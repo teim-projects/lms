@@ -3,5 +3,5 @@ from django.urls import path , include
 from lmsapp import views
 
 urlpatterns = [
-    
+    path('',views.index)
 ]
