@@ -1,9 +1,317 @@
-from django.shortcuts import render
-
-
 # Create your views here.
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 
 
-def index(request):
-    return render(request , 'index.html')
+def student_dashboard(request):
+    # Render a simple dashboard with a header
+    return render(request, 'student_dashboard.html')
+
+def signup(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Validation
+        if not email or not mobile or not password or not confirm_password:
+            messages.error(request, 'All fields are required.')
+            return render(request, 'lmsapp/signup.html')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'lmsapp/signup.html')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already registered.')
+            return render(request, 'lmsapp/signup.html')
+
+        # Create User
+        user = User.objects.create_user(
+            username=email,  # Use email as username
+            email=email,
+            password=make_password(password),
+        )
+        user.profile.mobile = mobile  # Assuming you extend User with a Profile model
+        user.save()
+
+        messages.success(request, 'Signup successful. Please login.')
+        return redirect('login')  # Adjust the name of your login URL as needed
+
+    return render(request, 'lmsapp/signup.html')
+
+
+
+
+import re
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from twilio.rest import Client
+from lmsapp.models import OTP, CustomUser  # Assuming CustomUser model is in the same app
+
+# Validate phone number in E.164 format
+def validate_phone_number(phone):
+    pattern = re.compile(r'^\+\d{10,15}$')  # E.164 format
+    if not pattern.match(phone):
+        raise ValidationError("Invalid phone number format. Use E.164 format (e.g., +1234567890).")
+    return phone
+
+def send_otp_email(email, otp_code):
+    try:
+        send_mail(
+            'Account Verification',
+            f'Your OTP for signup is: {otp_code}',
+            'noreply@myapp.com',
+            [email]
+        )
+    except BadHeaderError:
+        raise ValidationError("Invalid email header found.")
+    except Exception as e:
+        raise ValidationError(f"Error sending email: {e}")
+
+def send_otp_sms(mobile, otp_code):
+    try:
+        account_sid = "AC37239a11d8bc5f2a24d67d90d72c84cb"  # Replace with your actual Twilio Account SID
+        auth_token = "99aaa1ebe0c58adb4626aa1af997ab06"  # Replace with your actual Twilio Auth Token
+        client = Client(account_sid, auth_token)
+
+        message = client.messages.create(
+            body=f"Your OTP for signup is: {otp_code}",
+            from_="+15635542853",  # Replace with your Twilio phone number
+            to=mobile
+        )
+    except Exception as e:
+        raise ValidationError(f"Error sending SMS: {e}")
+
+
+
+
+
+def signup(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        country_code = request.POST.get('country_code')  # Get the selected country code
+        mobile = request.POST.get('mobile')  # Get the mobile number
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Combine the country code and mobile number
+        full_mobile_number = f"{country_code}{mobile}"
+
+        # Validate the phone number format (e.g., E.164)
+        try:
+            full_mobile_number = validate_phone_number(full_mobile_number)
+        except ValidationError as e:
+            messages.error(request, str(e))
+            return redirect('signup')
+
+        # Check for existing email or mobile
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request, f"User with email ({email}) already exists.")
+            return redirect('signup')
+
+        if CustomUser.objects.filter(mobile=full_mobile_number).exists():
+            messages.error(request, f"User with mobile number ({full_mobile_number}) already exists.")
+            return redirect('signup')
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('signup')
+
+        # Create user and send OTP
+        user = CustomUser.objects.create_user(email=email, mobile=full_mobile_number, password=password)
+        user.is_active = False
+        user.save()
+
+        otp_code = OTP.generate_otp()
+        OTP.objects.create(user=user, code=otp_code)
+
+        # Send OTP via Email
+        try:
+            send_otp_email(email, otp_code)
+        except ValidationError as e:
+            messages.error(request, str(e))
+            return redirect('signup')
+               
+               
+        # # Send OTP via Voice Call
+
+
+        # try:
+        #     send_otp_call(full_mobile_number, otp_code)
+        #     messages.success(request, "An OTP call has been made to your mobile. Please listen to the OTP.")
+        # except Exception as e:
+        #     messages.error(request, f"Error sending OTP call: {e}")
+        #     return redirect('signup')
+
+        # Send OTP via SMS using Twilio
+        try:
+            send_otp_sms(full_mobile_number, otp_code)
+        except ValidationError as e:
+            messages.error(request, str(e))
+            return redirect('signup')
+
+        messages.success(request, "Signup successful. Please verify your email and mobile.")
+        request.session['user_id'] = user.id
+        return redirect('verify_otp')
+
+    return render(request, 'signup.html')
+
+
+
+from django.core.mail import send_mail, BadHeaderError
+from django.utils.timezone import now, timedelta
+
+def verify_otp(request):
+    if request.method == 'POST':
+        user_id = request.session.get('user_id')
+        user = CustomUser.objects.get(id=user_id)
+        entered_otp = request.POST['otp']
+
+        # Retrieve OTP and check for time validity
+        otp = OTP.objects.filter(user=user, code=entered_otp).first()
+        
+        # Get the count of OTP attempts from session
+        otp_attempts = request.session.get('otp_attempts', 0)
+
+        if otp and otp.created_at >= now() - timedelta(minutes=10):
+            # Successful OTP validation
+            user.is_active = True
+            user.is_verified = True
+            user.save()
+            OTP.objects.filter(user=user).delete()  # Delete OTP after use
+            
+            # Send a welcome email
+            try:
+                send_mail(
+                    'Welcome to Our Institute!',
+                    f'Hi {user.email},\n\nWelcome to our institute! We are excited to have you with us.',
+                    'welcome@myapp.com',
+                    [user.email],
+                )
+            except BadHeaderError:
+                messages.error(request, "Invalid header found while sending welcome email.")
+            except Exception as e:
+                messages.error(request, f"Error sending welcome email: {e}")
+
+            # Clear session data for OTP attempts
+            request.session.pop('otp_attempts', None)
+            
+            messages.success(request, "Signup successful and welcome email sent.")
+            return redirect('/')
+        else:
+            # Increment OTP attempts
+            otp_attempts += 1
+            request.session['otp_attempts'] = otp_attempts
+            messages.error(request, "Invalid OTP. Please try again.")
+            
+            # Check if attempts exceeded the limit
+            if otp_attempts >= 2:
+                OTP.objects.filter(user=user).delete()
+                request.session.pop('otp_attempts', None)  # Reset attempts
+                return redirect('signup')
+    return render(request, 'verify_otp.html')
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import login as auth_login
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from lmsapp.models import CustomUser  # Replace with the actual path to your CustomUser model
+
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if email == 'admin@gmail.com' and password == 'admin@123#':
+            # Redirect to admin dashboard
+            return redirect('admin_dashboard')  
+
+        # Debugging output
+        print(f"Attempting login for email: {email}") 
+
+        # Check if the user exists by email
+        try:
+            user = CustomUser.objects.get(email=email)
+            if user.check_password(password):  # Validate the password
+                auth_login(request, user)  # Log the user in
+
+                # Redirect to the student's dashboard
+                return redirect('student_dashboard')  
+            else:
+                # Incorrect password
+                messages.error(request, "Incorrect password. Please try again.")
+        except CustomUser.DoesNotExist:
+            # Email not found in the system
+            messages.error(request, "User with this email does not exist. Please register.")
+
+    # Render login page with potential error messages
+    return render(request, 'login.html')
+
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+
+def logout_view(request):
+    logout(request)  # Logs out the user
+    return redirect('login')
+
+
+def password_reset(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        user = CustomUser.objects.filter(email=email).first()
+        if user:
+            otp_code = OTP.generate_otp()
+            OTP.objects.create(user=user, code=otp_code)
+            send_mail(
+                'Password Reset Request',
+                f'Your password reset OTP is: {otp_code}',
+                'noreply@myapp.com',
+                [email]
+            )
+            request.session['reset_user_id'] = user.id
+            return redirect('reset_password_verify')
+        messages.error(request, "Email not found")
+    return render(request, 'password_reset.html')
+
+
+
+from django.utils import timezone
+
+def reset_password_verify(request):
+    if request.method == 'POST':
+        reset_user_id = request.session.get('reset_user_id')
+        user = CustomUser.objects.get(id=reset_user_id)
+        entered_otp = request.POST['otp']
+
+        otp = OTP.objects.filter(user=user, code=entered_otp).first()
+
+        if otp and otp.created_at >= timezone.now() - timedelta(minutes=10):
+            return redirect('reset_password_confirm')
+        messages.error(request, "Invalid OTP")
+    return render(request, 'reset_password_verify.html')
+
+
+def reset_password_confirm(request):
+    if request.method == 'POST':
+        reset_user_id = request.session.get('reset_user_id')
+        user = CustomUser.objects.get(id=reset_user_id)
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+
+        if password == confirm_password:
+            user.set_password(password)
+            user.save()
+            messages.success(request, "Password reset successful")
+            return redirect('login')
+        messages.error(request, "Passwords do not match")
+    return render(request, 'reset_password_confirm.html')
