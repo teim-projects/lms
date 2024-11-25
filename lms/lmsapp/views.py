@@ -74,16 +74,18 @@ def send_otp_email(email, otp_code):
         raise ValidationError("Invalid email header found.")
     except Exception as e:
         raise ValidationError(f"Error sending email: {e}")
+    
+
 
 def send_otp_sms(mobile, otp_code):
     try:
-        account_sid = "AC246765ce1558324053e7d57120ce2901"  # Replace with your actual Twilio Account SID
-        auth_token = "4e2b0db8b5ca95805470676b40e314a9"  # Replace with your actual Twilio Auth Token
+        account_sid = "AC441b3df0c5137229a31a6d6ba6e2cdbf"  # Replace with your actual Twilio Account SID
+        auth_token = "157ceb657f85927cde4a508b95c06588"  # Replace with your actual Twilio Auth Token
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
             body=f"Your OTP for signup is: {otp_code}",
-            from_="+17433305674",  # Replace with your Twilio phone number
+            from_="+17433302299",  # Replace with your Twilio phone number
             to=mobile
         )
     except Exception as e:
