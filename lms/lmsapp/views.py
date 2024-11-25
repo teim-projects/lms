@@ -77,13 +77,13 @@ def send_otp_email(email, otp_code):
 
 def send_otp_sms(mobile, otp_code):
     try:
-        account_sid = "AC37239a11d8bc5f2a24d67d90d72c84cb"  # Replace with your actual Twilio Account SID
-        auth_token = "99aaa1ebe0c58adb4626aa1af997ab06"  # Replace with your actual Twilio Auth Token
+        account_sid = "AC246765ce1558324053e7d57120ce2901"  # Replace with your actual Twilio Account SID
+        auth_token = "4e2b0db8b5ca95805470676b40e314a9"  # Replace with your actual Twilio Auth Token
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
             body=f"Your OTP for signup is: {otp_code}",
-            from_="+15635542853",  # Replace with your Twilio phone number
+            from_="+17433305674",  # Replace with your Twilio phone number
             to=mobile
         )
     except Exception as e:
