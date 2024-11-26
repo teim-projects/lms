@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -138,3 +140,12 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sonuwaghmare7057@gmail.com'  # Your Gmail address
 EMAIL_HOST_PASSWORD = 'wmit aqfx mrhu fpez'  # Your Gmail password or app password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+load_dotenv()
+
+# Access environment variables
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')

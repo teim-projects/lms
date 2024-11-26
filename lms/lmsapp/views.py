@@ -76,21 +76,22 @@ def send_otp_email(email, otp_code):
         raise ValidationError(f"Error sending email: {e}")
     
 
+from twilio.rest import Client
+import os
 
 def send_otp_sms(mobile, otp_code):
     try:
-        account_sid = "AC441b3df0c5137229a31a6d6ba6e2cdbf"  # Replace with your actual Twilio Account SID
-        auth_token = "157ceb657f85927cde4a508b95c06588"  # Replace with your actual Twilio Auth Token
+        account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+        auth_token = os.getenv("TWILIO_AUTH_TOKEN")
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
             body=f"Your OTP for signup is: {otp_code}",
-            from_="+17433302299",  # Replace with your Twilio phone number
+            from_=os.getenv("TWILIO_PHONE_NUMBER"),
             to=mobile
         )
     except Exception as e:
         raise ValidationError(f"Error sending SMS: {e}")
-
 
 
 
