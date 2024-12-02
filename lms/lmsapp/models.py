@@ -75,3 +75,17 @@ class OTP(models.Model):
     def generate_otp():
         return str(random.randint(1000, 9999))
         
+
+
+# models.py
+from django.db import models
+
+class FreeCourse(models.Model):
+    title = models.CharField(max_length=255)
+    youtube_link = models.URLField()
+    thumbnail = models.ImageField(upload_to='thumbnails/')
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

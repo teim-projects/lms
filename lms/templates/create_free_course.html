@@ -1,0 +1,356 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+/* General Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    width: 100%;
+    background-color: #ddd;
+    /* position: relative;
+    background: url("{% static 'images/background2.jpg' %}") no-repeat center center fixed; 
+    background-size: cover;
+    overflow-x: hidden;  */
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3); /* Adjust opacity: 0.5 = 50% transparent */
+    z-index: -1; /* Place it behind all other content */
+}
+
+/* Ensure the main content stays above the pseudo-element */
+.dashboard, .navbar, .content, .sidebar .dropdown {
+    position: relative;
+    z-index: 1;
+}
+
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 1); /* Slight transparency for better blending with the background */
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background: #e9ecef;
+        }
+
+        .submenu {
+            list-style: none;
+            padding-left: 20px;
+            display: none;
+            color: black;
+        }
+
+        .submenu li {
+            padding-left: 20px;
+        }
+
+        .arrow {
+            font-size: 30px;
+            margin-left: auto;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .arrow.open {
+            transform: rotate(180deg);
+        }
+
+        /* Top Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 1); /* Slight transparency */
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%; /* Adjust for sidebar width */
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-pic {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+
+        .admin-email {
+            font-weight: bold;
+            color: black;
+        }
+
+                /* Navbar Links */
+        .navbar-link {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            margin-left: 15px; /* Space between links */
+            transition: color 0.3s ease-in-out;
+        }
+
+        .navbar-link:hover {
+            color: #007bff; /* Hover color */
+        }
+
+        /* Logout Specific Styling */
+        .logout-link {
+            color: rgb(255, 146, 146); /* Logout-specific color */
+        }
+
+        .logout-link:hover {
+            color: red; /* Hover effect for logout */
+        }
+
+        /* Main Content */
+        main {
+            margin-left: 250px;
+            padding: 100px 20px;
+        }
+
+        .content {
+            width: 60%;
+            margin: 20px auto; /* Center the content */
+            background: none; /* Remove background */
+            padding: 20px;
+            box-shadow: none; /* Remove box-shadow */
+        }
+
+        .content h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: black;
+        }
+
+        .content form {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto; /* Center the form */
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .content form input,
+        .content form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .content form button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .content form button:hover {
+            background: #0056b3;
+        }
+
+        .courses {
+            width: 80%;
+            margin: 20px auto; /* Center the courses section */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .course-card {
+            flex: 1 1 calc(33.333% - 20px); /* Three cards per row */
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card h2 {
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+        .course-card p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .course-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .course-card a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .course-card a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+         document.addEventListener("DOMContentLoaded", () => {
+            // Toggle submenu
+            const toggleButtons = document.querySelectorAll(".toggle-btn");
+
+            toggleButtons.forEach((btn) => {
+                btn.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    const submenu = btn.nextElementSibling;
+                    submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+                    btn.querySelector(".arrow").classList.toggle("open");
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            
+            <ul>
+            <br>
+            <br><br><br>
+                <li><a href="/admin_dashboard">Dashboard</a></li>
+                <li>
+                    <a href="#" class="toggle-btn">
+                        Course Management <span class="arrow">&#9662;</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="/create-free-course">Create Free Course</a></li>
+                        <li><a href="#">Create Course</a></li>
+                        <li><a href="#">Resource Upload</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="toggle-btn">
+                        Enrollment Management <span class="arrow">&#9662;</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="#">Give Access</a></li>
+                        <li><a href="#">Enrollment Tracking</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Certificates</a></li>
+                <li><a href="#">Invoices</a></li>
+                <li><a href="#">Notifications</a></li>
+                <li><a href="#">Create Sub Admin</a></li>
+            </ul>
+        </aside>
+        <!-- Main Content -->
+        <main>
+            <!-- Navbar -->
+            <header class="navbar">
+                <div class="admin-info">
+                    <img src="{% static 'images/profile.jpg' %}" alt="Profile" class="profile-pic">
+                    <span class="admin-email">{{ admin_email }}</span>
+                    <a href="#" class="navbar-link">My Profile</a>
+                    <a href="/" class="navbar-link logout-link">Logout</a>
+                </div>
+            </header>
+
+            <section class="content">
+                <h1>Create Free Course</h1>
+                <form action="/save-free-course" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="text" name="title" placeholder="Course Title" required>
+                    <textarea name="description" placeholder="Course Description" rows="5" required></textarea>
+                    <input type="text" name="youtube_link" placeholder="YouTube Video Link" required>
+                    <input type="file" name="thumbnail" accept="image/*" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </section>
+
+            <section class="content">
+                <h1>Available Courses</h1>
+                <div class="courses">
+                    {% for course in courses %}
+                    <div class="course-card">
+                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+                        <h2>{{ course.title }}</h2>
+                        <p>{{ course.description }}</p>
+                        <a href="{{ course.youtube_link }}" target="_blank">View Course</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

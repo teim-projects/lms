@@ -10,6 +10,12 @@ def student_dashboard(request):
     # Render a simple dashboard with a header
     return render(request, 'student_dashboard.html')
 
+
+def admin_dashboard(request):
+    # Get admin email from session
+    admin_email = request.session.get('admin_email', 'Admin Email')
+    return render(request, 'admin_dashboard.html', {'admin_email': admin_email})
+
 def signup(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -234,8 +240,10 @@ def login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        if email == 'admin@gmail.com' and password == 'admin@123#':
+        if email == 'admin@gmail.com' and password == 'admin':
             # Redirect to admin dashboard
+            request.session['admin_email'] = email
+
             return redirect('admin_dashboard')  
 
         # Debugging output
@@ -318,3 +326,28 @@ def reset_password_confirm(request):
             return redirect('login')
         messages.error(request, "Passwords do not match")
     return render(request, 'reset_password_confirm.html')
+
+
+
+
+
+from .models import FreeCourse
+
+def create_free_course(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        youtube_link = request.POST.get('youtube_link')
+        description = request.POST.get('description')
+        thumbnail = request.FILES.get('thumbnail')
+
+        if title and youtube_link and thumbnail and description:
+            FreeCourse.objects.create(
+                title=title,
+                youtube_link=youtube_link,
+                thumbnail=thumbnail,
+                description=description
+            )
+            return redirect('create_free_course')
+
+    courses = FreeCourse.objects.all()  # Fetch all courses to display
+    return render(request, 'create_free_course.html', {'courses': courses})
