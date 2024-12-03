@@ -229,34 +229,33 @@ def verify_otp(request):
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import login as auth_login  # Ensure proper login function import
+from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from lmsapp.models import CustomUser  # Replace with the actual path to your CustomUser model
+from .models import CustomUser
+
 
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
 
+        # Clear any existing session data
+        request.session.pop('admin_email', None)
+        request.session.pop('user_email', None)
+
+        # Admin login logic
         if email == 'admin@gmail.com' and password == 'admin':
-            # Redirect to admin dashboard
             request.session['admin_email'] = email
+            return redirect('admin_dashboard')  # Redirect to admin dashboard
 
-            return redirect('admin_dashboard')  
-
-        # Debugging output
-        print(f"Attempting login for email: {email}") 
-
-        # Check if the user exists by email
+        # Regular user login logic
         try:
             user = CustomUser.objects.get(email=email)
             if user.check_password(password):  # Validate the password
                 auth_login(request, user)  # Log the user in
-
-                # Redirect to the student's dashboard
-                return redirect('student_dashboard')  
+                request.session['user_email'] = user.email
+                return redirect('student_dashboard')  # Redirect to the user's dashboard
             else:
                 # Incorrect password
                 messages.error(request, "Incorrect password. Please try again.")
@@ -266,6 +265,8 @@ def login(request):
 
     # Render login page with potential error messages
     return render(request, 'login.html')
+
+
 
 from django.shortcuts import redirect
 from django.contrib.auth import logout
@@ -351,3 +352,9 @@ def create_free_course(request):
 
     courses = FreeCourse.objects.all()  # Fetch all courses to display
     return render(request, 'create_free_course.html', {'courses': courses})
+
+
+def free_course(request):
+    courses = FreeCourse.objects.all()  # Fetch all courses to display
+    return render(request, 'free_course.html', {'courses': courses})
+
