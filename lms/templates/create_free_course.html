@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+
+
+    /*BootStrap Cdn Start*/
+    
+     /*BootStrap Cdn Start*/
+    /*BootStrap Cdn End*/
     <style>
 /* General Reset */
 body {
@@ -165,7 +171,7 @@ body::before {
         /* Main Content */
         main {
             margin-left: 250px;
-            padding: 100px 20px;
+           /* padding: 100px 20px;*/
         }
 
         .content {
@@ -262,6 +268,12 @@ body::before {
         .course-card a:hover {
             text-decoration: underline;
         }
+
+        {# New Css#}
+        .content1{
+            margin-left:0px;
+            padding:10px;
+        }
     </style>
     <script>
          document.addEventListener("DOMContentLoaded", () => {
@@ -337,7 +349,7 @@ body::before {
                 </form>
             </section>
 
-            <section class="content">
+            <section class="content1" > {#class="content" this class chenge to content1#} 
                 <h1>Available Courses</h1>
                 <div class="courses">
                     {% for course in courses %}
@@ -346,6 +358,8 @@ body::before {
                         <h2>{{ course.title }}</h2>
                         <p>{{ course.description }}</p>
                         <a href="{{ course.youtube_link }}" target="_blank">View Course</a>
+                        <a href="{{ course.youtube_link }}" target="_blank">Edit</a>
+                        <a href="{{ course.youtube_link }}" target="_blank">Delete</a>
                     </div>
                     {% endfor %}
                 </div>
