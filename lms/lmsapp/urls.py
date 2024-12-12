@@ -13,8 +13,8 @@ urlpatterns = [
     path('password-reset/', views.password_reset, name='password_reset'),
     path('reset-password-verify/', views.reset_password_verify, name='reset_password_verify'),
     path('reset-password-confirm/', views.reset_password_confirm, name='reset_password_confirm'),
-    path('student_dashboard', views.student_dashboard , name='student_dashboard'),
-    path('admin_dashboard', views.admin_dashboard , name='admin_dashboard'),
+    path('student_dashboard/', views.student_dashboard , name='student_dashboard'),
+    path('admin_dashboard/', views.admin_dashboard , name='admin_dashboard'),
     path('create-free-course/', views.create_free_course, name='create_free_course'),
     path('free-course/', views.free_course, name='free_course'),
 
