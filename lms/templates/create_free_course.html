@@ -180,8 +180,9 @@ body::before {
             width: 60%;
             margin: 20px auto; /* Center the content */
             background: none; /* Remove background */
-            padding: 20px;
+            padding: 40px;
             box-shadow: none; /* Remove box-shadow */
+            
         }
 
         .content h1 {
@@ -504,6 +505,10 @@ body::before {
                 grid-template-columns: 1fr;
             }
         }
+
+        .myform{
+            box-shadow:0px 0px 100px gray;
+        }
     </style>
     <script>
          document.addEventListener("DOMContentLoaded", () => {
@@ -573,15 +578,15 @@ body::before {
                     </button>                 </div>
             </header>
 
-            <section class="content">
+            <section class="content myform " >
                 <h1 >Create Free Course</h1>
-                <form method="post" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data ">
                     {% csrf_token %}
-                    <input type="text" name="title" placeholder="Course Title" required>
-                    <textarea name="description" placeholder="Course Description" rows="5" required></textarea>
-                    <input type="text" name="youtube_link" placeholder="YouTube Video Link" required>
-                    <input type="file" name="thumbnail" accept="image/*" required>
-                    <button type="submit">Submit</button>
+                    <input type="text" name="title" placeholder="Course Title" required class="form-control">
+                    <textarea name="description" placeholder="Course Description" rows="5" required class="form-control"></textarea>
+                    <input type="text" name="youtube_link" placeholder="YouTube Video Link" required class="form-control">
+                    <input type="file" name="thumbnail" accept="image/*" required >
+                    <button type="submit" class="form-control">Submit</button>
                 </form>
             </section>
 
