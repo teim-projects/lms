@@ -7,10 +7,12 @@
     <title>Admin Dashboard</title>
 
 
-    /*BootStrap Cdn Start*/
-    
-     /*BootStrap Cdn Start*/
-    /*BootStrap Cdn End*/
+    {% comment %} /*BootStrap Cdn Start*/ {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+     {% comment %} /*BootStrap Cdn Start*/ {% endcomment %}
     <style>
 /* General Reset */
 body {
@@ -183,6 +185,7 @@ body::before {
         }
 
         .content h1 {
+            margin-top:100px;
             text-align: center;
             margin-bottom: 20px;
             font-size: 24px;
@@ -223,8 +226,12 @@ body::before {
         .content form button:hover {
             background: #0056b3;
         }
+        .cardddd:hover {
+            transform: translateY(-10px);
+            transition: 0.3s;
+        }
 
-        .courses {
+        {% comment %} .courses {
             width: 80%;
             margin: 20px auto; /* Center the courses section */
             display: flex;
@@ -273,6 +280,229 @@ body::before {
         .content1{
             margin-left:0px;
             padding:10px;
+        }
+        .Btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition-duration: .3s;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
+            background-color: rgb(255, 65, 65);
+        }
+
+        .sign {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition-duration: .3s;
+        }
+
+        .sign svg {
+            width: 17px;
+        }
+
+        .sign svg path {
+            fill: white;
+        }
+
+        .text {
+            position: absolute;
+            right: 0;
+            width: 0;
+            opacity: 0;
+            color: white;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition-duration: .3s;
+        }
+
+        .Btn:hover {
+            width: 125px;
+            border-radius: 40px;
+            transition-duration: .3s;
+        }
+
+        .Btn:hover .sign {
+            width: 30%;
+            transition-duration: .3s;
+            padding-left: 20px;
+        }
+
+        .Btn:hover .text {
+            opacity: 1;
+            width: 70%;
+            transition-duration: .3s;
+            padding-right: 0;
+        }
+
+        .Btn:active {
+            transform: translate(2px, 2px);
+        }
+        #createFC{
+            text-align: center;
+            margin-bottom: 20px;
+            
+            color: black;
+            font-waight:bold;
+            text-shadow:0px 2px 0px #BDC0C5;
+        }
+        .btnckick{
+    		background-color:rgb(169, 136, 185);
+    		border-radius: 5px;
+    		width: 100px;
+            border: none;
+    		padding: 3px;
+            padding-bottom:10px;
+            color:black;
+
+    	}
+
+    	.btnckick:hover {
+    		box-shadow: -2px 5px 10px #A15499;
+    	}
+        .cardbuttons a{
+            text-decoration: none; 
+
+
+        } {% endcomment %}
+
+
+        {% comment %} dbhbkkkkkkkkk {% endcomment %}
+        .content1 {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .content1 h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .courses {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .course-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .course-card h2 {
+            margin: 15px 0;
+            font-size: 1.5rem;
+        }
+
+        {% comment %} .course-card p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 15px;
+        } {% endcomment %}
+       
+            .course-card p {
+                display: -webkit-box;
+                -webkit-line-clamp: 4;        /* Limit to 3 lines */
+                -webkit-box-orient: vertical; /* Set the orientation to vertical */
+                overflow: hidden;             /* Hide anything that overflows */
+                text-overflow: ellipsis;      /* Add ellipsis (...) to show truncation */
+                height: 4.5em;                /* Set the height to match approximately 3 lines */
+            }
+
+        .course-card button {
+            margin: 5px 5px;
+            padding: 0px;
+            border-radius: 5px;
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .course-card button a {
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+        }
+
+        .btnckick {
+            background-color: #2dc08d;
+            color: white;
+            transition: box-shadow 0.3s ease;
+            
+        }
+
+        .btnckick:hover {
+            box-shadow: -2px 5px 10px rgb(15, 71, 155);
+        }
+
+        .btnckick.edit {
+            background-color: #227601;
+            width:60px;
+            padding:5px;
+            font-size:13px;
+        }
+
+        .btnckick.delete {
+            background-color: #fc173b;
+            width:60px;
+            padding:5px;
+            font-size:13px;
+        }
+        .btnckick.delete:hover{
+            box-shadow: -2px 5px 10px rgb(203, 75, 133);
+
+        }
+        
+        .btnckick.edit:hover{
+            box-shadow: -2px 5px 10px rgb(20, 66, 6);
+
+        }
+        .btnckick.ViewCourse{
+            padding:5px;
+            font-size:13px;
+        }
+
+        /* Responsive Styles */
+        /* Laptop and larger screens */
+        @media (min-width: 1024px) {
+            .courses {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Tablet screens */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .courses {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Mobile screens */
+        @media (max-width: 767px) {
+            .courses {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
     <script>
@@ -333,12 +563,18 @@ body::before {
                     <img src="{% static 'images/profile.jpg' %}" alt="Profile" class="profile-pic">
                     <span class="admin-email">{{ admin_email }}</span>
                     <a href="#" class="navbar-link">My Profile</a>
-                    <a href="/" class="navbar-link logout-link">Logout</a>
-                </div>
+                    <button class="Btn" onclick="location.href='/'">
+                        <div class="sign">
+                            <svg viewBox="0 0 512 512">
+                                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                            </svg>
+                        </div>
+                        <div class="text">   Logout</div>
+                    </button>                 </div>
             </header>
 
             <section class="content">
-                <h1>Create Free Course</h1>
+                <h1 >Create Free Course</h1>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="text" name="title" placeholder="Course Title" required>
@@ -349,17 +585,42 @@ body::before {
                 </form>
             </section>
 
-            <section class="content1" > {#class="content" this class chenge to content1#} 
-                <h1>Available Courses</h1>
+            {% comment %} <section class="content1" > {#class="content" this class chenge to content1#} 
+                <h1 id="createFC">Available Courses</h1>
                 <div class="courses">
                     {% for course in courses %}
                     <div class="course-card">
                         <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
                         <h2>{{ course.title }}</h2>
                         <p>{{ course.description }}</p>
-                        <a href="{{ course.youtube_link }}" target="_blank">View Course</a>
-                        <a href="{{ course.youtube_link }}" target="_blank">Edit</a>
-                        <a href="{{ course.youtube_link }}" target="_blank">Delete</a>
+                       <button class=" btn-outline-light btnckick cardbuttons" style=" hover:box-shadow: -2px 5px 10px rgb(15, 71, 155);"> <a href="{{ course.youtube_link }}" target="_blank">View Course</a>  </button> 
+                        <button class=" btn-outline-light btnckick cardbuttons" style="background-color:#227601;">  <a href="{{ course.youtube_link }}" target="_blank">Edit</a>  </button> 
+                            <button class=" btn-outline-light btnckick cardbuttons" style="background-color:#FC173B; text-decoration: none; color: white; display: inline; ">  <a href="{{ course.youtube_link }}" target="_blank">Delete</a>  </button> 
+                    </div>
+                    {% endfor %}
+                </div>
+            </section> {% endcomment %}
+
+
+
+
+            <section class="content1">
+                <h1 id="createFC">Available Courses</h1>
+                <div class="courses">
+                    {% for course in courses %}
+                    <div class="course-card cardddd">
+                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+                        <h2>{{ course.title }}</h2>
+                        <p>{{ course.description }}</p>
+                        <button class="btnckick ViewCourse">
+                            <a href="{{ course.youtube_link }}" target="_blank">View Course</a>
+                        </button>
+                        <button class="btnckick edit" style=" hover:box-shadow: -2px 5px 10px rgb(15, 71, 155);">
+                            <a href="{{ course.youtube_link }}" target="_blank">Edit</a>
+                        </button>
+                        <button class="btnckick delete">
+                            <a href="{{ course.youtube_link }}" target="_blank">Delete</a>
+                        </button>
                     </div>
                     {% endfor %}
                 </div>
@@ -368,3 +629,5 @@ body::before {
     </div>
 </body>
 </html>
+
+
