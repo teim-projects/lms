@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
    
     <style>
 /* General Reset */
@@ -182,6 +187,8 @@ body::before {
             margin-bottom: 20px;
             font-size: 24px;
             color: black;
+            margin-top:50px;
+            font-weight: bold;
         }
 
         .content form {
@@ -345,15 +352,15 @@ body::before {
         .btnckick{
     		background-color:rgb(169, 136, 185);
     		border-radius: 5px;
-    		width: 100px;
+    		
             border: none;
     		padding: 5px;
             padding-bottom:10px;
+            color:black;
+            justify-content: space-between;
     	}
 
-    	.btnckick:hover {
-    		box-shadow: -2px 5px 10px #A15499;
-    	}
+    
         .cardbuttons a{
             padding:0px;
             font-size:10px;
@@ -361,6 +368,55 @@ body::before {
 
 
         }
+        .btnckick.Edit {
+            background-color: #227601;
+            width:55px;
+            padding:5px;
+            font-size:12px;
+        }
+
+        .btnckick.delete {
+            background-color: #fc173b;
+            width:55px;
+            padding:5px;
+            font-size:12px;
+        }
+        .btnckick.delete:hover{
+            box-shadow: -2px 5px 10px rgb(195, 24, 15);
+
+        }
+        .btnckick.Edit:hover{
+            box-shadow: -2px 5px 10pxrgb(50, 181, 17);;
+
+        }
+        .btnckick.ViewCourse:hover{
+            box-shadow: -2px 5px 10px #A15499;
+
+        }
+        .btnckick.ViewCourse{
+            padding:3px;
+            font-size:12px;
+          
+        }
+        .btnckick a{
+            color:black;
+            text-decoration:none;
+        }
+        .btnckick{
+            justify-content:space-between;
+        }
+        .clamp-text {
+            display: -webkit-box; 
+            -webkit-line-clamp: 3; 
+            -webkit-box-orient: vertical;
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            line-height: 1.5em; 
+            height: 4.5em; 
+            max-height: 4.5em;
+          }
+          
+          
     </style>
     <script>
          document.addEventListener("DOMContentLoaded", () => {
@@ -449,10 +505,10 @@ body::before {
                     <div class="course-card">
                         <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
                         <h2>{{ course.title }}</h2>
-                        <p>{{ course.description }}</p>
-                       <button class=" btn-outline-light btnckick cardbuttons"> <a href="{{ course.youtube_link }}" target="_blank">View Course</a>  </button> 
-                        <button  class=" btn-outline-light btnckick cardbuttons" >  <a href="{{ course.youtube_link }}" target="_blank">Edit</a>  </button> 
-                            <button  class=" btn-outline-light btnckick cardbuttons">  <a href="{{ course.youtube_link }}" target="_blank">Delete</a>  </button> 
+                        <p class="clamp-text">{{ course.description }}</p>
+                       <button class=" btn-outline-light btnckick ViewCourse"> <a href="{{ course.youtube_link }}" target="_blank">View Course</a>  </button> 
+                        <button  class=" btn-outline-light btnckick Edit" >  <a href="{{ course.youtube_link }}" target="_blank">Edit</a>  </button> 
+                            <button  class=" btn-outline-light btnckick delete">  <a href="{{ course.youtube_link }}" target="_blank">Delete</a>  </button> 
                     </div>
                     {% endfor %}
 
