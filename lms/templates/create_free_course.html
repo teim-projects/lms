@@ -350,15 +350,15 @@ body::before {
             text-shadow:0px 2px 0px #BDC0C5;
         }
         .btnckick{
-    		background-color:rgb(169, 136, 185);
-    		border-radius: 5px;
-    		
+            background-color:rgb(169, 136, 185);
+            border-radius: 5px;
+            
             border: none;
-    		padding: 5px;
+            padding: 5px;
             padding-bottom:10px;
             color:black;
             justify-content: space-between;
-    	}
+        }
 
     
         .cardbuttons a{
@@ -415,7 +415,58 @@ body::before {
             height: 4.5em; 
             max-height: 4.5em;
           }
+
+          .showww{
+            position: fixed;
+            left: 0px;
+          }
+          .hiddd{
+            position: fixed;
+            left: 0px;
+            display: none;
+            
+          }
           
+
+          /* Mobile view (default adjustments can go here or inside a specific @media for mobile) */
+@media screen and (max-width: 768px) {
+    .sidebar{
+        display: none;
+    }
+    .hiddd{
+        
+        display: flex;
+        
+      }
+      .showww{
+        position: fixed;
+        left: 0px;
+        
+        
+      }
+      main {
+        margin-left: 20px;
+       /* padding: 100px 20px;*/
+    }
+
+    
+  }
+  
+  /* Tablet view */
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    /* Styles for tablet devices (769px to 1024px) */
+  }
+  
+  /* Laptop view */
+  @media screen and (min-width: 1025px) and (max-width: 1440px) {
+    /* Styles for laptops (1025px to 1440px) */
+  }
+  
+  /* Desktop view */
+  @media screen and (min-width: 1441px) {
+    /* Styles for desktops (≥1441px) */
+  }
+  
           
     </style>
     <script>
@@ -472,6 +523,14 @@ body::before {
         <main>
             <!-- Navbar -->
             <header class="navbar">
+                <li onclick="showSidebar()" class="showww">
+                    <a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a>
+                </li>
+
+
+                <ul>
+                    <li  onclick="hideSidebar()" class="hiddd"> <a href="#"> <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+              <br>
                 <div class="admin-info">
                     <img src="{% static 'images/profile.jpg' %}" alt="Profile" class="profile-pic">
                     <span class="admin-email">{{ admin_email }}</span>
@@ -487,6 +546,7 @@ body::before {
             </header>
 
             <section class="content">
+                <br><br>
                 <h1 >Create Free Course</h1>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -521,5 +581,18 @@ body::before {
 
     
     </div>
+    <script>
+
+        function showSidebar()
+        {
+            const sidebar=document.querySelector('.sidebar');
+            sidebar.style.display="flex"
+        }
+          function hideSidebar()
+        {
+            const sidebar=document.querySelector('.sidebar');
+            sidebar.style.display="none"
+        }
+    </script>
 </body>
 </html>
