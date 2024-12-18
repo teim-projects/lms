@@ -362,3 +362,43 @@ def paid_course(request):
     # Render a simple dashboard with a header
     return render(request, 'paid_course.html')
 
+
+
+
+from django.shortcuts import render, redirect
+from .models import PaidCourse
+from django.core.files.storage import FileSystemStorage
+def create_paid_course(request):
+    if request.method == 'POST':
+        course_title = request.POST.get('course_title')
+        duration = request.POST.get('duration')
+        description = request.POST.get('description')
+        instructor_name = request.POST.get('instructor_name')
+        course_level = request.POST.get('course_level')
+        course_price = request.POST.get('course_price')
+        thumbnail = request.FILES.get('thumbnail')
+
+        # Save thumbnail file if provided
+        if thumbnail:
+            fs = FileSystemStorage()
+            filename = fs.save(thumbnail.name, thumbnail)
+            thumbnail_url = fs.url(filename)
+        else:
+            thumbnail_url = None
+
+        # Save data to database
+        PaidCourse.objects.create(
+            course_title=course_title,
+            duration=duration,
+            description=description,
+            instructor_name=instructor_name,
+            course_level=course_level,
+            course_price=course_price,
+            thumbnail=thumbnail
+        )
+        return redirect('create_paid_course')  # Redirect to avoid form resubmission
+
+    # Fetch all courses
+    courses = PaidCourse.objects.all()
+
+    return render(request, 'paid_course.html', {'courses': courses})

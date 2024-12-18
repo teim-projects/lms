@@ -18,6 +18,8 @@ urlpatterns = [
     path('create-free-course/', views.create_free_course, name='create_free_course'),
     path('free-course/', views.free_course, name='free_course'),
     path('paid-course/', views.paid_course, name='paid_course'),
+    path('create-paid-course/', views.create_paid_course, name='create_paid_course'),
+
 
 ]
 

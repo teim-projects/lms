@@ -102,6 +102,41 @@
             display: flex;
             align-items: center;
         }
+
+        .course-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .course-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 300px;
+            flex: 1 1 calc(33.333% - 20px); /* Three cards per row */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .course-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .course-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .course-card p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+        .course-card span {
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -185,55 +220,73 @@
                 </div>
                 <div class="col-12 col-md-6 m-3 p-3 paid-form">
                     <h2 class="text-center">Create paid course</h2>
-                    <form class="p-3 ">
+                    <form class="p-3" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputEmail4">Course Title</label>
-                                <input type="email" class="form-control" id="inputEmail4">
+                                <label for="course_title">Course Title</label>
+                                <input type="text" class="form-control" id="course_title" name="course_title">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="inputPassword4">Duration</label>
-                                <input type="password" class="form-control" id="inputPassword4">
+                                <label for="duration">Duration</label>
+                                <input type="text" class="form-control" id="duration" name="duration">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputAddress">Discription</label>
-                            <input type="text" class="form-control" id="inputAddress" >
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control" id="description" name="description">
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <div class="form-group">
-                                    <label for="inputAddress">Instructor Name</label>
-                                    <input type="text" class="form-control" id="inputAddress" >
-                                </div>
+                                <label for="instructor_name">Instructor Name</label>
+                                <input type="text" class="form-control" id="instructor_name" name="instructor_name">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="inputPassword4">Course Level</label>
-                                <select id="inputState" class="form-control">
-                                    <option selected> Beginner</option>
-                                    <option> Intermediate</option>
-                                    <option> Advanced</option>
+                                <label for="course_level">Course Level</label>
+                                <select id="course_level" class="form-control" name="course_level">
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputState">Course Price</label>
-                                <input type="text" class="form-control" id="inputAddress" placeholder="price">
+                                <label for="course_price">Course Price</label>
+                                <input type="text" class="form-control" id="course_price" name="course_price" placeholder="Price">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="inputCity">Thumbnail</label>
-                                <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                                <label for="thumbnail">Thumbnail</label>
+                                <input type="file" class="form-control-file" id="thumbnail" name="thumbnail">
                             </div>
                         </div>
-                        <button type="submit" class=" paid-btn btn btn-primary">Submit</button>
+                        <button type="submit" class="paid-btn btn btn-primary">Submit</button>
                     </form>
+                    
                 </div>
                 <div class="col-12 col-md-3">
 
                 </div>
             </div>
         </div>
+    </div>
+
+
+    <h2> Paid Courses</h2>
+    <div class="course-container">
+        {% for course in courses %}
+        <div class="course-card">
+            {% if course.thumbnail %}
+            <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }} Thumbnail">
+            {% endif %}
+            <h3>{{ course.course_title }}</h3>
+            <p><span>Duration:</span> {{ course.duration }}</p>
+            <p><span>Description:</span> {{ course.description }}</p>
+            <p><span>Instructor:</span> {{ course.instructor_name }}</p>
+            <p><span>Level:</span> {{ course.course_level }}</p>
+            <p><span>Price:</span> ${{ course.course_price }}</p>
+        </div>
+        {% endfor %}
     </div>
 
 
