@@ -5,370 +5,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
-        /* General Reset */
         body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    height: 100%;
-    width: 100%;
-    position: relative;
-    background: url("{% static 'images/background2.jpg' %}") no-repeat center center fixed; 
-    background-size: cover;
-    overflow-x: hidden; /* Prevent horizontal scroll due to background */
-}
-
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.3); /* Adjust opacity: 0.5 = 50% transparent */
-    z-index: -1; /* Place it behind all other content */
-}
-
-/* Ensure the main content stays above the pseudo-element */
-.dashboard, .navbar, .content, .sidebar .dropdown {
-    position: relative;
-    z-index: 1;
-}
-
-
-        /* Dashboard Layout */
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            width: 250px;
-            background: rgba(255, 255, 255, 1); /* Slight transparency for better blending with the background */
-            padding: 20px;
-            border-right: 1px solid #ddd;
-            height: 100vh;
-            position: fixed;
-            overflow-y: auto;
-        }
-
-        .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
             margin: 0;
+            overflow-x: hidden;
         }
 
-        .sidebar ul li {
-            margin: 10px 0;
-            position: relative;
-        }
-
-        .sidebar ul li a {
-            text-decoration: none;
-            color: black;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .sidebar ul li a:hover {
-            background: #e9ecef;
-        }
-
-        .submenu {
-            list-style: none;
-            padding-left: 20px;
-            display: none;
-            color: black;
-        }
-
-        .submenu li {
-            padding-left: 20px;
-        }
-
-        .arrow {
-            font-size: 30px;
-            margin-left: auto;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .arrow.open {
-            transform: rotate(180deg);
-        }
-
-        /* Top Navbar */
-        .navbar {
-            background: rgba(255, 255, 255, 1); /* Slight transparency */
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px 20px;
+        /* Sidebar Styles */
+        .sidebar {
             position: fixed;
             top: 0;
-            right: 0;
-            width: 100%; /* Adjust for sidebar width */
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            left: -250px;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            transition: left 0.3s ease-in-out;
+            z-index: 1050;
         }
 
-        .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .sidebar.show {
+            left: 0;
         }
 
-        .profile-pic {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+        .sidebar .nav-link,
+        .sidebar .dropdown-item {
+            color: white !important;
         }
 
-        .admin-email {
-            font-weight: bold;
-            color: black;
-        }
-
-                /* Navbar Links */
-        .navbar-link {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            margin-left: 15px; /* Space between links */
-            transition: color 0.3s ease-in-out;
-        }
-
-        .navbar-link:hover {
-            color: #007bff; /* Hover color */
-        }
-
-        /* Logout Specific Styling */
-        .logout-link {
-            color: rgb(255, 146, 146); /* Logout-specific color */
-        }
-
-        .logout-link:hover {
-            color: red; /* Hover effect for logout */
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-btn {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            padding: 5px;
-            color: black;
-        }
-
-        .dropdown-content {
-            display: none;
+        .close-btn {
             position: absolute;
-            top: 100%;
-            right: -50px;
-            background: #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* z-index: 1000; */
-        }
-
-        .dropdown-content a {
-            padding: 10px;
-            display: block;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f5f5f5;
-        }
-
-        .dropdown.open .dropdown-content {
-            display: block;
-        }
-
-        /* Main Content */
-        main {
-            margin-left: 250px; /* Adjust for sidebar width */
-            padding: 100px 20px; /* Adjust for navbar height */
-        }
-
-        .content h1 {
+            top: 10px;
+            right: 10px;
+            font-size: 1.8rem;
             color: white;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            text-align: center;
-            margin-top: 150px;
-        }
-
-
-
-
-        .Btn {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            width: 45px;
-            height: 45px;
-            border: none;
-            border-radius: 50%;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition-duration: .3s;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
-            background-color: rgb(255, 65, 65);
+            font-size: 30px;
+            /* background-color: cornflowerblue;
+            padding: 0px 10px 4px; */
         }
 
-        .sign {
+        /* Toggle Button Styles */
+        .toggle-btn {
+            /* position: fixed; */
+            /* top: 10px; */
+            left: 10px;
+            z-index: 1100;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Navbar Styles */
+        .bg-light {
+            box-shadow: 0px 0px 5px 1px;
+        }
+
+        /* .logo {
+            margin-left: 40px;
+        } */
+
+        /* Content Styles */
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        a:hover {
+            /* background-color: rgb(94, 94, 93); */
+            /* font-size: 18px; */
+            /* border: 1px solid; */
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            /* padding: 5px; */
+        }
+
+        .paid-btn {
             width: 100%;
+        }
+
+        .paid-form {
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            border-radius: 10px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: 25px;
+        }
+        .logo1{
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition-duration: .3s;
-        }
-
-        .sign svg {
-            width: 17px;
-        }
-
-        .sign svg path {
-            fill: white;
-        }
-
-        .text {
-            position: absolute;
-            right: 0;
-            width: 0;
-            opacity: 0;
-            color: white;
-            font-size: 1.2em;
-            font-weight: 600;
-            transition-duration: .3s;
-        }
-
-        .Btn:hover {
-            width: 125px;
-            border-radius: 40px;
-            transition-duration: .3s;
-        }
-
-        .Btn:hover .sign {
-            width: 30%;
-            transition-duration: .3s;
-            padding-left: 20px;
-        }
-
-        .Btn:hover .text {
-            opacity: 1;
-            width: 70%;
-            transition-duration: .3s;
-            padding-right: 0;
-        }
-
-        .Btn:active {
-            transform: translate(2px, 2px);
         }
     </style>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Toggle submenu
-            const toggleButtons = document.querySelectorAll(".toggle-btn");
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.querySelector('.toggle-btn');
 
-            toggleButtons.forEach((btn) => {
-                btn.addEventListener("click", (event) => {
-                    event.preventDefault();
-                    const submenu = btn.nextElementSibling;
-                    submenu.style.display = submenu.style.display === "block" ? "none" : "block";
-                    btn.querySelector(".arrow").classList.toggle("open");
-                });
-            });
-        });
+        sidebar.classList.toggle('show');
 
-        // Dropdown toggle
-        function toggleDropdown(event) {
-            event.stopPropagation();
-            const dropdownContent = event.target.nextElementSibling;
-            dropdownContent.classList.toggle("show");
+        // Toggle button icon
+        if (sidebar.classList.contains('show')) {
+            toggleBtn.style.display = 'none';
+        } else {
+            toggleBtn.style.display = 'block';
         }
-
-        document.addEventListener("click", () => {
-            const dropdowns = document.querySelectorAll(".dropdown-content");
-            dropdowns.forEach((dropdown) => dropdown.classList.remove("show"));
-        });
-    </script>
+    }
+</script>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            
-            <ul>
-            <br>
-            <br><br><br>
-                <li><a href="/admin_dashboard/">Dashboard</a></li>
-                <li>
-                    <a href="#" class="toggle-btn">
-                        Course Management <span class="arrow">&#9662;</span>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="/create-free-course/">Create Free Course</a></li>
-                        <li><a href="#">Create Course</a></li>
-                        <li><a href="#">Resource Upload</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="toggle-btn">
-                        Enrollment Management <span class="arrow">&#9662;</span>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="#">Give Access</a></li>
-                        <li><a href="#">Enrollment Tracking</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Certificates</a></li>
-                <li><a href="#">Invoices</a></li>
-                <li><a href="#">Notifications</a></li>
-                <li><a href="#">Create Sub Admin</a></li>
-            </ul>
-        </aside>
+    <nav class="navbar navbar-light bg-light">
+        <div class="logo1">
+            <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i>
+            <img class="logo navbar-brand" src="../static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
+           
+        </div>
+        <div class="logo1">
+            <form class="form-inline">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Help</button>
+            </form>
+        </div>
+    </nav>
 
-        <!-- Main Content -->
-        <main>
-            <!-- Navbar -->
-            <header class="navbar">
-                <div class="admin-info">
-                    <img src="{% static 'images/profile.jpg' %}" alt="Profile" class="profile-pic">
-                    <span class="admin-email">{{ admin_email }}</span>
-                    <a href="#" class="navbar-link">My Profile</a>
-                    <button class="Btn" onclick="location.href='/'">
-                        <div class="sign">
-                            <svg viewBox="0 0 512 512">
-                                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
-                            </svg>
-                        </div>
-                        <div class="text">   Logout</div>
-                    </button> 
+    <!-- Sidebar -->
+    <div class="sidebar bg-dark" id="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <ul class="nav flex-column p-3">
+            <!-- Dashboard Menu -->
+            <li class="nav-item">
+                <a href="/admin_dashboard/" style="text-decoration: none;"><span class="nav-link" >Dashboard</span></a>
+            </li>
+
+            <!-- Course Management Menu -->
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
+                    aria-expanded="false" aria-controls="menu1">
+                    Course Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu1">
+                    <a class="nav-link pl-4" href="#">Create Course</a>
+                    <a class="nav-link pl-4" href="#">Resource Upload</a>
+                    <a class="nav-link pl-4" href="/create-free-course/">Create Free Course</a>
                 </div>
-            </header>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu2"
+                    aria-expanded="false" aria-controls="menu1">
+                    Enrollment Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu2">
+                    <a class="nav-link pl-4" href="#">Give Access</a>
+                    <a class="nav-link pl-4" href="#">Enrollment Tracking</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Certificates
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Invoices
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Notifications
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Create Sub Admin
+                </a>
+            </li>
+        </ul>
 
-            <!-- Dashboard Content -->
-            <!-- <section class="content">
-                <h1>Welcome to Admin Dashboard</h1>
-            </section> -->
-        </main>
     </div>
 </body>
 </html>
