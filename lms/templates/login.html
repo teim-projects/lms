@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Login</title>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -128,20 +130,23 @@
             }
         }
         @media screen and (max-width: 768px) {
-            footer p {
-                font-size: 10px;
+            .footer p {
+                font-size: 0.8rem; /* Smaller font for smaller devices */
+                word-wrap: break-word; /* Ensures text does not overflow */
+                margin: 5px 0; /* Adjust margin for compact view */
             }
-            footer img {
-                height: 16px;
+
+            .footer img {
+                height: 16px; /* Scale images for smaller devices */
             }
         }
         @media screen and (max-width: 480px) {
-            footer p {
-                font-size: 10px;
+            .footer p {
+                font-size: 0.7rem; /* Even smaller font for extra small devices */
             }
-            .footer{
-                padding: 0px;
-                height: 2px;
+
+            .footer img {
+                height: 14px; /* Further scale down images */
             }
         }
         .footer{
@@ -155,6 +160,7 @@
            font-size: 13px;
            padding: 0px;
         }
+       
     </style>
 </head>
 <body>
@@ -202,11 +208,22 @@
             {% endif %}
         </form>
     </div>
-    <footer style="background-color: #f7f7f7; padding: 0px 0px; text-align: center; font-size: 0.9rem; color: #555;" class="footer">
+    <footer style="background-color: #f7f7f7;  text-align: center; font-size: 0.8rem; color: #555;" class="footer">
         <div class="container">
-            <p style="margin: 0; font-weight: 600;">© 2024. Powered by <img src="{% static '../static\images\logoweb.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;"><a href="http://www.chronoanalytics.in/" style="  text-decoration: none; " >Chronoanalytics Solution </a> All Rights Reserved.</p>
-            <p style="margin: 0; font-weight: 600;">© 2024. Powered by <img src="{% static '../static\images\TeimLogo.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;"><a href="http://teim.in/" style="  text-decoration: none; " >Teim </a> All Rights Reserved.</p>
-
+            <!-- Footer Content -->
+            <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
+                © 2024. Powered by 
+                <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo" style="height: 20px; vertical-align: middle;">
+                <a href="http://www.chronoanalytics.in/" style="text-decoration: none; color: #007bff;">Chronoanalytics Solution</a> 
+                All Rights Reserved.
+            </p>
+            <p style="font-weight: 600; word-wrap: break-word;">
+                © 2024. Powered by 
+                <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;">
+                <a href="http://teim.in/" style="text-decoration: none; color: #007bff;">Teim</a> 
+                All Rights Reserved.
+            </p>
         </div>
+    
 </body>
 </html>
