@@ -3,32 +3,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         /* General body styling */
+       
         body {
-            font-family: Arial, sans-serif;
+            font-family:Verdana (sans-serif);
             margin: 0;
             padding: 0;
-            background: url("{% static 'images/background2.jpg' %}");
+            background-color: #FAFAFA;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
         }
 
-        /* Form container styling */
-        form {
-            background: rgba(255, 255, 255, 1); /* Slightly transparent white */
-            padding: 2em;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        /* Center the form using position and transform */
+        .form-container {
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 100%;
             max-width: 400px;
-            text-align: center;
+            padding: 2em;
+            background: rgba(255, 255, 255, 1); /* Solid white */
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         /* Input field styling */
@@ -37,7 +42,6 @@
             font-size: 1rem;
             font-weight: bold;
             color: #333;
-            text-align: left;
             margin-top: 1em;
         }
 
@@ -47,16 +51,19 @@
             margin-top: 0.5em;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 1rem;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
             background-color: #f9f9f9;
+            text-shadow: 0px 0px 1px rgba(6, 2, 17, 0);
+            font-weight: bold;
         }
 
         input:focus {
             outline: none;
             border-color: #6a11cb;
-            box-shadow: 5px 5px 5px rgba(106, 17, 203, 0.5);
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
             background: #fff;
+            font-size: 1rem;
         }
 
         /* Button styling */
@@ -71,17 +78,16 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1.5em;
+            width: 100%;
         }
 
         button:hover {
             background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1);
-            box-shadow: 0 15px 10px rgba(106, 17, 203, 0.5);
+            transform: scale(1.02);
         }
 
         /* Link styling */
         a {
-            margin-left: 20px;
             display: inline-block;
             margin-top: 1em;
             text-decoration: none;
@@ -100,29 +106,107 @@
             margin-top: 1em;
             font-weight: bold;
         }
+
+        /* Navbar adjustments for mobile */
+        .navbar {
+            background-color: #f7f4f4;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            padding: 0px;
+        }
+
+        .navbar-toggle {
+            border: none;
+        }
+
+        @media screen and (max-width: 768px) {
+           
+            .form-container{
+                margin-top: 30px;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            footer p {
+                font-size: 1.5rem;
+            }
+            footer img {
+                height: 16px;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            footer p {
+                font-size: 0.75rem;
+            }
+            .footer{
+                padding: 0px;
+                height: 2px;
+            }
+        }
+        .footer{
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+          
+        }
+        .signup a{
+           align-items: center;
+           font-size: 13px;
+           padding: 0px;
+        }
     </style>
 </head>
 <body>
-    <form method="post">
-        {% csrf_token %}
-        <h2 style="color: #333; margin-bottom: 1em;">Login</h2>
-        <label>Email:</label>
-        <input type="email" name="email" required>
-        <label>Password:</label>
-        <input type="password" name="password" required>
-        <button type="submit">Login</button>
-        <br> <hr>
-        <a href="/signup/">Signup</a>
-        <a href="/password-reset/">Forgot Password?</a>
-
-        {% if messages %}
-            <div class="error">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button> -->
+                <a class="navbar-brand" href="http://www.chronoanalytics.in/">
+                    <img src="{% static 'images/logoweb.png' %}" alt="Logo" style="height: 40px;   margin-bottom: 10px; ">
+                </a>
             </div>
-        {% endif %}
-    </form>
+            <!-- <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+            </div> -->
+        </div>
+    </nav>
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            <h2 style="color: #333; margin-bottom: 1em;">Login</h2>
+            <label>Email:</label>
+            <input type="email" name="email" required>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <button type="submit">Login</button>
+            <br> <hr>
+            <span class="signup">
+            <a href="/signup/" >Signup</a>
+            <a href="/password-reset/" >Forgot Password?</a>
+            </span>
+
+            {% if messages %}
+                <div class="error">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+    <footer style="background-color: #f7f7f7; padding: 20px 10px; text-align: center; font-size: 0.9rem; color: #555;" class="footer">
+        <div class="container">
+            <p style="margin: 0; font-weight: 600;">© 2024. Powered by <img src="{% static '../static\images\logoweb.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;"><a href="http://www.chronoanalytics.in/" style="  text-decoration: none; " >Chronoanalytics Solution </a>All Rights Reserved.</p>
+            <p style="margin: 0; font-weight: 600;">© 2024. Powered by <img src="{% static '../static\images\TeimLogo.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;"><a href="http://teim.in/" style="  text-decoration: none; " >Teim </a> All Rights Reserved.</p>
+
+        </div>
 </body>
 </html>
-

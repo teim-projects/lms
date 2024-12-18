@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Toggle</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            transition: left 0.3s ease-in-out;
+            z-index: 1050;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar .nav-link,
+        .sidebar .dropdown-item {
+            color: white !important;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            font-size: 30px;
+            /* background-color: cornflowerblue;
+            padding: 0px 10px 4px; */
+        }
+
+        /* Toggle Button Styles */
+        .toggle-btn {
+            /* position: fixed; */
+            /* top: 10px; */
+            left: 10px;
+            z-index: 1100;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Navbar Styles */
+        .bg-light {
+            box-shadow: 0px 0px 5px 1px;
+        }
+
+        /* .logo {
+            margin-left: 40px;
+        } */
+
+        /* Content Styles */
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        a:hover {
+            /* background-color: rgb(94, 94, 93); */
+            /* font-size: 18px; */
+            /* border: 1px solid; */
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            /* padding: 5px; */
+        }
+
+        .paid-btn {
+            width: 100%;
+        }
+
+        .paid-form {
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            border-radius: 10px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: 25px;
+        }
+        .logo1{
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-light">
+        <div class="logo1">
+            <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i>
+            <img class="logo navbar-brand" src="../static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
+           
+        </div>
+        <div class="logo1">
+            <form class="form-inline">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Help</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar bg-dark" id="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <ul class="nav flex-column p-3">
+            <!-- Dashboard Menu -->
+            <li class="nav-item">
+                <span class="nav-link" href="#">Dashboard</span>
+            </li>
+
+            <!-- Course Management Menu -->
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
+                    aria-expanded="false" aria-controls="menu1">
+                    Course Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu1">
+                    <a class="nav-link pl-4" href="#">Create Course</a>
+                    <a class="nav-link pl-4" href="#">Resource Upload</a>
+                    <a class="nav-link pl-4" href="#">Free Course</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu2"
+                    aria-expanded="false" aria-controls="menu1">
+                    Enrollment Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu2">
+                    <a class="nav-link pl-4" href="#">Give Access</a>
+                    <a class="nav-link pl-4" href="#">Enrollment Tracking</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Certificates
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Invoices
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Notifications
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Create Sub Admin
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+    <!-- Content -->
+    <div class="container">
+
+        <div>
+            <div class="row">
+                <div class="col-12 col-md-3">
+
+                </div>
+                <div class="col-12 col-md-6 m-3 p-3 paid-form">
+                    <h2 class="text-center">Create paid course</h2>
+                    <form class="p-3 ">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Course Title</label>
+                                <input type="email" class="form-control" id="inputEmail4">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Duration</label>
+                                <input type="password" class="form-control" id="inputPassword4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress">Discription</label>
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4"> Instructor</label>
+                                <select id="inputState" class="form-control">
+                                    <option selected>Anup Sir</option>
+                                    <option>Kalyani Ma'am</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Course Level</label>
+                                <select id="inputState" class="form-control">
+                                    <option selected> Beginner</option>
+                                    <option> Intermediate</option>
+                                    <option> Advanced</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputState">Course Price</label>
+                                <input type="text" class="form-control" id="inputAddress" placeholder="price">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">Thumbnail</label>
+                                <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                            </div>
+                        </div>
+                        <button type="submit" class=" paid-btn btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="col-12 col-md-3">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn');
+
+            sidebar.classList.toggle('show');
+
+            // Toggle button icon
+            if (sidebar.classList.contains('show')) {
+                toggleBtn.style.display = 'none';
+            } else {
+                toggleBtn.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

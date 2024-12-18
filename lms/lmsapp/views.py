@@ -358,3 +358,7 @@ def free_course(request):
     courses = FreeCourse.objects.all()  # Fetch all courses to display
     return render(request, 'free_course.html', {'courses': courses})
 
+def paid_course(request):
+    # Render a simple dashboard with a header
+    return render(request, 'paid_course.html')
+
