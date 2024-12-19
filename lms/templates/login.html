@@ -14,7 +14,7 @@
         /* General body styling */
        
         body {
-            font-family:Verdana (sans-serif);
+            font-family: Verdana, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #FAFAFA;
@@ -76,7 +76,7 @@
             border: none;
             border-radius: 25px;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 900;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1.5em;
@@ -155,18 +155,40 @@
             width: 100%;
           
         }
+        a {
+            color: #ff6f61;
+            text-decoration: none;
+        }
+
         .signup a{
            align-items: center;
            font-size: 13px;
            padding: 0px;
         }
-       
+       .tem{
+        position: fixed;
+        right: 25px;
+        top: 0px;
+       }
+       .navbar{
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+       }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
+        <div class="container-fluid navbarr">
+            <div class="navbar-header" style="margin-left: 20px;">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button> -->
+                <a class="navbar-brand" href="https://profitmaxacademy.com/">
+                    <img src="{% static 'images/pmxlogo_c.png' %}" alt="Logo" style="height: 40px;   margin-bottom: 10px; ">
+                </a>
+            </div>
+            <div class="navbar-header tem">
                 <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -208,7 +230,7 @@
             {% endif %}
         </form>
     </div>
-    <footer style="background-color: #f7f7f7;  text-align: center; font-size: 0.8rem; color: #555;" class="footer">
+    <footer  class="footer" style="background-color: #f7f7f7;  text-align: center; font-size: 0.8rem; color: #555;" class="footer">
         <div class="container">
             <!-- Footer Content -->
             <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
@@ -218,7 +240,7 @@
                 All Rights Reserved.
             </p>
             <p style="font-weight: 600; word-wrap: break-word;">
-                © 2024. Powered by 
+                © 2024. Marketed by TEIM 
                 <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;">
                 <a href="http://teim.in/" style="text-decoration: none; color: #007bff;">Teim</a> 
                 All Rights Reserved.
