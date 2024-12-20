@@ -14,8 +14,31 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        /* Sidebar Styles */
+        body {
+            margin: 0;
+            overflow-x: hidden;
+        }
 
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            transition: left 0.3s ease-in-out;
+            z-index: 1050;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar .nav-link,
+        .sidebar .dropdown-item {
+            color: white !important;
+        }
 
         .close-btn {
             position: absolute;
@@ -39,28 +62,33 @@
             font-size: 1.5rem;
         }
 
-
-
-        /*Navbar Css start*/
+ /* Navbar Styles */
+        .bg-light {
+            box-shadow: 0px 0px 5px 1px;
+        }
         .logo1 {
             display: flex;
             align-items: center;
         }
 
-        .bg-light {
-            box-shadow: 0px 0px 5px 1px;
-        }
+        /* .logo {
+            margin-left: 40px;
+        } */
 
-        /*Navbar Css End*/
-
-        /*Content Css start*/
-
+        /* Content Styles */
         .content {
             margin-left: 0;
             transition: margin-left 0.3s ease-in-out;
         }
 
-
+        a:hover {
+            /* background-color: rgb(94, 94, 93); */
+            /* font-size: 18px; */
+            /* border: 1px solid; */
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            /* padding: 5px; */
+        }
 
         .paid-btn {
             width: 100%;
@@ -89,8 +117,7 @@
             transition: all 0.3s ease;
             margin-top: 1.5em;
         }
-
-        .delet-btn {
+        .delet-btn{
             background: linear-gradient(to right, #cb1111, #fc5025);
             color: #fff;
             padding: 5px 20px;
@@ -101,8 +128,7 @@
             transition: all 0.3s ease;
             margin-top: 1.5em;
         }
-
-        .update-btn {
+        .update-btn{
             background: linear-gradient(to right, #059144, #1a520e);
             color: #fff;
             padding: 5px 20px;
@@ -114,6 +140,11 @@
             margin-top: 1.5em;
         }
 
+        button:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: scale(1);
+            box-shadow: 0 10px 10px rgba(106, 17, 203, 0.5);
+        }
 
         .paid-form {
             box-shadow: 0px 0px 5px rgb(177, 177, 176);
@@ -126,7 +157,7 @@
             margin-right: 25px;
         }
 
-
+        
 
         .course-container {
             display: flex;
@@ -168,57 +199,9 @@
         .course-card span {
             font-weight: bold;
         }
-
-        /*Content Css End*/
-
-        /*SideBar Css start*/
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            height: 100%;
-            width: 250px;
-            background-color: #343a40;
-            transition: left 0.3s ease-in-out;
-            z-index: 1050;
-        }
-
-        .sidebar.show {
-            left: 0;
-        }
-
-        /*SideBar Css End*/
-
-        /*Commen Css start*/
-
-        body {
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        .sidebar .nav-link,
-        .sidebar .dropdown-item {
-            color: white !important;
-        }
-
-        button:hover {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1);
-            box-shadow: 0 10px 10px rgba(106, 17, 203, 0.5);
-        }
-
-
-        a:hover {
-            /* background-color: rgb(94, 94, 93); */
-            /* font-size: 18px; */
-            /* border: 1px solid; */
-            border-radius: 5px;
+        .card-box{
             box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            /* padding: 5px; */
         }
-
-        /*Commen Css End*/
     </style>
 </head>
 
@@ -292,7 +275,8 @@
 
     </div>
 
-    <!-- Content -->
+<!-- paid couse form Content -->
+
     <div class="container">
 
         <div>
@@ -344,7 +328,7 @@
                             </div>
                         </div>
                         <!-- button class btn btn-primary -->
-                        <button type="submit" class="paid-btn ">Submit</button>
+                        <button type="submit" class="paid-btn">Submit</button>
                     </form>
 
                 </div>
@@ -356,23 +340,8 @@
     </div>
 
 
-    <!-- <h2> Paid Courses</h2>
-    <div class="course-container">
-        {% for course in courses %}
-        <div class="course-card">
-            {% if course.thumbnail %}
-            <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }} Thumbnail">
-            {% endif %}
-            <h3>{{ course.course_title }}</h3>
-            <p><span>Duration:</span> {{ course.duration }}</p>
-            <p><span>Description:</span> {{ course.description }}</p>
-            <p><span>Instructor:</span> {{ course.instructor_name }}</p>
-            <p><span>Level:</span> {{ course.course_level }}</p>
-            <p><span>Price:</span> ${{ course.course_price }}</p>
-        </div>
-        {% endfor %}
-    </div> -->
-
+ 
+ <!-- paid couse card  -->
 
     <div class="container my-4">
         <div class="text-center mb-4">
@@ -381,7 +350,7 @@
         <div class="row">
             {% for course in courses %}
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 card-box">
                     {% if course.thumbnail %}
                     <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.course_title }} Thumbnail"
                         style="width: 100%; height: 200px; object-fit: cover;">
@@ -404,9 +373,9 @@
             {% endfor %}
         </div>
     </div>
-
-
-
+   
+    
+    
     <!-- JavaScript -->
     <script>
         function toggleSidebar() {
