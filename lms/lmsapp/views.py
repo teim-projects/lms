@@ -363,6 +363,11 @@ def paid_course(request):
     return render(request, 'paid_course.html')
 
 
+def view_paid_course(request):
+    courses = PaidCourse.objects.all()
+    return render(request, 'view_paid_course.html',{'courses': courses})
+
+
 
 
 from django.shortcuts import render, redirect
