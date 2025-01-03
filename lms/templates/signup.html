@@ -4,14 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Signup</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
     <style>
         /* General body styling */
         body {
-            font-family: Arial, sans-serif;
+            font-family: Verdana (sans-serif);
+            background-color: #FAFAFA;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #ff2ff8, #39e5ff);
-            display: flex;
+            /*background: linear-gradient(to right, #ff2ff8, #39e5ff);*/
+      
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -20,7 +25,7 @@
         /* Form container styling */
         form {
             background: #ffffff;
-            padding: 2em;
+            padding: 1em;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             width: 100%;
@@ -40,13 +45,14 @@
 
         input, select {
             width: 100%;
-            padding: 10px;
+          
             margin-top: 0.5em;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
             transition: all 0.3s ease;
             background-color: #f9f9f9;
+            padding: 5px;
         }
 
         input:focus, select:focus {
@@ -64,7 +70,7 @@
             border: none;
             border-radius: 25px;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 900;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1.5em;
@@ -82,28 +88,181 @@
             margin-top: 1em;
             font-weight: bold;
         }
-        a {
-            
-            display: inline-block;
-            margin-top: 1em;
-            text-decoration: none;
-            color: #6a11cb;
-            font-size: 1.1rem;
-            font-weight: 650;
-        }
+       
         a:hover{
             color: #333;
         }
-        
+       
+      
+
+       
+        a{
+          text-decoration: none;
+        }
+        .b2{
+            color: rgb(252, 255, 254);
+        }
+        h2{
+            margin-top: 0px;
+        }
+.myform{
+    margin-top: 10px;
+}
+   
+
+
+.tem{
+    position: fixed;
+    right: 25px;
+    top: 0px;
+   }
+
+   
+   /* Navbar Css Start */
+   .navbar {
+       background-color: #f7f4f4;
+       box-shadow: 0px 2px 10px rgb(203, 203, 203);
+
+   }
+
+   .navbar-brand {
+       font-size: 1.5rem;
+       padding: 0px;
+   }
+
+   .navbar-toggle {
+       border: none;
+   }
+
+   .tem {
+       position: fixed;
+       right: 25px;
+       top: 0px;
+   }
+
+   .navbar {
+       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+   }
+
+   .navbar-header_logo {
+       position: absolute;
+       left: 10px;
+   }
+
+   .teimlms {
+       position: fixed;
+       left: 45%;
+       top: 20px;
+       font-weight: bold;
+       font-size: 20px;
+       font-family: Algerian;
+       background: linear-gradient(to right, #2575fc, #6a11cb);
+       /* Gradient definition */
+       -webkit-background-clip: text;
+       /* Clip the gradient to the text boundaries */
+       -webkit-text-fill-color: transparent;
+       border-bottom: 3px solid rgb(80, 16, 177);
+       /*Script MT */
+   }
+
+
+   /*Navbar Css End */
+ 
+/*Footer Css Start*/
+   @media screen and (max-width: 768px) {
+       .footer p {
+           font-size: 1rem;
+           /* Smaller font for smaller devices */
+           word-wrap: break-word;
+           /* Ensures text does not overflow */
+           margin: 5px 0;
+           /* Adjust margin for compact view */
+       }
+
+       .footer img {
+           height: 16px;
+           /* Scale images for smaller devices */
+       }
+   }
+
+   @media screen and (max-width: 480px) {
+       .footer p {
+           font-size: 1rem;
+           /* Even smaller font for extra small devices */
+       }
+
+       .footer img {
+           height: 14px;
+           /* Further scale down images */
+       }
+
+
+       .navbar-header_logo {
+
+           position: absolute;
+           left: 0px;
+       }
+
+
+   }
+
+   .footer {
+       position: fixed;
+       bottom: 0px;
+       width: 100%;
+       font-size: 20px;
+       box-shadow: 0px -2px 10px rgb(203, 203, 203);
+
+
+   }
+/*Footer Css End*/
     </style>
 </head>
 <body>
-    <form method="post">
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid navbarr">
+            <div class="navbar-header ">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button> -->
+                <a class="navbar-brand " href="https://profitmaxacademy.com/">
+                    <img src="{% static 'images/pmxlogo_c.png' %}" alt="Logo"
+                        style="height: 40px;   margin-bottom: 10px; " class="navbar-header_logo">
+                </a>
+            </div>
+
+            <div class="teimlms">
+                <span>T E I M L M S</span>
+            </div>
+            <div class="navbar-header tem">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button> -->
+                <a class="navbar-brand" href="http://www.chronoanalytics.in/">
+                    <img src="{% static 'images/logoweb.png' %}" alt="Logo"
+                        style="height: 40px;   margin-bottom: 10px; ">
+                </a>
+            </div>
+            <!-- <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+            </div> -->
+        </div>
+    </nav>
+<center>
+    <form method="post" class="myform">
         {% csrf_token %}
-        <h2 style="color: #333; margin-bottom: 1em;">Signup</h2>
+        <h2 style="color: #333; margin-bottom: 0.5em;">Signup</h2>
         
         <label>Email:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email"  class="form-control" required>
 
         <label>Country Code:</label>
         <select name="country_code" id="country_code" required>
@@ -113,17 +272,18 @@
         </select>
 
         <label>Mobile No:</label>
-        <input type="tel" name="mobile" id="mobile" required>
+        <input type="tel" name="mobile" id="mobile" required class="form-control">
 
         <label>Password:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required class="form-control">
 
         <label>Confirm Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required>
+        <input type="password" id="confirm_password" name="confirm_password" required class="form-control">
 
+        
         <button type="submit">Sign Up</button>
-        <br> <hr>
-        <a href="/">login</a>
+        <!-- <br> <hr> -->
+       <button> <a href="/" class="b2"> Login </a>   </button>
 
 
         {% if messages %}
@@ -134,5 +294,26 @@
             </div>
         {% endif %}
     </form>
+</center>
+<footer style="background-color: #f7f7f7;  text-align: center; font-size: 0.8rem; color: #555;" class="footer">
+    <div class="container">
+        <!-- Footer Content -->
+        <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
+            © 2024. Powered by 
+            <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo" style="height: 20px; vertical-align: middle;">
+            <a href="http://www.chronoanalytics.in/" style="text-decoration: none;font-size: 1.1rem; background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent;">Chronoanalytics Solution</a> 
+            All Rights Reserved.
+        </p>
+        <p style="font-weight: 600; word-wrap: break-word;">
+            © 2024. Marketed by TEIM 
+            <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;">
+            <a href="http://teim.in/" style="text-decoration: none;font-size: 1.3rem; background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent;">Teim</a> 
+            All Rights Reserved.
+        </p>
+    </div>
 </body>
 </html>

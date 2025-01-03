@@ -89,3 +89,25 @@ class FreeCourse(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+from django.db import models
+
+class PaidCourse(models.Model):
+    COURSE_LEVELS = [
+        ('Beginner', 'Beginner'),
+        ('Intermediate', 'Intermediate'),
+        ('Advanced', 'Advanced'),
+    ]
+    
+    course_title = models.CharField(max_length=255)
+    duration = models.CharField(max_length=100)
+    description = models.TextField()
+    instructor_name = models.CharField(max_length=255)
+    course_level = models.CharField(max_length=20, choices=COURSE_LEVELS, default='Beginner')
+    course_price = models.DecimalField(max_digits=10, decimal_places=2)
+    thumbnail = models.ImageField(upload_to='thumbnails/')
+
+    def __str__(self):
+        return self.course_title
