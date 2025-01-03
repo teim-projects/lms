@@ -114,7 +114,7 @@ body::before {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding: 10px 20px;
+           padding: 10px 20px;
             position: fixed;
             top: 0;
             right: 0;
@@ -157,6 +157,10 @@ body::before {
             color: #007bff; /* Hover color */
         }
 
+        .navbar{
+            margin-bottom: 0px;
+          
+        }
         /* Logout Specific Styling */
         .logout-link {
             color: rgb(255, 146, 146); /* Logout-specific color */
@@ -207,12 +211,16 @@ body::before {
         /* Main Content */
         main {
             margin-left: 250px; /* Adjust for sidebar width */
-            padding: 100px 20px; /* Adjust for navbar height */
+          
         }
 
+        .content{
+           padding-top: 0px;
+         
+        }
         .content h1 {
-            color: black;
-            text-shadow: 2px 2px 5px rgba(255, 231, 126, 0.7);
+           
+           
             text-align: center;
             margin-top: 150px;
         }
@@ -220,7 +228,7 @@ body::before {
         
         .courses {
             width: 80%;
-            margin: 20px auto; /* Center the courses section */
+            margin: 0px auto; /* Center the courses section */
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
@@ -235,9 +243,9 @@ body::before {
             border-radius: 5px;
             padding: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative; /* To position the button inside the card */
+            position: relative; 
             overflow: hidden; 
-            transition: transform 0.1s ease-out; /* Ensure the transition applies to the normal state */
+            transition: transform 0.1s ease-out; 
 
         }
 
@@ -606,7 +614,7 @@ button.learn-more:hover .button-text {
             </header>
 
             <section class="content">
-                <h1>Available Courses</h1>
+                <h1  style="background: linear-gradient( to right, #2575fc, #6a11cb);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">Available Courses</h1>
                 <div class="courses">
                     {% for course in courses %}
                     <div class="course-card">
