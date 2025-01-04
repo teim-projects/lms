@@ -8,115 +8,70 @@
     <style>
         /* General Reset */
         body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    height: 100%;
-    width: 100%;
-    background-color: #ddd;
-    /* position: relative;
-    background: url("{% static 'images/background2.jpg' %}") no-repeat center center fixed; 
-    background-size: cover;
-    overflow-x: hidden;  */
-}
-
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.3); /* Adjust opacity: 0.5 = 50% transparent */
-    z-index: -1; /* Place it behind all other content */
-}
-
-/* Ensure the main content stays above the pseudo-element */
-.dashboard, .navbar, .content, .sidebar .dropdown {
-    position: relative;
-    z-index: 1;
-}
-
-
-        /* Dashboard Layout */
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Verdana, sans-serif;
+            height: 100%;
+            width: 100%;
+            background-color: #ddd;
+            transition: margin-left 0.5s; /* Smooth content shifting */
         }
 
         /* Sidebar Styling */
         .sidebar {
-            width: 250px;
-            background: rgba(255, 255, 255, 1); /* Slight transparency for better blending with the background */
-            padding: 20px;
-            border-right: 1px solid #ddd;
-            height: 100vh;
+            height: 100%;
+            width: 0; /* Initially hidden */
             position: fixed;
-            overflow-y: auto;
+            z-index: 2; /* Above the main content */
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: width 0.8s; /* Smooth transition for width change */
+            padding-top: 40px;
         }
 
-        .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar ul li {
-            margin: 10px 0;
-            position: relative;
-        }
-
-        .sidebar ul li a {
+        .sidebar a {
+            padding: 10px 10px;
             text-decoration: none;
-            color: black;
-            display: flex;
-            /* justify-content: space-between; */
-            align-items: center;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        .sidebar ul li a img.icon {
-    width: 20px; /* Set the size of the icon */
-    height: 20px;
-    margin-right: 10px; /* Space between icon and text */
-    display: inline-block;
-}
-
-        .sidebar ul li a:hover {
-            background: #e9ecef;
+            font-size: 16px;
+            color: #ffffff;
+            display: block;
+            transition: color 0.3s;
         }
 
-        .submenu {
-            list-style: none;
-            padding-left: 20px;
-            display: none;
-            color: black;
+        .sidebar a:hover {
+            color: #62b552;
         }
 
-        .submenu li {
-            padding-left: 20px;
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
         }
 
-        .arrow {
-            font-size: 30px;
-            margin-left: auto;
+        /* Sidebar Toggle Button */
+        .openbtn {
+            font-size: 20px;
             cursor: pointer;
-            transition: transform 0.3s;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            margin-left: 10px;
+            position: fixed;
+            left: 10px;
         }
 
-        .arrow.open {
-            transform: rotate(180deg);
+        .openbtn:hover {
+            background-color: #444;
         }
 
-        /* Top Navbar */
+        /* Navbar */
         .navbar {
-            background: rgba(255, 255, 255, 1); /* Slight transparency */
+            background: #fff;
             display: flex;
             justify-content: flex-end;
             align-items: center;
@@ -124,9 +79,9 @@ body::before {
             position: fixed;
             top: 0;
             right: 0;
-            width: 100%; /* Adjust for sidebar width */
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+            width: 100%; /* Full width */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1; /* Ensure above sidebar */
         }
 
         .admin-info {
@@ -141,89 +96,37 @@ body::before {
             border-radius: 50%;
         }
 
-        .admin-email {
+        .admin-email, .user-email {
             font-weight: bold;
             color: black;
-        }
-        .user-email {
-            font-weight: bold;
-            color: black;
-        }
-
-                /* Navbar Links */
-        .navbar-link {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            margin-left: 15px; /* Space between links */
-            transition: color 0.3s ease-in-out;
-        }
-
-        .navbar-link:hover {
-            color: #007bff; /* Hover color */
-        }
-
-        /* Logout Specific Styling */
-        .logout-link {
-            color: rgb(255, 146, 146); /* Logout-specific color */
-        }
-
-        .logout-link:hover {
-            color: red; /* Hover effect for logout */
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-btn {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            padding: 5px;
-            color: black;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: -50px;
-            background: #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* z-index: 1000; */
-        }
-
-        .dropdown-content a {
-            padding: 10px;
-            display: block;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f5f5f5;
-        }
-
-        .dropdown.open .dropdown-content {
-            display: block;
         }
 
         /* Main Content */
         main {
-            margin-left: 250px; /* Adjust for sidebar width */
+            margin-left: 0; /* Adjust for sidebar width */
             padding: 100px 20px; /* Adjust for navbar height */
+            transition: margin-left 0.5s; /* Smooth content shifting */
         }
 
-        .content h1 {
-            color: white;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            text-align: center;
-            margin-top: 150px;
+        /* Smooth Submenu */
+        .submenu {
+            display: none;
+            list-style: none;
+            padding-left: 20px;
         }
-         /* Button Styles */
- .Btn {
+
+        .submenu li {
+            padding-left: 20px;
+        }
+
+        .toggle-btn {
+            cursor: pointer;
+        }
+
+        .toggle-btn:hover .submenu {
+            display: block;
+        }
+        .Btn {
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -288,87 +191,104 @@ body::before {
         .Btn:active {
             transform: translate(2px, 2px);
         }
-
-    </style>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Toggle submenu
-            const toggleButtons = document.querySelectorAll(".toggle-btn");
-
-            toggleButtons.forEach((btn) => {
-                btn.addEventListener("click", (event) => {
-                    event.preventDefault();
-                    const submenu = btn.nextElementSibling;
-                    submenu.style.display = submenu.style.display === "block" ? "none" : "block";
-                    btn.querySelector(".arrow").classList.toggle("open");
-                });
-            });
-        });
-
-        // Dropdown toggle
-        function toggleDropdown(event) {
-            event.stopPropagation();
-            const dropdownContent = event.target.nextElementSibling;
-            dropdownContent.classList.toggle("show");
+        .navbar-link {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            margin-left: 15px; /* Space between links */
+            transition: color 0.3s ease-in-out;
         }
 
-        document.addEventListener("click", () => {
-            const dropdowns = document.querySelectorAll(".dropdown-content");
-            dropdowns.forEach((dropdown) => dropdown.classList.remove("show"));
+        .navbar-link:hover {
+            color: #007bff; /* Hover color */
+        }
+
+        /* Logout Specific Styling */
+        .logout-link {
+            color: rgb(255, 146, 146); /* Logout-specific color */
+        }
+
+        .logout-link:hover {
+            color: red; /* Hover effect for logout */
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            color: black;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: -50px;
+            background: #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* z-index: 1000; */
+        }
+
+        .dropdown-content a {
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .dropdown.open .dropdown-content {
+            display: block;
+        }
+    </style>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+           
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+          
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Toggle submenu functionality
+            const toggleButtons = document.querySelectorAll(".toggle-btn");
+            toggleButtons.forEach(button => {
+                button.addEventListener("click", event => {
+                    event.preventDefault();
+                    const submenu = button.nextElementSibling;
+                    submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+                });
+            });
         });
     </script>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            
-            <ul>
-            <br>
-            <br><br><br>
-                <li><a href="/student_dashboard/"><img src="{% static 'images/dashboard.png' %}" alt="Dashboard Icon" class="icon">
-                    Dashboard</a></li>
-                <li>
-                    <a href="#" class="toggle-btn">
-                        Course Management <span class="arrow">&#9662;</span>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="/free-course/">Free Course</a></li>
-                        <li><a href="/view_paid_course/">view paid Courses</a></li>
-                        
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="toggle-btn">
-                        Enrollment Management <span class="arrow">&#9662;</span>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="#">Enrollment Tracking</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Certificates</a></li>
-                <li><a href="#">Invoices</a></li>
-                <li><a href="#">Notifications</a></li>
-                <li><a href="#">Create Sub Admin</a></li>
-            </ul>
-        </aside>
+    <!-- Navbar -->
+    <header class="navbar">
+        <button class="openbtn" onclick="openNav()">☰</button>
+        <div class="admin-info">
+            <img src="{% static 'images/profile2.png' %}" alt="Profile" class="profile-pic">
+            {% if request.session.admin_email %}
+                <span class="admin-email">{{ request.session.admin_email }}</span>
+            {% elif request.session.user_email %}
+                <span class="user-email">{{ request.session.user_email }}</span>
+            {% else %}
+                <span class="no-user">No user logged in.</span>
+            {% endif %}
 
-        <!-- Main Content -->
-        <main>
-            <!-- Navbar -->
-            <header class="navbar">
-                <div class="admin-info">
-                    <img src="{% static 'images/profile2.png' %}" alt="Profile" class="profile-pic">
-                    {% if request.session.admin_email %}
-                        <span class="admin-email">{{ request.session.admin_email }}</span>
-                    {% elif request.session.user_email %}
-                        <span class="user-email">{{ request.session.user_email }}</span>
-                    {% else %}
-                        <span class="no-user">No user logged in.</span>
-                    {% endif %}
-
-                    <a href="#" class="navbar-link">My Profile</a>
+            <a href="#" class="navbar-link">My Profile</a>
                     <button class="Btn" onclick="location.href='/'">
                         <div class="sign">
                             <svg viewBox="0 0 512 512">
@@ -377,11 +297,30 @@ body::before {
                         </div>
                         <div class="text">   Logout</div>
                     </button>      
-                </div>
-            </header>
+        </div>
+    </header>
 
-            
-        </main>
-    </div>
+    <!-- Sidebar -->
+    <aside id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <ul>
+            <li><a href="/student_dashboard/">Dashboard</a></li>
+            <li>
+                <a href="#" class="toggle-btn">Course Management</a>
+                <ul class="submenu">
+                    <li><a href="/free-course/">Free Course</a></li>
+                    <li><a href="/view_paid_course/">View Paid Courses</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Certificates</a></li>
+            <li><a href="#">Invoices</a></li>
+            <li><a href="#">Notifications</a></li>
+         </ul> 
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <h1>Welcome to the Student Dashboard</h1>
+    </main>
 </body>
 </html>
