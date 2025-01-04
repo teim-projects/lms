@@ -363,8 +363,13 @@
                         <p class="card-text"><strong>Level:</strong> {{ course.course_level }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ course.course_price }}</p>
                         <div class="d-flex justify-content-around mt-3">
-                            <button class="card-button add-btn"> <i class="fa-solid fa-cloud-arrow-up"></i> </button>
-                            <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
+                            <a href="{% url 'upload_content' course.id %}" class="btn btn-primary">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Upload Content
+                            </a>
+                            <a href="{% url 'view_content' course.id %}" class="btn btn-info">
+                                <i class="fa-solid fa-eye"></i> View Content
+                            </a>                
+                                        <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
                             <button class=" update-btn"><i class="fa-solid fa-pen-to-square"></i></i></button>
                         </div>
                     </div>

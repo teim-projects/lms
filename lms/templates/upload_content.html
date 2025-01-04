@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Course Content</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container my-4">
+    <h2>Upload Course Content</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <div id="subtitle-container">
+            <div class="subtitle-block">
+                <div class="form-group">
+                    <label for="subtitle">Subtitle:</label>
+                    <input type="text" class="form-control" name="subtitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="resource_type">Resource Type:</label>
+                    <select class="form-control" name="resource_type" required>
+                        <option value="pdf">PDF</option>
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                        <option value="word">Word Document</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="resource_file">Upload File:</label>
+                    <input type="file" class="form-control" name="resource_file" required>
+                </div>
+
+                <button type="button" class="btn btn-danger remove-subtitle">Delete Subtitle</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="add-subtitle">Add Subtitle</button>
+        <br><br>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#add-subtitle').click(function () {
+            const subtitleBlock = `
+                <div class="subtitle-block">
+                    <div class="form-group">
+                        <label for="subtitle">Subtitle:</label>
+                        <input type="text" class="form-control" name="subtitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="resource_type">Resource Type:</label>
+                        <select class="form-control" name="resource_type" required>
+                            <option value="pdf">PDF</option>
+                            <option value="image">Image</option>
+                            <option value="video">Video</option>
+                            <option value="word">Word Document</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="resource_file">Upload File:</label>
+                        <input type="file" class="form-control" name="resource_file" required>
+                    </div>
+                    <button type="button" class="btn btn-danger remove-subtitle">Delete Subtitle</button>
+                </div>
+            `;
+            $('#subtitle-container').append(subtitleBlock);
+        });
+
+        $(document).on('click', '.remove-subtitle', function () {
+            $(this).closest('.subtitle-block').remove();
+        });
+    });
+</script>
+</body>
+</html>

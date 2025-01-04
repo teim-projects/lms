@@ -407,3 +407,68 @@ def create_paid_course(request):
     courses = PaidCourse.objects.all()
 
     return render(request, 'paid_course.html', {'courses': courses})
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import PaidCourse, CourseContent
+
+def upload_content(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        subtitles = request.POST.getlist('subtitle')
+        resource_files = request.FILES.getlist('resource_file')
+
+        if len(subtitles) != len(resource_files):
+            # Handle mismatch between subtitles and files
+            return render(request, 'upload_content.html', {'course': course, 'error': 'Each subtitle must have a corresponding file.'})
+
+        # Save content entries
+        for subtitle, resource in zip(subtitles, resource_files):
+            CourseContent.objects.create(course=course, title=title, subtitle=subtitle, resource_file=resource)
+
+        return redirect('view_paid_course')
+
+    return render(request, 'upload_content.html', {'course': course})
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import PaidCourse, CourseContent
+
+def view_content(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    contents = course.contents.all()
+
+    # Annotate each content with its type
+    annotated_contents = []
+    for content in contents:
+        file_url = content.resource_file.url
+        print(f"Resource File URL: {file_url}")  # Debugging the file URL
+        if file_url.endswith('.pdf'):
+            content_type = 'pdf'
+        elif file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            content_type = 'image'
+        elif file_url.endswith('.mp4'):
+            content_type = 'video'
+        elif file_url.endswith('.docx'):
+            content_type = 'word'
+        else:
+            content_type = 'unknown'
+
+        annotated_contents.append({
+            'title': content.title,
+            'subtitle': content.subtitle,
+            'resource_file': file_url,
+            'type': content_type,
+        })
+
+    return render(request, 'view_content.html', {
+        'course': course,
+        'contents': annotated_contents,
+    })
+

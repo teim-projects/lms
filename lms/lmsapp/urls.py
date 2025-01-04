@@ -20,6 +20,8 @@ urlpatterns = [
     path('paid-course/', views.paid_course, name='paid_course'),
     path('create-paid-course/', views.create_paid_course, name='create_paid_course'),
     path('view_paid_course/', views.view_paid_course, name='view_paid_course'),
+    path('course/<int:course_id>/upload-content/', views.upload_content, name='upload_content'),
+    path('course/<int:course_id>/view-content/', views.view_content, name='view_content'),
 
 
 ]
