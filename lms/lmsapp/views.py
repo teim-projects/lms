@@ -449,14 +449,16 @@ def view_content(request, course_id):
     for content in contents:
         file_url = content.resource_file.url
         print(f"Resource File URL: {file_url}")  # Debugging the file URL
+        
+        # Determine the content type based on the file extension
         if file_url.endswith('.pdf'):
             content_type = 'pdf'
         elif file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
             content_type = 'image'
-        elif file_url.endswith('.mp4'):
+        elif file_url.endswith(('.mp4', '.webm', '.ogg')):
             content_type = 'video'
-        elif file_url.endswith('.docx'):
-            content_type = 'word'
+        # elif file_url.endswith('.docx'):
+        #     content_type = 'word'
         else:
             content_type = 'unknown'
 
