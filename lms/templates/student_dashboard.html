@@ -5,128 +5,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
-        /* General Reset */
         body {
             margin: 0;
-            padding: 0;
-            font-family: Verdana, sans-serif;
-            height: 100%;
-            width: 100%;
-            background-color: #ddd;
-            transition: margin-left 0.5s; /* Smooth content shifting */
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            height: 100%;
-            width: 0; /* Initially hidden */
-            position: fixed;
-            z-index: 2; /* Above the main content */
-            top: 0;
-            left: 0;
-            background-color: #111;
             overflow-x: hidden;
-            transition: width 0.8s; /* Smooth transition for width change */
-            padding-top: 40px;
         }
 
-        .sidebar a {
-            padding: 10px 10px;
-            text-decoration: none;
-            font-size: 16px;
-            color: #ffffff;
-            display: block;
-            transition: color 0.3s;
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            transition: left 0.3s ease-in-out;
+            z-index: 1050;
         }
 
-        .sidebar a:hover {
-            color: #62b552;
+        .sidebar.show {
+            left: 0;
         }
 
-        .sidebar .closebtn {
+        .sidebar .nav-link,
+        .sidebar .dropdown-item {
+            color: white !important;
+        }
+
+        .close-btn {
             position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
-
-        /* Sidebar Toggle Button */
-        .openbtn {
-            font-size: 20px;
-            cursor: pointer;
-            background-color: #111;
+            top: 10px;
+            right: 10px;
+            font-size: 1.8rem;
             color: white;
-            padding: 10px 15px;
-            border: none;
-            margin-left: 10px;
-            position: fixed;
-            left: 10px;
-        }
-
-        .openbtn:hover {
-            background-color: #444;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: #fff;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%; /* Full width */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1; /* Ensure above sidebar */
-        }
-
-        .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .profile-pic {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-        }
-
-        .admin-email, .user-email {
-            font-weight: bold;
-            color: black;
-        }
-
-        /* Main Content */
-        main {
-            margin-left: 0; /* Adjust for sidebar width */
-            padding: 100px 20px; /* Adjust for navbar height */
-            transition: margin-left 0.5s; /* Smooth content shifting */
-        }
-
-        /* Smooth Submenu */
-        .submenu {
-            display: none;
-            list-style: none;
-            padding-left: 20px;
-        }
-
-        .submenu li {
-            padding-left: 20px;
-        }
-
-        .toggle-btn {
             cursor: pointer;
+            font-size: 30px;
+            /* background-color: cornflowerblue;
+            padding: 0px 10px 4px; */
         }
 
-        .toggle-btn:hover .submenu {
-            display: block;
+        /* Toggle Button Styles */
+        .toggle-btn {
+            /* position: fixed; */
+            /* top: 10px; */
+            left: 10px;
+            z-index: 1100;
+            cursor: pointer;
+            font-size: 1.5rem;
         }
-        .Btn {
+
+        /* Navbar Styles */
+        .bg-light {
+            box-shadow: 0px 0px 5px 1px;
+        }
+
+        /* .logo {
+            margin-left: 40px;
+        } */
+
+        /* Content Styles */
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        a:hover {
+            /* background-color: rgb(94, 94, 93); */
+            /* font-size: 18px; */
+            /* border: 1px solid; */
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            /* padding: 5px; */
+        }
+
+        .paid-btn {
+            width: 100%;
+        }
+
+        .paid-form {
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            border-radius: 10px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: 25px;
+        }
+        .logo1{
+            display: flex;
+            align-items: center;
+        }
+           /* Button Styles */
+ .Btn {
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -140,6 +119,7 @@
             transition-duration: .3s;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
             background-color: rgb(255, 65, 65);
+            margin-top: 10px;
         }
 
         .sign {
@@ -186,141 +166,132 @@
             width: 70%;
             transition-duration: .3s;
             padding-right: 0;
+
         }
 
         .Btn:active {
             transform: translate(2px, 2px);
         }
-        .navbar-link {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            margin-left: 15px; /* Space between links */
-            transition: color 0.3s ease-in-out;
-        }
-
-        .navbar-link:hover {
-            color: #007bff; /* Hover color */
-        }
-
-        /* Logout Specific Styling */
-        .logout-link {
-            color: rgb(255, 146, 146); /* Logout-specific color */
-        }
-
-        .logout-link:hover {
-            color: red; /* Hover effect for logout */
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-btn {
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            padding: 5px;
-            color: black;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: -50px;
-            background: #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* z-index: 1000; */
-        }
-
-        .dropdown-content a {
+       .submenu ,.submenu li a {
+        text-decoration: none;
+            color: white;
+            list-style-type: none;
             padding: 10px;
-            display: block;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f5f5f5;
-        }
-
-        .dropdown.open .dropdown-content {
-            display: block;
-        }
-    </style>
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-           
-        }
-
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
           
         }
+        .submenu li a:hover{
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+        }
+        .mypro{
+            text-decoration: none;
+            color: white;
+        }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            // Toggle submenu functionality
-            const toggleButtons = document.querySelectorAll(".toggle-btn");
-            toggleButtons.forEach(button => {
-                button.addEventListener("click", event => {
-                    event.preventDefault();
-                    const submenu = button.nextElementSibling;
-                    submenu.style.display = submenu.style.display === "block" ? "none" : "block";
-                });
-            });
-        });
-    </script>
+        .mypro:hover{
+            text-decoration: none;
+            color: white;
+            box-shadow: none;
+
+        }
+    </style>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.querySelector('.toggle-btn');
+
+        sidebar.classList.toggle('show');
+
+        // Toggle button icon
+        if (sidebar.classList.contains('show')) {
+            toggleBtn.style.display = 'none';
+        } else {
+            toggleBtn.style.display = 'block';
+        }
+    }
+
+   
+</script>
 </head>
 <body>
-    <!-- Navbar -->
-    <header class="navbar">
-        <button class="openbtn" onclick="openNav()">☰</button>
-        <div class="admin-info">
-            <img src="{% static 'images/profile2.png' %}" alt="Profile" class="profile-pic">
-            {% if request.session.admin_email %}
-                <span class="admin-email">{{ request.session.admin_email }}</span>
-            {% elif request.session.user_email %}
-                <span class="user-email">{{ request.session.user_email }}</span>
-            {% else %}
-                <span class="no-user">No user logged in.</span>
-            {% endif %}
-
-            <a href="#" class="navbar-link">My Profile</a>
-                    <button class="Btn" onclick="location.href='/'">
-                        <div class="sign">
-                            <svg viewBox="0 0 512 512">
-                                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
-                            </svg>
-                        </div>
-                        <div class="text">   Logout</div>
-                    </button>      
+    <nav class="navbar navbar-light bg-light">
+        <div class="logo1">
+            <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i>
+            <img class="logo navbar-brand" src="../static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
+           
         </div>
-    </header>
+
+        <div class="logo1">
+            <a href="#" class="navbar-link mypro">My Profile</a>
+            <form class="form-inline">
+                
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Help</button>
+            </form>
+        </div>
+    </nav>
 
     <!-- Sidebar -->
-    <aside id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <ul>
-            <li><a href="/student_dashboard/">Dashboard</a></li>
-            <li>
-                <a href="#" class="toggle-btn">Course Management</a>
-                <ul class="submenu">
-                    <li><a href="/free-course/">Free Course</a></li>
-                    <li><a href="/view_paid_course/">View Paid Courses</a></li>
-                </ul>
+    <div class="sidebar bg-dark" id="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <ul class="nav flex-column p-3">
+           
+              
+            <!-- Dashboard Menu -->
+            <li class="nav-item">
+                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link" >Dashboard</span></a>
             </li>
-            <li><a href="#">Certificates</a></li>
-            <li><a href="#">Invoices</a></li>
-            <li><a href="#">Notifications</a></li>
-         </ul> 
-    </aside>
 
-    <!-- Main Content -->
-    <main>
-        <h1>Welcome to the Student Dashboard</h1>
-    </main>
+            <!-- Course Management Menu -->
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
+                    aria-expanded="false" aria-controls="menu1">
+                    Course Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu1">
+                   <ul class="submenu">
+                        <li><a class="nav-link pl-4" href="/free-course/">Free Course</a></li>
+                        <li><a class="nav-link pl-4" href="/view_paid_course/">view paid Courses</a></li>
+                        
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu2"
+                    aria-expanded="false" aria-controls="menu1">
+                    Enrollment Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu2">
+                  
+                    <a class="nav-link pl-4" href="#">Enrollment Tracking</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Certificates
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Invoices
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Notifications
+                </a>
+               
+            </li>
+            <button class="Btn" onclick="location.href='/'">
+                <div class="sign">
+                    <svg viewBox="0 0 512 512">
+                        <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                    </svg>
+                </div>
+                <div class="text">   Logout</div>
+            </button>
+        </ul>
+
+    </div>
 </body>
 </html>
