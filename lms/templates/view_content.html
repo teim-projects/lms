@@ -22,18 +22,22 @@
         }
     
         @keyframes moveEmail {
-            0% {
-                left: 0;
-            }
-            50% {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-            100% {
-                left: 100%;
-                transform: translateX(-100%);
-            }
-        }
+    0% {
+        top: 0;
+        left: 0;
+    }
+    50% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        top: 100%;
+        left: 100%;
+        transform: translate(-100%, -100%);
+    }
+}
+
     </style>
 
     <title>Course Content</title>
@@ -55,7 +59,7 @@
         <div style="position: relative; display: inline-block;">
             <p class="moving-email"> Email: {{ request.session.user_email }}</p>
 
-            <video controls controlslist="nodownload" style="height: 300px; width: 500px;">
+            <video controls controlslist="nodownload" style="height: 500px; width: 800px;">
                 <source src="{{ content.resource_file }}" type="video/mp4">
                 <source src="{{ content.resource_file }}" type="video/webm">
                 <source src="{{ content.resource_file }}" type="video/ogg">
