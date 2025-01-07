@@ -513,18 +513,22 @@
                         <p class="card-text"><strong>Level:</strong> {{ course.course_level }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ course.course_price }}</p>
                         <div class="d-flex justify-content-around mt-3">
-                            <button class="uplode-btn">   
-                            <a href="{% url 'upload_content' course.id %}" >
+                            <a href="{% url 'upload_content' course.id %}" ><button class="uplode-btn">   
+                           
                                 <i class="fa-solid fa-cloud-arrow-up"></i> 
-                            </a>
-                        </button>
-                            <button class="viwe-btn">  <a href="{% url 'view_content' course.id %}" >
+                            
+                        </button></a>
+                        <a href="{% url 'view_content' course.id %}" ><button class="viwe-btn">  
                                
                                 <i class="fa-solid fa-eye"></i> 
                                
-                            </a>  </button>               
-                            <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
-                            <button class=" update-btn"><i class="fa-solid fa-pen-to-square"></i></i></button>
+                            </button>         </a>        
+                            <form action="{% url 'delete_paid_course' course.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
+                            </form>
+                            
+                            <a href="{% url 'update_paid_course' course.id %}"><button class=" update-btn"><i class="fa-solid fa-pen-to-square"></i></i></button></a>
                         </div>
                     </div>
                 </div>

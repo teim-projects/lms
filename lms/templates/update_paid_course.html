@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container my-4">
+        <h2 class="text-center">Update Paid Course</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="course_title" class="form-label">Course Title</label>
+                <input type="text" class="form-control" id="course_title" name="course_title" value="{{ course.course_title }}">
+            </div>
+            <div class="mb-3">
+                <label for="duration" class="form-label">Duration</label>
+                <input type="text" class="form-control" id="duration" name="duration" value="{{ course.duration }}">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description">{{ course.description }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="instructor_name" class="form-label">Instructor Name</label>
+                <input type="text" class="form-control" id="instructor_name" name="instructor_name" value="{{ course.instructor_name }}">
+            </div>
+            <div class="mb-3">
+                <label for="course_level" class="form-label">Course Level</label>
+                <select class="form-control" id="course_level" name="course_level">
+                    {% for level, label in course.COURSE_LEVELS %}
+                    <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="course_price" class="form-label">Course Price</label>
+                <input type="number" step="0.01" class="form-control" id="course_price" name="course_price" value="{{ course.course_price }}">
+            </div>
+            <div class="mb-3">
+                <label for="thumbnail" class="form-label">Thumbnail</label>
+                <input type="file" class="form-control" id="thumbnail" name="thumbnail">
+                {% if course.thumbnail %}
+                <img src="{{ course.thumbnail.url }}" alt="Thumbnail" style="width: 100px; height: auto; margin-top: 10px;">
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-success">Update Course</button>
+        </form>
+    </div>
+    
+</body>
+</html>

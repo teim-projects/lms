@@ -22,6 +22,11 @@ urlpatterns = [
     path('view_paid_course/', views.view_paid_course, name='view_paid_course'),
     path('course/<int:course_id>/upload-content/', views.upload_content, name='upload_content'),
     path('course/<int:course_id>/view-content/', views.view_content, name='view_content'),
+    path('delete-course/<int:course_id>/', views.delete_free_course, name='delete_free_course'),
+    path('update-course/<int:course_id>/', views.update_free_course, name='update_free_course'),
+    path('delete_paid_course/<int:course_id>/', views.delete_paid_course, name='delete_paid_course'),
+    path('update_paid_course/<int:course_id>/', views.update_paid_course, name='update_paid_course'),
+
 
 
 ]

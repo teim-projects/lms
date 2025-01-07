@@ -475,3 +475,75 @@ def view_content(request, course_id):
         
     })
 
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from .models import FreeCourse
+
+# Delete Free Course
+def delete_free_course(request, course_id):
+    if request.method == 'POST':
+        course = get_object_or_404(FreeCourse, id=course_id)
+        course.delete()
+        return redirect('create_free_course')
+    
+
+# Update Free Course
+def update_free_course(request, course_id):
+    course = get_object_or_404(FreeCourse, id=course_id)
+    if request.method == 'POST':
+        course.title = request.POST.get('title', course.title)
+        course.description = request.POST.get('description', course.description)
+        course.youtube_link = request.POST.get('youtube_link', course.youtube_link)
+
+        if 'thumbnail' in request.FILES:
+            course.thumbnail = request.FILES['thumbnail']
+
+        course.save()
+        return redirect('create_free_course')  # Redirect to the course list page
+
+    return render(request, 'update_free_course.html', {'course': course})
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import PaidCourse
+
+# Delete Paid Course
+from django.shortcuts import get_object_or_404, redirect
+from django.db import transaction
+from lmsapp.models import PaidCourse , CourseContent
+
+def delete_paid_course(request, course_id):
+    if request.method == 'POST':
+        course = get_object_or_404(PaidCourse, id=course_id)
+
+        # Atomic transaction to ensure consistency
+        with transaction.atomic():
+            course.contents.all().delete()  # Delete all related CourseContent records
+            course.delete()  # Delete the PaidCourse record
+
+        return redirect('paid_course')  # Redirect to the course list
+    return redirect('paid_course')  # Fallback for non-POST requests
+
+
+# Update Paid Course
+def update_paid_course(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    if request.method == 'POST':
+        course.course_title = request.POST.get('course_title', course.course_title)
+        course.duration = request.POST.get('duration', course.duration)
+        course.description = request.POST.get('description', course.description)
+        course.instructor_name = request.POST.get('instructor_name', course.instructor_name)
+        course.course_level = request.POST.get('course_level', course.course_level)
+        course.course_price = request.POST.get('course_price', course.course_price)
+
+        if 'thumbnail' in request.FILES:
+            course.thumbnail = request.FILES['thumbnail']
+
+        course.save()
+        return redirect('create_paid_course')  # Redirect to the paid course list page
+
+    return render(request, 'update_paid_course.html', {'course': course})

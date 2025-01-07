@@ -402,8 +402,17 @@
                         <p class="card-text clamp-text">{{ course.description }}</p>
                         <div class="d-flex justify-content-around mt-3">
                             <a href="{{ course.youtube_link }}" target="_blank"><button class="card-button add-btn"> <i class="fa fa-light fa-eye"></i> </button></a>
-                            <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
-                            <button class=" update-btn"><i class="fa-solid fa-pen-to-square"></i></i></button>
+                            <form action="{% url 'delete_free_course' course.id %}" method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <button class="delet-btn" type="submit">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                            <a href="{% url 'update_free_course' course.id %}">
+                                <button class="update-btn">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
