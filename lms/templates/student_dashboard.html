@@ -184,15 +184,64 @@
         }
         .mypro{
             text-decoration: none;
-            color: white;
+            color: rgb(17, 14, 14);
+            margin-right: 10px;
+            
         }
 
         .mypro:hover{
             text-decoration: none;
-            color: white;
+            color: rgb(9, 37, 96);
             box-shadow: none;
 
         }
+
+
+           
+/*Footer Css Start*/
+@media screen and (max-width: 768px) {
+    .footer p {
+        font-size: 1rem;
+        /* Smaller font for smaller devices */
+        word-wrap: break-word;
+        /* Ensures text does not overflow */
+        margin: 5px 0;
+        /* Adjust margin for compact view */
+    }
+
+    .footer img {
+        height: 16px;
+        /* Scale images for smaller devices */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .footer p {
+        font-size: 1rem;
+        /* Even smaller font for extra small devices */
+    }
+
+    .footer img {
+        height: 14px;
+        /* Further scale down images */
+    }
+
+
+
+}
+
+.footer {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    font-size: 20px;
+    box-shadow: 0px -2px 10px rgb(203, 203, 203);
+
+
+}
+/*Footer Css End*/
+
+
     </style>
 
 <script>
@@ -282,7 +331,7 @@
                 </a>
                
             </li>
-            <button class="Btn" onclick="location.href='/'">
+            <button class="Btn ml-3" onclick="location.href='/'">
                 <div class="sign">
                     <svg viewBox="0 0 512 512">
                         <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
@@ -293,5 +342,31 @@
         </ul>
 
     </div>
+
+    <footer class="footer" style="background-color: #f7f7f7;  text-align: center; font-size: 1.1rem; color: #555;"
+        class="footer">
+        <div class="container">
+            <!-- Footer Content -->
+            <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
+                © 2024. Powered by
+                <img src="../static/images/logoweb.png" alt="Chronoanalytics Logo"
+                    style="height: 20px; vertical-align: middle;">
+                <a href="http://www.chronoanalytics.in/"
+                    style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb);-webkit-background-clip: text;-webkit-text-fill-color: transparent; font-size: 1.1rem;">Chronoanalytics
+                    Solution</a>
+                All Rights Reserved.
+            </p>
+            <p style="font-weight: 600; word-wrap: break-word; ">
+                © 2024. Marketed by 
+                <img src="../static/images/TeimLogo.png" alt="Teim Logo"
+                    style="height: 20px; vertical-align: middle;">
+                <a href="http://teim.in/" style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; font-size: 1.1rem;">TEIM</a>
+                All Rights Reserved.
+            </p>
+        </div>
+        
+        </footer>
 </body>
 </html>
