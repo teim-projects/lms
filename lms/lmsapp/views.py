@@ -430,7 +430,7 @@ def upload_content(request, course_id):
         for subtitle, resource in zip(subtitles, resource_files):
             CourseContent.objects.create(course=course, title=title, subtitle=subtitle, resource_file=resource)
 
-        return redirect('view_paid_course')
+        return redirect('create_paid_course')
 
     return render(request, 'upload_content.html', {'course': course})
 
@@ -472,5 +472,6 @@ def view_content(request, course_id):
     return render(request, 'view_content.html', {
         'course': course,
         'contents': annotated_contents,
+        
     })
 
