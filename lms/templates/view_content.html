@@ -7,6 +7,35 @@
     <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
 
 
+    <style>
+        .moving-email {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            animation: moveEmail 10s linear infinite; /* Animation to move the email */
+            z-index: 9999;
+        }
+    
+        @keyframes moveEmail {
+            0% {
+                left: 0;
+            }
+            50% {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            100% {
+                left: 100%;
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+
     <title>Course Content</title>
 </head>
 <body>
@@ -23,15 +52,20 @@
         {% elif content.type == 'image' %}
             <img src="{{ content.resource_file }}" alt="{{ content.title }}">
         {% elif content.type == 'video' %}
-            <video controls controlslist="nodownload">
+        <div style="position: relative; display: inline-block;">
+            <p class="moving-email"> Email: {{ request.session.user_email }}</p>
+
+            <video controls controlslist="nodownload" style="height: 300px; width: 500px;">
                 <source src="{{ content.resource_file }}" type="video/mp4">
                 <source src="{{ content.resource_file }}" type="video/webm">
                 <source src="{{ content.resource_file }}" type="video/ogg">
                 <source src="{{ content.resource_file }}" type="video/mkv">
                 Your browser does not support the video tag.
             </video>
+        </div>
         <!-- {% elif content.type == 'word' %}
         <a href="https://docs.google.com/viewer?url={{ content.resource_file|safe }}" target="_blank">View Document</a> -->
+        
         {% else %}
             <p>Unsupported content type</p>
         {% endif %}
@@ -48,7 +82,28 @@
     <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
 
 
+<script>
+    // JavaScript to ensure the email remains visible in fullscreen
+document.getElementById("videoElement").addEventListener("fullscreenchange", function() {
+    if (document.fullscreenElement) {
+        // Fullscreen mode is activated
+        document.querySelector(".moving-email").style.top = "20px";  // Adjust if necessary
+    } else {
+        // Exiting fullscreen
+        document.querySelector(".moving-email").style.top = "20px";  // Adjust if necessary
+    }
+});
 
+// Optional: Also listen for webkitfullscreenchange for Safari
+document.getElementById("videoElement").addEventListener("webkitfullscreenchange", function() {
+    if (document.webkitFullscreenElement) {
+        document.querySelector(".moving-email").style.top = "20px";
+    } else {
+        document.querySelector(".moving-email").style.top = "20px";
+    }
+});
+
+</script>
     
 </body>
 </html>

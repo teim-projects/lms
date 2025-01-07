@@ -510,7 +510,7 @@ button.learn-more {
                        
 <!-- View Course Button -->
 <button class="learn-more">
-    <a href="{{ course.youtube_link }}" target="_blank" class="button-link">
+    <a href="{% url 'view_content' course.id %}" class="button-link">
       <span class="circle" aria-hidden="true">
         <span class="icon arrow"></span>
       </span>
