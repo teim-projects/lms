@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,14 +18,16 @@
         body {
             margin: 0;
             overflow-x: hidden;
-               position: relative;
             font-family: Verdana, sans-serif;
         }
+
+
 
         /* Sidebar Styles */
         .sidebar {
             position: fixed;
             top: 0;
+            font-size: 14px;
             left: -250px;
             height: 100%;
             width: 250px;
@@ -85,7 +88,7 @@
             /* border: 1px solid; */
             border-radius: 5px;
             box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            /* padding: 5px; */
+
         }
 
         .paid-btn {
@@ -102,162 +105,161 @@
             flex-wrap: wrap;
             margin-right: 25px;
         }
-        .logo1{
+
+        .logo1 {
             display: flex;
             align-items: center;
         }
 
         /* Logout Button Styles */
         .Btn {
-           display: flex;
-           align-items: center;
-           justify-content: flex-start;
-           width: 45px;
-           height: 45px;
-           border: none;
-           border-radius: 50%;
-           cursor: pointer;
-           position: relative;
-           overflow: hidden;
-           transition-duration: .3s;
-           box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
-           background-color: rgb(255, 65, 65);
-           margin-top: 10px;
-       }
-       
-       .sign {
-           width: 100%;
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           transition-duration: .3s;
-       }
-       
-       .sign svg {
-           width: 17px;
-       }
-       
-       .sign svg path {
-           fill: white;
-       }
-       
-       .text {
-           position: absolute;
-           right: 0;
-           width: 0;
-           opacity: 0;
-           color: white;
-           font-size: 1.2em;
-           font-weight: 600;
-           transition-duration: .3s;
-       }
-       
-       .Btn:hover {
-           width: 125px;
-           border-radius: 40px;
-           transition-duration: .3s;
-       }
-       
-       .Btn:hover .sign {
-           width: 30%;
-           transition-duration: .3s;
-           padding-left: 20px;
-       }
-       
-       .Btn:hover .text {
-           opacity: 1;
-           width: 70%;
-           transition-duration: .3s;
-           padding-right: 0;
-       
-       }
-       
-       .Btn:active {
-           transform: translate(2px, 2px);
-       }
-                   
-/*Footer Css Start*/
-@media screen and (max-width: 768px) 
-{
-    .footer p 
-    {
-        font-size: 1rem;
-        /* Smaller font for smaller devices */
-        word-wrap: break-word;
-        /* Ensures text does not overflow */
-        margin: 5px 0;
-        /* Adjust margin for compact view */
-    }
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition-duration: .3s;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
+            background-color: rgb(255, 65, 65);
+            margin-top: 10px;
+        }
 
-    .footer img {
-        height: 16px;
-        /* Scale images for smaller devices */
-    }
-}
+        .sign {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition-duration: .3s;
+        }
 
-@media screen and (max-width: 480px) {
-    .footer p {
-        font-size: 1rem;
-        /* Even smaller font for extra small devices */
-    }
+        .sign svg {
+            width: 17px;
+        }
 
-    .footer img {
-        height: 14px;
-        /* Further scale down images */
-    }
+        .sign svg path {
+            fill: white;
+        }
 
-}
+        .text {
+            position: absolute;
+            right: 0;
+            width: 0;
+            opacity: 0;
+            color: white;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition-duration: .3s;
+        }
 
-       
-.footer {
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
-  
-    box-shadow: 0px -2px 10px rgb(203, 203, 203);
+        .Btn:hover {
+            width: 125px;
+            border-radius: 40px;
+            transition-duration: .3s;
+        }
+
+        .Btn:hover .sign {
+            width: 30%;
+            transition-duration: .3s;
+            padding-left: 20px;
+        }
+
+        .Btn:hover .text {
+            opacity: 1;
+            width: 70%;
+            transition-duration: .3s;
+            padding-right: 0;
+
+        }
+
+        .Btn:active {
+            transform: translate(2px, 2px);
+        }
+
+        /*Footer Css Start*/
+        @media screen and (max-width: 768px) {
+            .footer p {
+                font-size: 1rem;
+                /* Smaller font for smaller devices */
+                word-wrap: break-word;
+                /* Ensures text does not overflow */
+                margin: 5px 0;
+                /* Adjust margin for compact view */
+            }
+
+            .footer img {
+                height: 16px;
+                /* Scale images for smaller devices */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .footer p {
+                font-size: 1rem;
+                /* Even smaller font for extra small devices */
+            }
+
+            .footer img {
+                height: 14px;
+                /* Further scale down images */
+            }
+
+        }
 
 
-}
-          
+        .footer {
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+padding: 1%;
+            box-shadow: 0px -2px 10px rgb(203, 203, 203);
+
+
+        }
     </style>
 
-<script>
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.querySelector('.toggle-btn');
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn');
 
-        sidebar.classList.toggle('show');
+            sidebar.classList.toggle('show');
 
-        // Toggle button icon
-        if (sidebar.classList.contains('show')) {
-            toggleBtn.style.display = 'none';
-        } else {
-            toggleBtn.style.display = 'block';
+            // Toggle button icon
+            if (sidebar.classList.contains('show')) {
+                toggleBtn.style.display = 'none';
+            } else {
+                toggleBtn.style.display = 'block';
+            }
         }
-    }
-</script>
+    </script>
 </head>
+
 <body>
     <nav class="navbar navbar-light bg-light">
         <div class="logo1">
             <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i>
             <img class="logo navbar-brand" src="../static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
-           
+
         </div>
         <div class="logo1">
-          
+
         </div>
     </nav>
-
     <!-- Sidebar -->
     <div class="sidebar bg-dark" id="sidebar">
         <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         <ul class="nav flex-column p-3">
+
+
             <!-- Dashboard Menu -->
             <li class="nav-item">
-                <a href="/admin_dashboard/" style="text-decoration: none;"><span class="nav-link" >Dashboard</span></a>
+                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
             </li>
-
             <!-- Course Management Menu -->
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
@@ -266,14 +268,16 @@
                 </a>
                 <!-- Collapsible Submenu -->
                 <div class="collapse" id="menu1">
-                    <a class="nav-link pl-4" href="/create-paid-course/">Create Paid Course</a>
-                   
+                     <a class="nav-link pl-4" href="/create-paid-course/">Create Paid Course</a>
                     <a class="nav-link pl-4" href="/create-free-course/">Create Free Course</a>
                 </div>
             </li>
+
+
+
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu2"
-                    aria-expanded="false" aria-controls="menu1">
+                    aria-expanded="false" aria-controls="menu2">
                     Enrollment Management
                 </a>
                 <!-- Collapsible Submenu -->
@@ -283,6 +287,8 @@
                 </div>
             </li>
             <li class="nav-item">
+
+
                 <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
                     aria-controls="menu1">
                     Certificates
@@ -296,47 +302,49 @@
                     Notifications
                 </a>
                 <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
-                    aria-controls="menu1">
-                    Create Sub Admin
-                </a>
+                aria-controls="menu1">
+                Create Sub Admin
+            </a>
             </li>
             <button class="Btn ml-3" onclick="location.href='/'">
                 <div class="sign">
                     <svg viewBox="0 0 512 512">
-                        <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                        <path
+                            d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                        </path>
                     </svg>
                 </div>
-                <div class="text">   Logout</div>
+                <div class="text"> Logout</div>
             </button>
         </ul>
 
     </div>
 
 
-    <footer class="footer" style="background-color: #f7f7f7;  text-align: center; font-size: 0.9rem; color: #555;"
-    >
-    <div class="container">
-        <!-- Footer Content -->
-        <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
-            © 2024. Powered by
-            <img src="../static/images/logoweb.png" alt="Chronoanalytics Logo"
-                style="height: 20px; vertical-align: middle;">
-            <a href="http://www.chronoanalytics.in/"
-                style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb);-webkit-background-clip: text;-webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
-                Solution</a>
-            All Rights Reserved.
-        </p>
-        <p style="font-weight: 600; word-wrap: break-word; ">
-            © 2024. Marketed by 
-            <img src="../static/images/TeimLogo.png" alt="Teim Logo"
-                style="height: 20px; vertical-align: middle;">
-            <a href="http://teim.in/" style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
+
+    <footer class="footer" style="background-color: #f7f7f7;  text-align: center; font-size: 0.9rem; color: #555;">
+        <div class="container">
+            <!-- Footer Content -->
+            <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
+                © 2024. Powered by
+                <img src="../static/images/logoweb.png" alt="Chronoanalytics Logo"
+                    style="height: 20px; vertical-align: middle;">
+                <a href="http://www.chronoanalytics.in/"
+                    style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb);-webkit-background-clip: text;-webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
+                    Solution</a>
+                All Rights Reserved.
+            </p>
+            <p style="font-weight: 600; word-wrap: break-word; ">
+                © 2024. Marketed by
+                <img src="../static/images/TeimLogo.png" alt="Teim Logo" style="height: 20px; vertical-align: middle;">
+                <a href="http://teim.in/" style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
     -webkit-background-clip: text; 
     -webkit-text-fill-color: transparent; font-size: 0.8rem;">TEIM</a>
-            All Rights Reserved.
-    </p>
-    </div>
-    
+                All Rights Reserved.
+            </p>
+        </div>
+
     </footer>
 </body>
+
 </html>
