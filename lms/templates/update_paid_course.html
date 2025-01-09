@@ -4,51 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+
+        body {
+            font-family: Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FAFAFA;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+        .row{
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body>
+<body >
     <div class="container my-4">
-        <h2 class="text-center">Update Paid Course</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="course_title" class="form-label">Course Title</label>
-                <input type="text" class="form-control" id="course_title" name="course_title" value="{{ course.course_title }}">
+
+        <div class="row ">
+            <div class="col-md-12 col-12 ">
+                <h2 class="text-center">Update Paid Course</h2>
             </div>
-            <div class="mb-3">
-                <label for="duration" class="form-label">Duration</label>
-                <input type="text" class="form-control" id="duration" name="duration" value="{{ course.duration }}">
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description">{{ course.description }}</textarea>
-            </div>
-            <div class="mb-3">
-                <label for="instructor_name" class="form-label">Instructor Name</label>
-                <input type="text" class="form-control" id="instructor_name" name="instructor_name" value="{{ course.instructor_name }}">
-            </div>
-            <div class="mb-3">
-                <label for="course_level" class="form-label">Course Level</label>
-                <select class="form-control" id="course_level" name="course_level">
-                    {% for level, label in course.COURSE_LEVELS %}
-                    <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
-                        {{ label }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="course_price" class="form-label">Course Price</label>
-                <input type="number" step="0.01" class="form-control" id="course_price" name="course_price" value="{{ course.course_price }}">
-            </div>
-            <div class="mb-3">
-                <label for="thumbnail" class="form-label">Thumbnail</label>
-                <input type="file" class="form-control" id="thumbnail" name="thumbnail">
-                {% if course.thumbnail %}
-                <img src="{{ course.thumbnail.url }}" alt="Thumbnail" style="width: 100px; height: auto; margin-top: 10px;">
-                {% endif %}
-            </div>
-            <button type="submit" class="btn btn-success">Update Course</button>
-        </form>
+
+        </div>
+       <div class="row">
+        <div class="col-md-3"></div> 
+       
+        <div class="col-md-6">
+           
+           <div class="card p-4">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3 card-header" style="padding: 0px;">
+              
+                    {% if course.thumbnail %}
+                    <img src="{{ course.thumbnail.url }}" alt="Thumbnail" height="100%" width="100%"  style=" height: auto; margin-top: 10px;">
+                    {% endif %} 
+                </div>
+                <div class="mb-3">
+                    <label for="thumbnail" class="form-label">Thumbnail</label>
+                    <input type="file" class="form-control p-1" id="thumbnail" name="thumbnail">
+                </div>
+                <div class="mb-3">
+                    <label for="course_title" class="form-label">Course Title</label>
+                    <input type="text" class="form-control" id="course_title" name="course_title" value="{{ course.course_title }}">
+                </div>
+                <div class="mb-3">
+                    <label for="duration" class="form-label">Duration</label>
+                    <input type="text" class="form-control" id="duration" name="duration" value="{{ course.duration }}">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description">{{ course.description }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="instructor_name" class="form-label">Instructor Name</label>
+                    <input type="text" class="form-control" id="instructor_name" name="instructor_name" value="{{ course.instructor_name }}">
+                </div>
+                <div class="mb-3">
+                    <label for="course_level" class="form-label">Course Level</label>
+                    <select class="form-control" id="course_level" name="course_level">
+                        {% for level, label in course.COURSE_LEVELS %}
+                        <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="course_price" class="form-label">Course Price</label>
+                    <input type="number" step="0.01" class="form-control" id="course_price" name="course_price" value="{{ course.course_price }}">
+                </div>
+            
+    
+                <div class="  mb-2" >
+                    <button type="submit" class="btn btn-outline-primary  buttonn" >Update Course</button>
+                    <a href="{% url 'create_free_course' %}" class="btn  buttonn buttonncancle btn-outline-danger"  >Cancel</a>
+                </div>
+              
+            </form>
+           </div>
+        </div> 
+        <div class="col-md-3"></div> 
+
+        </div>
     </div>
     
 </body>
