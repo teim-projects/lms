@@ -180,48 +180,91 @@
             transform: translate(2px, 2px);
         }
 
-        /*Footer Css Start*/
-        @media screen and (max-width: 768px) {
-            .footer p {
-                font-size: 1rem;
-                /* Smaller font for smaller devices */
-                word-wrap: break-word;
-                /* Ensures text does not overflow */
-                margin: 5px 0;
-                /* Adjust margin for compact view */
-            }
+                     
+/*Footer Css Start*/
+@media screen and (max-width: 768px) 
+{
+    .footer p 
+    {
+        font-size: 1rem;
+        /* Smaller font for smaller devices */
+        word-wrap: break-word;
+        /* Ensures text does not overflow */
+        margin: 5px 0;
+        /* Adjust margin for compact view */
+    }
 
-            .footer img {
-                height: 16px;
-                /* Scale images for smaller devices */
-            }
+    .footer img {
+        height: 16px;
+        /* Scale images for smaller devices */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .footer p {
+        font-size: 1rem;
+        /* Even smaller font for extra small devices */
+    }
+
+    .footer img {
+        height: 14px;
+        /* Further scale down images */
+    }
+
+}
+
+        /* Navbar Styles CSS */
+        .bg-light {
+            box-shadow: 0px 0px 5px 1px;
         }
 
-        @media screen and (max-width: 480px) {
-            .footer p {
-                font-size: 1rem;
-                /* Even smaller font for extra small devices */
-            }
+        /* .logo {
+            margin-left: 40px;
+        } */
 
-            .footer img {
-                height: 14px;
-                /* Further scale down images */
-            }
-
+        /* Content Styles */
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
         }
 
-
-        .footer {
-            position: fixed;
-            bottom: 0px;
-            width: 100%;
-padding: 1%;
-            box-shadow: 0px -2px 10px rgb(203, 203, 203);
-
-
+        .logo1 {
+            display: flex;
+            align-items: center;
         }
+.footer {
+    
+    width: 100%;
+  padding:1%;
+    box-shadow: 0px -2px 10px rgb(203, 203, 203);
+
+
+
+}
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f7f7f7;
+    text-align: center;
+    box-shadow: 0px -2px 10px rgb(203, 203, 203);
+}
+
+.footer {
+    background-color: #f7f7f7;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.container{
+    padding-bottom: 10px;
+}
+
+/*Footer Css End*/
+
     </style>
-
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -321,30 +364,29 @@ padding: 1%;
     </div>
 
 
-
-    <footer class="footer" style="background-color: #f7f7f7;  text-align: center; font-size: 0.9rem; color: #555;">
+    <footer class="footer {% if not courses %}fixed-footer{% endif %}">
         <div class="container">
             <!-- Footer Content -->
             <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
                 © 2024. Powered by
-                <img src="../static/images/logoweb.png" alt="Chronoanalytics Logo"
+                <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo"
                     style="height: 20px; vertical-align: middle;">
                 <a href="http://www.chronoanalytics.in/"
-                    style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb);-webkit-background-clip: text;-webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
+                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
                     Solution</a>
                 All Rights Reserved.
             </p>
-            <p style="font-weight: 600; word-wrap: break-word; ">
+            <p style="font-weight: 600; word-wrap: break-word;">
                 © 2024. Marketed by
-                <img src="../static/images/TeimLogo.png" alt="Teim Logo" style="height: 20px; vertical-align: middle;">
-                <a href="http://teim.in/" style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; font-size: 0.8rem;">TEIM</a>
+                <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo"
+                    style="height: 20px; vertical-align: middle;">
+                <a href="http://teim.in/"
+                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">TEIM</a>
                 All Rights Reserved.
             </p>
         </div>
-
     </footer>
+    
 </body>
 
 </html>
