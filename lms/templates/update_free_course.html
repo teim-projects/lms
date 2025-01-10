@@ -43,14 +43,17 @@
         }
         .buttonn.buttonncancle{
             background: linear-gradient(to right, #f80303, #bd03ba);
+            color: #f7f7f7;
 
         }
 
         .buttonn:hover {
             background: linear-gradient(to right, #2575fc, #6a11cb);
             transform: scale(1.02);
+            color: #f7f7f7;
         }
         .buttonn.buttonncancle:hover {
+            color: #f7f7f7;
             background: linear-gradient(to right, #f80303, #bd03ba);
             transform: scale(1.02);
         }
@@ -250,6 +253,7 @@ margin-bottom: 40px;
      /* border: 1px solid; */
      border-radius: 5px;
      box-shadow: 0px 0px 5px rgb(177, 177, 176);
+     color: #f7f7f7;
      /* padding: 5px; */
  }
 
@@ -483,8 +487,8 @@ margin-bottom: 40px;
 
     
             <div class="card-footer bg-white mb-2" >
-                <button type="submit" class="btn  buttonn" >Update Course</button>
-                <a href="{% url 'create_free_course' %}" class="btn  buttonn buttonncancle"  >Cancel</a>
+                <button type="submit" class="btn  buttonn text-white" >Update Course</button>
+                <a href="{% url 'create_free_course' %}" class="btn  buttonn buttonncancle text-white"  >Cancel</a>
             </div>
           
         </form>
