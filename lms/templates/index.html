@@ -173,7 +173,7 @@
        }
 
 .info{
-    font-weight: bold;
+    font-weight: 500;
 }
    
 
@@ -207,18 +207,19 @@ button:hover {
     background: linear-gradient(to right, #017123, #1cb149);
     transform: scale(1.02);
 }
-.imglaptop{
+.imglaptop {
     margin-left: 10px;
     border-radius: 10px;
     cursor: pointer;
-}
-.imglaptop:hover{
     width: 100%;
     height: 100%;
-    transition:  1s;
-   
-
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
+
+.imglaptop:hover {
+    transform: scale(1.05); /* Gently enlarges the image */
+}
+
 
         
     </style>
@@ -274,7 +275,7 @@ button:hover {
                     tempor incididunt ut labore et dolore magna aliqua.</p>
 
 
-                    <div class="row">
+                    <div class="row mt-5">
 
                         <div class="col-md-6 col-6">
                             <button>Login</button>
@@ -287,8 +288,12 @@ button:hover {
                     </div>
             </div>
             <div class="col-md-6 infopc col-12 mt-5 ">
-                <img src=" https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" class="imglaptop" height="90%" width="90%">
-            </div>
+                <img 
+                src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" 
+                class="imglaptop" 
+                alt="Dashboard Image"
+            >
+                    </div>
             
                
     
