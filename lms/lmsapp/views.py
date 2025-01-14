@@ -560,7 +560,10 @@ from django.contrib.auth.hashers import make_password
 def is_admin(user):
     return user.is_superuser
 
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from .models import SubAdmin
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
@@ -569,13 +572,9 @@ from .models import SubAdmin
 def manage_subadmins(request):
     if request.method == 'POST':
         # Extract form data
-        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
         phone_number = request.POST.get('phone_number')
-        address = request.POST.get('address')
 
         # Ensure no duplicate emails for SubAdmin
         if SubAdmin.objects.filter(email=email).exists():
@@ -583,22 +582,19 @@ def manage_subadmins(request):
         else:
             # Save new SubAdmin
             subadmin = SubAdmin.objects.create(
-                username=username,
                 email=email,
                 password=make_password(password),  # Hash the password
-                first_name=first_name,
-                last_name=last_name,
+                plain_password=password,  # Store plain-text password
                 phone_number=phone_number,
-                address=address,
                 is_subadmin=True  # Ensure subadmin role
             )
-            messages.success(request, "SubAdmin created successfully! They can now log in.")
+            messages.success(request, "SubAdmin created successfully!")
 
         return redirect('manage_subadmins')
 
+    # Retrieve all SubAdmins
     subadmins = SubAdmin.objects.filter(is_subadmin=True)
     return render(request, 'manage_subadmin.html', {'subadmins': subadmins})
-
 
 
 from django.shortcuts import render
