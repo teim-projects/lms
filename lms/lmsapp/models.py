@@ -120,3 +120,27 @@ class CourseContent(models.Model):
 
     def __str__(self):
         return self.title
+
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class SubAdmin(AbstractUser):
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    is_subadmin = models.BooleanField(default=True)
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='subadmin_user_set',  # Custom related_name to avoid conflict
+        blank=True,
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='subadmin_user_permissions_set',  # Custom related_name to avoid conflict
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"{self.username} ({self.email})"
+

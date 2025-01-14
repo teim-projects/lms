@@ -26,6 +26,9 @@ urlpatterns = [
     path('update-course/<int:course_id>/', views.update_free_course, name='update_free_course'),
     path('delete_paid_course/<int:course_id>/', views.delete_paid_course, name='delete_paid_course'),
     path('update_paid_course/<int:course_id>/', views.update_paid_course, name='update_paid_course'),
+    path('manage_subadmins/', views.manage_subadmins, name='manage_subadmins'),
+    path('subadmin_dashboard/', views.subadmin_dashboard, name='subadmin_dashboard'),
+    path('subadmin-login/', views.subadmin_login_view, name='subadmin_login'),
 
 
 

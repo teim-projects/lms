@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage SubAdmins</title>
+</head>
+<body>
+    <h1>Manage SubAdmins</h1>
+
+    <!-- Form to Add SubAdmin -->
+    <h2>Add New SubAdmin</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Username:</label>
+        <input type="text" name="username" required><br>
+        
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        
+        <label>Password:</label>
+        <input type="password" name="password" required><br>
+        
+        <label>First Name:</label>
+        <input type="text" name="first_name"><br>
+        
+        <label>Last Name:</label>
+        <input type="text" name="last_name"><br>
+        
+        <label>Phone Number:</label>
+        <input type="text" name="phone_number"><br>
+        
+        <label>Address:</label>
+        <textarea name="address"></textarea><br>
+        
+        <button type="submit">Add SubAdmin</button>
+    </form>
+
+    <!-- SubAdmin List -->
+    <h2>SubAdmin List</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subadmin in subadmins %}
+            <tr>
+                <td>{{ subadmin.username }}</td>
+                <td>{{ subadmin.email }}</td>
+                <td>{{ subadmin.first_name }}</td>
+                <td>{{ subadmin.last_name }}</td>
+                <td>{{ subadmin.phone_number }}</td>
+                <td>{{ subadmin.address }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No sub-admins found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
