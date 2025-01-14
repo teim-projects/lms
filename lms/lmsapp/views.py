@@ -551,3 +551,94 @@ def update_paid_course(request, course_id):
         return redirect('create_paid_course')  # Redirect to the paid course list page
 
     return render(request, 'update_paid_course.html', {'course': course})
+
+from django.shortcuts import render, redirect
+from .models import SubAdmin
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.hashers import make_password
+
+def is_admin(user):
+    return user.is_superuser
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from .models import SubAdmin
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from .models import SubAdmin
+
+def manage_subadmins(request):
+    if request.method == 'POST':
+        # Extract form data
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        phone_number = request.POST.get('phone_number')
+
+        # Ensure no duplicate emails for SubAdmin
+        if SubAdmin.objects.filter(email=email).exists():
+            messages.error(request, "A SubAdmin with this email already exists.")
+        else:
+            # Save new SubAdmin
+            subadmin = SubAdmin.objects.create(
+                email=email,
+                password=make_password(password),  # Hash the password
+                plain_password=password,  # Store plain-text password
+                phone_number=phone_number,
+                is_subadmin=True  # Ensure subadmin role
+            )
+            messages.success(request, "SubAdmin created successfully!")
+
+        return redirect('manage_subadmins')
+
+    # Retrieve all SubAdmins
+    subadmins = SubAdmin.objects.filter(is_subadmin=True)
+    return render(request, 'manage_subadmin.html', {'subadmins': subadmins})
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+# Function to check if user is a sub-admin
+def is_subadmin(user):
+    return user.is_authenticated and user.is_subadmin
+
+
+def subadmin_dashboard(request):
+    return render(request, 'subadmin_dashboard.html', {})
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
+from .models import SubAdmin
+
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
+from .models import SubAdmin
+
+def subadmin_login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        # Authenticate as SubAdmin using email and password
+        try:
+            user = SubAdmin.objects.get(email=email)
+            if user.check_password(password) and user.is_subadmin:
+                auth_login(request, user)
+                request.session['subadmin_email'] = user.email
+                return redirect('admin_dashboard')  # Redirect to subadmin dashboard
+            else:
+                messages.error(request, "Invalid credentials or SubAdmin access denied.")
+        except SubAdmin.DoesNotExist:
+            messages.error(request, "SubAdmin with this email does not exist.")
+
+    return render(request, 'subadmin_login.html')
+

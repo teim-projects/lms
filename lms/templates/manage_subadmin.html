@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage SubAdmins</title>
+</head>
+<body>
+    <h1>Manage SubAdmins</h1>
+
+    <!-- Form to Add SubAdmin -->
+    <h2>Add New SubAdmin</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        
+        <label>Password:</label>
+        <input type="password" name="password" required><br>
+        
+        <label>Phone Number:</label>
+        <input type="text" name="phone_number"><br>
+        
+        <button type="submit">Add SubAdmin</button>
+    </form>
+
+    <!-- SubAdmin List -->
+    <h2>SubAdmin List</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subadmin in subadmins %}
+            <tr>
+                <td>{{ subadmin.email }}</td>
+                <td>{{ subadmin.plain_password }}</td>
+                <td>{{ subadmin.phone_number }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No sub-admins found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>
