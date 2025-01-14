@@ -6,6 +6,10 @@ from django.contrib.auth.hashers import make_password
 
 
 
+def index(request):
+    # Render a simple dashboard with a header
+    return render(request, 'index.html')
+
 def student_dashboard(request):
     # Render a simple dashboard with a header
     return render(request, 'student_dashboard.html')
