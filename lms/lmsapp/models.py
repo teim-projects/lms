@@ -91,7 +91,6 @@ class FreeCourse(models.Model):
         return self.title
 
 
-
 from django.db import models
 
 class PaidCourse(models.Model):
@@ -100,7 +99,7 @@ class PaidCourse(models.Model):
         ('Intermediate', 'Intermediate'),
         ('Advanced', 'Advanced'),
     ]
-    
+
     course_title = models.CharField(max_length=255)
     duration = models.CharField(max_length=100)
     description = models.TextField()
@@ -111,3 +110,48 @@ class PaidCourse(models.Model):
 
     def __str__(self):
         return self.course_title
+
+
+class CourseContent(models.Model):
+    course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE, related_name='contents')
+    title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, blank=True, null=True)
+    resource_file = models.FileField(upload_to='course_resources/')
+
+    def __str__(self):
+        return self.title
+
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class SubAdmin(AbstractUser):
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    plain_password = models.CharField(max_length=128, blank=True, null=True)  # Store plain-text password
+    is_subadmin = models.BooleanField(default=True)
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='subadmin_set',
+        blank=True,
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='subadmin_permissions_set',
+        blank=True,
+    )
+
+    # Remove unused fields and override username to None
+    username = None
+    first_name = None
+    last_name = None
+    address = None
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['phone_number']
+
+    def __str__(self):
+        return self.email

@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <style>
+    <!-- <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png"> -->
+
+    <style>  
         /*Commen css start*/
         body {
             font-family: Verdana, sans-serif;
@@ -140,7 +142,7 @@
 
 
         .tem {
-            position: fixed;
+            position: absolute;
             right: 25px;
             top: 0px;
         }
@@ -155,7 +157,7 @@
         }
 
         .teimlms {
-            position: fixed;
+            position: absolute;
             left: 45%;
             top: 20px;
             font-weight: bold;
@@ -232,6 +234,7 @@
 
 
 
+
     </style>
 </head>
 
@@ -251,7 +254,7 @@
             </div>
 
             <div class="teimlms">
-                <span>T E I M L M S</span>
+                <span>T E I M  L M S</span>
             </div>
             <div class="navbar-header tem">
                 <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -288,7 +291,10 @@
                     style=" margin-left: 20px; text-shadow:0px 0px 6px rgba(171, 41, 41, 0.1);  font-weight: bold; ">Signup</a>
                 <a href="/password-reset/" style="  position:absolute; right: 20px; font-weight: bold;">Forgot
                     Password?</a>
+                    
             </span>
+            <a href="/subadmin-login/" style=" margin-left:35px; font-size:12px;">
+                SubAdmin Login</a>
 
             {% if messages %}
             <div class="error">
@@ -305,7 +311,7 @@
             <!-- Footer Content -->
             <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
                 © 2024. Powered by
-                <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo"
+                <img src="../static/images/logoweb.png" alt="Chronoanalytics Logo"
                     style="height: 20px; vertical-align: middle;">
                 <a href="http://www.chronoanalytics.in/"
                     style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb);-webkit-background-clip: text;-webkit-text-fill-color: transparent; font-size: 1.1rem;">Chronoanalytics
@@ -313,15 +319,17 @@
                 All Rights Reserved.
             </p>
             <p style="font-weight: 600; word-wrap: break-word; ">
-                © 2024. Marketed by TEIM
-                <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo"
+                © 2024. Marketed by 
+                <img src="../static/images/TeimLogo.png" alt="Teim Logo"
                     style="height: 20px; vertical-align: middle;">
                 <a href="http://teim.in/" style="text-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
         -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent; font-size: 1.1rem;">Teim</a>
+        -webkit-text-fill-color: transparent; font-size: 1.1rem;">TEIM</a>
                 All Rights Reserved.
             </p>
         </div>
+        
+        </footer>
 
 
 

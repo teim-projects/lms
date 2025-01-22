@@ -6,6 +6,10 @@ from django.contrib.auth.hashers import make_password
 
 
 
+def index(request):
+    # Render a simple dashboard with a header
+    return render(request, 'index.html')
+
 def student_dashboard(request):
     # Render a simple dashboard with a header
     return render(request, 'student_dashboard.html')
@@ -407,3 +411,234 @@ def create_paid_course(request):
     courses = PaidCourse.objects.all()
 
     return render(request, 'paid_course.html', {'courses': courses})
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import PaidCourse, CourseContent
+
+def upload_content(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        subtitles = request.POST.getlist('subtitle')
+        resource_files = request.FILES.getlist('resource_file')
+
+        if len(subtitles) != len(resource_files):
+            # Handle mismatch between subtitles and files
+            return render(request, 'upload_content.html', {'course': course, 'error': 'Each subtitle must have a corresponding file.'})
+
+        # Save content entries
+        for subtitle, resource in zip(subtitles, resource_files):
+            CourseContent.objects.create(course=course, title=title, subtitle=subtitle, resource_file=resource)
+
+        return redirect('create_paid_course')
+
+    return render(request, 'upload_content.html', {'course': course})
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import PaidCourse, CourseContent
+
+def view_content(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    contents = course.contents.all()
+
+    # Annotate each content with its type
+    annotated_contents = []
+    for content in contents:
+        file_url = content.resource_file.url
+        print(f"Resource File URL: {file_url}")  # Debugging the file URL
+        
+        # Determine the content type based on the file extension
+        if file_url.endswith('.pdf'):
+            content_type = 'pdf'
+        elif file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            content_type = 'image'
+        elif file_url.endswith(('.mp4', '.webm', '.ogg')):
+            content_type = 'video'
+        # elif file_url.endswith('.docx'):
+        #     content_type = 'word'
+        else:
+            content_type = 'unknown'
+
+        annotated_contents.append({
+            'title': content.title,
+            'subtitle': content.subtitle,
+            'resource_file': file_url,
+            'type': content_type,
+        })
+
+    return render(request, 'view_content.html', {
+        'course': course,
+        'contents': annotated_contents,
+        
+    })
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from .models import FreeCourse
+
+# Delete Free Course
+def delete_free_course(request, course_id):
+    if request.method == 'POST':
+        course = get_object_or_404(FreeCourse, id=course_id)
+        course.delete()
+        return redirect('create_free_course')
+    
+
+# Update Free Course
+def update_free_course(request, course_id):
+    course = get_object_or_404(FreeCourse, id=course_id)
+    if request.method == 'POST':
+        course.title = request.POST.get('title', course.title)
+        course.description = request.POST.get('description', course.description)
+        course.youtube_link = request.POST.get('youtube_link', course.youtube_link)
+
+        if 'thumbnail' in request.FILES:
+            course.thumbnail = request.FILES['thumbnail']
+
+        course.save()
+        return redirect('create_free_course')  # Redirect to the course list page
+
+    return render(request, 'update_free_course.html', {'course': course})
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import PaidCourse
+
+# Delete Paid Course
+from django.shortcuts import get_object_or_404, redirect
+from django.db import transaction
+from lmsapp.models import PaidCourse , CourseContent
+
+def delete_paid_course(request, course_id):
+    if request.method == 'POST':
+        course = get_object_or_404(PaidCourse, id=course_id)
+
+        # Atomic transaction to ensure consistency
+        with transaction.atomic():
+            course.contents.all().delete()  # Delete all related CourseContent records
+            course.delete()  # Delete the PaidCourse record
+
+        return redirect('paid_course')  # Redirect to the course list
+    return redirect('paid_course')  # Fallback for non-POST requests
+
+
+# Update Paid Course
+def update_paid_course(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    if request.method == 'POST':
+        course.course_title = request.POST.get('course_title', course.course_title)
+        course.duration = request.POST.get('duration', course.duration)
+        course.description = request.POST.get('description', course.description)
+        course.instructor_name = request.POST.get('instructor_name', course.instructor_name)
+        course.course_level = request.POST.get('course_level', course.course_level)
+        course.course_price = request.POST.get('course_price', course.course_price)
+
+        if 'thumbnail' in request.FILES:
+            course.thumbnail = request.FILES['thumbnail']
+
+        course.save()
+        return redirect('create_paid_course')  # Redirect to the paid course list page
+
+    return render(request, 'update_paid_course.html', {'course': course})
+
+from django.shortcuts import render, redirect
+from .models import SubAdmin
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.hashers import make_password
+
+def is_admin(user):
+    return user.is_superuser
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from .models import SubAdmin
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from .models import SubAdmin
+
+def manage_subadmins(request):
+    if request.method == 'POST':
+        # Extract form data
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        phone_number = request.POST.get('phone_number')
+
+        # Ensure no duplicate emails for SubAdmin
+        if SubAdmin.objects.filter(email=email).exists():
+            messages.error(request, "A SubAdmin with this email already exists.")
+        else:
+            # Save new SubAdmin
+            subadmin = SubAdmin.objects.create(
+                email=email,
+                password=make_password(password),  # Hash the password
+                plain_password=password,  # Store plain-text password
+                phone_number=phone_number,
+                is_subadmin=True  # Ensure subadmin role
+            )
+            messages.success(request, "SubAdmin created successfully!")
+
+        return redirect('manage_subadmins')
+
+    # Retrieve all SubAdmins
+    subadmins = SubAdmin.objects.filter(is_subadmin=True)
+    return render(request, 'manage_subadmin.html', {'subadmins': subadmins})
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+# Function to check if user is a sub-admin
+def is_subadmin(user):
+    return user.is_authenticated and user.is_subadmin
+
+
+def subadmin_dashboard(request):
+    return render(request, 'subadmin_dashboard.html', {})
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
+from .models import SubAdmin
+
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
+from .models import SubAdmin
+
+def subadmin_login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        # Authenticate as SubAdmin using email and password
+        try:
+            user = SubAdmin.objects.get(email=email)
+            if user.check_password(password) and user.is_subadmin:
+                auth_login(request, user)
+                request.session['subadmin_email'] = user.email
+                return redirect('admin_dashboard')  # Redirect to subadmin dashboard
+            else:
+                messages.error(request, "Invalid credentials or SubAdmin access denied.")
+        except SubAdmin.DoesNotExist:
+            messages.error(request, "SubAdmin with this email does not exist.")
+
+    return render(request, 'subadmin_login.html')
+

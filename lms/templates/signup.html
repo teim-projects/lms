@@ -1,68 +1,125 @@
-{% load static %}
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    
+
     <style>
         /* General body styling */
         body {
-            font-family: Verdana (sans-serif);
+            font-family: Arial, sans-serif;
             background-color: #FAFAFA;
             margin: 0;
             padding: 0;
-            /*background: linear-gradient(to right, #ff2ff8, #39e5ff);*/
-      
-            justify-content: center;
-            align-items: center;
             height: 100vh;
         }
 
-        /* Form container styling */
-        form {
-            background: #ffffff;
-            padding: 1em;
+        
+ /* Navbar Css Start */
+ .navbar {
+    background-color: #f7f4f4;
+    box-shadow: 0px 2px 10px rgb(203, 203, 203);
+
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    padding: 0px;
+}
+
+.navbar-toggle {
+    border: none;
+}
+
+
+.tem {
+    position: absolute;
+    right: 25px;
+    top: 15px;
+}
+
+.navbar {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.navbar-header_logo {
+    position: absolute;
+    left: 10px;
+}
+
+.teimlms {
+    position: absolute;
+    left: 45%;
+    top: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: Algerian;
+    background: linear-gradient(to right, #2575fc, #6a11cb);
+    /* Gradient definition */
+    -webkit-background-clip: text;
+    /* Clip the gradient to the text boundaries */
+    -webkit-text-fill-color: transparent;
+    border-bottom: 3px solid rgb(80, 16, 177);
+    /*Script MT */
+}
+
+
+/*Navbar Css End */
+        /* Form styling */
+        .form-container {
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 100px); /* Adjust for footer height */
+        }
+
+        .form-wrapper {
+            background: rgba(255, 255, 255, 1);
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 400px;
-            text-align: center;
         }
 
-        /* Input field styling */
+        h2 {
+            color: #333;
+            margin-bottom: 0.5em;
+            text-align: center;
+            padding: 0px;
+        }
+
         label {
-            display: block;
-            font-size: 1rem;
+            font-size: 13px;
             font-weight: bold;
             color: #333;
-            text-align: left;
             margin-top: 1em;
         }
 
         input, select {
             width: 100%;
-          
+            padding: 10px;
             margin-top: 0.5em;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 14px;
             background-color: #f9f9f9;
-            padding: 5px;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: #6a11cb;
-            box-shadow: 5px 5px 5px rgba(106, 17, 203, 0.5);
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
             background: #fff;
         }
 
-        /* Button styling */
         button {
             background: linear-gradient(to right, #6a11cb, #2575fc);
             color: #fff;
@@ -70,156 +127,127 @@
             border: none;
             border-radius: 25px;
             font-size: 1rem;
-            font-weight: 900;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
             margin-top: 1.5em;
+            width: 100%;
+            transition: all 0.3s ease;
         }
 
         button:hover {
             background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1);
-            box-shadow: 0 15px 10px rgba(106, 17, 203, 0.5);
         }
 
-        /* Error message styling */
-        .error {
-            color: red;
+        .form-wrapper a {
+            display: block;
             margin-top: 1em;
+            text-align: center;
+            font-size: 14px;
+            color: #f7f7f7;
+            text-decoration: none;
+        }
+
+        .form-wrapper a:hover {
+            text-decoration: underline;
+            color: #f7f7f7;
+            text-decoration: none;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #f7f7f7;
+            text-align: center;
+            font-size: 1rem;
+            color: #555;
+            padding: 10px 0;
+           /* position: fixed;
+            bottom: 0;
+            width: 100%;
+            */
+            margin-top: 100px;
+            box-shadow: 0px -2px 10px rgba(203, 203, 203, 0.8);
+        }
+
+        footer p {
+            margin: 0;
+            font-weight: 600;
+            word-wrap: break-word;
+        }
+
+        footer img {
+            height: 20px;
+            vertical-align: middle;
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            .form-wrapper {
+                padding: 15px;
+                box-shadow: none;
+            }
+
+            label {
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .form-wrapper {
+                width: 100%;
+                border-radius: 0;
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+            .form-container{
+                margin-top: 0px;
+            }
+            .footer{
+                margin-top: 10px;
+            }
+        }
+    
+        .btnn {
+            background: linear-gradient(to right, #c10c85, #ff1c0b);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
             font-weight: bold;
+            cursor: pointer;
+            margin-top: 1.5em;
+            width: 100%;
+            transition: all 0.3s ease;
+            
         }
-       
-        a:hover{
-            color: #333;
-        }
-       
-      
-
-       
         a{
-          text-decoration: none;
+            text-decoration: none;
+            color: #fdfdfd;
         }
-        .b2{
-            color: rgb(252, 255, 254);
+
+       .btnn:hover {
+            background: linear-gradient(to right, #c10c85, #ff1c0b);
         }
-        h2{
-            margin-top: 0px;
+
+        .btnn {
+            display: block;
+            margin-top: 1em;
+            text-align: center;
+            font-size: 14px;
+            color: #fdfdfd;
+            text-decoration: none;
         }
-.myform{
-    margin-top: 10px;
-}
-   
 
-
-.tem{
-    position: fixed;
-    right: 25px;
-    top: 0px;
-   }
-
-   
-   /* Navbar Css Start */
-   .navbar {
-       background-color: #f7f4f4;
-       box-shadow: 0px 2px 10px rgb(203, 203, 203);
-
-   }
-
-   .navbar-brand {
-       font-size: 1.5rem;
-       padding: 0px;
-   }
-
-   .navbar-toggle {
-       border: none;
-   }
-
-   .tem {
-       position: fixed;
-       right: 25px;
-       top: 0px;
-   }
-
-   .navbar {
-       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-   }
-
-   .navbar-header_logo {
-       position: absolute;
-       left: 10px;
-   }
-
-   .teimlms {
-       position: fixed;
-       left: 45%;
-       top: 20px;
-       font-weight: bold;
-       font-size: 20px;
-       font-family: Algerian;
-       background: linear-gradient(to right, #2575fc, #6a11cb);
-       /* Gradient definition */
-       -webkit-background-clip: text;
-       /* Clip the gradient to the text boundaries */
-       -webkit-text-fill-color: transparent;
-       border-bottom: 3px solid rgb(80, 16, 177);
-       /*Script MT */
-   }
-
-
-   /*Navbar Css End */
- 
-/*Footer Css Start*/
-   @media screen and (max-width: 768px) {
-       .footer p {
-           font-size: 1rem;
-           /* Smaller font for smaller devices */
-           word-wrap: break-word;
-           /* Ensures text does not overflow */
-           margin: 5px 0;
-           /* Adjust margin for compact view */
-       }
-
-       .footer img {
-           height: 16px;
-           /* Scale images for smaller devices */
-       }
-   }
-
-   @media screen and (max-width: 480px) {
-       .footer p {
-           font-size: 1rem;
-           /* Even smaller font for extra small devices */
-       }
-
-       .footer img {
-           height: 14px;
-           /* Further scale down images */
-       }
-
-
-       .navbar-header_logo {
-
-           position: absolute;
-           left: 0px;
-       }
-
-
-   }
-
-   .footer {
-       position: fixed;
-       bottom: 0px;
-       width: 100%;
-       font-size: 20px;
-       box-shadow: 0px -2px 10px rgb(203, 203, 203);
-
-
-   }
-/*Footer Css End*/
+        .btnn:hover {
+            text-decoration: underline;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
-
     <nav class="navbar navbar-default">
         <div class="container-fluid navbarr">
             <div class="navbar-header ">
@@ -235,7 +263,7 @@
             </div>
 
             <div class="teimlms">
-                <span>T E I M L M S</span>
+                <span>T E I M  L M S</span>
             </div>
             <div class="navbar-header tem">
                 <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -256,64 +284,38 @@
             </div> -->
         </div>
     </nav>
-<center>
-    <form method="post" class="myform">
-        {% csrf_token %}
-        <h2 style="color: #333; margin-bottom: 0.5em;">Signup</h2>
-        
-        <label>Email:</label>
-        <input type="email" id="email" name="email"  class="form-control" required>
-
-        <label>Country Code:</label>
-        <select name="country_code" id="country_code" required>
-            <option value="+1">+1 (USA)</option>
-            <option value="+91">+91 (India)</option>
-            <option value="+44">+44 (UK)</option>
-        </select>
-
-        <label>Mobile No:</label>
-        <input type="tel" name="mobile" id="mobile" required class="form-control">
-
-        <label>Password:</label>
-        <input type="password" id="password" name="password" required class="form-control">
-
-        <label>Confirm Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required class="form-control">
-
-        
-        <button type="submit">Sign Up</button>
-        <!-- <br> <hr> -->
-       <button> <a href="/" class="b2"> Login </a>   </button>
-
-
-        {% if messages %}
-            <div class="error">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </form>
-</center>
-<footer style="background-color: #f7f7f7;  text-align: center; font-size: 0.8rem; color: #555;" class="footer">
-    <div class="container">
-        <!-- Footer Content -->
-        <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
-            © 2024. Powered by 
-            <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo" style="height: 20px; vertical-align: middle;">
-            <a href="http://www.chronoanalytics.in/" style="text-decoration: none;font-size: 1.1rem; background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent;">Chronoanalytics Solution</a> 
-            All Rights Reserved.
-        </p>
-        <p style="font-weight: 600; word-wrap: break-word;">
-            © 2024. Marketed by TEIM 
-            <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;">
-            <a href="http://teim.in/" style="text-decoration: none;font-size: 1.3rem; background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent;">Teim</a> 
-            All Rights Reserved.
-        </p>
+    <div class="form-container">
+        <div class="form-wrapper">
+            <form method="post">
+                {% csrf_token %}
+                <h2>Signup</h2>
+                <label>Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+                <label>Country Code:</label>
+                <select name="country_code" id="country_code" required>
+                    <option value="+1">+1 (USA)</option>
+                    <option value="+91">+91 (India)</option>
+                    <option value="+44">+44 (UK)</option>
+                </select>
+                <label>Mobile No:</label>
+                <input type="tel" name="mobile" id="mobile" class="form-control" required>
+                <label>Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+                <label>Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                <button type="submit">Sign Up</button>
+                <a href="/" class="btnn">Login</a>
+            </form>
+        </div>
     </div>
+
+    <footer>
+        <p>© 2024. Powered by <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo">
+            <a href="http://www.chronoanalytics.in/" style="color: #555;">Chronoanalytics Solution</a>. All Rights Reserved.</p>
+            <p>  © 2024. Marketed by  <img src="{% static 'images/TeimLogo.png' %}" alt="Chronoanalytics Logo">
+                <a href="http://www.chronoanalytics.in/" style="color: #555;">Teim </a> All Rights Reserved.</p>
+       
+                
+        </footer>
 </body>
 </html>

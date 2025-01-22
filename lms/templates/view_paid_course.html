@@ -1,34 +1,520 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paid Course</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body {
+            position: relative;
+            font-family: Verdana, sans-serif;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+
+        .course-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .course-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            flex: 1 1 calc(33.333% - 20px);
+            margin: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .course-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        .course-card span {
+            font-weight: bold;
+        }
+
+        .card-box {
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+        }
+
+        .card-button,
+        .delet-btn,
+        .update-btn {
+            color: #fff;
+            padding: 5px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5em;
+        }
+
+        .card-button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+        }
+
+        .delet-btn {
+            background: linear-gradient(to right, #cb1111, #fc5025);
+        }
+
+        .update-btn {
+            background: linear-gradient(to right, #059144, #1a520e);
+        }
+
+        .bg-light {
+            box-shadow: 0px 0px 5px 1px;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+             
+/*Footer Css Start*/
+@media screen and (max-width: 768px) 
+{
+    .footer p 
+    {
+        font-size: 1rem;
+        /* Smaller font for smaller devices */
+        word-wrap: break-word;
+        /* Ensures text does not overflow */
+        margin: 5px 0;
+        /* Adjust margin for compact view */
+    }
+
+    .footer img {
+        height: 16px;
+        /* Scale images for smaller devices */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .footer p {
+        font-size: 1rem;
+        /* Even smaller font for extra small devices */
+    }
+
+    .footer img {
+        height: 14px;
+        /* Further scale down images */
+    }
+
+}
+
+        /* Navbar Styles CSS */
+        .bg-light {
+            box-shadow: 0px 0px 5px 1px;
+        }
+
+        /* .logo {
+            margin-left: 40px;
+        } */
+
+        /* Content Styles */
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .logo1 {
+            display: flex;
+            align-items: center;
+        }
+.footer {
+    
+    width: 100%;
+  padding:1%;
+    box-shadow: 0px -2px 10px rgb(203, 203, 203);
+
+
+
+}
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f7f7f7;
+    text-align: center;
+    box-shadow: 0px -2px 10px rgb(203, 203, 203);
+}
+
+.footer {
+    background-color: #f7f7f7;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.container{
+    padding-bottom: 10px;
+}
+
+/*Footer Css End*/
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.8rem;
+    color: white;
+    cursor: pointer;
+    font-size: 30px;
+    /* background-color: cornflowerblue;
+    padding: 0px 10px 4px; */
+}
+
+/* Toggle Button Styles */
+.toggle-btn {
+    /* position: fixed; */
+    /* top: 10px; */
+    left: 10px;
+    z-index: 1100;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+button.learn-more {
+    width: 12rem;
+    height: auto;
+    padding: 0;
+    margin: 0;
+  }
+ 
+  button.learn-more a.button-link {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Circle Styling */
+  button.learn-more .circle {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: relative;
+    display: block;
+    margin: 0;
+    top: 5px;
+    left: -0.101rem;
+    width: 3rem;
+    height: 3rem;
+    background: #282936;
+    border-radius: 1.625rem;
+  }
+  
+  button.learn-more .circle .icon {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    
+    margin: auto;
+    background: #fff;
+   
+  }
+  
+  button.learn-more .circle .icon.arrow {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    left: 0.5rem;
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
+  }
+  
+  button.learn-more .circle .icon.arrow::before {
+    position: absolute;
+    content: "";
+    top: -0.29rem;
+    right: 0.0625rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-top: 0.125rem solid #fff;
+    border-right: 0.125rem solid #fff;
+    transform: rotate(45deg);
+  }
+  
+  /* Text Styling */
+  button.learn-more .button-text {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+  
+    left: 16px;
+    right: 0;
+    bottom: 0;
+    padding: 0.75rem 0;
+    margin: 0 0 0 1.85rem;
+    color: #282936;
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  
+  button.learn-more:hover .circle {
+    width: 100%;
+  }
+  
+  button.learn-more:hover .circle .icon.arrow {
+    background: #fff;
+    transform: translate(1rem, 0);
+  }
+  
+  button.learn-more:hover .button-text {
+    color: #fff;
+  }
+  
+  
+       /* General Button Styles */
+       button {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        border: 0;
+        vertical-align: middle;
+        text-decoration: none;
+        background: transparent;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+      }
+
+       /* Sidebar Styles */
+       .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        height: 100%;
+        width: 250px;
+        background-color: #343a40;
+        transition: left 0.3s ease-in-out;
+        z-index: 1050;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .sidebar .nav-link,
+    .sidebar .dropdown-item {
+        color: white !important;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.8rem;
+        color: white;
+        cursor: pointer;
+        font-size: 30px;
+        /* background-color: cornflowerblue;
+        padding: 0px 10px 4px; */
+    }
+
+    /* Toggle Button Styles */
+    .toggle-btn {
+        /* position: fixed; */
+        /* top: 10px; */
+        left: 10px;
+        z-index: 1100;
+        cursor: pointer;
+        font-size: 1.5rem;
+    }
+               /* Button Styles */
+ .Btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
+    background-color: rgb(255, 65, 65);
+    margin-top: 10px;
+}
+
+.sign {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-duration: .3s;
+}
+
+.sign svg {
+    width: 17px;
+}
+
+.sign svg path {
+    fill: white;
+}
+
+.text {
+    position: absolute;
+    right: 0;
+    width: 0;
+    opacity: 0;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 600;
+    transition-duration: .3s;
+}
+
+.Btn:hover {
+    width: 125px;
+    border-radius: 40px;
+    transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+}
+
+.Btn:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 0;
+
+}
+
+.Btn:active {
+    transform: translate(2px, 2px);
+}
+li a:hover {
+    /* background-color: rgb(94, 94, 93); */
+    /* font-size: 18px; */
+    /* border: 1px solid; */
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgb(177, 177, 176);
+    /* padding: 5px; */
+}
+</style>
 </head>
 <body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-light bg-light">
+    <div class="logo1">
+        <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i><a href="#" >
+        <img class="logo navbar-brand" src="../static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
+</a>
+    </div>
+    <div class="logo1">
+        <form class="form-inline">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Help</button>
+        </form>
+    </div>
+</nav>
+
     
+    <!-- Sidebar -->
+    <div class="sidebar bg-dark" id="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <ul class="nav flex-column p-3">
+            <!-- Dashboard Menu -->
+            <li class="nav-item">
+                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
+            </li>
 
+            <!-- Course Management Menu -->
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
+                    aria-expanded="false" aria-controls="menu1">
+                    Course Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu1">
+                    <a class="nav-link pl-4" href="#">Paid Course</a>
+               
+                    <a class="nav-link pl-4" href="/free-course/">Free Course</a>
+                </div>
+            </li>
+           
+            <li class="nav-item">
+                <a class="nav-link " href="#">Enrollment Tracking</a>
 
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Certificates
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Invoices
+                </a>
+                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Notifications
+                </a>
+               
+            </li>
+            <button class="Btn ml-3" onclick="location.href='/'">
+                <div class="sign">
+                    <svg viewBox="0 0 512 512">
+                        <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                    </svg>
+                </div>
+                <div class="text">   Logout</div>
+            </button>
+        </ul>
 
-
-
-
-
-
-
-
-
-    <div class="container my-4">
-        <div class="text-center mb-4">
-            <h2>Paid Courses</h2>
-        </div>
+    </div>
+    <!-- main Menu -->
+    <div class="container my-2">
+       
         <div class="row">
             {% for course in courses %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100 card-box">
                     {% if course.thumbnail %}
-                    <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.course_title }} Thumbnail"
-                        style="width: 100%; height: 200px; object-fit: cover;">
+                    <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.course_title }} Thumbnail" style="width: 100%; height: 200px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
                         <h3 class="card-title">{{ course.course_title }}</h3>
@@ -37,10 +523,18 @@
                         <p class="card-text"><strong>Instructor:</strong> {{ course.instructor_name }}</p>
                         <p class="card-text"><strong>Level:</strong> {{ course.course_level }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ course.course_price }}</p>
-                        <div class="d-flex justify-content-around mt-3">
-                            <button class="card-button add-btn"> <i class="fa-solid fa-cloud-arrow-up"></i> </button>
-                            <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
-                            <button class=" update-btn"><i class="fa-solid fa-pen-to-square"></i></i></button>
+                        <div class=" justify-content-around mt-3">
+                            <!-- <button class="card-button add-btn"><i class="fa-solid fa-cloud-arrow-up"></i></button> -->
+                       
+<!-- View Course Button -->
+<button class="learn-more">
+    <a href="{% url 'view_content' course.id %}" class="button-link">
+      <span class="circle" aria-hidden="true">
+        <span class="icon arrow"></span>
+      </span>
+      <span class="button-text">View Course</span>
+    </a>
+  </button>                            <!-- <button class="update-btn"><i class="fa-solid fa-pen-to-square"></i></button> -->
                         </div>
                     </div>
                 </div>
@@ -48,7 +542,56 @@
             {% endfor %}
         </div>
     </div>
-   
+
+
+
+
+
+    <footer class="footer {% if not courses %}fixed-footer{% endif %}">
+        <div class="container">
+            <!-- Footer Content -->
+            <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
+                © 2024. Powered by
+                <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo"
+                    style="height: 20px; vertical-align: middle;">
+                <a href="http://www.chronoanalytics.in/"
+                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
+                    Solution</a>
+                All Rights Reserved.
+            </p>
+            <p style="font-weight: 600; word-wrap: break-word;">
+                Marketed by
+                <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo"
+                    style="height: 20px; vertical-align: middle;">
+                <a href="http://teim.in/"
+                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">TEIM</a>
+                All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+    
+
+
+
+
+    
+
+    <!-- JavaScript -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn');
+
+            sidebar.classList.toggle('show');
+
+            // Toggle button icon
+            if (sidebar.classList.contains('show')) {
+                toggleBtn.style.display = 'none';
+            } else {
+                toggleBtn.style.display = 'block';
+            }
+        }
+    </script>
 
 </body>
 </html>

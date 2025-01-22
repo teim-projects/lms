@@ -1,11 +1,514 @@
+{%load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
+    <title>Lms</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Verdana (sans-serif);
+            background-color: #FAFAFA;
+            margin: 0;
+            padding: 0;
+            /*background: linear-gradient(to right, #ff2ff8, #39e5ff);*/
+
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Navbar Css Start */
+        .navbar {
+            background-color: #f7f4f4;
+            box-shadow: 0px 2px 10px rgb(203, 203, 203);
+
+
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            padding: 0px;
+        }
+
+        .navbar-toggle {
+            border: none;
+        }
+
+
+        .tem {
+            position: absolute;
+            right: 30px;
+            top: 10px;
+        }
+
+        .navbar {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+            position: fixed;
+            width: 100%;
+            top: 0px;
+            z-index: 1000;
+
+        }
+
+        .navbar-header_logo {
+            position: absolute;
+            margin-left: 20px;
+            top: 10px;
+            height: 200px;
+        }
+
+        .teimlms {
+            position: absolute;
+            left: 45%;
+            top: 25px;
+            font-weight: bold;
+            font-size: 20px;
+            font-family: Algerian;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            /* Gradient definition */
+            -webkit-background-clip: text;
+            /* Clip the gradient to the text boundaries */
+            -webkit-text-fill-color: transparent;
+            border-bottom: 3px solid rgb(80, 16, 177);
+            /*Script MT */
+        }
+
+
+        /*Navbar Css End */
+
+
+        /*Footer Css Start*/
+        @media screen and (max-width: 768px) {
+            .footer p {
+                font-size: 1rem;
+                /* Smaller font for smaller devices */
+                word-wrap: break-word;
+                /* Ensures text does not overflow */
+                margin: 5px 0;
+                /* Adjust margin for compact view */
+            }
+
+            .footer img {
+                height: 16px;
+                /* Scale images for smaller devices */
+            }
+
+            .teimlms {
+
+                position: absolute;
+                left: 33%;
+                top: 10px;
+
+            }
+
+            .tem {
+                position: absolute;
+                right: 15px;
+                top: 10px;
+            }
+
+            .navbar-header_logo {
+
+                margin-left: 10px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .footer p {
+                font-size: 1rem;
+                /* Even smaller font for extra small devices */
+            }
+
+            .footer img {
+                height: 14px;
+                /* Further scale down images */
+            }
+
+            .teimlms {
+
+                position: absolute;
+                left: 33%;
+                top: 10px;
+
+            }
+
+            .tem {
+                position: absolute;
+                right: 15px;
+                top: 10px;
+            }
+
+            .navbar-header_logo {
+
+                margin-left: 10px;
+            }
+
+
+        }
+
+        .footer {
+            
+            margin-top: 30px;
+            width: 100%;
+            font-size: 50px;
+           
+padding-top: 20px;
+padding-bottom: 10px;
+            box-shadow: 0px -2px 10px rgb(203, 203, 203);
+
+
+        }
+
+        .footer p {
+            padding: 1px;
+        }
+
+        /*Footer Css End*/
+
+
+        .navbar-header_logo {
+
+            position: absolute;
+            left: 0px;
+        }
+
+        .info {
+            font-weight: 500;
+        }
+
+
+
+        /*Footer Css End*/
+        /* Button styling */
+        button {
+            background: linear-gradient(to right, #017123, #044e13);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5em;
+            width: 100%;
+            display: inline-block;
+        }
+
+        .signbut {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+
+
+        }
+
+        .signbut:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: scale(1.02);
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #017123, #1cb149);
+            transform: scale(1.02);
+        }
+
+        .imglaptop {
+            margin-left: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .imglaptop:hover {
+            transform: scale(1.05);
+            /* Gently enlarges the image */
+        }
+
+        .Our-Mission {
+
+            text-align: center;
+            text-decoration: none;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 30px;
+            font-weight: 400;
+        }
+
+        .info p {
+            font-weight: 330;
+            font-size: 20px;
+        }
+
+        .card-header {
+            background-color: #ffffff;
+            border-bottom: none;
+        }
+        i{
+            font-weight: bold;
+           font-size: 25px;
+        }
+        li{
+            list-style-type: none;
+            text-decoration: none;
+            text-align: left;
+            margin-bottom: 30px;
+            
+           
+        }
+        li span{
+            color: #9b8f7d;
+        }
+        .card-body h6{
+            font-weight: 600;
+        }
+         /* Footer styling */
+         .footer {
+            background-color: #f7f7f7;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            padding: 20px 0;
+        }
+
+        .footer .container {
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-weight: 600;
+            word-wrap: break-word;
+        }
+
+        .footer img {
+            height: 20px;
+            vertical-align: middle;
+        }
+
+        .footer a {
+            text-decoration: none;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.1rem;
+        }
+        .step2{
+            margin-top: 130px;
+        }
+        .Our-Mission{
+            margin-top: 30px;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <nav class="navbar navbar-default p-4 " >
+        <div class="container-fluid navbarr">
+            <div class="navbar-header ">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button> -->
+                <a class="navbar-brand " href="https://profitmaxacademy.com/">
+                    <img src="{% static 'images/pmxlogo_c.png' %}" alt="Logo"
+                        style="height: 40px;   margin-bottom: 10px; " class="navbar-header_logo">
+                </a>
+            </div>
+
+            <div class="teimlms">
+                <span>T E I M L M S</span>
+            </div>
+            <div class="navbar-header tem">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button> -->
+                <a class="navbar-brand" href="http://www.chronoanalytics.in/">
+                    <img src="{% static 'images/logoweb.png' %}" alt="Logo"
+                        style="height: 40px;   margin-bottom: 10px; ">
+                </a>
+            </div>
+            <!-- <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+            </div> -->
+        </div>
+    </nav>
+
+
+
+    <!-- main Content start -->
+
+    <div class="container mt-5 ">
+        <div class="row step2">
+            <div class="col-md-6 info col-12 mt-5 ">
+                <h2>Teim Lms Dashboard</h2>
+                <p style="text-align: left;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.</p>
+
+
+                <div class="row mt-5">
+
+                    <div class="col-md-6 col-6">
+                        <button>Login</button>
+
+                    </div>
+                    <div class="col-md-16 col-6">
+
+                        <button class="signbut">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 infopc col-12 mt-5 ">
+                <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png"
+                    class="imglaptop" alt="Dashboard Image">
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+        <div class="row ">
+            <div class="col-md-12 col-12 text-center p-5 Our-Mission "> Our Mission </div>
+
+        </div>
+        <div class="row ">
+            <div class="col-md-4 col-12">
+                <div class="card  mb-5">
+                    <div class="card-header text-center " >
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div class="card-body ">
+                        <h6 class="text-center">User-Friendly LMS!</h6>
+                        <p>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Our LMS makes learning simple and
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;efficient. Enjoy an intuitive design for
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hassle-free navigation!"</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-12">
+                <div class="card mb-5">
+                    <div class="card-header text-center" >
+
+                        <i class="fa-solid fa-check"></i>
+
+                    </div>
+                    <div class="card-body text-center ">
+
+                        <h6 class="text-center">User-Friendly LMS!</h6>
+                        <p>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Our LMS makes learning simple and
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;efficient. Enjoy an intuitive design for
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hassle-free navigation!"</p>
+                    </div>
+
+                </div>
+
+            </div>
+                <div class="col-md-4 col-12">
+                    <div class="card mb-5">
+                        <div class="card-header text-center" >
+
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div class="card-body text-center ">
+
+                            <h6 class="text-center">User-Friendly LMS!</h6>
+                            <p>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Our LMS makes learning simple and
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;efficient. Enjoy an intuitive design for
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hassle-free navigation!"
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+<div class="container  text-center">
+
+    <div class="row "  >
+        <div class="col-md-12 col-12 text-center p-5 Our-Mission ">  Services We Offer </div>
+       
+    </div>
+    <div class="row"  >
+        <div class="col-md-6 col-12 mb-5">
+         <div class="row" style="height: 400px;">
+            <div class="col-md-6  col-12 mb-5"style="height: 100%; width:100%;">
+                <img src="https://rajaneditz.com/wp-content/uploads/2023/04/Cb-editing-background-full-hd-1080p.jpg" height="100%" width="100%">
+            </div>
+            <div class="col-md-6  col-12" style="height: 100%; width:100%;">
+                <div style="height: 45%; width:100%;">                <img src="https://png.pngtree.com/thumb_back/fw800/background/20240515/pngtree-beautiful-snapseed-background-hd-4k-for-editing-image_15785545.jpg" height="100%" width="100%">
+                </div>
+                <div style="margin-top: 40px; height: 45%; width:100%;" >                <img src="https://png.pngtree.com/thumb_back/fw800/background/20240718/pngtree-snapseed-background-hd-4k-for-editing-image_16018705.jpg" height="100%" width="100%">
+                </div>
+            </div>
+         </div>
+        </div>
+        <div class="col-md-6  col-12 mb-5  text-info">
+            <ul >
+               
+                <li>  <i class="fa-solid fa-check mt-4 "></i>  <span> &nbsp; &nbsp;Here's a great YouTube intro script tailored for channel.</span></li>
+                <li>  <i class="fa-solid fa-check"></i>   <span> &nbsp; &nbsp;Here's a great YouTube intro script tailored for channel.</span></li>
+                <li>  <i class="fa-solid fa-check"></i>   <span> &nbsp; &nbsp;Here's a great YouTube intro script tailored for channel.</span></li>
+                <li>  <i class="fa-solid fa-check"></i>   <span> &nbsp; &nbsp;Here's a great YouTube intro script tailored for channel.</span></li>
+                <li>  <i class="fa-solid fa-check"></i>   <span> &nbsp; &nbsp;Here's a great YouTube intro script tailored for channel.</span></li>
+                <li>  <i class="fa-solid fa-check"></i>   <span> &nbsp; &nbsp;Here's a great YouTube intro script tailored for channel.</span></li>
+                <li>  <i class="fa-solid fa-check"></i>   <span> &nbsp; &nbsp;Here's a great YouTube intro script tailored for channel.</span></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <!-- Footer Content -->
+        <p>
+            © 2024. Powered by
+            <img src="../static/images/logoweb.png" alt="Chronoanalytics Logo">
+            <a href="http://www.chronoanalytics.in/">Chronoanalytics Solution</a>
+            All Rights Reserved.
+        </p>
+        <p>
+            © 2024. Marketed by
+            <img src="../static/images/TeimLogo.png" alt="Teim Logo">
+            <a href="http://teim.in/">TEIM</a>
+            All Rights Reserved.
+        </p>
+    </div>
+</footer>
+
+
 </body>
+
 </html>

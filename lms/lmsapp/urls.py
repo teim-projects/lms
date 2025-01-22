@@ -9,6 +9,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout_view, name='logout'),
     path('', views.login, name='login'),
+    path('index/', views.index, name='index'),
     path('verify-otp/', views.verify_otp, name='verify_otp'),
     path('password-reset/', views.password_reset, name='password_reset'),
     path('reset-password-verify/', views.reset_password_verify, name='reset_password_verify'),
@@ -20,8 +21,15 @@ urlpatterns = [
     path('paid-course/', views.paid_course, name='paid_course'),
     path('create-paid-course/', views.create_paid_course, name='create_paid_course'),
     path('view_paid_course/', views.view_paid_course, name='view_paid_course'),
-
-
+    path('course/<int:course_id>/upload-content/', views.upload_content, name='upload_content'),
+    path('course/<int:course_id>/view-content/', views.view_content, name='view_content'),
+    path('delete-course/<int:course_id>/', views.delete_free_course, name='delete_free_course'),
+    path('update-course/<int:course_id>/', views.update_free_course, name='update_free_course'),
+    path('delete_paid_course/<int:course_id>/', views.delete_paid_course, name='delete_paid_course'),
+    path('update_paid_course/<int:course_id>/', views.update_paid_course, name='update_paid_course'),
+    path('manage_subadmins/', views.manage_subadmins, name='manage_subadmins'),
+    path('subadmin_dashboard/', views.subadmin_dashboard, name='subadmin_dashboard'),
+    path('subadmin-login/', views.subadmin_login_view, name='subadmin_login'),
 ]
 
 
