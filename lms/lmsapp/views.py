@@ -231,12 +231,13 @@ def verify_otp(request):
                 return redirect('signup')
     return render(request, 'verify_otp.html')
 
-
-
-from django.contrib.auth import login as auth_login  # Ensure proper login function import
+from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.sessions.models import Session
+from django.utils.timezone import now
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from .models import CustomUser
+import hashlib
 
 
 def login(request):
@@ -257,28 +258,69 @@ def login(request):
         try:
             user = CustomUser.objects.get(email=email)
             if user.check_password(password):  # Validate the password
-                auth_login(request, user)  # Log the user in
+                
+                # Check if the user has exceeded the session limit
+                if not manage_user_sessions(user, request):
+                    messages.error(request, "You have reached the maximum number of active sessions. Please log out from another device to log in.")
+                    return render(request, 'login.html')
+
+                # Log the user in
+                auth_login(request, user)
                 request.session['user_email'] = user.email
-                return redirect('student_dashboard')  # Redirect to the user's dashboard
+                return redirect('student_dashboard')
+
             else:
-                # Incorrect password
                 messages.error(request, "Incorrect password. Please try again.")
         except CustomUser.DoesNotExist:
-            # Email not found in the system
             messages.error(request, "User with this email does not exist. Please register.")
 
-    # Render login page with potential error messages
     return render(request, 'login.html')
 
 
+def manage_user_sessions(user, request):
+    """
+    Ensures that a user can log in on a maximum of **2 devices/browsers**.
+    If they exceed this limit, the oldest session is removed.
+    """
+    max_sessions = 2  # User can be logged in on 2 devices/browsers
 
+    # Generate a unique browser/device identifier
+    browser_identifier = hashlib.md5(request.META.get('HTTP_USER_AGENT', '').encode('utf-8')).hexdigest()
+
+    # Retrieve all active sessions for this user
+    user_sessions = []
+    sessions = Session.objects.all()
+
+    for session in sessions:
+        session_data = session.get_decoded()
+        if session_data.get('_auth_user_id') == str(user.id):
+            user_sessions.append(session)
+
+    # If user already has 2 active sessions, delete the oldest one
+    if len(user_sessions) >= max_sessions:
+        user_sessions.sort(key=lambda s: s.expire_date)  # Sort by expiry date
+        user_sessions[0].delete()  # Delete the oldest session
+
+    return True  # Allow login
+
+
+
+from django.contrib.auth import logout as auth_logout
+from django.contrib.sessions.models import Session
 from django.shortcuts import redirect
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
 
 def logout_view(request):
-    logout(request)  # Logs out the user
-    return redirect('login')
+    if request.user.is_authenticated:
+        # Delete the user's session from the database
+        Session.objects.filter(session_key=request.session.session_key).delete()
+
+    # Clear the session
+    auth_logout(request)
+    request.session.flush()  # Remove all session data
+
+    return redirect('login')  # Redirect to login page
+
+
 
 
 def password_reset(request):
