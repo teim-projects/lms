@@ -321,30 +321,40 @@
         .Our-Mission {
             margin-top: 30px;
         }
-
+        @media screen and (min-width: 768px) {
+            .subcan{
+                display: inline-block;
+                width: 30%;
+                margin-left: 62px;
+            }
+           
+        }
         @media screen and (max-width: 480px) {
             .last {
                 margin-top: 500px;
                 border: 1px solid green;
                 padding: 5px;
             }
-
-            .imgcun {
-                display: none;
+            .imgcun{
+                margin-top: 20px;
             }
 
+        .subcan{
+            display: inline-block;
+            width: 72%;
+            margin-left: 42px;
         }
+        }
+
+           
+
+        
 
         label {
             text-align: left;
         }
 
-        .subcan {
-            display: inline-block;
-            width: 30%;
-            margin-left: 70px;
-
-        }
+     
 
         .myform {
             border: 1px solid rgb(192, 166, 166);
@@ -566,8 +576,8 @@
                     <label>Enter Your Message</label>
                     <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
 
-                    <button type="submit" class="subcan"> Submit</button>
-                    <button type="reset" class="subcan" style="background: linear-gradient(to right, #ff2929, #ea0909);"> Cancel</button>
+                    <button type="submit" class="subcan "> Submit</button>
+                    <button type="reset" class="subcan " style="background: linear-gradient(to right, #ff2929, #ea0909); "> Cancel</button>
                 </form>
             </div>
             <div class="col-md-6 col-12 imgcun " >
