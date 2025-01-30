@@ -30,7 +30,12 @@ urlpatterns = [
     path('manage_subadmins/', views.manage_subadmins, name='manage_subadmins'),
     path('subadmin_dashboard/', views.subadmin_dashboard, name='subadmin_dashboard'),
     path('subadmin-login/', views.subadmin_login_view, name='subadmin_login'),
+    path('send_notification/', views.send_notification, name='send_notification'),
+    
+    
 ]
+
+
 
 
 
