@@ -684,3 +684,52 @@ def subadmin_login_view(request):
 
     return render(request, 'subadmin_login.html')
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Notification
+from django.core.files.storage import default_storage
+
+def send_notification(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+
+        # Save the notification to the database
+        notification = Notification(title=title, description=description)
+
+        if image:
+            notification.image = image  # Django handles file saving automatically
+
+        notification.save()
+
+        messages.success(request, 'Notification saved successfully!')
+        return redirect('admin_dashboard')  # Change this to the correct URL name
+
+    return render(request, 'send_notification.html')
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .models import Notification
+
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Notification
+
+
+from django.shortcuts import render
+from .models import Notification
+
+from django.shortcuts import render
+from .models import Notification
+
+from django.shortcuts import render
+from .models import Notification
+
+def student_dashboard(request):
+    # Fetch all notifications ordered by newest first
+    notifications = Notification.objects.all().order_by('-created_at')
+
+    return render(request, 'student_dashboard.html', {'notifications': notifications})
