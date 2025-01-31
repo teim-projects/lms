@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Now</title>
+</head>
+<body>
+    <h1>Make a Payment</h1>
+    <p>Click the button below to proceed to the payment page.</p>
+
+    <!-- Display Course Details -->
+    <h2>Course: {{ course.course_title }}</h2>
+    <p>Price: ₹{{ course.course_price }}</p>
+
+    <!-- Pay Now Button -->
+    <button id="pay-now-button">Pay Now</button>
+
+    <script type="text/javascript">
+        // Add event listener to the button
+        document.getElementById('pay-now-button').addEventListener('click', function () {
+            // Fetch the course price from the template
+            var coursePrice = "{{ course.course_price }}";
+
+            // Redirect to Easebuzz demo payment page with the course price
+            window.location.href = `https://easebuzz.in/demo/?amount=${coursePrice}`;
+        });
+    </script>
+</body>
+</html>

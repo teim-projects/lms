@@ -524,12 +524,14 @@ li a:hover {
                        
 <!-- View Course Button -->
 <button class="learn-more">
-    <a href="{% url 'view_content' course.id %}" class="button-link">
-      <span class="circle" aria-hidden="true">
+    
         <span class="icon arrow"></span>
       </span>
-      <span class="button-text">View Course</span>
+      <a href="{% url 'initiate_payment' course.id %}" class="button">
+        <span class="button-text">Buy Course</span>
     </a>
+    
+    
   </button>                            <!-- <button class="update-btn"><i class="fa-solid fa-pen-to-square"></i></button> -->
                         </div>
                     </div>

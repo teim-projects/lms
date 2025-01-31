@@ -30,6 +30,9 @@ urlpatterns = [
     path('manage_subadmins/', views.manage_subadmins, name='manage_subadmins'),
     path('subadmin_dashboard/', views.subadmin_dashboard, name='subadmin_dashboard'),
     path('subadmin-login/', views.subadmin_login_view, name='subadmin_login'),
+    path("payment/<int:course_id>/", views.initiate_payment, name="initiate_payment"),
+    path("payment/success/", views.payment_success, name="payment_success"),
+    path("payment/failure/", views.payment_failure, name="payment_failure"),
 ]
 
 
