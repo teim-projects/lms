@@ -691,3 +691,157 @@ def subadmin_login_view(request):
 
     return render(request, 'subadmin_login.html')
 
+import hashlib
+import requests
+from django.conf import settings
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+
+def generate_hash_key(data_dict):
+    """Generate hash key for Easebuzz payment"""
+    hash_sequence = "|".join(str(data_dict[key]) for key in sorted(data_dict.keys()))
+    hash_string = settings.EASEBUZZ_SALT + "|" + hash_sequence + "|" + settings.EASEBUZZ_SALT
+    return hashlib.sha512(hash_string.encode()).hexdigest()
+
+from .models import Payment
+import uuid  # To generate unique transaction IDs
+
+from django.contrib.auth.models import AnonymousUser
+
+import uuid
+import uuid
+import hashlib
+import requests
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from .models import Payment, PaidCourse
+
+def generate_hash_key(data):
+    """Generates a hash for the Easebuzz transaction request"""
+    hash_sequence = "|".join([data[key] for key in sorted(data.keys())]) + "|" + settings.EASEBUZZ_SALT
+    return hashlib.sha512(hash_sequence.encode()).hexdigest()
+
+from django.views.decorators.csrf import csrf_exempt
+
+@login_required
+def initiate_payment(request, course_id):
+    try:
+        course = get_object_or_404(PaidCourse, id=course_id)
+    except PaidCourse.DoesNotExist:
+        return JsonResponse({"error": "Course not found."})
+
+    txnid = f"Txn{uuid.uuid4().hex[:10]}"  # Generate a unique transaction ID
+    first_name = request.user.first_name.strip() if request.user.first_name else "User"
+
+    if not hasattr(settings, "EASEBUZZ_MERCHANT_KEY") or not settings.EASEBUZZ_MERCHANT_KEY:
+        return JsonResponse({"error": "Invalid merchant key. Please check your settings."})
+
+    phone_number = getattr(request.user, 'mobile', '')
+    if not phone_number:
+        return JsonResponse({"error": "Phone number is required for payment."})
+
+    payment = Payment.objects.create(
+        user=request.user,
+        course=course,
+        transaction_id=txnid,
+        amount=course.course_price,
+        status="Pending"
+    )
+
+    # Construct payment data for Easebuzz
+    data = {
+        "key": settings.EASEBUZZ_MERCHANT_KEY,
+        "txnid": txnid,
+        "amount": str(course.course_price),
+        "productinfo": course.course_title,
+        "firstname": first_name,
+        "email": request.user.email,
+        "phone": phone_number,
+        "surl": request.build_absolute_uri("/payment/success/"),  # Success URL
+        "furl": request.build_absolute_uri("/payment/failure/"),  # Failure URL
+    }
+
+    # Generate hash (if required by Easebuzz)
+    data["hash"] = generate_hash_key(data)  # Ensure you have a function to generate the hash
+
+    return render(request, "payment_redirect.html", {"data": data, "easebuzz_url": settings.EASEBUZZ_BASE_URL,'course':course})
+
+
+
+# views.py
+from django.shortcuts import render
+from .models import Payment
+
+def payment_success(request):
+    txnid = request.GET.get('txnid')  # Get transaction ID from Easebuzz
+    try:
+        payment = Payment.objects.get(transaction_id=txnid)
+        payment.status = "Success"
+        payment.save()
+    except Payment.DoesNotExist:
+        pass  # Handle error properly in production
+
+    return render(request, "payment_success.html", {"txnid": txnid})
+
+def payment_failure(request):
+    txnid = request.GET.get('txnid')
+    try:
+        payment = Payment.objects.get(transaction_id=txnid)
+        payment.status = "Failed"
+        payment.save()
+    except Payment.DoesNotExist:
+        pass
+
+    return render(request, "payment_failed.html", {"txnid": txnid})
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Notification
+from django.core.files.storage import default_storage
+
+def send_notification(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+
+        # Save the notification to the database
+        notification = Notification(title=title, description=description)
+
+        if image:
+            notification.image = image  # Django handles file saving automatically
+
+        notification.save()
+
+        messages.success(request, 'Notification saved successfully!')
+        return redirect('admin_dashboard')  # Change this to the correct URL name
+
+    return render(request, 'send_notification.html')
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .models import Notification
+
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Notification
+
+
+from django.shortcuts import render
+from .models import Notification
+
+from django.shortcuts import render
+from .models import Notification
+
+from django.shortcuts import render
+from .models import Notification
+
+def student_dashboard(request):
+    # Fetch all notifications ordered by newest first
+    notifications = Notification.objects.all().order_by('-created_at')
+
+    return render(request, 'student_dashboard.html', {'notifications': notifications})
+
