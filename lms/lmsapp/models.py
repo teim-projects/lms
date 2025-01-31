@@ -173,3 +173,15 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.user.user} - {self.course.course} - {self.status}"
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class Notification(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='notifications/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
