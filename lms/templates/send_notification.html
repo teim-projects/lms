@@ -294,10 +294,9 @@ h3{
         <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         <ul class="nav flex-column p-3">
             <!-- Dashboard Menu -->
-            <li class="nav-item">
-                <a href="/admin_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
+            li class="nav-item">
+                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
             </li>
-
             <!-- Course Management Menu -->
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
@@ -306,14 +305,16 @@ h3{
                 </a>
                 <!-- Collapsible Submenu -->
                 <div class="collapse" id="menu1">
-                    <a class="nav-link pl-4" href="#">Create Course</a>
-            
-                    <a class="nav-link pl-4" href="#">Free Course</a>
+                     <a class="nav-link pl-4" href="/create-paid-course/">Create Paid Course</a>
+                    <a class="nav-link pl-4" href="/create-free-course/">Create Free Course</a>
                 </div>
             </li>
+
+
+
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu2"
-                    aria-expanded="false" aria-controls="menu1">
+                    aria-expanded="false" aria-controls="menu2">
                     Enrollment Management
                 </a>
                 <!-- Collapsible Submenu -->
