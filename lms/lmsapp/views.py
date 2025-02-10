@@ -417,7 +417,8 @@ def paid_course(request):
 
 
 def view_paid_course(request):
-    courses = PaidCourse.objects.all()
+     # Replace with the actual course ID you want
+    courses = PaidCourse.objects.filter(id=course_id) 
     return render(request, 'view_paid_course.html',{'courses': courses})
 
 
@@ -492,6 +493,7 @@ def upload_content(request, course_id):
 
 from django.shortcuts import render, get_object_or_404
 from .models import PaidCourse, CourseContent
+from django.urls import reverse
 
 def view_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
@@ -524,14 +526,13 @@ def view_content(request, course_id):
 
     return render(request, 'view_content.html', {
         'course': course,
-        'contents': annotated_contents,
-        
+        'contents': contents,  # This must be passed correctly!
     })
 
 
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from .models import FreeCourse
 
 # Delete Free Course
@@ -845,3 +846,66 @@ def student_dashboard(request):
 
     return render(request, 'student_dashboard.html', {'notifications': notifications})
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import PaidCourse, CourseContent, CourseProgress
+
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import CourseProgress, CourseContent
+
+from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
+from .models import PaidCourse, CourseContent
+
+from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse
+from lmsapp.models import PaidCourse, CourseContent, CourseProgress  # Ensure models are imported
+
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse, HttpResponse
+from .models import PaidCourse, CourseContent, CourseProgress
+
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from .models import PaidCourse, CourseContent, CourseProgress
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+ # Only if you can't use CSRF tokens in JS
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from .models import PaidCourse, CourseContent, CourseProgress
+  # Required for AJAX POST requests without Django's default CSRF setup
+@login_required
+def mark_content_completed(request, course_id, content_id):
+    if request.method == "POST":
+        course = get_object_or_404(PaidCourse, id=course_id)
+        content = get_object_or_404(CourseContent, id=content_id)
+
+        progress, created = CourseProgress.objects.get_or_create(
+            user=request.user,
+            course=course,
+            content=content
+        )
+
+        if not progress.completed:
+            progress.completed = True
+            progress.save()
+
+        return JsonResponse({"message": "Marked as completed", "completed": True})
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+  # Redirect back to course content
+
+def view_paid_course(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login page if user is anonymous
+    
+    courses = PaidCourse.objects.all()
+    return render(request, 'view_paid_course.html', {'courses': courses})

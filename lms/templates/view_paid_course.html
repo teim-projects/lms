@@ -544,11 +544,24 @@
                         <div class="row">
                             <div class="col-md-12"> 
                                 <button class="btn btn-outline-success bnt" style="width: 100%;">
-
-
-                                <a href="{% url 'initiate_payment' course.id %}">
-                                    Buy Course
-                                </a>
+                                    {% for course, progress in course_progress.items %}
+                                    <div class="course-card">
+                                        <h2>{{ course.course_title }}</h2>
+                                        <p>Instructor: {{ course.instructor_name }}</p>
+                                        
+                                        {% if progress %}
+                                            <progress value="{{ progress.progress_percentage }}" max="100"></progress>
+                                            <p>Progress: {{ progress.progress_percentage|floatformat:0 }}%</p>
+                                        {% else %}
+                                            <p>Progress: 0%</p>
+                                        {% endif %}
+                                        
+                                        
+                                    </div>
+                                {% endfor %}
+                                
+                                <a href="{% url 'view_content' course.id %}">Continue Course</a>
+                                
 
 
                             </button></div>

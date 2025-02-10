@@ -432,54 +432,33 @@
         {% if contents %}
         <ul class="list-group">
             {% for content in contents %}
-             
-              <div class="col-md-12 col-12  mb-4 cardmaincontent">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white titlesubtitle" style="border-bottom: none;">
-                        <h3 class="mb-0">{{ content.title }}</h3>
-                    </div>
-                    <div class="card-body titlesubtitle">
-                        <p class="text-muted">{{ content.subtitle }}</p>
-                    </div>
+            <div class="content-block">
+                <h3>{{ content.title }}</h3>
+                <p>{{ content.subtitle }}</p>
+        
+                {% if content.type == "video" %}
+                    <video src="{{ content.resource_file.url }}" controls></video>
+                {% elif content.type == "pdf" %}
+                    <a href="{{ content.resource_file.url }}" target="_blank">View PDF</a>
+                {% elif content.type == "image" %}
+                    <img src="{{ content.resource_file.url }}" alt="Course Image">
+                {% endif %}
+        
+                {% if content.completed %}
+                    <span class="badge badge-success">Completed</span>
+                {% else %}
+                <button class="mark-complete" data-course-id="{{ course.id }}" data-content-id="{{ content.id }}">
+                    Mark as Completed
+                </button>
+                {% endif %}
+            </div>
+        {% endfor %}
 
-                    {% if content.type == 'pdf' %}
-                    <div class="card-footer">
-                        <a href="{{ content.resource_file }}" target="_blank"
-                            class="btn btn-outline-primary btn-sm">View PDF</a>
-                    </div>
-
-                    {% elif content.type == 'image' %}
-                    <div class="card-footer " style="border-top: none;  ">
-                        <center>
-                            <img src="{{ content.resource_file }}" alt="{{ content.title }}" class="img-fluid"
-                                height="300px" width="300px">
-                        </center>
-                    </div>
-
-                    {% elif content.type == 'video' %}
-                    <div class="card-footer position-relative">
-                        <p class="moving-email "> {{ request.session.user_email }}</p>
-                        <video controls controlslist="nodownload" class="w-100">
-                            <source src="{{ content.resource_file }}" type="video/mp4">
-                            <source src="{{ content.resource_file }}" type="video/webm">
-                            <source src="{{ content.resource_file }}" type="video/ogg">
-                            <source src="{{ content.resource_file }}" type="video/mkv">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-
-                    {% else %}
-                    <div class="card-footer">
-                        <p class="text-danger">Unsupported content type</p>
-                    </div>
-                    {% endif %}
-                </div>
-             </div>
-            {% endfor %}
         </ul>
         {% else %}
         <p class="text-center text-muted">No content available for this course.</p>
         {% endif %}
+        
     </div>
 
     <footer class="footer {% if not contents %}fixed-footer{% endif %}">
@@ -529,6 +508,66 @@
         });
 
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".mark-complete").forEach(button => {
+        button.addEventListener("click", function () {
+            let courseId = this.getAttribute("data-course-id");
+            let contentId = this.getAttribute("data-content-id");
+
+            fetch(`/course/${courseId}/view_content/${contentId}/complete/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.completed) {
+                    this.textContent = "Completed";
+                    this.style.backgroundColor = "green";
+
+                    // Show a popup confirmation
+                    showCompletionPopup();
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+
+    function showCompletionPopup() {
+        let popup = document.createElement("div");
+        popup.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #4CAF50;
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 18px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            ">
+                ✅ Content Marked as Completed!
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+
+        setTimeout(() => {
+            popup.remove();  // Remove popup after 2 seconds
+        }, 2000);
+    }
+});
+</script>
+
+        
+    
 
 </body>
 
