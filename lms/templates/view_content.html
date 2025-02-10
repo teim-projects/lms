@@ -526,8 +526,18 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 if (data.completed) {
+                    // Immediately update button to show "Completed"
                     this.textContent = "Completed";
                     this.style.backgroundColor = "green";
+                    this.style.color = "white";
+                    this.disabled = true;  // Make button permanently disabled
+
+                    // Store the completed content ID in localStorage to persist across refresh
+                    let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
+                    if (!completedContent.includes(contentId)) {
+                        completedContent.push(contentId);
+                        localStorage.setItem("completedContent", JSON.stringify(completedContent));
+                    }
 
                     // Show a popup confirmation
                     showCompletionPopup();
@@ -535,6 +545,18 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Error:", error));
         });
+    });
+
+    // Check localStorage for completed content and disable the button if needed
+    let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
+    document.querySelectorAll(".mark-complete").forEach(button => {
+        let contentId = button.getAttribute("data-content-id");
+        if (completedContent.includes(contentId)) {
+            button.textContent = "Completed";
+            button.style.backgroundColor = "green";
+            button.style.color = "white";
+            button.disabled = true;
+        }
     });
 
     function showCompletionPopup() {
@@ -564,6 +586,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 2000);
     }
 });
+
 </script>
 
         
