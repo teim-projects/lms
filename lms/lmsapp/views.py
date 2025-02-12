@@ -415,11 +415,30 @@ def paid_course(request):
     # Render a simple dashboard with a header
     return render(request, 'paid_course.html')
 
+from django.shortcuts import render
+from .models import PaidCourse, CourseProgress
+
+from django.shortcuts import render
+from .models import PaidCourse, CourseProgress
 
 def view_paid_course(request):
-     # Replace with the actual course ID you want
-    courses = PaidCourse.objects.filter(id=course_id) 
-    return render(request, 'view_paid_course.html',{'courses': courses})
+    courses = PaidCourse.objects.all()
+
+    for course in courses:
+        progress = CourseProgress.objects.filter(user=request.user, course=course)
+        
+        if progress.exists():
+            completed_contents = progress.filter(completed=True).count()
+            total_contents = course.contents.count()
+            progress_percentage = (completed_contents / total_contents) * 100 if total_contents > 0 else 0
+        else:
+            progress_percentage = 0
+
+        # Add progress directly as an attribute of the course object
+        course.progress_percentage = round(progress_percentage, 2)
+
+    return render(request, 'view_paid_course.html', {'courses': courses})
+
 
 
 
