@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
 
     <style>
         body {
@@ -451,6 +453,13 @@
         .bnt:hover {
             color: #fff;
         }
+        
+    .progress-bar {
+        background-color: #28a745 !important;  /* Force green */
+    }
+
+
+
     </style>
 </head>
 
@@ -543,13 +552,18 @@
     
                         <!-- Progress Bar Section -->
                         <div class="progress" style="height: 20px; margin-bottom: 10px;">
-                            <div class="progress-bar bg-success" role="progressbar"
-                                 style="width: {{ course.progress_percentage|floatformat:0 }}%;"
-                                 aria-valuenow="{{ course.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">
-                                {{ course.progress_percentage|floatformat:0 }}%
+                            <div class="progress-bar bg-success progress-bar-striped" role="progressbar"
+                                 style="width: {{ course.progress_percentage|default:0|floatformat:0 }}%;"  
+                                 aria-valuenow="{{ course.progress_percentage|default:0|floatformat:0 }}" 
+                                 aria-valuemin="0" aria-valuemax="100" id="progress-bar-{{ course.id }}">
+                                {{ course.progress_percentage|default:0|floatformat:0 }}%
                             </div>
                         </div>
-                        <p>Progress: {{ course.progress_percentage|floatformat:0 }}% Completed</p>
+                        
+                        <p>Progress: <span id="progress-text-{{ course.id }}">{{ course.progress_percentage|floatformat:0 }}</span>% Completed</p>
+                        
+                        
+                        
                         
     
                         <!-- Continue Course Button -->
@@ -591,7 +605,40 @@
 
 
 
-
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".mark-complete").forEach(button => {
+                button.addEventListener("click", function() {
+                    let courseId = this.dataset.courseId;
+                    let contentId = this.dataset.contentId;
+                    let progressBar = document.querySelector(`#progress-bar-${courseId}`);
+                    let progressText = document.querySelector(`#progress-text-${courseId}`);
+        
+                    fetch(`/mark-content-completed/${courseId}/${contentId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.completed) {
+                            // Fetch the updated progress percentage from backend
+                            fetch(`/get-progress/${courseId}/`)
+                            .then(response => response.json())
+                            .then(progressData => {
+                                progressBar.style.width = progressData.percentage + "%";
+                                progressText.innerText = progressData.percentage + "% Completed";
+                            });
+                        }
+                    });
+                });
+            });
+        });
+        </script>
+                
 
 
 

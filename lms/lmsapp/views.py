@@ -420,21 +420,23 @@ from .models import PaidCourse, CourseProgress
 
 from django.shortcuts import render
 from .models import PaidCourse, CourseProgress
+from django.shortcuts import render
+from .models import PaidCourse, CourseProgress
 
 def view_paid_course(request):
     courses = PaidCourse.objects.all()
 
     for course in courses:
-        progress = CourseProgress.objects.filter(user=request.user, course=course)
+        # Get total contents of the course
+        total_contents = course.contents.count()
         
-        if progress.exists():
-            completed_contents = progress.filter(completed=True).count()
-            total_contents = course.contents.count()
-            progress_percentage = (completed_contents / total_contents) * 100 if total_contents > 0 else 0
-        else:
-            progress_percentage = 0
+        # Get the number of completed contents for the current user
+        completed_contents = CourseProgress.objects.filter(user=request.user, course=course, completed=True).count()
 
-        # Add progress directly as an attribute of the course object
+        # Calculate progress percentage
+        progress_percentage = (completed_contents / total_contents) * 100 if total_contents > 0 else 0
+
+        # Store progress percentage in the course object
         course.progress_percentage = round(progress_percentage, 2)
 
     return render(request, 'view_paid_course.html', {'courses': courses})
@@ -915,16 +917,31 @@ def mark_content_completed(request, course_id, content_id):
             progress.completed = True
             progress.save()
 
-        return JsonResponse({"message": "Marked as completed", "completed": True})
+        # Calculate updated progress percentage
+        total_contents = course.contents.count()
+        completed_contents = CourseProgress.objects.filter(user=request.user, course=course, completed=True).count()
+        progress_percentage = (completed_contents / total_contents) * 100 if total_contents > 0 else 0
+
+        return JsonResponse({
+            "message": "Marked as completed",
+            "completed": True,
+            "progress_percentage": round(progress_percentage, 2),
+            "course_id": course.id
+        })
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
-  # Redirect back to course content
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import CourseProgress, PaidCourse
 
-def view_paid_course(request):
-    if not request.user.is_authenticated:
-        return redirect('login')  # Redirect to login page if user is anonymous
+@login_required
+def get_course_progress(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    progress = CourseProgress.objects.filter(user=request.user, course=course, completed=True).count()
+    total_contents = course.contents.count()
+    progress_percentage = (progress / total_contents) * 100 if total_contents > 0 else 0
     
-    courses = PaidCourse.objects.all()
-    return render(request, 'view_paid_course.html', {'courses': courses})
+    return JsonResponse({"percentage": round(progress_percentage, 2)})
+
