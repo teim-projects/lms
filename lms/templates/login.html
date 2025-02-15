@@ -58,7 +58,7 @@
             text-align: center;
         }
 
-        .footer {
+        .f1{
             background-color: #f7f7f7;
             text-align: center;
             font-size: 1rem;
@@ -68,21 +68,43 @@
             position: fixed;
             width: 100%;
             bottom: 0px;
+            padding-top: 5px;
 
         }
+        .f2{
+            background-color: #FAFAFA;
+            text-align: center;
+            font-size: 1rem;
+        
+            color: #555;
+           
 
+        }
+.f2{
+    display: none;
+}
         @media (max-width: 768px) {
             .teimlms {
                 font-size: 18px;
             }
         }
         @media (max-width: 480px) {
+            .f1{
+                display: none;
+            }
+            .f2{
+                display: block;
+                margin-top: 30px;
+            }
             .footer{
                 font-size: 0.6rem;
             }
             .align-items-center{
-                margin-top: 47px;
+                margin-top: 67px;
 
+            }
+            .rounded{
+                margin-top: 50px;
             }
         }
         
@@ -143,13 +165,22 @@
         </div>
     </div>
 
-    <footer class="footer">
+    <footer class="footer f1 p-2 mb-0">
         <div class="container">
             <p>© 2024. Powered by <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo" height="20">
                 <a href="http://www.chronoanalytics.in/" class="textcolor">Chronoanalytics Solution</a> All Rights
-                Reserved.
+                Reserved.<br>
+            © 2024. Marketed by <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" height="20">
+                <a href="http://teim.in/" class="textcolor">TEIM</a> All Rights Reserved.
             </p>
-            <p>© 2024. Marketed by <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" height="20">
+        </div>
+    </footer>
+    <footer class="footer f2 p-1">
+        <div class="container">
+            <p>© 2024. Powered by <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo" height="20">
+                <a href="http://www.chronoanalytics.in/" class="textcolor">Chronoanalytics Solution</a> All Rights
+                Reserved.<br>
+            © 2024. Marketed by <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" height="20">
                 <a href="http://teim.in/" class="textcolor">TEIM</a> All Rights Reserved.
             </p>
         </div>
