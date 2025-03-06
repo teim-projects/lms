@@ -433,23 +433,47 @@
     } 
     </style>
 
-    <script>
-        function toggleNotifications() {
-            var container = document.getElementById("notificationContainer");
-            container.classList.toggle('active');
-            if (container.style.display === "none" || container.style.display === "") {
-                container.style.display = "block"; // Show container
-            } else {
-                container.style.display = "none"; // Hide container
-            }
+<script>
+    function toggleNotifications() {
+        var container = document.getElementById("notificationContainer");
+        var notificationCount = document.getElementById("notification-count");
+
+        container.classList.toggle('active');
+
+        if (container.style.display === "none" || container.style.display === "") {
+            container.style.display = "block"; // Show container
+            notificationCount.style.display = "none"; // Hide count when opened
+        } else {
+            container.style.display = "none"; // Hide container
         }
+    }
 
-        function closeNotifications() {
-            document.getElementById("notificationContainer").style.display = "none";
+    function closeNotifications() {
+        document.getElementById("notificationContainer").style.display = "none";
+    }
+
+    // Function to update notification count
+    function updateNotificationCount(count) {
+        const notificationCount = document.getElementById('notification-count');
+        if (count > 0) {
+            notificationCount.innerText = count;
+            notificationCount.style.display = 'inline-block'; // Show count if new notifications exist
+        } else {
+            notificationCount.style.display = 'none'; // Hide if no new notifications
         }
+    }
 
+    // Example: Simulate receiving new notifications dynamically
+    let newNotifications = 3; // Initial notification count
+    updateNotificationCount(newNotifications);
 
-    </script>
+    // Simulating new notifications every 5 seconds (for demo purposes)
+    setInterval(() => {
+        newNotifications += 1; // Increase notification count
+        updateNotificationCount(newNotifications);
+    }, 5000);
+</script>
+
 </head>
 
 <body>
@@ -502,13 +526,18 @@
             <!-- <a href="#" class="navbar-link mypro">My Profile</a> -->
             <form class="form-inline">
 
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Help</button>
+                <a href="/tickets/raise/"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Help</button></a>
             </form>
             <div class="bell-icon" onclick="toggleSidebar2()">🔔</div>
 
         </div>
 
     </nav>
+
+
+
+
+    
 
     <!-- Notification Container -->
     <!-- <div class="notification-container sidebar2 mt-5" id="notificationContainer">

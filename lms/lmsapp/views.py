@@ -945,3 +945,44 @@ def get_course_progress(request, course_id):
     
     return JsonResponse({"percentage": round(progress_percentage, 2)})
 
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+from .forms import TicketForm
+
+@login_required
+def raise_ticket(request):
+    if request.method == "POST":
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            return redirect("ticket_list")
+    else:
+        form = TicketForm()
+    return render(request, "raise_ticket.html", {"form": form})
+
+@login_required
+def close_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+    ticket.status = "closed"
+    ticket.save()
+    return redirect("ticket_list")
+
+@login_required
+def ticket_list(request):
+    tickets = Ticket.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "ticket_list.html", {"tickets": tickets})
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+def user_list(request):
+    users = CustomUser.objects.all()  # Only superadmins see users
+    return render(request, 'admin_user_list.html', {'users': users})

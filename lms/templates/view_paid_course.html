@@ -563,11 +563,15 @@
                         <p>Progress: <span id="progress-text-{{ course.id }}">{{ course.progress_percentage|floatformat:0 }}</span>% Completed</p>
                         
                         
-                        
+                        <form action="{% url 'initiate_payment' course.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="amount" value="{{ course.course_price }}">
+                            <button type="submit" class="btn btn-success btn-block">Buy Now</button>
+                        </form>
                         
     
                         <!-- Continue Course Button -->
-                        <a href="{% url 'view_content' course.id %}" class="btn btn-primary btn-block">Continue Course</a>
+                        <!-- <a href="{% url 'view_content' course.id %}" class="btn btn-primary btn-block">Continue Course</a> -->
                     </div>
                 </div>
             </div>

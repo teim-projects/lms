@@ -1,0 +1,22 @@
+<h2>My Tickets</h2>
+<table border="1">
+    <tr>
+        <th>Subject</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    {% for ticket in tickets %}
+    <tr>
+        <td>{{ ticket.subject }}</td>
+        <td>{{ ticket.status }}</td>
+        <td>
+            {% if ticket.status == "open" %}
+                <a href="{% url 'close_ticket' ticket.id %}">Close Ticket</a>
+            {% else %}
+                Closed
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'raise_ticket' %}">Raise a New Ticket</a>
