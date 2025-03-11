@@ -412,81 +412,97 @@ a:hover {
 
 <!-- free course form -->
 
-    <div class="container " style="margin-top: 100px;">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-6 m-3 p-3 free-form">
-                <h2 class="text-center">Create Free Course</h2>
-                <form class="p-3" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <!-- Course Title -->
-                    <div class="form-group">
-                        <label for="course_title">Course Title</label>
-                        <input type="text" class="form-control" id="course_title" name="title" placeholder="Enter course title" required>
+<div class="container" style="margin-top: 100px;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 m-3 p-3 free-form">
+            <h2 class="text-center">Create Free Course</h2>
+            <form class="p-3" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Course Title -->
+                <div class="form-group">
+                    <label for="course_title">Course Title</label>
+                    <input type="text" class="form-control" id="course_title" name="title" placeholder="Enter course title" required>
+                </div>
+
+                <!-- Course Description -->
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter course description" required></textarea>
+                </div>
+
+                <!-- Thumbnail -->
+                <div class="form-group">
+                    <label for="thumbnail">Thumbnail</label>
+                    <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*" required>
+                </div>
+
+                <!-- YouTube Video Links (Dynamic Fields) -->
+                <div class="form-group">
+                    <label for="youtube_links">YouTube Video Links (Add multiple links)</label>
+                    <div id="youtube-links-container">
+                        <input type="url" class="form-control mb-2" name="youtube_links[]" placeholder="Enter YouTube link" required>
                     </div>
-    
-                    <!-- Course Description -->
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter course description" required></textarea>
-                    </div>
-    
-                    <!-- YouTube Video Link -->
-                    <div class="form-group">
-                        <label for="youtube_link">YouTube Video Link</label>
-                        <input type="url" class="form-control" id="youtube_link" name="youtube_link" placeholder="Enter YouTube link" required>
-                    </div>
-    
-                    <!-- Thumbnail -->
-                    <div class="form-group">
-                        <label for="thumbnail">Thumbnail</label>
-                        <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*" required>
-                    </div>
-    
-                    <!-- Submit Button -->
-                    <button type="submit" class=" paid-btn w-100">Submit</button>
-                </form>
-            </div>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addYoutubeField()">+ Add Another</button>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="paid-btn w-100">Submit</button>
+            </form>
         </div>
     </div>
-    
-<!-- Course Card Content -->
+</div>
 
+<script>
+    function addYoutubeField() {
+        let container = document.getElementById("youtube-links-container");
+        let input = document.createElement("input");
+        input.type = "url";
+        input.name = "youtube_links[]";
+        input.className = "form-control mb-2";
+        input.placeholder = "Enter another YouTube link";
+        container.appendChild(input);
+    }
+</script>
+<!-- Course Card Content -->
 <div class="container my-4">
     <div class="text-center mb-4">
         <h2>Available Courses</h2>
     </div>
-    <div class="row">
-        {% for course in courses %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 card-box">
-                {% if course.thumbnail %}
-                <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
-                    style="width: 100%; height: 200px; object-fit: cover;">
-                {% endif %}
-                <div class="card-body">
-                    <h3 class="card-title">{{ course.title }}</h3>
-                    <p class="card-text clamp-text">{{ course.description }}</p>
-                    <div class="d-flex justify-content-around mt-3">
-                        <a href="{{ course.youtube_link }}" target="_blank"><button class="card-button add-btn"> <i
-                                    class="fa fa-light fa-eye"></i> </button></a>
-                                    <form action="{% url 'delete_free_course' course.id %}" method="POST" style="display: inline;">
-                            {% csrf_token %}
-                            <button class="delet-btn" type="submit">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </form>
-                        <a href="{% url 'update_free_course' course.id %}">
-                            <button class="update-btn">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                        </a>
+
+    {% if courses %}
+        <div class="row">
+            {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 card-box">
+                        {% if course.thumbnail %}
+                            <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
+                                style="width: 100%; height: 200px; object-fit: cover;">
+                        {% else %}
+                            <p>No thumbnail available</p>
+                        {% endif %}
+                        <div class="card-body">
+                            <h3 class="card-title">{{ course.title }}</h3>
+                            <p class="card-text clamp-text">{{ course.description }}</p>
+
+                            <h5>Chapters:</h5>
+                            <ul>
+                                {% for chapter in course.chapters.all %}
+                                    <li><a href="{{ chapter.youtube_link }}" target="_blank">{{ chapter.title }}</a></li>
+                                {% empty %}
+                                    <li>No chapters available</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+    {% else %}
+        <p>No courses available</p>
+    {% endif %}
 </div>
+
 
 
 

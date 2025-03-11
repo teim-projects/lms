@@ -77,18 +77,36 @@ class OTP(models.Model):
         
 
 
+
+
+
+
+
 # models.py
 from django.db import models
 
 class FreeCourse(models.Model):
     title = models.CharField(max_length=255)
-    youtube_link = models.URLField()
+    
     thumbnail = models.ImageField(upload_to='thumbnails/')
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class CourseChapter(models.Model):
+    course = models.ForeignKey(FreeCourse, on_delete=models.CASCADE, related_name="chapters")
+    title = models.CharField(max_length=255)  # Title for the chapter
+    youtube_link = models.URLField()
+
+    def __str__(self):
+        return f"{self.course.title} - {self.title}"
+
+
+
+
 
 
 from django.db import models

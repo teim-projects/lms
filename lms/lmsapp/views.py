@@ -385,31 +385,65 @@ def reset_password_confirm(request):
 
 
 
-from .models import FreeCourse
+from .models import FreeCourse,CourseChapter
 
 def create_free_course(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        youtube_link = request.POST.get('youtube_link')
-        description = request.POST.get('description')
-        thumbnail = request.FILES.get('thumbnail')
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        thumbnail = request.FILES.get("thumbnail")
+        youtube_links = request.POST.getlist("youtube_links[]")
 
-        if title and youtube_link and thumbnail and description:
-            FreeCourse.objects.create(
-                title=title,
-                youtube_link=youtube_link,
-                thumbnail=thumbnail,
-                description=description
+        # Create the course
+        course = FreeCourse.objects.create(title=title, description=description, thumbnail=thumbnail)
+
+        # Save each YouTube link as a chapter
+        for index, link in enumerate(youtube_links, start=1):
+            CourseChapter.objects.create(course=course, title=f"Chapter {index}", youtube_link=link)
+
+        return redirect("create_free_course")
+
+    return render(request, "create_free_course.html")
+
+
+
+from django.shortcuts import render, redirect
+from .models import FreeCourse, CourseChapter
+
+def create_free_course(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        thumbnail = request.FILES.get("thumbnail")
+        youtube_links = request.POST.getlist("youtube_links[]")  # Get multiple links
+
+        if title and description and thumbnail:
+            # Create the FreeCourse instance
+            course = FreeCourse.objects.create(
+                title=title, description=description, thumbnail=thumbnail
             )
-            return redirect('create_free_course')
 
-    courses = FreeCourse.objects.all()  # Fetch all courses to display
-    return render(request, 'create_free_course.html', {'courses': courses})
+            # Create associated Chapter instances
+            for link in youtube_links:
+                if link.strip():  # Ensure link is not empty
+                    CourseChapter.objects.create(course=course, title=f"Chapter {course.chapters.count() + 1}", youtube_link=link)
+
+            return redirect("create_free_course")  # Redirect to course listing page
+
+    courses = FreeCourse.objects.prefetch_related("chapters").all()
+    return render(request, "create_free_course.html", {"courses": courses})
+
+def free_courses(request):
+    courses = FreeCourse.objects.prefetch_related("chapters").all()
+    
+    # Debugging Output
+    print("Courses:", courses)
+    for course in courses:
+        print(f"Course: {course.title}, Thumbnail: {course.thumbnail}, Chapters: {course.chapters.all()}")
+
+    return render(request, "free_course.html", {"courses": courses})
 
 
-def free_course(request):
-    courses = FreeCourse.objects.all()  # Fetch all courses to display
-    return render(request, 'free_course.html', {'courses': courses})
 
 def paid_course(request):
     # Render a simple dashboard with a header
@@ -440,7 +474,6 @@ def view_paid_course(request):
         course.progress_percentage = round(progress_percentage, 2)
 
     return render(request, 'view_paid_course.html', {'courses': courses})
-
 
 
 
