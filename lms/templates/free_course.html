@@ -486,34 +486,44 @@ li a:hover {
   </div>
 
   <main>
-    <section class="content container">
-       
-        <div class="container my-4">
+    <section class="content container py-5">
+        <div class="container">
             <div class="text-center mb-4">
-                <h2>Available Courses</h2>
+                <h2 class="fw-bold text-dark">Available Courses</h2>
+                <hr class="w-25 mx-auto border-primary">
             </div>
-        
+
             {% if courses %}
                 <div class="row">
                     {% for course in courses %}
                         <div class="col-md-4 mb-4">
-                            <div class="card h-100 card-box">
+                            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden transition-all">
                                 {% if course.thumbnail %}
-                                    <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
-                                        style="width: 100%; height: 200px; object-fit: cover;">
+                                    <img class="card-img-top rounded-top-4"
+                                         src="{{ course.thumbnail.url }}"
+                                         alt="{{ course.title }} Thumbnail"
+                                         style="width: 100%; height: 200px; object-fit: cover;">
                                 {% else %}
-                                    <p>No thumbnail available</p>
+                                    <div class="d-flex align-items-center justify-content-center p-5 bg-light text-muted">
+                                        No Thumbnail Available
+                                    </div>
                                 {% endif %}
+
                                 <div class="card-body">
-                                    <h3 class="card-title">{{ course.title }}</h3>
-                                    <p class="card-text clamp-text">{{ course.description }}</p>
-        
-                                    <h5>Chapters:</h5>
-                                    <ul>
+                                    <h4 class="card-title text-primary fw-semibold">{{ course.title }}</h4>
+                                    <p class="card-text text-muted clamp-text">{{ course.description }}</p>
+                                    
+                                    <h5 class="mt-3 fw-bold text-dark">Chapters:</h5>
+                                    <ul class="list-unstyled">
                                         {% for chapter in course.chapters.all %}
-                                            <li><a href="{{ chapter.youtube_link }}" target="_blank">{{ chapter.title }}</a></li>
+                                            <li class="mb-1">
+                                                <a href="{{ chapter.youtube_link }}" target="_blank" 
+                                                   class="text-decoration-none text-primary d-flex align-items-center">
+                                                    <i class="bi bi-play-circle-fill me-2"></i> {{ chapter.title }}
+                                                </a>
+                                            </li>
                                         {% empty %}
-                                            <li>No chapters available</li>
+                                            <li class="text-muted">No chapters available</li>
                                         {% endfor %}
                                     </ul>
                                 </div>
@@ -522,12 +532,17 @@ li a:hover {
                     {% endfor %}
                 </div>
             {% else %}
-                <p>No courses available</p>
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-folder-x fs-1"></i>
+                    <p class="mt-2">No courses available</p>
+                </div>
             {% endif %}
         </div>
-    
     </section>
-  </main>
+</main>
+
+
+
 
   <footer class="footer {% if not courses %}fixed-footer{% endif %}">
     <div class="container mt-2">
