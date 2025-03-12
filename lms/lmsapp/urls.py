@@ -39,6 +39,7 @@ urlpatterns = [
     path('course/<int:course_id>/view_content/<int:content_id>/complete/', views.mark_content_completed, name='mark_content_completed'),
     path('get-progress/<int:course_id>/', views.get_course_progress, name='get_course_progress'),
     path("tickets/", views.ticket_list, name="ticket_list"),
+    path("ticket_to_admin/", views.ticket_to_admin, name="ticket_to_admin"),
     path("tickets/raise/", views.raise_ticket, name="raise_ticket"),
     path("tickets/close/<int:ticket_id>/", views.close_ticket, name="close_ticket"),
     path('admin_user_list/', views.user_list, name='admin_user_list'),

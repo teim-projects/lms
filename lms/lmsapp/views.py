@@ -985,30 +985,81 @@ from django.contrib.auth.decorators import login_required
 from .models import Ticket
 from .forms import TicketForm
 
-@login_required
-def raise_ticket(request):
-    if request.method == "POST":
-        form = TicketForm(request.POST)
-        if form.is_valid():
-            ticket = form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
-            return redirect("ticket_list")
-    else:
-        form = TicketForm()
-    return render(request, "raise_ticket.html", {"form": form})
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponse
+from .models import Ticket
+
+# Check if the user is an admin or sub-admin
+def is_admin(user):
+    return user.is_subadmin or user.is_superuser
 
 @login_required
-def close_ticket(request, ticket_id):
-    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-    ticket.status = "closed"
-    ticket.save()
-    return redirect("ticket_list")
+def raise_ticket(request):
+    """Allow students to raise a ticket without using Django forms."""
+    if request.method == "POST":
+        subject = request.POST.get("subject")
+        description = request.POST.get("description")
+
+        if subject and description:
+            Ticket.objects.create(user=request.user, subject=subject, description=description)
+            return redirect("ticket_list")
+        else:
+            return HttpResponse("All fields are required.", status=400)
+
+    return render(request, "raise_ticket.html")
+
+
 
 @login_required
 def ticket_list(request):
-    tickets = Ticket.objects.filter(user=request.user).order_by("-created_at")
+    """Students see their tickets, Admins see all tickets."""
+    if request.user.is_staff or request.user.is_superuser:
+        tickets = Ticket.objects.all().order_by("-created_at")  # Admins/Sub-Admins see all
+    else:
+        tickets = Ticket.objects.filter(user=request.user).order_by("-created_at")  # Students see only their own
     return render(request, "ticket_list.html", {"tickets": tickets})
+
+from django.shortcuts import render
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+def ticket_to_admin(request):
+    """View all tickets (accessible to everyone)."""
+    tickets = Ticket.objects.all().order_by("-created_at")  # Fetch all tickets
+    return render(request, "ticket_to_admin.html", {"tickets": tickets})
+
+
+
+@login_required
+def close_ticket(request, ticket_id):
+    """Only superusers (admins) can close tickets."""
+    if not request.user.is_superuser:  # Ensure only superusers can close tickets
+        return redirect("ticket_to_admin")  # Prevent unauthorized access
+
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    ticket.status = "closed"
+    ticket.save()
+    
+    return redirect("ticket_to_admin")  # Redirect b
+
+
+
 
 
 from django.contrib.auth import get_user_model
