@@ -1,0 +1,18 @@
+
+
+<div class="container">
+    <h2>Raise a Ticket</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" id="subject" name="subject" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Ticket</button>
+    </form>
+</div>
+

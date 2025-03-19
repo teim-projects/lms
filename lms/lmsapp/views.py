@@ -385,31 +385,65 @@ def reset_password_confirm(request):
 
 
 
-from .models import FreeCourse
+from .models import FreeCourse,CourseChapter
 
 def create_free_course(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        youtube_link = request.POST.get('youtube_link')
-        description = request.POST.get('description')
-        thumbnail = request.FILES.get('thumbnail')
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        thumbnail = request.FILES.get("thumbnail")
+        youtube_links = request.POST.getlist("youtube_links[]")
 
-        if title and youtube_link and thumbnail and description:
-            FreeCourse.objects.create(
-                title=title,
-                youtube_link=youtube_link,
-                thumbnail=thumbnail,
-                description=description
+        # Create the course
+        course = FreeCourse.objects.create(title=title, description=description, thumbnail=thumbnail)
+
+        # Save each YouTube link as a chapter
+        for index, link in enumerate(youtube_links, start=1):
+            CourseChapter.objects.create(course=course, title=f"Chapter {index}", youtube_link=link)
+
+        return redirect("create_free_course")
+
+    return render(request, "create_free_course.html")
+
+
+
+from django.shortcuts import render, redirect
+from .models import FreeCourse, CourseChapter
+
+def create_free_course(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        thumbnail = request.FILES.get("thumbnail")
+        youtube_links = request.POST.getlist("youtube_links[]")  # Get multiple links
+
+        if title and description and thumbnail:
+            # Create the FreeCourse instance
+            course = FreeCourse.objects.create(
+                title=title, description=description, thumbnail=thumbnail
             )
-            return redirect('create_free_course')
 
-    courses = FreeCourse.objects.all()  # Fetch all courses to display
-    return render(request, 'create_free_course.html', {'courses': courses})
+            # Create associated Chapter instances
+            for link in youtube_links:
+                if link.strip():  # Ensure link is not empty
+                    CourseChapter.objects.create(course=course, title=f"Chapter {course.chapters.count() + 1}", youtube_link=link)
+
+            return redirect("create_free_course")  # Redirect to course listing page
+
+    courses = FreeCourse.objects.prefetch_related("chapters").all()
+    return render(request, "create_free_course.html", {"courses": courses})
+
+def free_courses(request):
+    courses = FreeCourse.objects.prefetch_related("chapters").all()
+    
+    # Debugging Output
+    print("Courses:", courses)
+    for course in courses:
+        print(f"Course: {course.title}, Thumbnail: {course.thumbnail}, Chapters: {course.chapters.all()}")
+
+    return render(request, "free_course.html", {"courses": courses})
 
 
-def free_course(request):
-    courses = FreeCourse.objects.all()  # Fetch all courses to display
-    return render(request, 'free_course.html', {'courses': courses})
 
 def paid_course(request):
     # Render a simple dashboard with a header
@@ -440,7 +474,6 @@ def view_paid_course(request):
         course.progress_percentage = round(progress_percentage, 2)
 
     return render(request, 'view_paid_course.html', {'courses': courses})
-
 
 
 
@@ -945,3 +978,95 @@ def get_course_progress(request, course_id):
     
     return JsonResponse({"percentage": round(progress_percentage, 2)})
 
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+from .forms import TicketForm
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponse
+from .models import Ticket
+
+# Check if the user is an admin or sub-admin
+def is_admin(user):
+    return user.is_subadmin or user.is_superuser
+
+@login_required
+def raise_ticket(request):
+    """Allow students to raise a ticket without using Django forms."""
+    if request.method == "POST":
+        subject = request.POST.get("subject")
+        description = request.POST.get("description")
+
+        if subject and description:
+            Ticket.objects.create(user=request.user, subject=subject, description=description)
+            return redirect("ticket_list")
+        else:
+            return HttpResponse("All fields are required.", status=400)
+
+    return render(request, "raise_ticket.html")
+
+
+
+@login_required
+def ticket_list(request):
+    """Students see their tickets, Admins see all tickets."""
+    if request.user.is_staff or request.user.is_superuser:
+        tickets = Ticket.objects.all().order_by("-created_at")  # Admins/Sub-Admins see all
+    else:
+        tickets = Ticket.objects.filter(user=request.user).order_by("-created_at")  # Students see only their own
+    return render(request, "ticket_list.html", {"tickets": tickets})
+
+from django.shortcuts import render
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+def ticket_to_admin(request):
+    """View all tickets (accessible to everyone)."""
+    tickets = Ticket.objects.all().order_by("-created_at")  # Fetch all tickets
+    return render(request, "ticket_to_admin.html", {"tickets": tickets})
+
+
+
+@login_required
+def close_ticket(request, ticket_id):
+    """Only superusers (admins) can close tickets."""
+    if not request.user.is_superuser:  # Ensure only superusers can close tickets
+        return redirect("ticket_to_admin")  # Prevent unauthorized access
+
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    ticket.status = "closed"
+    ticket.save()
+    
+    return redirect("ticket_to_admin")  # Redirect b
+
+
+
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+def user_list(request):
+    users = CustomUser.objects.all()  # Only superadmins see users
+    return render(request, 'admin_user_list.html', {'users': users})

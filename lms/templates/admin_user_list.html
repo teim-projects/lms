@@ -1,3 +1,7 @@
+
+    
+    
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-
+    <title>Registered Users</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
@@ -204,7 +208,50 @@
             box-shadow: none;
 
         }
-
+        yle>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .user-table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #6a11cb;
+            color: white;
+        }
+        tr:hover {
+            background: #f1f1f1;
+        }
+        .verified {
+            color: green;
+            font-weight: bold;
+        }
+        .not-verified {
+            color: red;
+            font-weight: bold;
+        }
+        .container {
+            padding: 20px;
+        }
 
 
         /*Footer Css Start*/
@@ -619,7 +666,6 @@
             <li class="nav-item">
                 <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
             </li>
-
             <!-- Course Management Menu -->
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
@@ -628,16 +674,29 @@
                 </a>
                 <!-- Collapsible Submenu -->
                 <div class="collapse" id="menu1">
-                    <ul class="submenu">
-                        <li><a class="nav-link pl-4" href="/free-course/">Free Course</a></li>
-                        <li><a class="nav-link pl-4" href="/view_paid_course/">view paid Courses</a></li>
-
-                    </ul>
+                     <a class="nav-link pl-4" href="/create-paid-course/">Create Paid Course</a>
+                    <a class="nav-link pl-4" href="/create-free-course/">Create Free Course</a>
                 </div>
             </li>
 
+
+
             <li class="nav-item">
-                <a class="nav-link " href="#">Enrollment Tracking</a>
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu2"
+                    aria-expanded="false" aria-controls="menu2">
+                    Enrollment Management
+                </a>
+                <!-- Collapsible Submenu -->
+                <div class="collapse" id="menu2">
+                    <a class="nav-link pl-4" href="#">Give Access</a>
+                    <a class="nav-link pl-4" href="#">Enrollment Tracking</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/ticket_to_admin/" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Tickets
+                </a>
 
                 <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
                     aria-controls="menu1">
@@ -647,12 +706,18 @@
                     aria-controls="menu1">
                     Invoices
                 </a>
-                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
+                <a class="nav-link " href="/send_notification/" data-toggle="" data-target="#menu" aria-expanded="false"
                     aria-controls="menu1">
                     Notifications
                 </a>
-
+                <a class="nav-link " href="/admin_user_list/" data-toggle="" data-target="#menu" aria-expanded="false"
+                    aria-controls="menu1">
+                    Student List
+                </a>
+                {% if not is_subadmin %}
+                <a class="nav-link pl-4" href="/manage_subadmins/">Create SubAdmin</a>
             </li>
+            {% endif %}
             <button class="Btn ml-3" onclick="location.href='/'">
                 <div class="sign">
                     <svg viewBox="0 0 512 512">
@@ -661,12 +726,38 @@
                         </path>
                     </svg>
                 </div>
-                <div class="text">Logout</div>
+                <div class="text"> Logout</div>
             </button>
         </ul>
 
     </div>
-
+<div class="container">
+        <h2>Registered Users</h2>
+        {% if users %}
+        <table class="user-table">
+            <tr>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Mobile</th>
+                <th>Verified</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.email }}</td>
+                <td>{{ user.first_name|default:"N/A" }}</td>
+                <td>{{ user.last_name|default:"N/A" }}</td>
+                <td>{{ user.mobile|default:"N/A" }}</td>
+                <td class="{% if user.is_verified %}verified{% else %}not-verified{% endif %}">
+                    {% if user.is_verified %}✔ Verified{% else %}❌ Not Verified{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No users available.</p>
+        {% endif %}
+    </div>
 
      <footer class="footer {% if not courses %}fixed-footer{% endif %}">
         <div class="container mt-2">

@@ -8,8 +8,8 @@ from lmsapp import views
 urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout_view, name='logout'),
-    path('', views.login, name='login'),
-    path('index/', views.index, name='index'),
+    path('login/', views.login, name='login'),
+    path('', views.index, name='index'),
     path('verify-otp/', views.verify_otp, name='verify_otp'),
     path('password-reset/', views.password_reset, name='password_reset'),
     path('reset-password-verify/', views.reset_password_verify, name='reset_password_verify'),
@@ -17,7 +17,7 @@ urlpatterns = [
     path('student_dashboard/', views.student_dashboard , name='student_dashboard'),
     path('admin_dashboard/', views.admin_dashboard , name='admin_dashboard'),
     path('create-free-course/', views.create_free_course, name='create_free_course'),
-    path('free-course/', views.free_course, name='free_course'),
+    path('free-course/', views.free_courses, name='free_course'),
     path('paid-course/', views.paid_course, name='paid_course'),
     path('create-paid-course/', views.create_paid_course, name='create_paid_course'),
     path('view_paid_course/', views.view_paid_course, name='view_paid_course'),
@@ -38,6 +38,11 @@ urlpatterns = [
     path('send_notification/', views.send_notification, name='send_notification'),
     path('course/<int:course_id>/view_content/<int:content_id>/complete/', views.mark_content_completed, name='mark_content_completed'),
     path('get-progress/<int:course_id>/', views.get_course_progress, name='get_course_progress'),
+    path("tickets/", views.ticket_list, name="ticket_list"),
+    path("ticket_to_admin/", views.ticket_to_admin, name="ticket_to_admin"),
+    path("tickets/raise/", views.raise_ticket, name="raise_ticket"),
+    path("tickets/close/<int:ticket_id>/", views.close_ticket, name="close_ticket"),
+    path('admin_user_list/', views.user_list, name='admin_user_list'),
 
 
     
