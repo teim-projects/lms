@@ -8,34 +8,34 @@
                 <th>Description</th>
                 <th>Status</th>
                 <th>Created At</th>
-                {% if user.is_staff or user.is_superuser %} 
-                    <th>Action</th> 
-                {% endif %}
+                <th>Action</th>
             </tr>
         </thead>
+        
         <tbody>
             {% for ticket in tickets %}
-            <tr>
+            <tr id="ticket-{{ ticket.id }}">
                 <td>{{ ticket.subject }}</td>
                 <td>{{ ticket.description }}</td>
                 <td>
-                    {% if ticket.status == "open" %}
-                        <span class="badge bg-warning text-dark">Open</span>
-                    {% else %}
-                        <span class="badge bg-success">Closed</span>
-                    {% endif %}
+                    <span id="status-{{ ticket.id }}" class="badge {% if ticket.status == 'open' %} bg-warning text-dark {% else %} bg-success {% endif %}">
+                        {{ ticket.status|capfirst }}
+                    </span>
                 </td>
                 <td>{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
                 
-                {% if user.is_staff or user.is_superuser %}
-                <td>
+                <td id="action-{{ ticket.id }}">
+                    <span id="status-{{ ticket.id }}" class="badge {% if ticket.status == 'open' %} bg-warning text-dark {% else %} bg-success {% endif %}">
+                        {{ ticket.status|capfirst }}
+                    </span>
+                    
                     {% if ticket.status == "open" %}
-                        <button onclick="confirmClose('{{ ticket.id }}')" class="btn btn-danger btn-sm">Close</button>
+                        <button id="close-btn-{{ ticket.id }}" onclick="confirmClose({{ ticket.id }})" class="btn btn-danger btn-sm">Close</button>
                     {% else %}
                         <span class="text-muted">Closed</span>
                     {% endif %}
                 </td>
-                {% endif %}
+                
             </tr>
             {% empty %}
             <tr>
@@ -43,12 +43,37 @@
             </tr>
             {% endfor %}
         </tbody>
+        
+        
     </table>
 </div>
+
+<!-- AJAX Script for Live Ticket Status Update -->
 <script>
     function confirmClose(ticketId) {
         if (confirm("Are you sure you want to close this ticket?")) {
-            window.location.href = "{% url 'close_ticket' 0 %}".replace('0', ticketId);
+            fetch(`/tickets/close/${ticketId}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "closed") {
+                    // ✅ Update the UI immediately
+                    document.getElementById(`status-${ticketId}`).innerHTML = "Closed";
+                    document.getElementById(`status-${ticketId}`).className = "badge bg-success";
+
+                    // ✅ Remove the close button
+                    document.getElementById(`close-btn-${ticketId}`).remove();
+
+                    // ✅ Show "Closed" text permanently
+                    document.getElementById(`action-${ticketId}`).innerHTML += '<span class="text-muted"> Closed</span>';
+                }
+            })
+            .catch(error => console.error("Error:", error));
         }
     }
 </script>

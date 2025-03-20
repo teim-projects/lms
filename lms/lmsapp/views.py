@@ -27,8 +27,13 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', {'admin_email': admin_email})
 
 
+
+from lmsapp.models import CustomUser
+
 def signup(request):
     if request.method == 'POST':
+        first_name=request.POST.get('first_name')
+        last_name=request.Post.get('last_name')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
         password = request.POST.get('password')
@@ -1045,18 +1050,41 @@ def ticket_to_admin(request):
     return render(request, "ticket_to_admin.html", {"tickets": tickets})
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket  # Ensure Ticket model is imported
+
+
+def ticket_to_admin(request):
+    """View all tickets (accessible to everyone)."""
+    tickets = Ticket.objects.all().order_by("-created_at")  # Fetch all tickets
+    return render(request, "ticket_to_admin.html", {"tickets": tickets})
+
+
+ # Ensure only logged-in users can access
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
 
 @login_required
 def close_ticket(request, ticket_id):
-    """Only superusers (admins) can close tickets."""
-    if not request.user.is_superuser:  # Ensure only superusers can close tickets
-        return redirect("ticket_to_admin")  # Prevent unauthorized access
-
+    """Close a ticket permanently and store it in the database."""
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    ticket.status = "closed"
+
+    if ticket.status == "closed":
+        return JsonResponse({"message": "Already closed", "status": "closed"})  # Prevent reopening
+
+    ticket.status = "closed"  # ✅ Save status permanently
     ticket.save()
-    
-    return redirect("ticket_to_admin")  # Redirect b
+
+    return JsonResponse({"status": "closed", "message": "Ticket closed permanently"})
+
 
 
 

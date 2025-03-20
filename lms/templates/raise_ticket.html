@@ -1,8 +1,6 @@
-
-
 <div class="container">
     <h2>Raise a Ticket</h2>
-    <form method="post">
+    <form method="post" action="{% url 'raise_ticket' %}">
         {% csrf_token %}
         <div class="mb-3">
             <label for="subject" class="form-label">Subject</label>
@@ -15,4 +13,3 @@
         <button type="submit" class="btn btn-primary">Submit Ticket</button>
     </form>
 </div>
-
