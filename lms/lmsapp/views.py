@@ -1030,65 +1030,34 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Ticket
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Ticket
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Ticket
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Ticket
 def ticket_to_admin(request):
     """View all tickets (accessible to everyone)."""
     tickets = Ticket.objects.all().order_by("-created_at")  # Fetch all tickets
     return render(request, "ticket_to_admin.html", {"tickets": tickets})
 
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Ticket  # Ensure Ticket model is imported
-
-
-def ticket_to_admin(request):
-    """View all tickets (accessible to everyone)."""
-    tickets = Ticket.objects.all().order_by("-created_at")  # Fetch all tickets
-    return render(request, "ticket_to_admin.html", {"tickets": tickets})
-
-
- # Ensure only logged-in users can access
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Ticket
-
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt  # REMOVE this in production
 from django.contrib.auth.decorators import login_required
 from .models import Ticket
 
 @login_required
+
 def close_ticket(request, ticket_id):
-    """Close a ticket permanently and store it in the database."""
+    """ Close the ticket and update the database. """
     ticket = get_object_or_404(Ticket, id=ticket_id)
-
-    if ticket.status == "closed":
-        return JsonResponse({"message": "Already closed", "status": "closed"})  # Prevent reopening
-
-    ticket.status = "closed"  # ✅ Save status permanently
-    ticket.save()
-
-    return JsonResponse({"status": "closed", "message": "Ticket closed permanently"})
-
-
-
-
-
+    
+    if request.method == "POST":
+        ticket.status = "closed"
+        ticket.save()
+        messages.success(request, "Ticket closed successfully.")
+    
+    return redirect("ticket_to_admin")  # Change to your actual view name
 
 from django.contrib.auth import get_user_model
 

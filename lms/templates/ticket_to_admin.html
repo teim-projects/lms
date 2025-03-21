@@ -1,79 +1,75 @@
-<div class="container my-4">
-    <h2 class="mb-4">Ticket Management</h2>
-
-    <table class="table table-bordered table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th>Subject</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Created At</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-            {% for ticket in tickets %}
-            <tr id="ticket-{{ ticket.id }}">
-                <td>{{ ticket.subject }}</td>
-                <td>{{ ticket.description }}</td>
-                <td>
-                    <span id="status-{{ ticket.id }}" class="badge {% if ticket.status == 'open' %} bg-warning text-dark {% else %} bg-success {% endif %}">
-                        {{ ticket.status|capfirst }}
-                    </span>
-                </td>
-                <td>{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
-                
-                <td id="action-{{ ticket.id }}">
-                    <span id="status-{{ ticket.id }}" class="badge {% if ticket.status == 'open' %} bg-warning text-dark {% else %} bg-success {% endif %}">
-                        {{ ticket.status|capfirst }}
-                    </span>
-                    
-                    {% if ticket.status == "open" %}
-                        <button id="close-btn-{{ ticket.id }}" onclick="confirmClose({{ ticket.id }})" class="btn btn-danger btn-sm">Close</button>
-                    {% else %}
-                        <span class="text-muted">Closed</span>
-                    {% endif %}
-                </td>
-                
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" class="text-center">No tickets found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        
-        
-    </table>
-</div>
-
-<!-- AJAX Script for Live Ticket Status Update -->
-<script>
-    function confirmClose(ticketId) {
-        if (confirm("Are you sure you want to close this ticket?")) {
-            fetch(`/tickets/close/${ticketId}/`, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "closed") {
-                    // ✅ Update the UI immediately
-                    document.getElementById(`status-${ticketId}`).innerHTML = "Closed";
-                    document.getElementById(`status-${ticketId}`).className = "badge bg-success";
-
-                    // ✅ Remove the close button
-                    document.getElementById(`close-btn-${ticketId}`).remove();
-
-                    // ✅ Show "Closed" text permanently
-                    document.getElementById(`action-${ticketId}`).innerHTML += '<span class="text-muted"> Closed</span>';
-                }
-            })
-            .catch(error => console.error("Error:", error));
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Management</title>
+    <style>
+        /* Centered Popup Styling */
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1000;
+            text-align: center;
+            display: none; /* Hide initially */
         }
-    }
-</script>
+        .popup-content button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container my-4">
+        <h2 class="mb-4">Ticket Management</h2>
+
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Subject</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.subject }}</td>
+                    <td>{{ ticket.description }}</td>
+                    <td>
+                        <span class="badge {% if ticket.status == 'open' %} bg-warning text-dark {% else %} bg-success {% endif %}">
+                            {{ ticket.status|capfirst }}
+                        </span>
+                    </td>
+                    <td>{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        {% if ticket.status == "open" %}
+                            <form method="post" action="{% url 'close_ticket' ticket.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Close</button>
+                            </form>
+                        {% else %}
+                            <span class="text-muted">Closed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No tickets found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
