@@ -1046,7 +1046,7 @@ from django.views.decorators.csrf import csrf_exempt  # REMOVE this in productio
 from django.contrib.auth.decorators import login_required
 from .models import Ticket
 
-@login_required
+
 
 def close_ticket(request, ticket_id):
     """ Close the ticket and update the database. """
