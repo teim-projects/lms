@@ -275,8 +275,7 @@
         }
 
         .fixed-footer {
-            position: fixed;
-            bottom: 0;
+             bottom: 0;
             width: 100%;
             background-color: #f7f7f7;
             text-align: center;
@@ -431,6 +430,38 @@
         /* White shadow */
         cursor: pointer;
     } 
+     /* Button styling */
+     .signbut {
+        background: linear-gradient(to right, #017123, #044e13);
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 900;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1.5em;
+        width: 100%;
+        display: inline-block;
+    }
+
+    .signbut {
+        background: linear-gradient(to right, #2575fc, #6a11cb);
+
+
+    }
+
+    .signbut:hover {
+        background: linear-gradient(to right, #2575fc, #6a11cb);
+        transform: scale(1.02);
+    }
+
+    .signbut:hover {
+        background: linear-gradient(to right, #017123, #1cb149);
+        transform: scale(1.02);
+    }
+
     </style>
 
 <script>
@@ -514,7 +545,7 @@
 
     </script>
 
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-light bg-light" style="z-index: 1;">
         <div class="logo1">
             <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i>
             <img class="logo navbar-brand" src="/static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
@@ -669,7 +700,8 @@
         </ul>
 
     </div>
-    <div class="container" style="margin-top: 50px; display: flex; justify-content: center;">
+    <div class="gffjhgdf" style="min-height: 100vh;">
+    <div class="container" style="margin-top: 100px; display: flex; justify-content: center;  ">
     <div class="card" style="max-width: 600px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%;">
         <h3 style="text-align: center; margin-bottom: 20px; color: #007bff;">Raise a Ticket</h3>
         <form method="post" action="{% url 'raise_ticket' %}">
@@ -683,16 +715,18 @@
                 <textarea id="description" name="description" style="width: 100%; padding: 10px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border-radius: 5px; height: 100px;" required></textarea>
             </div>
             <div style="text-align: center;">
-                <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Submit Ticket</button>
+                <!-- <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Submit Ticket</button> -->
+                <a href="/signup/"><button class="signbut">Sign Up</button></a>
+
             </div>
         </form>
     </div>
 </div>
-
+    </div>
     
 
 
-     <footer class="footer {% if not courses %}fixed-footer{% endif %}">
+     <footer class="footer p-2 ">
         <div class="container mt-2">
             <!-- Footer Content -->
             <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
