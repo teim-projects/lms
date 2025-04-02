@@ -27,15 +27,20 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', {'admin_email': admin_email})
 
 
+
+from lmsapp.models import CustomUser
+
 def signup(request):
     if request.method == 'POST':
+        first_name=request.POST.get('first_name')
+        last_name=request.Post.get('last_name')
         email = request.POST.get('email')
-        mobile = request.POST.get('mobile')
+        # mobile = request.POST.get('mobile')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
         # Validation
-        if not email or not mobile or not password or not confirm_password:
+        if not email or not password or not confirm_password:
             messages.error(request, 'All fields are required.')
             return render(request, 'lmsapp/signup.html')
 
@@ -53,7 +58,7 @@ def signup(request):
             email=email,
             password=make_password(password),
         )
-        user.profile.mobile = mobile  # Assuming you extend User with a Profile model
+        # user.profile.mobile = email # Assuming you extend User with a Profile model
         user.save()
 
         messages.success(request, 'Signup successful. Please login.')
@@ -73,11 +78,11 @@ from twilio.rest import Client
 from lmsapp.models import OTP, CustomUser  # Assuming CustomUser model is in the same app
 
 # Validate phone number in E.164 format
-def validate_phone_number(phone):
-    pattern = re.compile(r'^\+\d{10,15}$')  # E.164 format
-    if not pattern.match(phone):
-        raise ValidationError("Invalid phone number format. Use E.164 format (e.g., +1234567890).")
-    return phone
+# def validate_phone_number(phone):
+#     pattern = re.compile(r'^\+\d{10,15}$')  # E.164 format
+#     if not pattern.match(phone):
+#         raise ValidationError("Invalid phone number format. Use E.164 format (e.g., +1234567890).")
+#     return phone
 
 def send_otp_email(email, otp_code):
     try:
@@ -116,37 +121,29 @@ def send_otp_sms(mobile, otp_code):
 def signup(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        country_code = request.POST.get('country_code')  # Get the selected country code
-        mobile = request.POST.get('mobile')  # Get the mobile number
+        first_name = request.POST.get('first_name')  # Get the first name
+        last_name = request.POST.get('last_name')  # Get the last name
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Combine the country code and mobile number
-        full_mobile_number = f"{country_code}{mobile}"
-
-        # Validate the phone number format (e.g., E.164)
-        try:
-            full_mobile_number = validate_phone_number(full_mobile_number)
-        except ValidationError as e:
-            messages.error(request, str(e))
-            return redirect('signup')
-
-        # Check for existing email or mobile
+        # Check if user already exists by email
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, f"User with email ({email}) already exists.")
             return redirect('signup')
 
-        if CustomUser.objects.filter(mobile=full_mobile_number).exists():
-            messages.error(request, f"User with mobile number ({full_mobile_number}) already exists.")
-            return redirect('signup')
-
+        # Check if passwords match
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return redirect('signup')
 
-        # Create user and send OTP
-        user = CustomUser.objects.create_user(email=email, mobile=full_mobile_number, password=password)
-        user.is_active = False
+        # Create user
+        user = CustomUser.objects.create_user(
+            email=email,
+            first_name=first_name,  # Pass first name
+            last_name=last_name,    # Pass last name
+            password=password
+        )
+        user.is_active = False  # The user will need to verify their email before they can log in
         user.save()
 
         otp_code = OTP.generate_otp()
@@ -158,26 +155,8 @@ def signup(request):
         except ValidationError as e:
             messages.error(request, str(e))
             return redirect('signup')
-               
-               
-        # # Send OTP via Voice Call
 
-
-        # try:
-        #     send_otp_call(full_mobile_number, otp_code)
-        #     messages.success(request, "An OTP call has been made to your mobile. Please listen to the OTP.")
-        # except Exception as e:
-        #     messages.error(request, f"Error sending OTP call: {e}")
-        #     return redirect('signup')
-
-        # Send OTP via SMS using Twilio
-        try:
-            send_otp_sms(full_mobile_number, otp_code)
-        except ValidationError as e:
-            messages.error(request, str(e))
-            return redirect('signup')
-
-        messages.success(request, "Signup successful. Please verify your email and mobile.")
+        messages.success(request, "Signup successful. Please verify your email.")
         request.session['user_id'] = user.id
         return redirect('verify_otp')
 
@@ -1025,42 +1004,34 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Ticket
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Ticket
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Ticket
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Ticket
 def ticket_to_admin(request):
     """View all tickets (accessible to everyone)."""
     tickets = Ticket.objects.all().order_by("-created_at")  # Fetch all tickets
     return render(request, "ticket_to_admin.html", {"tickets": tickets})
 
 
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt  # REMOVE this in production
+from django.contrib.auth.decorators import login_required
+from .models import Ticket
 
-@login_required
+
+
 def close_ticket(request, ticket_id):
-    """Only superusers (admins) can close tickets."""
-    if not request.user.is_superuser:  # Ensure only superusers can close tickets
-        return redirect("ticket_to_admin")  # Prevent unauthorized access
-
+    """ Close the ticket and update the database. """
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    ticket.status = "closed"
-    ticket.save()
     
-    return redirect("ticket_to_admin")  # Redirect b
-
-
-
-
+    if request.method == "POST":
+        ticket.status = "closed"
+        ticket.save()
+        messages.success(request, "Ticket closed successfully.")
+    
+    return redirect("ticket_to_admin")  # Change to your actual view name
 
 from django.contrib.auth import get_user_model
 
