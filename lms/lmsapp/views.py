@@ -27,20 +27,17 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', {'admin_email': admin_email})
 
 
-
-from lmsapp.models import CustomUser
-
 def signup(request):
     if request.method == 'POST':
-        first_name=request.POST.get('first_name')
-        last_name=request.Post.get('last_name')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
         email = request.POST.get('email')
-        # mobile = request.POST.get('mobile')
+        mobile = request.POST.get('mobile')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
         # Validation
-        if not email or not password or not confirm_password:
+        if not email or not password or not confirm_password or not mobile:
             messages.error(request, 'All fields are required.')
             return render(request, 'lmsapp/signup.html')
 
@@ -52,19 +49,32 @@ def signup(request):
             messages.error(request, 'Email already registered.')
             return render(request, 'lmsapp/signup.html')
 
-        # Create User
+        # Create user
         user = User.objects.create_user(
-            username=email,  # Use email as username
+            username=email,
             email=email,
             password=make_password(password),
+            first_name=first_name,
+            last_name=last_name,
         )
-        # user.profile.mobile = email # Assuming you extend User with a Profile model
         user.save()
 
+        # Send email
+        subject = 'New LMS Signup'
+        message = f'''New user signed up:
+
+First Name: {first_name}
+Last Name: {last_name}
+Email: {email}
+Mobile: {mobile}
+'''
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
+
         messages.success(request, 'Signup successful. Please login.')
-        return redirect('login')  # Adjust the name of your login URL as needed
+        return redirect('login')
 
     return render(request, 'lmsapp/signup.html')
+
 
 
 
@@ -121,6 +131,8 @@ def send_otp_sms(mobile, otp_code):
 def signup(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+
         first_name = request.POST.get('first_name')  # Get the first name
         last_name = request.POST.get('last_name')  # Get the last name
         password = request.POST.get('password')
@@ -139,6 +151,7 @@ def signup(request):
         # Create user
         user = CustomUser.objects.create_user(
             email=email,
+            mobile=mobile,
             first_name=first_name,  # Pass first name
             last_name=last_name,    # Pass last name
             password=password
@@ -173,24 +186,20 @@ def verify_otp(request):
         user = CustomUser.objects.get(id=user_id)
         entered_otp = request.POST['otp']
 
-        # Retrieve OTP and check for time validity
         otp = OTP.objects.filter(user=user, code=entered_otp).first()
-        
-        # Get the count of OTP attempts from session
         otp_attempts = request.session.get('otp_attempts', 0)
 
         if otp and otp.created_at >= now() - timedelta(minutes=10):
-            # Successful OTP validation
             user.is_active = True
             user.is_verified = True
             user.save()
-            OTP.objects.filter(user=user).delete()  # Delete OTP after use
-            
-            # Send a welcome email
+            OTP.objects.filter(user=user).delete()
+
+            # ✅ Send welcome email to the user
             try:
                 send_mail(
                     'Welcome to Our Institute!',
-                    f'Hi {user.email},\n\nWelcome to our institute! We are excited to have you with us.',
+                    f'Hi {user.first_name},\n\nWelcome to our institute! We are excited to have you with us.',
                     'welcome@myapp.com',
                     [user.email],
                 )
@@ -199,23 +208,42 @@ def verify_otp(request):
             except Exception as e:
                 messages.error(request, f"Error sending welcome email: {e}")
 
-            # Clear session data for OTP attempts
+            # ✅ Notify Admin via email
+            try:
+                send_mail(
+                    subject='New User Signup Notification',
+                    message=(
+                        f'New user signed up:\n\n'
+                        f'First Name: {user.first_name}\n'
+                        f'Last Name: {user.last_name}\n'
+                        f'Email: {user.email}\n'
+                        f'Mobile: {user.mobile}\n'
+                    ),
+                    from_email='welcome@myapp.com',
+                    recipient_list=['lmsprofitmaxacademy@gmail.com'],
+                )
+            except Exception as e:
+                messages.error(request, f"Failed to notify admin: {e}")
+
+            # ✅ Clear OTP attempts
             request.session.pop('otp_attempts', None)
-            
-            messages.success(request, "Signup successful and welcome email sent.")
-            return redirect('/')
+
+            # ✅ Add success message for popup
+            messages.success(request, "Signup successful. Please login.")
+            return render(request, 'verify_otp.html', {'show_popup': True})
+
         else:
-            # Increment OTP attempts
             otp_attempts += 1
             request.session['otp_attempts'] = otp_attempts
             messages.error(request, "Invalid OTP. Please try again.")
-            
-            # Check if attempts exceeded the limit
+
             if otp_attempts >= 2:
                 OTP.objects.filter(user=user).delete()
-                request.session.pop('otp_attempts', None)  # Reset attempts
+                request.session.pop('otp_attempts', None)
                 return redirect('signup')
+
     return render(request, 'verify_otp.html')
+
 
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.sessions.models import Session

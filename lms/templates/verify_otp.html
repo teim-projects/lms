@@ -104,6 +104,22 @@ box-shadow: 0px 0px 5px ;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+
+        .popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #4CAF50;
+  color: white;
+  padding: 20px 40px;
+  border-radius: 10px;
+  font-size: 18px;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
     </style>
 </head>
 
@@ -147,6 +163,29 @@ box-shadow: 0px 0px 5px ;
             </form>
         </div>
     </div>
+
+
+    {% if show_popup %}
+<div id="success-popup" class="popup">
+  <p>Signup successful. Please login.</p>
+</div>
+{% endif %}
+
+
+
+<script>
+    window.onload = function () {
+      var popup = document.getElementById("success-popup");
+      if (popup) {
+        popup.style.display = "block";
+        setTimeout(function () {
+          popup.style.display = "none";
+          window.location.href = "/";  // 🔁 Redirect to home or login
+        }, 3000); // Show for 3 seconds
+      }
+    };
+  </script>
+  
 
     <footer class="footer">
         <div class="container">
