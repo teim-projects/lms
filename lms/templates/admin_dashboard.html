@@ -241,15 +241,7 @@
 
 
 }
-
-.fixed-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #f7f7f7;
-    text-align: center;
-    box-shadow: 0px -2px 10px rgb(203, 203, 203);
-}
+ 
 
 .footer {
     background-color: #f7f7f7;
@@ -262,6 +254,9 @@
     padding-bottom: 10px;
 }
 
+.main{
+    min-height: 100vh;
+}
 /*Footer Css End*/
 
     </style>
@@ -368,6 +363,7 @@
         </ul>
 
     </div>
+ <div class="main">
     <div class="container my-4">
         <div class="text-center mb-4">
             <h2>Available Courses</h2>
@@ -376,35 +372,35 @@
         {% if courses %}
             <div class="row">
                 {% for course in courses %}
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 card-box">
-                            {% if course.thumbnail %}
-                                <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
-                                    style="width: 100%; height: 200px; object-fit: cover;">
-                            {% else %}
-                                <p>No thumbnail available</p>
-                            {% endif %}
-                            <div class="card-body">
-                                <h3 class="card-title">{{ course.title }}</h3>
-                                <p class="card-text clamp-text">{{ course.description }}</p>
+                <div class="col-md-6 col-lg-4 mb-4">  <!-- 3 per row on lg screens -->
+                    <div class="card h-100 shadow card-box">
+                        {% if course.thumbnail %}
+                            <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
+                                 style="width: 100%; height: 200px; object-fit: cover;">
+                        {% else %}
+                            <p>No thumbnail available</p>
+                        {% endif %}
     
-                                <h5>Chapters:</h5>
-                                <div class="d-flex flex-wrap gap-2 mt-2">
-                                    {% for chapter in course.chapters.all %}
-                                        <a href="{{ chapter.youtube_link }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                            {{ chapter.title }}
-                                        </a>
-                                    {% empty %}
-                                        <span class="text-muted">No chapters available</span>
-                                    {% endfor %}
-                                </div>
-                                
-                                <!-- Delete Course Button -->
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title">{{ course.title }}</h3>
+                            <p class="card-text clamp-text">{{ course.description }}</p>
     
-    
+                            <h5>Chapters:</h5>
+                            <div class="gap-2 mt-2">
+                                {% for chapter in course.chapters.all %}
+                                    <a href="{{ chapter.youtube_link }}" target="_blank" class="btn btn-outline-info btn-sm mt-3">
+                                        {{ chapter.title }}
+                                    </a>
+                                    <br>
+                                {% empty %}
+                                    <span class="text-muted">No chapters available</span>
+                                {% endfor %}
                             </div>
+    
+                            
                         </div>
                     </div>
+                </div>
                 {% endfor %}
             </div>
         {% else %}
@@ -412,31 +408,34 @@
         {% endif %}
     </div>
     
+ </div>
     
 
 
-    <footer class="footer {% if not courses %}fixed-footer{% endif %}">
-        <div class="container">
-            <!-- Footer Content -->
-            <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
-                © 2024. Powered by
-                <img src="{% static 'images/logoweb.png' %}" alt="Chronoianalytics Logo"
-                    style="height: 20px; vertical-align: middle;">
-                <a href="http://www.chronoanalytics.in/"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
-                    Solution</a>
-                All Rights Reserved.
-            </p>
-            <p style="font-weight: 600; word-wrap: break-word;">
-                © 2024. Marketed by
-                <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo"
-                    style="height: 20px; vertical-align: middle;">
-                <a href="http://teim.in/"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">TEIM</a>
-                All Rights Reserved.
-            </p>
-        </div>
-    </footer>
+ <footer class="footer">
+    <div class="container">
+        <!-- Footer Content -->
+        <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
+            © 2024. Powered by
+            <img src="{% static 'images/logoweb.png' %}" alt="Chronoianalytics Logo" style="height: 20px; vertical-align: middle;">
+            <a href="http://www.chronoanalytics.in/"
+                style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">
+                Chronoanalytics Solution
+            </a> 
+            All Rights Reserved.
+        </p>
+        <p style="font-weight: 600; word-wrap: break-word;">
+            © 2024. Marketed by
+            <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo" style="height: 20px; vertical-align: middle;">
+            <a href="http://teim.in/"
+                style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">
+                TEIM
+            </a> 
+            All Rights Reserved.
+        </p>
+    </div>
+</footer>
+
     
 </body>
 

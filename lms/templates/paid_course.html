@@ -81,14 +81,7 @@
             transition: margin-left 0.3s ease-in-out;
         }
 
-        a:hover {
-            /* background-color: rgb(94, 94, 93); */
-            /* font-size: 18px; */
-            /* border: 1px solid; */
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            /* padding: 5px; */
-        }
+       
 
         .paid-btn {
             width: 100%;
@@ -352,7 +345,14 @@
     z-index: 1000;
    
 }
-      
+ .nav-link:hover{
+            /* background-color: rgb(94, 94, 93); */
+            /* font-size: 18px; */
+            /* border: 1px solid; */
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            /* padding: 5px; */
+        } 
     </style>
 </head>
 
@@ -374,13 +374,13 @@
         <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         <ul class="nav flex-column p-3">
             <!-- Dashboard Menu -->
-            <li class="nav-item">
+            <li class="nav-item sin">
                 <a href="/admin_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
             </li>
 
             <!-- Course Management Menu -->
             <li class="nav-item">
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
+                <a class="nav-link dropdown-toggle sin" href="#" data-toggle="collapse" data-target="#menu1"
                     aria-expanded="false" aria-controls="menu1">
                     Course Management
                 </a>
@@ -434,7 +434,7 @@
 
 <!-- paid couse form Content -->
 
-    <div class="container" style="margin-top: 100px;">
+    <div class="container" style="margin-top: 100px; min-height: 100vh;">
 
         <div>
             <div class="row">

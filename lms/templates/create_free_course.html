@@ -116,7 +116,7 @@
             transition: all 0.3s ease;
             margin-top: 1.5em;
         }
-        button:hover {
+        .submitbtn:hover {
             background: linear-gradient(to right, #2575fc, #6a11cb);
             transform: scale(1);
             box-shadow: 0 10px 10px rgba(106, 17, 203, 0.5);
@@ -330,6 +330,28 @@ a:hover {
     z-index: 1000;
    
 }
+.delete-button {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b); /* Pink to Orange gradient */
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    padding: 5px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+}
+
+.delete-button:hover {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c); /* Reverse gradient on hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 75, 43, 0.6);
+}
+
     </style>
 </head>
 
@@ -351,8 +373,8 @@ a:hover {
         <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         <ul class="nav flex-column p-3">
             <!-- Dashboard Menu -->
-            li class="nav-item">
-            <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
+            <li class="nav-item">
+            <a href="/admin_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
         </li>
         <!-- Course Management Menu -->
         <li class="nav-item">
@@ -450,7 +472,7 @@ a:hover {
                 
                 
                 
-                <button type="submit" class="paid-btn w-100">Submit</button>
+                <button type="submit" class="paid-btn w-100 submitbtn">Submit</button>
             </form>
         </div>
     </div>
@@ -489,24 +511,27 @@ a:hover {
                             <p class="card-text clamp-text">{{ course.description }}</p>
 
                             <h5>Chapters:</h5>
-                            <div class="d-flex flex-wrap gap-2 mt-2">
+                            <div class="gap-2 mt-2">
                                 {% for chapter in course.chapters.all %}
-                                    <a href="{{ chapter.youtube_link }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ chapter.youtube_link }}" target="_blank" class="btn btn-outline-info btn-sm mt-3">
                                         {{ chapter.title }}
                                     </a>
+                                    <br>
                                 {% empty %}
                                     <span class="text-muted">No chapters available</span>
                                 {% endfor %}
                             </div>
                             
                             <!-- Delete Course Button -->
-<form method="post" action="{% url 'delete_free_course' course.id %}" onsubmit="return confirm('Are you sure you want to delete this course?');">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger btn-lg w-100 mt-3" style="border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <i class="fas fa-trash-alt me-2"></i> Delete Free Course
-    </button>
-    
-</form>
+                            <form method="post" action="{% url 'delete_free_course' course.id %}" 
+                            onsubmit="return confirm('Are you sure you want to delete this course?');"
+                            style="display: flex; justify-content: center; align-items: center;">
+                          {% csrf_token %}
+                          <button type="submit" class="delete-button mt-3">
+                              <i class="fas fa-trash-alt me-2"></i> <span>Delete</span>
+                          </button>
+                      </form>
+                      
 
                         </div>
                     </div>
