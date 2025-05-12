@@ -24,7 +24,8 @@ def student_dashboard(request):
 
 def admin_dashboard(request):
     admin_email = request.session.get('admin_email', 'Admin Email')
-    return render(request, 'admin_dashboard.html', {'admin_email': admin_email})
+    courses = FreeCourse.objects.all()
+    return render(request, 'admin_dashboard.html', {'admin_email': admin_email, 'courses': courses})
 
 
 def signup(request):

@@ -43,7 +43,7 @@ urlpatterns = [
     path("tickets/raise/", views.raise_ticket, name="raise_ticket"),
     path("tickets/close/<int:ticket_id>/", views.close_ticket, name="close_ticket"),
     path('admin_user_list/', views.user_list, name='admin_user_list'),
-
+    
 
     
     
