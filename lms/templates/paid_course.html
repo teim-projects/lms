@@ -442,6 +442,21 @@
 
                 </div>
                 <div class="col-12 col-md-6 m-3 p-3 paid-form">
+                      <!-- Back and home buttons start -->
+                <span onclick="window.location.href='/admin_dashboard/'"
+                    style="float: left; cursor: pointer; color:rgb(75, 162, 255); font-size:20px;" class="mb-4"><i
+                        class="fas fa-house-chimney"></i></span>
+                <span onclick="goBackAndRefresh()" style="float: right; cursor: pointer; color:red; font-size:20px;"
+                    class="mb-4">X</span>
+                <script>
+                    function goBackAndRefresh() {
+                        window.history.back();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 100); // slight delay to allow back navigation
+                    }
+                </script>
+                <!-- Back and home buttons End -->
                     <h2 class="text-center">Create paid course</h2>
                     <form class="p-3" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -502,6 +517,7 @@
 
     <div class="container my-4">
         <div class="text-center mb-4">
+            
             <h2>Paid Courses</h2>
         </div>
         <div class="row">

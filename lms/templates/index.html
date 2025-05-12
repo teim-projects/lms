@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -397,11 +398,75 @@
           .weserviceimg p {
             font-size: 14px;
             color: #666;
+      
           }
     </style>
 </head>
 
 <body>
+    <div id="tsparticles" style="position: fixed;top:0px; z-index: -1; width: 100%; height: 100%;"></div>
+<script>
+tsParticles.load("tsparticles", {
+  background: {
+    color: "#f4f4f4", // Dark background
+  },
+  fullScreen: {
+    enable: false
+  },
+  particles: {
+    number: {
+      value: 30,
+    },
+    shape: {
+      type: "image",
+      image: [
+        {
+          src: "https://img.icons8.com/ios-filled/50/00ff00/candlestick-chart.png",
+          width: 20,
+          height: 20
+        },
+        {
+          src: "https://img.icons8.com/ios-filled/50/00ff00/bullish.png",
+          width: 20,
+          height: 20
+        },
+            {
+          src: "https://img.icons8.com/ios-filled/50/00ff00/bullish.png",
+          width: 20,
+          height: 20
+        },
+       
+        {
+          src: "https://img.icons8.com/ios-filled/50/ff0000/bearish.png",
+          width: 20,
+          height: 20
+        },
+        {
+          src: "https://img.icons8.com/ios-filled/50/ffffff/us-dollar-circled--v1.png",
+          width: 20,
+          height: 20
+        }
+      ]
+    },
+    opacity: {
+      value: 0.1
+    },
+    size: {
+      value: 20
+    },
+    move: {
+      enable: true,
+      speed: 1,
+      direction: "none",
+      outModes: {
+        default: "bounce"
+      }
+    }
+  },
+  detectRetina: true
+});
+</script>
+
     <nav class="navbar navbar-default p-4 ">
         <div class="container-fluid navbarr">
             <div class="navbar-header ">

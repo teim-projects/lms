@@ -82,7 +82,7 @@ LOGIN_URL = '/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lms',
+        'NAME': 'lmsdb',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',
