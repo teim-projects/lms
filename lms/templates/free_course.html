@@ -297,14 +297,7 @@
         }
 
         /* Sidebar Styles */
-        a:hover {
-            /* background-color: rgb(94, 94, 93); */
-            /* font-size: 18px; */
-            /* border: 1px solid; */
-           
-            /* padding: 5px; */
-        }
-
+      
         .sidebar {
             position: fixed;
             top: 0;
@@ -419,7 +412,7 @@
 .Btn:active {
     transform: translate(2px, 2px);
 }
-li a:hover {
+.nav-link:hover {
     /* background-color: rgb(94, 94, 93); */
     /* font-size: 18px; */
     /* border: 1px solid; */
@@ -516,13 +509,13 @@ li a:hover {
                                     <h4 class="card-title text-primary fw-semibold">{{ course.title }}</h4>
                                     <p class="card-text text-muted clamp-text">{{ course.description }}</p>
                                     
-                                    <h5 class="mt-3 fw-bold text-dark">Chapters:</h5>
+                                    <h5 class="btn btn-outline-info btn-sm mt-3">Chapters:</h5>
                                     <ul class="list-unstyled">
                                         {% for chapter in course.chapters.all %}
                                             <li class="mb-1">
                                                 <a href="{{ chapter.youtube_link }}" target="_blank" 
                                                    class="text-decoration-none text-primary d-flex align-items-center">
-                                                    <i class="bi bi-play-circle-fill me-2"></i> {{ chapter.title }}
+                                                    <i class="bi bi-play-circle-fill me-2"></i> <span class="btn btn-outline-info btn-sm mt-3">{{ chapter.title }}</span>
                                                 </a>
                                             </li>
                                         {% empty %}

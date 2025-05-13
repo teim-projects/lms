@@ -453,7 +453,25 @@ margin-bottom: 40px;
 <div class="col-md-3"></div>
 <div class="col-md-6">
     <div class="card ">
-
+<div class="d " style="display: flex;    justify-content: space-between;
+">
+         <!-- Back and home buttons start -->
+       <span onclick="window.location.href='/admin_dashboard/'"
+        style="float: left; cursor: pointer; color:rgb(75, 162, 255); font-size:20px;" class="mb-4">
+    <i class="fa-solid fa-house-chimney p-2"></i>
+  </span>
+        <span onclick="goBackAndRefresh()" style="float: right; cursor: pointer; color:red; font-size:20px;"
+            class="mb-4 p-2">X</span>
+        <script>
+            function goBackAndRefresh() {
+                window.history.back();
+                setTimeout(function () {
+                    location.reload();
+                }, 100); // slight delay to allow back navigation
+            }
+        </script>
+        <!-- Back and home buttons End -->
+</div>
         <form action="{% url 'update_free_course' course.id %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3 card-header bg-white " style="border-bottom: none; padding:0%; ">
