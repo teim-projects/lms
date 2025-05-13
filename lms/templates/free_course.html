@@ -137,10 +137,7 @@
         } */
 
         /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
+     
 
         .logo1 {
             display: flex;
@@ -340,8 +337,8 @@
             margin: 0px;
             border-radius: 3px;
            width: 100%;
-           margin-left: 25px;
-        }
+
+         }
         .card img{
             border-radius: 3px;
         }
@@ -482,18 +479,18 @@
   </div>
 
   <main>
-    <section class="content container py-5" style="min-height: 100vh;">
+    <section class="content" style="min-height: 100vh;">
         <div class="container">
             <div class="text-center mb-4">
-                <h2 class="fw-bold text-dark">Available Courses</h2>
+                <h3 class="fw-bold   mt-3">Available Courses</h3>
                 <hr class="w-25 mx-auto border-primary">
             </div>
 
             {% if courses %}
                 <div class="row">
                     {% for course in courses %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden transition-all">
+                        <div class="col-md-4 mb-4 " style="padding: 10px; ">
+                            <div class="card h-100 shadow border-0 rounded-4 overflow-hidden transition-all">
                                 {% if course.thumbnail %}
                                     <img class="card-img-top rounded-top-4"
                                          src="{{ course.thumbnail.url }}"
