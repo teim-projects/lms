@@ -473,16 +473,73 @@ margin-bottom: 40px;
                 <input type="text" name="title" id="title" class="form-control" value="{{ course.title }}" required>
             
             </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Course Description</label>
-                <textarea name="description" id="description" class="form-control" rows="4"
-                    required>{{ course.description }}</textarea>
+           <!-- Course Description -->
+<div class="mb-3">
+    <label for="description" class="form-label">Course Description</label>
+    <textarea name="description" id="description" class="form-control" rows="4" required>{{ course.description }}</textarea>
+</div>
+
+<!-- YouTube Video Links -->
+<div class="mb-3">
+    <label>YouTube Video Links (Chapters)</label>
+    <div id="youtube-links-container">
+        {% for chapter in chapters %}
+            <div class="d-flex flex-wrap gap-2 mb-2 align-items-center chapter-block" data-chapter-id="{{ chapter.id }}">
+                <input type="hidden" name="chapter_id" value="{{ chapter.id }}">
+                
+                <input type="text" class="form-control" name="chapter_title" value="{{ chapter.title }}" placeholder="Chapter Title" required>
+
+                <input type="url" class="form-control" name="youtube_link" value="{{ chapter.youtube_link }}" placeholder="YouTube Link" required>
+
+                <!-- Hidden delete input (updated dynamically when button clicked) -->
+                <!-- <input type="hidden" name="delete_chapter_ids" value="" disabled> -->
+
+                <!-- Delete button -->
+                <!-- <button type="button" class="btn btn-danger btn-sm" onclick="markForDeletion(this)">Delete</button> -->
             </div>
-            <div class="">
-                <label for="youtube_link" class="form-label">YouTube Link</label>
-                <input type="url" name="youtube_link" id="youtube_link" class="form-control"
-                    value="{{ course.youtube_link }}" required>
-            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Container for new chapters -->
+    <div id="new-links-container"></div>
+    <button type="button" class="btn btn-outline-secondary btn-sm mt-2" onclick="addYoutubeField()">+ Add New Chapter</button>
+</div>
+
+<script>
+    function addYoutubeField() {
+        const container = document.getElementById("new-links-container");
+        const wrapper = document.createElement("div");
+        wrapper.className = "d-flex flex-wrap gap-2 mb-2 align-items-center chapter-block";
+        wrapper.innerHTML = `
+            <input type="hidden" name="chapter_id" value="new">
+            <input type="text" class="form-control" name="chapter_title" placeholder="Chapter Title" required>
+            <input type="url" class="form-control" name="youtube_link" placeholder="YouTube Link" required>
+            
+        `;
+        container.appendChild(wrapper);
+    }
+
+    function markForDeletion(button) {
+        const block = button.closest(".chapter-block");
+        const chapterId = block.dataset.chapterId;
+        // Enable and set delete input
+        const hiddenInput = block.querySelector('input[name="delete_chapter_ids"]');
+        hiddenInput.value = chapterId;
+        hiddenInput.disabled = false;
+
+        // Optionally hide or disable the input fields
+        block.style.display = "none"; // Hide from view
+    }
+
+    function removeNewChapter(button) {
+        const block = button.closest(".chapter-block");
+        block.remove();
+    }
+</script>
+
+
+<!-- JavaScript -->
+
             </div>
 
     

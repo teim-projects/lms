@@ -434,12 +434,29 @@ def create_free_course(request):
             # Create associated Chapter instances
             for link in youtube_links:
                 if link.strip():  # Ensure link is not empty
-                    CourseChapter.objects.create(course=course, title=f"Chapter {course.chapters.count() + 1}", youtube_link=link)
+                    CourseChapter.objects.create(course=course, title=f"Chapter {course.chapters.count() + 1}", youtube_links=link)
 
             return redirect("create_free_course")  # Redirect to course listing page
 
     courses = FreeCourse.objects.prefetch_related("chapters").all()
     return render(request, "create_free_course.html", {"courses": courses})
+
+
+def update_free_course(request, course_id):
+    course = FreeCourse.objects.get(id=course_id)
+
+    if request.method == 'POST':
+        course.title = request.POST.get('title')
+        course.description = request.POST.get('description')
+        # Thumbnail logic if any
+        course.save()
+
+        # Example: Update chapter links
+        for chapter in course.chapters.all():
+            print(chapter.youtube_links)  # ✅ Works if you need it
+
+        return redirect('create_free_course')
+
 
 def free_courses(request):
     courses = FreeCourse.objects.prefetch_related("chapters").all()
@@ -606,20 +623,55 @@ def delete_free_course(request, course_id):
     
 
 # Update Free Course
+from .models import CourseChapter  # Import your chapter model
+
+from django.shortcuts import get_object_or_404, redirect, render
+from .models import FreeCourse, CourseChapter
+
 def update_free_course(request, course_id):
     course = get_object_or_404(FreeCourse, id=course_id)
+
     if request.method == 'POST':
         course.title = request.POST.get('title', course.title)
         course.description = request.POST.get('description', course.description)
-        course.youtube_link = request.POST.get('youtube_link', course.youtube_link)
 
         if 'thumbnail' in request.FILES:
             course.thumbnail = request.FILES['thumbnail']
-
         course.save()
-        return redirect('create_free_course')  # Redirect to the course list page
 
-    return render(request, 'update_free_course.html', {'course': course})
+        # Get chapter fields
+        chapter_ids = request.POST.getlist('chapter_id')
+        chapter_titles = request.POST.getlist('chapter_title')
+        youtube_links = request.POST.getlist('youtube_link')
+
+
+
+        
+
+        for i in range(len(chapter_ids)):
+            cid = chapter_ids[i]
+            title = chapter_titles[i]
+            link = youtube_links[i]
+
+            if cid == "new":
+                if title and link:
+                    CourseChapter.objects.create(course=course, title=title, youtube_link=link)
+            else:
+                try:
+                    chapter = CourseChapter.objects.get(id=cid, course=course)
+                    chapter.title = title
+                    chapter.youtube_link = link
+                    chapter.save()
+                except CourseChapter.DoesNotExist:
+                    continue
+
+        return redirect('create_free_course')
+
+    chapters = course.chapters.all()
+    return render(request, 'update_free_course.html', {'course': course, 'chapters': chapters})
+
+
+    
 
 
 

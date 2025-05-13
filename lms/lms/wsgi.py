@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/
 
 
 # from static_ranges import Ranges
-# from dj_static import Cling, MediaCling
+# sfrom dj_static import Cling, MediaCling
 
 import os
 from django.core.wsgi import get_wsgi_application
