@@ -423,20 +423,24 @@ def create_free_course(request):
         title = request.POST.get("title")
         description = request.POST.get("description")
         thumbnail = request.FILES.get("thumbnail")
-        youtube_links = request.POST.getlist("youtube_links[]")  # Get multiple links
+        youtube_links = request.POST.getlist("youtube_links[]")  # ✅ Correct name
 
         if title and description and thumbnail:
-            # Create the FreeCourse instance
             course = FreeCourse.objects.create(
-                title=title, description=description, thumbnail=thumbnail
+                title=title,
+                description=description,
+                thumbnail=thumbnail
             )
 
-            # Create associated Chapter instances
             for link in youtube_links:
-                if link.strip():  # Ensure link is not empty
-                    CourseChapter.objects.create(course=course, title=f"Chapter {course.chapters.count() + 1}", youtube_links=link)
+                if link.strip():
+                    CourseChapter.objects.create(
+                        course=course,
+                        title=f"Chapter {course.chapters.count() + 1}",
+                        youtube_link=link
+                    )
 
-            return redirect("create_free_course")  # Redirect to course listing page
+            return redirect("create_free_course")
 
     courses = FreeCourse.objects.prefetch_related("chapters").all()
     return render(request, "create_free_course.html", {"courses": courses})
@@ -453,7 +457,7 @@ def update_free_course(request, course_id):
 
         # Example: Update chapter links
         for chapter in course.chapters.all():
-            print(chapter.youtube_links)  # ✅ Works if you need it
+            print(chapter.youtube_link)  # ✅ Works if you need it
 
         return redirect('create_free_course')
 
