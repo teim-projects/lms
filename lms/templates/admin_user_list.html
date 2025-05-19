@@ -30,9 +30,9 @@
         .sidebar {
             position: fixed;
             top: 0;
-            left: -250px;
+            left: -350px;
             height: 100%;
-            width: 250px;
+            width: 300px;
             background-color: #343a40;
             transition: left 0.3s ease-in-out;
             z-index: 1050;
@@ -253,41 +253,7 @@
             padding: 20px;
         }
 
-
-        /*Footer Css Start*/
-        @media screen and (max-width: 768px) {
-            .footer p {
-                font-size: 1rem;
-                /* Smaller font for smaller devices */
-                word-wrap: break-word;
-                /* Ensures text does not overflow */
-                margin: 5px 0;
-                /* Adjust margin for compact view */
-            }
-
-            .footer img {
-                height: 16px;
-                /* Scale images for smaller devices */
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .footer p {
-                font-size: 0.7rem;
-                /* Even smaller font for extra small devices */
-            }
-
-            .footer img {
-                height: 14px;
-                /* Further scale down images */
-            }
-            .sidebar2 {
-                width: 250px;
-            }
-            
-
-
-        }
+ 
 
         /* Navbar Styles CSS */
         .bg-light {
@@ -312,30 +278,9 @@
             align-items: center;
         }
 
-        .footer {
-
-            width: 100%;
-            box-shadow: 0px -2px 10px rgb(203, 203, 203);
-
-
-
-        }
-
-        .fixed-footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f7f7f7;
-            text-align: center;
-            box-shadow: 0px -2px 10px rgb(203, 203, 203);
-        }
-
-        .footer {
-            background-color: #f7f7f7;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #555;
-        }
+       
+        
+ 
 
         /* Bell Icon */
         .bell-icon {
@@ -561,26 +506,23 @@
 
     </script>
 
-    <nav class="navbar navbar-light bg-light">
-        <div class="logo1">
-            <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i>
-            <img class="logo navbar-brand" src="../static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
+ <nav class="navbar navbar-light bg-light d-flex justify-content-between align-items-center px-3">
+    <!-- Left: Toggle Sidebar Button -->
+    <div class="d-flex align-items-center">
+        <i class="fa fa-bars text-black p-2" style="font-size: 24px; cursor: pointer;" onclick="toggleSidebar()"></i>
+    </div>
 
-        </div>
+    <!-- Center: Logo -->
+    <div class="text-center">
+        <img class="navbar-brand mx-auto" src="../static/images/pmxlogo_c.png" alt="Logo" width="80" height="55">
+    </div>
 
-        <div class="logo1">
+    <!-- Right: Bell Icon -->
+    <div class="d-flex align-items-center">
+        <div class="bell-icon" onclick="toggleSidebar2()" style="font-size: 24px; cursor: pointer;">🔔</div>
+    </div>
+</nav>
 
-            <!-- <a href="#" class="navbar-link mypro">My Profile</a> -->
-            <form class="form-inline">
-
-                <!-- <a href="{% url 'raise_ticket' %}" class="btn btn-outline-success my-2 my-sm-0">Help</a> -->
-
-            </form>
-            <div class="bell-icon" onclick="toggleSidebar2()">🔔</div>
-
-        </div>
-
-    </nav>
 
 
 
@@ -664,7 +606,7 @@
 
             <!-- Dashboard Menu -->
             <li class="nav-item">
-                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
+                <a href="/admin_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
             </li>
             <!-- Course Management Menu -->
             <li class="nav-item">
@@ -731,57 +673,48 @@
         </ul>
 
     </div>
-<div class="container mt-3"> 
-    
-        <h2 class="text-center mt-5">Registered Users</h2>
+<div class="main" style="min-height: 100vh; background: #f8f9fa;">
+    <div class="container py-5" style="margin-top: 80px;">
+        <h2 class="text-center mb-4 fw-bold text-primary">📋 Registered Users</h2>
+
         {% if users %}
-        <table class="user-table">
-            <tr>
-                <th>Email</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Mobile</th>
-                <th>Verified</th>
-            </tr>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.email }}</td>
-                <td>{{ user.first_name|default:"N/A" }}</td>
-                <td>{{ user.last_name|default:"N/A" }}</td>
-                <td>{{ user.mobile|default:"N/A" }}</td>
-                <td class="{% if user.is_verified %}verified{% else %}not-verified{% endif %}">
-                    {% if user.is_verified %}✔ Verified{% else %}❌ Not Verified{% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="table-responsive rounded shadow">
+            <table class="table table-hover align-middle bg-white rounded">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Mobile</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.first_name|default:"N/A" }}</td>
+                        <td>{{ user.last_name|default:"N/A" }}</td>
+                        <td>{{ user.mobile|default:"N/A" }}</td>
+                        <td>
+                            {% if user.is_verified %}
+                                <span class="badge text-success">✔ Verified</span>
+                            {% else %}
+                                <span class="badge ">❌ Not Verified</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-        <p class="text-center mt-5">No users available.</p>
+        <p class="text-center mt-5 text-muted">No users available.</p>
         {% endif %}
     </div>
+</div>
 
-     <footer class="footer {% if not courses %}fixed-footer{% endif %}">
-        <div class="container mt-2">
-            <!-- Footer Content -->
-            <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
-                © 2024. Powered by
-                <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo"
-                    style="height: 20px; vertical-align: middle;">
-                <a href="http://www.chronoanalytics.in/"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
-                    Solution</a>
-                All Rights Reserved.
-            </p>
-            <p style="font-weight: 600; word-wrap: break-word;">
-                © 2024.Marketed by
-                <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo"
-                    style="height: 20px; vertical-align: middle;">
-                <a href="http://teim.in/"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">TEIM</a>
-                All Rights Reserved.
-            </p>
-        </div>
-    </footer>
+   
  
 </body>
 
