@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage SubAdmins</title>
+    <title>Profit Max Share Market Academy </title>
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -87,12 +88,12 @@
             font-size: 1rem;
         }
 
-     
+
 
 
         a {
             display: inline-block;
-             text-decoration: none;
+            text-decoration: none;
             color: #ff6f61;
             font-size: 0.9rem;
         }
@@ -125,123 +126,124 @@
         }
 
 
- 
- 
- 
+
+
+
         .content {
             margin-left: 0;
             transition: margin-left 0.3s ease-in-out;
         }
 
-   
 
- 
+
+
         .container {
             padding-bottom: 10px;
         }
 
- 
+
         a:hover {
             /* background-color: rgb(94, 94, 93); */
             /* font-size: 18px; */
             /* border: 1px solid; */
-             box-shadow: 0px 0px 5px rgb(177, 177, 176);
+            box-shadow: 0px 0px 5px rgb(177, 177, 176);
 
         }
     </style>
 </head>
- 
+
 
 <body>
- 
+
 
     {% include 'Admin_Base.html' %}
- 
-<div class="container py-4">
-    <!-- Header -->
-    <div class="text-center mt-5">
-        <h2 class="text-primary">Manage Sub-Admins</h2>
-    </div>
 
-    <!-- Add Sub-Admin Form -->
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-6 col-md-8 col-sm-10 col-12 bg-white p-4 rounded shadow ">
-            <!-- Back and home buttons -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span onclick="window.location.href='/admin_dashboard/'" style="cursor: pointer; color:rgb(75, 162, 255); font-size: 20px;">
-                    <i class="fa-solid fa-house-chimney"></i>
-                </span>
-                <span onclick="goBackAndRefresh()" style="cursor: pointer; color: red; font-size: 20px;">
-                    X
-                </span>
-            </div>
-
-            <h4 class="text-center text-dark mb-3">Add New Sub-Admin</h4>
-
-            <form method="post">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label>Email:</label>
-                    <input type="email" name="email" required class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label>Password:</label>
-                    <input type="password" name="password" required class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label>Phone Number:</label>
-                    <input type="text" name="phone_number" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Add SubAdmin</button>
-            </form>
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="text-center mt-5">
+            <h2 class="text-primary">Manage Sub-Admins</h2>
         </div>
-    </div>
 
- 
+        <!-- Add Sub-Admin Form -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-6 col-md-8 col-sm-10 col-12 bg-white p-4 rounded shadow ">
+                <!-- Back and home buttons -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span onclick="window.location.href='/admin_dashboard/'"
+                        style="cursor: pointer; color:rgb(75, 162, 255); font-size: 20px;">
+                        <i class="fa-solid fa-house-chimney"></i>
+                    </span>
+                    <span onclick="goBackAndRefresh()" style="cursor: pointer; color: red; font-size: 20px;">
+                        X
+                    </span>
+                </div>
 
-    <!-- Sub-Admin List -->
-    <div class="row mt-5">
-        <div class="col-12 text-center">
-            <h4 class="text-secondary">Sub-Admin List</h4>
-        </div>
-        <div class="col-12 mt-4">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover text-center align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Email</th>
-                            <th>Password</th>
-                            <th>Phone Number</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for subadmin in subadmins %}
-                        <tr>
-                            <td>{{ subadmin.email }}</td>
-                            <td>{{ subadmin.plain_password }}</td>
-                            <td>{{ subadmin.phone_number }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="3" class="text-center text-muted">No sub-admins found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <h4 class="text-center text-dark mb-3">Add New Sub-Admin</h4>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label>Email:</label>
+                        <input type="email" name="email" required class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Password:</label>
+                        <input type="password" name="password" required class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Phone Number:</label>
+                        <input type="text" name="phone_number" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add SubAdmin</button>
+                </form>
             </div>
         </div>
-    </div>
-</div>
-{% include 'footer.html' %}
-<!-- Go back & refresh script -->
-<script>
-    function goBackAndRefresh() {
-        window.history.back();
-        setTimeout(() => location.reload(), 100);
-    }
-</script>
 
- 
+
+
+        <!-- Sub-Admin List -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <h4 class="text-secondary">Sub-Admin List</h4>
+            </div>
+            <div class="col-12 mt-4">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Phone Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subadmin in subadmins %}
+                            <tr>
+                                <td>{{ subadmin.email }}</td>
+                                <td>{{ subadmin.plain_password }}</td>
+                                <td>{{ subadmin.phone_number }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No sub-admins found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+    <!-- Go back & refresh script -->
+    <script>
+        function goBackAndRefresh() {
+            window.history.back();
+            setTimeout(() => location.reload(), 100);
+        }
+    </script>
+
+
 
 </body>
 

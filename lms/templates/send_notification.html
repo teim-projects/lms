@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Notification</title>
+    <title>Profit Max Share Market Academy </title>
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
@@ -24,8 +25,8 @@
             padding: 0;
         }
 
-  
-   
+
+
 
         .frm {
             padding: 20px;
@@ -35,7 +36,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-      
+
         .Submitbtn {
             background: linear-gradient(to right, #6a11cb, #2575fc);
             color: #fff;
@@ -56,9 +57,9 @@
             transform: scale(1.02);
         }
 
-    
-    
-     
+
+
+
 
         /* footer css*/
         .container {
@@ -66,7 +67,7 @@
             /* Pushes footer to the bottom */
         }
 
-    
+
         h3 {
             text-decoration: none;
             background: linear-gradient(to right, #2575fc, #6a11cb);
@@ -79,59 +80,60 @@
 
 <body>
     {% include 'Admin_Base.html' %}
- 
+
     <div class="container   " style="min-height: 100vh;">
- 
-<div class="container mt-5">
-    <div class="row justify-content-center " style="margin-top: 100px;">
-        <div class="col-12 col-md-8 col-lg-6 mb-5 frm bg-white p-4 rounded shadow ">
-            <!-- Back and home buttons start -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span onclick="window.location.href='/admin_dashboard/'"
-                    style="cursor: pointer; color:rgb(75, 162, 255); font-size:20px;">
-                    <i class="fa-solid fa-house-chimney"></i>
-                </span>
-                <span onclick="goBackAndRefresh()" style="cursor: pointer; color:red; font-size:20px;">X</span>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center " style="margin-top: 100px;">
+                <div class="col-12 col-md-8 col-lg-6 mb-5 frm bg-white p-4 rounded shadow ">
+                    <!-- Back and home buttons start -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span onclick="window.location.href='/admin_dashboard/'"
+                            style="cursor: pointer; color:rgb(75, 162, 255); font-size:20px;">
+                            <i class="fa-solid fa-house-chimney"></i>
+                        </span>
+                        <span onclick="goBackAndRefresh()" style="cursor: pointer; color:red; font-size:20px;">X</span>
+                    </div>
+                    <script>
+                        function goBackAndRefresh() {
+                            window.history.back();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 100);
+                        }
+                    </script>
+                    <!-- Back and home buttons End -->
+
+                    <h3 class="text-center mb-4">Send Notification</h3>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="title">Title:</label>
+                            <input type="text" id="title" name="title" required class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description">Description:</label>
+                            <textarea id="description" name="description" rows="5" required
+                                class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="image">Image (optional):</label>
+                            <input type="file" id="image" name="image" accept="image/*" class="form-control p-1">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Send Notification</button>
+                    </form>
+                </div>
             </div>
-            <script>
-                function goBackAndRefresh() {
-                    window.history.back();
-                    setTimeout(function () {
-                        location.reload();
-                    }, 100);
-                }
-            </script>
-            <!-- Back and home buttons End -->
-
-            <h3 class="text-center mb-4">Send Notification</h3>
-
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="mb-3">
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" name="title" required class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" rows="5" required class="form-control"></textarea>
-                </div>
-
-                <div class="mb-4">
-                    <label for="image">Image (optional):</label>
-                    <input type="file" id="image" name="image" accept="image/*" class="form-control p-1">
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">Send Notification</button>
-            </form>
         </div>
-    </div>
-</div>
 
     </div>
 
-{% include 'footer.html' %}
+    {% include 'footer.html' %}
 </body>
 
 </html>

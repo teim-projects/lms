@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paid Course</title>
+    <title>Profit Max Share Market Academy </title>
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
@@ -453,13 +454,11 @@
         .bnt:hover {
             color: #fff;
         }
-        
-    .progress-bar {
-        background-color: #28a745 !important;  /* Force green */
-    }
 
-
-
+        .progress-bar {
+            background-color: #28a745 !important;
+            /* Force green */
+        }
     </style>
 </head>
 
@@ -540,7 +539,7 @@
                 <div class="card h-100 card-box">
                     {% if course.thumbnail %}
                     <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.course_title }} Thumbnail"
-                         style="width: 100%; height: 200px; object-fit: cover;">
+                        style="width: 100%; height: 200px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
                         <h3 class="card-title">{{ course.course_title }}</h3>
@@ -549,27 +548,28 @@
                         <p class="card-text"><strong>Instructor:</strong> {{ course.instructor_name }}</p>
                         <p class="card-text"><strong>Level:</strong> {{ course.course_level }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ course.course_price }}</p>
-    
+
                         <!-- Progress Bar Section -->
                         <div class="progress" style="height: 20px; margin-bottom: 10px;">
                             <div class="progress-bar bg-success progress-bar-striped" role="progressbar"
-                                 style="width: {{ course.progress_percentage|default:0|floatformat:0 }}%;"  
-                                 aria-valuenow="{{ course.progress_percentage|default:0|floatformat:0 }}" 
-                                 aria-valuemin="0" aria-valuemax="100" id="progress-bar-{{ course.id }}">
+                                style="width: {{ course.progress_percentage|default:0|floatformat:0 }}%;"
+                                aria-valuenow="{{ course.progress_percentage|default:0|floatformat:0 }}"
+                                aria-valuemin="0" aria-valuemax="100" id="progress-bar-{{ course.id }}">
                                 {{ course.progress_percentage|default:0|floatformat:0 }}%
                             </div>
                         </div>
-                        
-                        <p>Progress: <span id="progress-text-{{ course.id }}">{{ course.progress_percentage|floatformat:0 }}</span>% Completed</p>
-                        
-                        
+
+                        <p>Progress: <span id="progress-text-{{ course.id }}">{{
+                                course.progress_percentage|floatformat:0 }}</span>% Completed</p>
+
+
                         <form action="{% url 'initiate_payment' course.id %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="amount" value="{{ course.course_price }}">
                             <button type="submit" class="btn btn-success btn-block">Buy Now</button>
                         </form>
-                        
-    
+
+
                         <!-- Continue Course Button -->
                         <!-- <a href="{% url 'view_content' course.id %}" class="btn btn-primary btn-block">Continue Course</a> -->
                     </div>
@@ -578,7 +578,7 @@
             {% endfor %}
         </div>
     </div>
-    
+
 
 
 
@@ -610,14 +610,14 @@
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".mark-complete").forEach(button => {
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     let courseId = this.dataset.courseId;
                     let contentId = this.dataset.contentId;
                     let progressBar = document.querySelector(`#progress-bar-${courseId}`);
                     let progressText = document.querySelector(`#progress-text-${courseId}`);
-        
+
                     fetch(`/mark-content-completed/${courseId}/${contentId}/`, {
                         method: "POST",
                         headers: {
@@ -626,23 +626,23 @@
                         },
                         body: JSON.stringify({})
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.completed) {
-                            // Fetch the updated progress percentage from backend
-                            fetch(`/get-progress/${courseId}/`)
-                            .then(response => response.json())
-                            .then(progressData => {
-                                progressBar.style.width = progressData.percentage + "%";
-                                progressText.innerText = progressData.percentage + "% Completed";
-                            });
-                        }
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.completed) {
+                                // Fetch the updated progress percentage from backend
+                                fetch(`/get-progress/${courseId}/`)
+                                    .then(response => response.json())
+                                    .then(progressData => {
+                                        progressBar.style.width = progressData.percentage + "%";
+                                        progressText.innerText = progressData.percentage + "% Completed";
+                                    });
+                            }
+                        });
                 });
             });
         });
-        </script>
-                
+    </script>
+
 
 
 
@@ -663,84 +663,84 @@
         }
     </script>
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    let completedContents = JSON.parse(localStorage.getItem("completedContents")) || [];
+        document.addEventListener("DOMContentLoaded", function () {
+            let completedContents = JSON.parse(localStorage.getItem("completedContents")) || [];
 
-    function updateProgress() {
-        let totalContents = document.querySelectorAll(".mark-complete").length + completedContents.length;
-        let progress = totalContents > 0 ? (completedContents.length / totalContents) * 100 : 0;
-        let progressBar = document.querySelector(".progress-bar");
+            function updateProgress() {
+                let totalContents = document.querySelectorAll(".mark-complete").length + completedContents.length;
+                let progress = totalContents > 0 ? (completedContents.length / totalContents) * 100 : 0;
+                let progressBar = document.querySelector(".progress-bar");
 
-        progressBar.style.width = progress + "%";
-        progressBar.innerText = Math.round(progress) + "% Completed";
-        progressBar.setAttribute("aria-valuenow", Math.round(progress));
-    }
+                progressBar.style.width = progress + "%";
+                progressBar.innerText = Math.round(progress) + "% Completed";
+                progressBar.setAttribute("aria-valuenow", Math.round(progress));
+            }
 
-    function markAsCompleted(button, contentId) {
-        if (!completedContents.includes(contentId)) {
-            completedContents.push(contentId);
-            localStorage.setItem("completedContents", JSON.stringify(completedContents));
-        }
-        button.outerHTML = '<span class="badge badge-success">Completed</span>';
-        updateProgress();
-    }
+            function markAsCompleted(button, contentId) {
+                if (!completedContents.includes(contentId)) {
+                    completedContents.push(contentId);
+                    localStorage.setItem("completedContents", JSON.stringify(completedContents));
+                }
+                button.outerHTML = '<span class="badge badge-success">Completed</span>';
+                updateProgress();
+            }
 
-    document.querySelectorAll(".mark-complete").forEach(button => {
-        let contentId = button.getAttribute("data-content-id");
+            document.querySelectorAll(".mark-complete").forEach(button => {
+                let contentId = button.getAttribute("data-content-id");
 
-        // Check if already completed
-        if (completedContents.includes(contentId)) {
-            button.outerHTML = '<span class="badge badge-success">Completed</span>';
-        } else {
-            button.addEventListener("click", function () {
-                markAsCompleted(button, contentId);
+                // Check if already completed
+                if (completedContents.includes(contentId)) {
+                    button.outerHTML = '<span class="badge badge-success">Completed</span>';
+                } else {
+                    button.addEventListener("click", function () {
+                        markAsCompleted(button, contentId);
+                    });
+                }
             });
-        }
-    });
 
-    updateProgress();
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    let completedContents = JSON.parse(localStorage.getItem("completedContents")) || [];
+            updateProgress();
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let completedContents = JSON.parse(localStorage.getItem("completedContents")) || [];
 
-    function updateProgress() {
-        let totalContents = document.querySelectorAll(".mark-complete").length + completedContents.length;
-        let progress = totalContents > 0 ? (completedContents.length / totalContents) * 100 : 0;
-        let progressBar = document.querySelector(".progress-bar");
+            function updateProgress() {
+                let totalContents = document.querySelectorAll(".mark-complete").length + completedContents.length;
+                let progress = totalContents > 0 ? (completedContents.length / totalContents) * 100 : 0;
+                let progressBar = document.querySelector(".progress-bar");
 
-        progressBar.style.width = progress + "%";
-        progressBar.innerText = Math.round(progress) + "% Completed";
-        progressBar.setAttribute("aria-valuenow", Math.round(progress));
-    }
+                progressBar.style.width = progress + "%";
+                progressBar.innerText = Math.round(progress) + "% Completed";
+                progressBar.setAttribute("aria-valuenow", Math.round(progress));
+            }
 
-    function markAsCompleted(button, contentId) {
-        if (!completedContents.includes(contentId)) {
-            completedContents.push(contentId);
-            localStorage.setItem("completedContents", JSON.stringify(completedContents));
-        }
-        button.outerHTML = '<span class="badge badge-success">Completed</span>';
-        updateProgress();
-    }
+            function markAsCompleted(button, contentId) {
+                if (!completedContents.includes(contentId)) {
+                    completedContents.push(contentId);
+                    localStorage.setItem("completedContents", JSON.stringify(completedContents));
+                }
+                button.outerHTML = '<span class="badge badge-success">Completed</span>';
+                updateProgress();
+            }
 
-    document.querySelectorAll(".mark-complete").forEach(button => {
-        let contentId = button.getAttribute("data-content-id");
+            document.querySelectorAll(".mark-complete").forEach(button => {
+                let contentId = button.getAttribute("data-content-id");
 
-        // Check if already completed
-        if (completedContents.includes(contentId)) {
-            button.outerHTML = '<span class="badge badge-success">Completed</span>';
-        } else {
-            button.addEventListener("click", function () {
-                markAsCompleted(button, contentId);
+                // Check if already completed
+                if (completedContents.includes(contentId)) {
+                    button.outerHTML = '<span class="badge badge-success">Completed</span>';
+                } else {
+                    button.addEventListener("click", function () {
+                        markAsCompleted(button, contentId);
+                    });
+                }
             });
-        }
-    });
 
-    updateProgress();
-});
+            updateProgress();
+        });
 
-</script>
+    </script>
 
 </body>
 

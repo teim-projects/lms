@@ -5,9 +5,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
+  <title>Profit Max Share Market Academy </title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
-  
+
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,25 +18,17 @@
     }
 
     .teim-navbar-wrapper {
-      padding: 18px 20px;
+      /* padding: 18px 20px; */
       background-color: #ffffff;
       border-bottom: 2px solid #e0e0e0;
       position: relative;
       z-index: 10;
     }
 
-    .teim-title {
-      font-size: 22px;
-      font-weight: 700;
-      background: linear-gradient(45deg, #0d6efd, #6610f2, #20c997);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
 
     .teim-navbar-brand img {
       transition: transform 0.3s ease, filter 0.3s ease;
-      height: 50px;
+      height: 70px;
     }
 
     .teim-navbar-brand img:hover {
@@ -43,61 +36,35 @@
       filter: brightness(1.2);
     }
 
-    /* Center Logo Styling */
-    .teim-logo-center {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+
+    .teim-navbar-wrapper {
+      position: fixed;
+      top: 0%;
+      width: 100%;
+      z-index: 100%;
+
     }
 
- @media (max-width: 767.98px) {
-  .teim-logo-center {
-    position: static;
-    transform: none;
-    margin-left: 0;  /* Align to left */
-    margin-right: auto;
-    display: block;
-  }
-
-  .teim-container {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .teim-title {
-    display: none; /* Hide title on mobile */
-  }
-}
-.teim-navbar-wrapper{
-    position: fixed;
-    top:0%;
-    width: 100%;
-    z-index: 100%;
- 
-}
-
+    .container-fluid.teim-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   </style>
 </head>
 
 <body>
 
   <nav class="navbar teim-navbar-wrapper shadow-sm">
-    <div class="container-fluid d-flex justify-content-between align-items-center position-relative teim-container">
+    <div class="container-fluid  teim-container">
 
-      <!-- Left: TEIM LMS Text -->
-      <div class="teim-title">
-        T E I M L M S
-      </div>
 
       <!-- Center: ProfitMax Logo -->
       <a class="teim-navbar-brand teim-logo-center" href="https://profitmaxacademy.com/">
         <img src="{% static 'images/pmxlogo_c.png' %}" alt="ProfitMax Logo">
       </a>
 
-      <!-- Right: Chrono Logo -->
-      <a class="teim-navbar-brand" href="http://www.chronoanalytics.in/">
-        <img src="{% static 'images/logoweb.png' %}" alt="Chrono Logo">
-      </a>
+
 
     </div>
   </nav>

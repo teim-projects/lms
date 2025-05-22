@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Profit Max Share Market Academy   </title>
+<link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
@@ -141,6 +142,17 @@
 .frecardd:hover{
     box-shadow: 0px 0px 10px #000000;
 }
+ .Our-Mission {
+
+            text-align: center;
+            text-decoration: none;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
     </style>
 
 </head>
@@ -150,9 +162,9 @@
     {% include 'Admin_Base.html' %}
     <div class="main">
         <div class="container my-4">
-            <div class="text-center mb-4">
-                <h1>Available Courses</h1>
-                <p>Welcome to Your Profit Journey! with Profitmax Share Market Academy.</p>
+            <div class="text-center mb-5">
+                <!-- <h1>Available Courses</h1> -->
+                <h4>Welcome to Your Profit Journey! with <br><span class="Our-Mission">Profitmax Share Market Academy.</span> </h4>
             </div>
 
             {% if courses %}
@@ -171,7 +183,7 @@
                             <h5 class="card-title  fw-semibold" style="color:#0F40BF">{{ course.title }}</h5>
 
                             <p class="card-text clamp-text">{{ course.description }}</p>
-                            <h5 class="chapter-heading mt-3 text-center">Chapters</h5>
+                            <h5 class="chapter-heading mt-3 text-center"> Lesson</h5>
                             <ul class="list-unstyled">
                                 {% for chapter in course.chapters.all %}
                                 <li class="mb-1">

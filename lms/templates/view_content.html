@@ -12,7 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <title>Profit Max Share Market Academy </title>
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
     <style>
         body {
@@ -26,24 +27,23 @@
             height: 100vh;
         }
 
-        .moving-email 
-        {
+        .moving-email {
             position: absolute;
             top: 16px;
             left: 0;
             color: white;
             font-size: 16px;
             font-weight: bold;
-            animation: moveEmail 23s linear infinite ;
+            animation: moveEmail 23s linear infinite;
             /* Animation to move the email */
             z-index: 9999;
-          background-color: rgb(11, 3, 3);
-          padding: 7px;
-          border-radius: 15px;
-          opacity: 0.4;
+            background-color: rgb(11, 3, 3);
+            padding: 7px;
+            border-radius: 15px;
+            opacity: 0.4;
 
         }
-        
+
 
         @keyframes moveEmail {
             0% {
@@ -54,28 +54,29 @@
             25% {
                 top: 80%;
                 left: 68%;
-                
+
             }
-          
+
 
             50% {
-               
+
                 top: 10%;
                 left: 68%;
-               
+
             }
-          
+
             75% {
                 top: 90%;
                 left: 2%;
-                
-               
+
+
             }
+
             100% {
-                top:3%;
+                top: 3%;
                 left: 2%;
-                
-               
+
+
             }
         }
 
@@ -98,24 +99,24 @@
             color: rgb(0, 0, 0);
         }
 
-       
- 
- 
- 
-    
+
+
+
+
+
         .content {
             margin-left: 0;
             transition: margin-left 0.3s ease-in-out;
         }
- 
- 
- 
-.container{
-    padding-bottom: 10px;
-}
 
- 
- 
+
+
+        .container {
+            padding-bottom: 10px;
+        }
+
+
+
         .content-container {
             text-align: center;
             padding: 20px;
@@ -125,9 +126,9 @@
             margin: 20px auto;
             max-width: 800px;
         }
-    
-   
-    
+
+
+
         .pdf-link {
             display: inline-block;
             margin-top: 10px;
@@ -139,30 +140,29 @@
             font-weight: bold;
             transition: background 0.3s ease;
         }
-    
+
         .pdf-link:hover {
             background: #0056b3;
         }
-    
+
         .unsupported {
             color: red;
             font-weight: bold;
         }
-        
-    /* Style for the moving email watermark */
-    .moving-email {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        z-index: 9999;
-        transition: top 0.3s ease;
-    }
 
+        /* Style for the moving email watermark */
+        .moving-email {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 9999;
+            transition: top 0.3s ease;
+        }
     </style>
 
     <title>Course Content</title>
@@ -170,86 +170,88 @@
 
 
 
- 
+
 </head>
 
-<body >
-    
-       {% include 'Admin_Base.html' %}
+<body>
 
- <div class="main" style="min-height: 100vh;">
-       <div class="container my-4"  >
-        <div class="row" style="margin-top: 100px;">
-            <div class="col-md-12 couresname col-12">
-                <h2 class="text-center">{{ course.course_title }}</h2>
+    {% include 'Admin_Base.html' %}
+
+    <div class="main" style="min-height: 100vh;">
+        <div class="container my-4">
+            <div class="row" style="margin-top: 100px;">
+                <div class="col-md-12 couresname col-12">
+                    <h2 class="text-center">{{ course.course_title }}</h2>
+                </div>
             </div>
-        </div>
 
-        {% if contents %}
-        <ul class="list-group">
-            {% for content in contents %}
-            <div class="content-block">
-                <h3>{{ content.title }}</h3>
-                <p>{{ content.subtitle }}</p>
-        
-                <div class="content-container">
-                    {% if content.resource_file %}
+            {% if contents %}
+            <ul class="list-group">
+                {% for content in contents %}
+                <div class="content-block">
+                    <h3>{{ content.title }}</h3>
+                    <p>{{ content.subtitle }}</p>
+
+                    <div class="content-container">
+                        {% if content.resource_file %}
                         {% with file_ext=content.resource_file.name|slice:"-4:"|lower %}
-                            {% if file_ext in ".mp4" or file_ext in ".mov" or file_ext in ".avi" %}
-                                <h3>📹 Video Content</h3>
-                                
-                                <div style="position: relative;">
-                                    <div class="moving-email" id="user-email" data-email="{{ customuser.email }}">{{ request.user.email }}</div>
+                        {% if file_ext in ".mp4" or file_ext in ".mov" or file_ext in ".avi" %}
+                        <h3>📹 Video Content</h3>
 
-                                    <video id="videoElement" controls playsinline controlsList="nofullscreen">
-                                        <source src="{{ content.resource_file.url }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-                            {% elif file_ext in ".pdf" %}
-                                <h3>📄 PDF Document</h3>
-                                <embed src="{{ content.resource_file.url }}" type="application/pdf" />
-                                <br>
-                                <a href="{{ content.resource_file.url }}" class="pdf-link" target="_blank">📂 Open PDF in a New Tab</a>
-                            {% elif file_ext in ".jpg" or file_ext in ".png" or file_ext in ".jpeg" %}
-                                <h3>🖼️ Image Content</h3>
-                                <img src="{{ content.resource_file.url }}" alt="Course Image">
-                            {% else %}
-                                <p class="unsupported">⚠️ Unsupported file format.</p>
-                            {% endif %}
+                        <div style="position: relative;">
+                            <div class="moving-email" id="user-email" data-email="{{ customuser.email }}">{{
+                                request.user.email }}</div>
+
+                            <video id="videoElement" controls playsinline controlsList="nofullscreen">
+                                <source src="{{ content.resource_file.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        {% elif file_ext in ".pdf" %}
+                        <h3>📄 PDF Document</h3>
+                        <embed src="{{ content.resource_file.url }}" type="application/pdf" />
+                        <br>
+                        <a href="{{ content.resource_file.url }}" class="pdf-link" target="_blank">📂 Open PDF in a New
+                            Tab</a>
+                        {% elif file_ext in ".jpg" or file_ext in ".png" or file_ext in ".jpeg" %}
+                        <h3>🖼️ Image Content</h3>
+                        <img src="{{ content.resource_file.url }}" alt="Course Image">
+                        {% else %}
+                        <p class="unsupported">⚠️ Unsupported file format.</p>
+                        {% endif %}
                         {% endwith %}
-                    {% else %}
+                        {% else %}
                         <p class="unsupported">⚠️ No content available.</p>
+                        {% endif %}
+                    </div>
+
+
+
+                    {% if content.completed %}
+                    <span class="badge badge-success">Completed</span>
+                    {% else %}
+                    <button class="mark-complete" data-course-id="{{ course.id }}" data-content-id="{{ content.id }}">
+                        Mark as Completed
+                    </button>
                     {% endif %}
                 </div>
+                {% endfor %}
 
-
-        
-                {% if content.completed %}
-                    <span class="badge badge-success">Completed</span>
-                {% else %}
-                <button class="mark-complete" data-course-id="{{ course.id }}" data-content-id="{{ content.id }}">
-                    Mark as Completed
-                </button>
-                {% endif %}
+            </ul>
+            {% else %}
+            <p class="text-center text-muted">No content available for this course.</p>
+            {% endif %}
+            <div class="progress mt-3">
+                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                    aria-valuemax="100">
+                    0% Completed
+                </div>
             </div>
-        {% endfor %}
 
-        </ul>
-        {% else %}
-        <p class="text-center text-muted">No content available for this course.</p>
-        {% endif %}
-        <div class="progress mt-3">
-            <div class="progress-bar" role="progressbar" style="width: 0%;" 
-                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                0% Completed
-            </div>
         </div>
-        
+
     </div>
 
- </div>
- 
     <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
 
 
@@ -257,85 +259,85 @@
         document.addEventListener("DOMContentLoaded", function () {
             let video = document.getElementById("videoElement");
             let emailOverlay = document.querySelector(".moving-email");
-    
+
             if (!video || !emailOverlay) {
                 console.warn("Video element or email overlay not found!");
                 return;
             }
             ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange", "MSFullscreenChange"]
-        .forEach(event => {
-            document.addEventListener(event, preventFullscreen);
-        });
-    
+                .forEach(event => {
+                    document.addEventListener(event, preventFullscreen);
+                });
+
             // Disable fullscreen option by removing keyboard shortcuts
             video.addEventListener("webkitfullscreenchange", preventFullscreen);
             video.addEventListener("mozfullscreenchange", preventFullscreen);
             video.addEventListener("fullscreenchange", preventFullscreen);
             video.addEventListener("MSFullscreenChange", preventFullscreen);
-    
+
             function preventFullscreen(event) {
                 event.preventDefault(); // Prevent default fullscreen behavior
                 document.exitFullscreen(); // Exit fullscreen immediately
             }
         });
     </script>
-    
-    
-    
+
+
+
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".mark-complete").forEach(button => {
-        button.addEventListener("click", function () {
-            let courseId = this.getAttribute("data-course-id");
-            let contentId = this.getAttribute("data-content-id");
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".mark-complete").forEach(button => {
+                button.addEventListener("click", function () {
+                    let courseId = this.getAttribute("data-course-id");
+                    let contentId = this.getAttribute("data-content-id");
 
-            fetch(`/course/${courseId}/view_content/${contentId}/complete/`, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.completed) {
-                    // Immediately update button to show "Completed"
-                    this.textContent = "Completed";
-                    this.style.backgroundColor = "green";
-                    this.style.color = "white";
-                    this.disabled = true;  // Make button permanently disabled
+                    fetch(`/course/${courseId}/view_content/${contentId}/complete/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.completed) {
+                                // Immediately update button to show "Completed"
+                                this.textContent = "Completed";
+                                this.style.backgroundColor = "green";
+                                this.style.color = "white";
+                                this.disabled = true;  // Make button permanently disabled
 
-                    // Store the completed content ID in localStorage to persist across refresh
-                    let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
-                    if (!completedContent.includes(contentId)) {
-                        completedContent.push(contentId);
-                        localStorage.setItem("completedContent", JSON.stringify(completedContent));
-                    }
+                                // Store the completed content ID in localStorage to persist across refresh
+                                let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
+                                if (!completedContent.includes(contentId)) {
+                                    completedContent.push(contentId);
+                                    localStorage.setItem("completedContent", JSON.stringify(completedContent));
+                                }
 
-                    // Show a popup confirmation
-                    showCompletionPopup();
+                                // Show a popup confirmation
+                                showCompletionPopup();
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                });
+            });
+
+            // Check localStorage for completed content and disable the button if needed
+            let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
+            document.querySelectorAll(".mark-complete").forEach(button => {
+                let contentId = button.getAttribute("data-content-id");
+                if (completedContent.includes(contentId)) {
+                    button.textContent = "Completed";
+                    button.style.backgroundColor = "green";
+                    button.style.color = "white";
+                    button.disabled = true;
                 }
-            })
-            .catch(error => console.error("Error:", error));
-        });
-    });
+            });
 
-    // Check localStorage for completed content and disable the button if needed
-    let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
-    document.querySelectorAll(".mark-complete").forEach(button => {
-        let contentId = button.getAttribute("data-content-id");
-        if (completedContent.includes(contentId)) {
-            button.textContent = "Completed";
-            button.style.backgroundColor = "green";
-            button.style.color = "white";
-            button.disabled = true;
-        }
-    });
-
-    function showCompletionPopup() {
-        let popup = document.createElement("div");
-        popup.innerHTML = `
+            function showCompletionPopup() {
+                let popup = document.createElement("div");
+                popup.innerHTML = `
             <div style="
                 position: fixed;
                 top: 50%;
@@ -353,19 +355,19 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         `;
 
-        document.body.appendChild(popup);
+                document.body.appendChild(popup);
 
-        setTimeout(() => {
-            popup.remove();  // Remove popup after 2 seconds
-        }, 2000);
-    }
-});
+                setTimeout(() => {
+                    popup.remove();  // Remove popup after 2 seconds
+                }, 2000);
+            }
+        });
 
-</script>
+    </script>
 
-        
-      {% include 'footer.html' %}
- 
+
+    {% include 'footer.html' %}
+
 
 </body>
 

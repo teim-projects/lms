@@ -1,10 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Course Content</title>
+    <title>Profit Max Share Market Academy </title>
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
@@ -14,7 +16,6 @@
 </head>
 
 <style>
-
     body {
         font-family: Verdana, sans-serif;
         margin: 0;
@@ -24,22 +25,25 @@
         background-position: center;
         background-repeat: no-repeat;
         height: 100vh;
-        
+
     }
-/*Form css*/
-    fieldset{
-        background: rgba(255, 255, 255, 1);      
+
+    /*Form css*/
+    fieldset {
+        background: rgba(255, 255, 255, 1);
         border-radius: 10px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         font-weight: bold;
     }
+
     input:focus {
         outline: none;
-       
-        box-shadow: 0 0 5px linear-gradient( #10014b, #01235d);
+
+        box-shadow: 0 0 5px linear-gradient(#10014b, #01235d);
         background: #fff;
         font-size: 1rem;
     }
+
     .allbutton {
         background: linear-gradient(to right, #6a11cb, #2575fc);
         color: #fff;
@@ -48,7 +52,7 @@
         border-radius: 25px;
         cursor: pointer;
         transition: all 0.3s ease;
-       
+
         width: 100%;
     }
 
@@ -57,104 +61,111 @@
         transform: scale(1.02);
         color: #f7f7f7;
     }
-    .remove-subtitle,.add-subtitle-btn,.submit-btn{
+
+    .remove-subtitle,
+    .add-subtitle-btn,
+    .submit-btn {
         border-radius: 15px;
         border: none;
         font-size: 1rem;
         color: #f7f7f7;
     }
-    .ucc{
+
+    .ucc {
         text-align: center;
     }
- 
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
 
- 
- 
-.container{
-    padding-bottom: 10px;
-}
+    .content {
+        margin-left: 0;
+        transition: margin-left 0.3s ease-in-out;
+    }
 
-/*Footer Css End*/
+
+
+    .container {
+        padding-bottom: 10px;
+    }
+
+    /*Footer Css End*/
 </style>
+
 <body>
 
- 
 
-       {% include 'Admin_Base.html' %}
 
- 
-<div class="main" style="min-height: 100vh;">
-    <div class="container-fluid my-4 " >
-    <!-- <div class="row "  >
+    {% include 'Admin_Base.html' %}
+
+
+    <div class="main" style="min-height: 100vh;">
+        <div class="container-fluid my-4 ">
+            <!-- <div class="row "  >
         <div class="col-md-12 col-12 ucc mt-4" style="ext-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
 -webkit-background-clip: text; 
 -webkit-text-fill-color: transparent;"><h3>Upload Course Content</h3></div>
     </div> -->
-<div class="row mt-5" style="margin-top: 110px !important;">
-        <div class="col-md-3"></div>
-<div class="col-md-6 col-12">
-    <fieldset >
-    <form method="POST" enctype="multipart/form-data" class=" p-5">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="title">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" required>
-        </div>
+            <div class="row mt-5" style="margin-top: 110px !important;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-12">
+                    <fieldset>
+                        <form method="POST" enctype="multipart/form-data" class=" p-5">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
 
-        <div id="subtitle-container">
-            <div class="subtitle-block">
-                <div class="form-group">
-                    <label for="subtitle">Subtitle:</label>
-                    <input type="text" class="form-control" name="subtitle" required>
+                            <div id="subtitle-container">
+                                <div class="subtitle-block">
+                                    <div class="form-group">
+                                        <label for="subtitle">Subtitle:</label>
+                                        <input type="text" class="form-control" name="subtitle" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="resource_type">Resource Type:</label>
+                                        <select class="form-control" name="resource_type" required>
+                                            <option value="pdf">PDF</option>
+                                            <option value="image">Image</option>
+                                            <option value="video">Video</option>
+                                            <!-- <option value="word">Word Document</option> -->
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="resource_file">Upload File:</label>
+                                        <input type="file" class="form-control p-1" name="resource_file" required>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-md-12 "> <button type="button"
+                                                class="btn  remove-subtitle allbutton">Delete Subtitle</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6 col-12 mt-2">
+                                    <button type="button" class="btn btn-primary add-subtitle-btn allbutton"
+                                        id="add-subtitle">Add Subtitle</button>
+                                </div>
+                                <div class="col-md-6 col-12 mt-2 ">
+                                    <button type="submit" class="btn btn-success submit-btn allbutton">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </fieldset>
                 </div>
+                <div class="col-md-3 mt-2 "></div>
 
-                <div class="form-group">
-                    <label for="resource_type">Resource Type:</label>
-                    <select class="form-control" name="resource_type" required>
-                        <option value="pdf">PDF</option>
-                        <option value="image">Image</option>
-                        <option value="video">Video</option>
-                        <!-- <option value="word">Word Document</option> -->
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="resource_file">Upload File:</label>
-                    <input type="file" class="form-control p-1" name="resource_file" required>
-                </div>
-<div class="row">
-
-               <div class="col-md-12 "> <button type="button" class="btn  remove-subtitle allbutton">Delete Subtitle</button></div>
             </div>
         </div>
-</div>
-<div class="row mt-3">
-<div class="col-md-6 col-12 mt-2">     
-       <button type="button" class="btn btn-primary add-subtitle-btn allbutton" id="add-subtitle" >Add Subtitle</button>
-</div>       
-<div class="col-md-6 col-12 mt-2 ">      
-      <button type="submit" class="btn btn-success submit-btn allbutton">Submit</button>
-</div>
-        </div>
-    </form>
-</fieldset>
+
     </div>
-    <div class="col-md-3 mt-2 " ></div>
 
-</div>
-</div>
 
-</div>
- 
- 
-<script>
-    $(document).ready(function () {
-        $('#add-subtitle').click(function () {
-            const subtitleBlock = `
+    <script>
+        $(document).ready(function () {
+            $('#add-subtitle').click(function () {
+                const subtitleBlock = `
                 <div class="subtitle-block">
                     <div class="form-group">
                         <label for="subtitle">Subtitle:</label>
@@ -180,15 +191,16 @@
         </div>       
         </div>
             `;
-            $('#subtitle-container').append(subtitleBlock);
-        });
+                $('#subtitle-container').append(subtitleBlock);
+            });
 
-        $(document).on('click', '.remove-subtitle', function () {
-            $(this).closest('.subtitle-block').remove();
+            $(document).on('click', '.remove-subtitle', function () {
+                $(this).closest('.subtitle-block').remove();
+            });
         });
-    });
-</script>
+    </script>
     {% include 'footer.html' %}
 
 </body>
+
 </html>

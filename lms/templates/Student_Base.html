@@ -5,245 +5,248 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
+  <title>Profit Max Share Market Academy </title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
   <!-- Bootstrap & Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<style>
-  body {
-    font-family: Verdana, sans-serif;
-    background-color: #fffffff6;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Navbar */
-  .navbar {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 500;
-    background-color: #f8f9fa;
-    padding: 15px !important;
-  }
-
-  .navbar-logo {
-    height: 60px;
-  }
-
-  @media (max-width: 767.98px) {
-    .navbar-logo {
-      position: static !important;
-      margin: 0 !important;
-      transform: none !important;
+  <style>
+    body {
+      font-family: Verdana, sans-serif;
+      background-color: #fffffff6;
+      margin: 0;
+      padding: 0;
     }
-  }
 
-  @media (min-width: 768px) {
+    /* Navbar */
+    .navbar {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 500;
+      background-color: #f8f9fa;
+      padding: 15px !important;
+    }
+
     .navbar-logo {
+      height: 60px;
+    }
+
+    @media (max-width: 767.98px) {
+      .navbar-logo {
+        position: static !important;
+        margin: 0 !important;
+        transform: none !important;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .navbar-logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -270px;
+      width: 270px;
+      height: 100vh;
+      background-color: #343a40;
+      color: #ffffff;
+      transition: all 0.3s ease-in-out;
+      z-index: 999;
+      padding-top: 70px;
+      overflow-y: auto;
+    }
+
+    .sidebar.show {
+      left: 0;
+    }
+
+    .sidebar .nav-link {
+      color: #ffffff;
+      font-size: 15px;
+    }
+
+    .sidebar .nav-link:hover {
+      color: #fff;
+      box-shadow: 0px 0px 10px rgb(255, 255, 255);
+      border-radius: 5px;
+    }
+
+    .sidebar .dropdown-toggle::after {
+      float: right;
+      margin-top: 6px;
+    }
+
+    .toggle-btn {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .close-btn {
       position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 20px;
+      right: 20px;
+      font-size: 26px;
+      cursor: pointer;
     }
-  }
 
-  /* Sidebar */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -270px;
-    width: 270px;
-    height: 100vh;
-    background-color: #343a40;
-    color: #ffffff;
-    transition: all 0.3s ease-in-out;
-    z-index: 999;
-    padding-top: 70px;
-    overflow-y: auto;
-  }
+    .nav-item .nav-link.pl-4 {
+      padding-left: 2.5rem !important;
+    }
 
-  .sidebar.show {
-    left: 0;
-  }
+    /* Main Content */
+    .main-content {
+      padding-top: 100px;
+      /* Adjust based on navbar height */
+    }
 
-  .sidebar .nav-link {
-    color: #ffffff;
-    font-size: 15px;
-  }
-
-  .sidebar .nav-link:hover {
-    color: #fff;
- box-shadow: 0px 0px 10px rgb(255, 255, 255);    
- border-radius: 5px;
-  }
-
-  .sidebar .dropdown-toggle::after {
-    float: right;
-    margin-top: 6px;
-  }
-
-  .toggle-btn {
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 26px;
-    cursor: pointer;
-  }
-
-  .nav-item .nav-link.pl-4 {
-    padding-left: 2.5rem !important;
-  }
-
-  /* Main Content */
-  .main-content {
-    padding-top: 100px; /* Adjust based on navbar height */
-  }
-
-  /* Sidebar 2 (Right) */
-  .sidebar2 {
-    position: fixed;
-    top: 0;
-    right: -350px;
-    width: 300px;
-    height: 100vh;
-    background-color: #343a40;
-    z-index: 1050;
-    transition: right 0.5s ease-in-out;
-    overflow-y: scroll;
-    border-radius: 5px;
-  }
-
-  .sidebar2.show {
-    right: 0;
-  }
-
-  .sidebar2:hover {
-    background-color: #23272b;
-  }
-
-  .sidebar2 .nav-link,
-  .sidebar2 .dropdown-item {
-    color: white !important;
-  }
-
-  .close-btn2 {
-    position: sticky;
-    top: 0;
-    right: 5px;
-    background-color: #23272b;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-    z-index: 1000;
-    text-align: right;
-    padding: 10px 20px;
-  }
-
-  .close-btn2:hover {
-    color: #ff4d4d;
-  }
-
-  .toggle-btn2 {
-    position: fixed;
-    top: 1px;
-    left: 10px;
-    z-index: 1100;
-    cursor: pointer;
-    font-size: 1.5rem;
-  }
-
-  @media screen and (max-width: 480px) {
+    /* Sidebar 2 (Right) */
     .sidebar2 {
-      width: 250px;
+      position: fixed;
+      top: 0;
+      right: -350px;
+      width: 300px;
+      height: 100vh;
+      background-color: #343a40;
+      z-index: 1050;
+      transition: right 0.5s ease-in-out;
+      overflow-y: scroll;
+      border-radius: 5px;
     }
-  }
 
-  /* Notification */
-  .notification {
-    transition: all 0.3s ease-in-out;
-    border-radius: 8px;
-    border: 1px solid cyan;
-  }
+    .sidebar2.show {
+      right: 0;
+    }
 
-  .notification:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 4px 20px #ddd;
-    cursor: pointer;
-  }
+    .sidebar2:hover {
+      background-color: #23272b;
+    }
 
-  .notification.card {
-    margin: 10px;
-  }
+    .sidebar2 .nav-link,
+    .sidebar2 .dropdown-item {
+      color: white !important;
+    }
 
-  .notification-container {
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    height: 500px;
-    border: 1px solid #ddd;
-    max-width: 300px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    display: none;
-    overflow-y: auto;
-  }
+    .close-btn2 {
+      position: sticky;
+      top: 0;
+      right: 5px;
+      background-color: #23272b;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 1000;
+      text-align: right;
+      padding: 10px 20px;
+    }
 
-  .bell-icon {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    margin: 10px;
-    transition: 2s;
-  }
+    .close-btn2:hover {
+      color: #ff4d4d;
+    }
 
-  .nonoti {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    cursor: not-allowed;
-    text-decoration: none;
-    background: linear-gradient(to left, #2575fc, #ffffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+    .toggle-btn2 {
+      position: fixed;
+      top: 1px;
+      left: 10px;
+      z-index: 1100;
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
 
-  /* Button */
-  .Btn {
-    display: flex;
-    align-items: center;
-    background-color: #dc3545;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    margin-top: 30px;
-    border-radius: 30px;
-    transition: 0.3s;
-  }
+    @media screen and (max-width: 480px) {
+      .sidebar2 {
+        width: 250px;
+      }
+    }
 
-  .Btn:hover {
-    background-color: #c82333;
-  }
+    /* Notification */
+    .notification {
+      transition: all 0.3s ease-in-out;
+      border-radius: 8px;
+      border: 1px solid cyan;
+    }
 
-  .Btn .text {
-    margin-left: 10px;
-    font-weight: 500;
-  }
+    .notification:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 4px 20px #ddd;
+      cursor: pointer;
+    }
 
-  .Btn svg {
-    width: 20px;
-    fill: #fff;
-  }
-</style>
+    .notification.card {
+      margin: 10px;
+    }
+
+    .notification-container {
+      position: absolute;
+      top: 50px;
+      right: 20px;
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      height: 500px;
+      border: 1px solid #ddd;
+      max-width: 300px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      overflow-y: auto;
+    }
+
+    .bell-icon {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      margin: 10px;
+      transition: 2s;
+    }
+
+    .nonoti {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      cursor: not-allowed;
+      text-decoration: none;
+      background: linear-gradient(to left, #2575fc, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Button */
+    .Btn {
+      display: flex;
+      align-items: center;
+      background-color: #dc3545;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      margin-top: 30px;
+      border-radius: 30px;
+      transition: 0.3s;
+    }
+
+    .Btn:hover {
+      background-color: #c82333;
+    }
+
+    .Btn .text {
+      margin-left: 10px;
+      font-weight: 500;
+    }
+
+    .Btn svg {
+      width: 20px;
+      fill: #fff;
+    }
+  </style>
 
 
   <!-- Scripts -->
@@ -266,32 +269,32 @@
 
   <script>
     function toggleNotifications() {
-        var container = document.getElementById("notificationContainer");
-        var notificationCount = document.getElementById("notification-count");
+      var container = document.getElementById("notificationContainer");
+      var notificationCount = document.getElementById("notification-count");
 
-        container.classList.toggle('active');
+      container.classList.toggle('active');
 
-        if (container.style.display === "none" || container.style.display === "") {
-            container.style.display = "block"; // Show container
-            notificationCount.style.display = "none"; // Hide count when opened
-        } else {
-            container.style.display = "none"; // Hide container
-        }
+      if (container.style.display === "none" || container.style.display === "") {
+        container.style.display = "block"; // Show container
+        notificationCount.style.display = "none"; // Hide count when opened
+      } else {
+        container.style.display = "none"; // Hide container
+      }
     }
 
     function closeNotifications() {
-        document.getElementById("notificationContainer").style.display = "none";
+      document.getElementById("notificationContainer").style.display = "none";
     }
 
     // Function to update notification count
     function updateNotificationCount(count) {
-        const notificationCount = document.getElementById('notification-count');
-        if (count > 0) {
-            notificationCount.innerText = count;
-            notificationCount.style.display = 'inline-block'; // Show count if new notifications exist
-        } else {
-            notificationCount.style.display = 'none'; // Hide if no new notifications
-        }
+      const notificationCount = document.getElementById('notification-count');
+      if (count > 0) {
+        notificationCount.innerText = count;
+        notificationCount.style.display = 'inline-block'; // Show count if new notifications exist
+      } else {
+        notificationCount.style.display = 'none'; // Hide if no new notifications
+      }
     }
 
     // Example: Simulate receiving new notifications dynamically
@@ -300,10 +303,10 @@
 
     // Simulating new notifications every 5 seconds (for demo purposes)
     setInterval(() => {
-        newNotifications += 1; // Increase notification count
-        updateNotificationCount(newNotifications);
+      newNotifications += 1; // Increase notification count
+      updateNotificationCount(newNotifications);
     }, 5000);
-</script>
+  </script>
 </head>
 
 <body>
@@ -359,10 +362,10 @@
       <li class="nav-item">
         <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu1" role="button">Course Management</a>
         <div class="collapse" id="menu1">
-           <a class="nav-link pl-4" href="/free-course/">Free Course</a>
+          <a class="nav-link pl-4" href="/free-course/">Free Course</a>
         </div>
       </li>
- 
+
 
       <li class="nav-item">
         <a class="nav-link" href="/tickets/">Your Tickets</a>
@@ -370,14 +373,19 @@
 
       <li class="nav-item">
         <button class="Btn" onclick="location.href='/'">
-          <svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
+          <svg viewBox="0 0 512 512">
+            <path
+              d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+            </path>
+          </svg>
           <div class="text">Logout</div>
         </button>
       </li>
     </ul>
   </div>
 
-  
+
 
 </body>
+
 </html>
