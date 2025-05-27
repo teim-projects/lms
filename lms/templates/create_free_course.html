@@ -232,6 +232,51 @@
         .frecardd:hover {
             box-shadow: 0px 0px 10px #000000;
         }
+        .chapter-title {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+.chapter-title.expanded {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+}
+.read-more-btn {
+    border: none;
+    background: none;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+}
+.truncated-title {
+    display: inline-block;
+    max-width: 85%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.truncated-title.expanded {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+}
+
+.read-more-btn {
+    background: none;
+    border: none;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    color: #0F40BF;
+}
+
+
     </style>
 </head>
 
@@ -320,74 +365,133 @@
         </script>
         <!-- Course Card Content -->
         <div class="container my-4">
-            <div class="text-center mb-4">
-                <h2>Available Courses</h2>
-            </div>
-
-            {% if courses %}
-            <div class="row">
-                {% for course in courses %}
-                <div class="col-md-4 mb-4">
-                   <div class="card h-100 card-box">
-    {% if course.thumbnail %}
-        <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
-            style="width: 100%; height: 200px; object-fit: cover;">
-    {% else %}
-        <p>No thumbnail available</p>
-    {% endif %}
-
-    <div class="card-body">
-        <h5 class="card-title fw-semibold" style="color:#0F40BF">{{ course.title }}</h5>
-
-        <p class="card-text clamp-text">{{ course.description }}</p>
-
-        <h5 class="chapter-heading mt-3 text-center">Chapters</h5>
-        <ul class="list-unstyled" id="chapter-list-{{ course.id }}">
-            {% for chapter in course.chapters.all %}
-                <li class="mb-1 {% if forloop.counter > 3 %}d-none extra-chapter-{{ course.id }}{% endif %}">
-                    <a href="{{ chapter.youtube_link }}" target="_blank" class="chbtn">
-                        {{ chapter.title }}
-                    </a>
-                </li>
-            {% empty %}
-                <li class="text-muted text-center text-info">No chapters available</li>
-            {% endfor %}
-        </ul>
-
-        {% if course.chapters.count > 3 %}
-            <div class="text-center mt-2">
-                <button class="btn btn-outline-primary btn-sm explore-btn" data-course-id="{{ course.id }}">
-                    Explore More
-                </button>
-            </div>
-        {% endif %}
-
-        <!-- Course Buttons -->
-        <div class="buttonsv d-flex justify-content-center align-items-center gap-2 mt-3">
-            <form method="post" action="{% url 'delete_free_course' course.id %}"
-                onsubmit="return confirm('Are you sure you want to delete this course?');">
-                {% csrf_token %}
-                <button type="submit" class="delet-btn"><i class="fa-solid fa-trash"></i></button>
-            </form>
-
-            <a href="{% url 'update_free_course' course.id %}">
-                <button class="update-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-            </a>
-        </div>
+    <div class="text-center mb-4">
+        <h2>Available Courses</h2>
     </div>
+
+    {% if courses %}
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 card-box">
+                {% if course.thumbnail %}
+                <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
+                    style="width: 100%; height: 200px; object-fit: cover;">
+                {% else %}
+                <p>No thumbnail available</p>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title fw-semibold" style="color:#0F40BF">{{ course.title }}</h5>
+                    <p class="card-text clamp-text">{{ course.description }}</p>
+
+                    <h5 class="chapter-heading mt-3 text-center">Chapters</h5>
+                    <ul class="list-unstyled" id="chapter-list-{{ course.id }}">
+                        {% for chapter in course.chapters.all %}
+                        <li class="mb-1 {% if forloop.counter > 3 %}d-none extra-chapter extra-{{ course.id }}{% endif %}">
+                            <a href="{{ chapter.youtube_link }}" target="_blank" class="chbtn chapter-title"
+                                id="chapter-title-{{ chapter.id }}">
+                                {{ chapter.title }}
+                            </a>
+                            {% if chapter.title|length > 50 %}
+                            <button type="button" class="read-more-btn text-primary small ms-1"
+                                onclick="toggleChapterText({{ chapter.id }})">Read More</button>
+                            {% endif %}
+                        </li>
+                        {% empty %}
+                        <li class="text-muted text-center text-info">No chapters available</li>
+                        {% endfor %}
+                    </ul>
+                    
+
+                  {% if course.chapters.count > 3 %}
+
+                 <div class="text-center mt-2">
+                     <button class="btn btn-outline-primary btn-sm explore-btn" data-course-id="{{ course.id }}">
+                      Explore More
+                  </button>
+                </div>
+                 {% endif %}
+
+                    
+
+                    <!-- Course Buttons -->
+                    <div class="buttonsv d-flex justify-content-center align-items-center gap-2 mt-3">
+                        <form method="post" action="{% url 'delete_free_course' course.id %}"
+                            onsubmit="return confirm('Are you sure you want to delete this course?');">
+                            {% csrf_token %}
+                            <button type="submit" class="delet-btn"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+
+                        <a href="{% url 'update_free_course' course.id %}">
+                            <button class="update-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No courses available</p>
+    {% endif %}
 </div>
 
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <p>No courses available</p>
-            {% endif %}
-        </div>
 
 
 
     </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.explore-btn');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const courseId = this.dataset.courseId;
+            const extraChapters = document.querySelectorAll(`.extra-${courseId}`);
+            let anyHidden = false;
+
+            extraChapters.forEach(chap => {
+                if (chap.classList.contains('d-none')) {
+                    chap.classList.remove('d-none');
+                    anyHidden = true;
+                } else {
+                    chap.classList.add('d-none');
+                }
+            });
+
+            this.textContent = anyHidden ? 'Show Less' : 'Explore More';
+        });
+    });
+});
+</script>
+
+
+   <script>
+function toggleChapterText(chapterId) {
+    const titleEl = document.getElementById(`chapter-title-${chapterId}`);
+    const btn = titleEl.nextElementSibling;
+
+    titleEl.classList.toggle("expanded");
+    btn.textContent = titleEl.classList.contains("expanded") ? "Read Less" : "Read More";
+}
+
+function toggleExplore(courseId) {
+    const extraChapters = document.querySelectorAll(`.extra-${courseId}`);
+    const btn = document.querySelector(`button.explore-btn[onclick*="${courseId}"]`);
+
+    const isCurrentlyExpanded = !extraChapters[0].classList.contains("d-none");
+
+    extraChapters.forEach(chap => {
+        chap.classList.toggle("d-none", isCurrentlyExpanded);
+    });
+
+    btn.textContent = isCurrentlyExpanded ? "Explore More" : "Show Less";
+}
+</script>
+
+
+
     <script>
     $(document).ready(function () {
         $('.explore-btn').click(function () {
@@ -397,6 +501,21 @@
         });
     });
 </script>
+<script>
+function toggleChapterText(chapterId) {
+    const titleEl = document.getElementById(`chapter-title-${chapterId}`);
+    const btn = titleEl.nextElementSibling;
+
+    titleEl.classList.toggle("expanded");
+
+    if (titleEl.classList.contains("expanded")) {
+        btn.textContent = "Read Less";
+    } else {
+        btn.textContent = "Read More";
+    }
+}
+</script>
+
 
     {% include 'footer.html' %}
 </body>
