@@ -1124,5 +1124,41 @@ User = get_user_model()
 
 
 def user_list(request):
-    users = CustomUser.objects.all()  # Only superadmins see users
+    users = CustomUser.objects.order_by('email')# Only superadmins see users
     return render(request, 'admin_user_list.html', {'users': users})
+
+
+
+import openpyxl
+from django.http import HttpResponse
+from .models import CustomUser
+
+def export_users_to_excel(request):
+    # Create an in-memory workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Registered Users"
+
+    # Define header
+    headers = ['Sr. No.', 'Email', 'First Name', 'Last Name', 'Mobile', 'Verified']
+    ws.append(headers)
+
+    # Fetch users ordered by first name
+    users = CustomUser.objects.order_by('email')
+
+    # Populate data rows
+    for index, user in enumerate(users, start=1):
+        ws.append([
+            index,
+            user.email,
+            user.first_name or 'N/A',
+            user.last_name or 'N/A',
+            user.mobile or 'N/A',
+            'Yes' if user.is_verified else 'No'
+        ])
+
+    # Create HTTP response with Excel content
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=registered_users.xlsx'
+    wb.save(response)
+    return response

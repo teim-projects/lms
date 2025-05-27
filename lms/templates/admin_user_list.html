@@ -682,12 +682,17 @@
     <div class="main" style="min-height: 100vh; background: #f8f9fa;">
         <div class="container py-5" style="margin-top: 80px;">
             <h2 class="text-center mb-4 fw-bold text-primary">📋 Registered Users</h2>
-
+             <div class="text-end mb-3">
+    <a href="{% url 'export_users' %}" class="btn btn-success">
+        📥 Export to Excel
+    </a>
+</div>
             {% if users %}
             <div class="table-responsive rounded shadow">
                 <table class="table table-hover align-middle bg-white rounded">
                     <thead class="table-primary">
                         <tr>
+                            <th>Sr. No.</th>
                             <th>Email</th>
                             <th>First Name</th>
                             <th>Last Name</th>
@@ -698,6 +703,7 @@
                     <tbody>
                         {% for user in users %}
                         <tr>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.first_name|default:"N/A" }}</td>
                             <td>{{ user.last_name|default:"N/A" }}</td>
