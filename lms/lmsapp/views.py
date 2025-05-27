@@ -1123,9 +1123,31 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from .models import CustomUser
+
+from django.core.paginator import Paginator
+from django.db.models import Q
+from .models import CustomUser
+
 def user_list(request):
-    users = CustomUser.objects.order_by('email')# Only superadmins see users
-    return render(request, 'admin_user_list.html', {'users': users})
+    query = request.GET.get('q', '')
+    user_list = CustomUser.objects.order_by('email')
+
+    if query:
+        user_list = user_list.filter(
+            Q(email__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query)
+        )
+
+    paginator = Paginator(user_list, 10)  # Show 10 users per page
+    page_number = request.GET.get('page')
+    users = paginator.get_page(page_number)
+
+    return render(request, 'admin_user_list.html', {'users': users, 'query': query})
+
 
 
 
@@ -1162,3 +1184,7 @@ def export_users_to_excel(request):
     response['Content-Disposition'] = 'attachment; filename=registered_users.xlsx'
     wb.save(response)
     return response
+
+
+
+
