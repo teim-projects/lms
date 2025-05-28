@@ -511,7 +511,8 @@
 
     </script>
 
-    <nav class="navbar navbar-light bg-light d-flex justify-content-between align-items-center px-3">
+    <nav class="navbar navbar-light bg-light d-flex justify-content-between align-items-center px-3"
+        style="z-index: 500;">
         <!-- Left: Toggle Sidebar Button -->
         <div class="d-flex align-items-center">
             <i class="fa fa-bars text-black p-2" style="font-size: 24px; cursor: pointer;"
@@ -684,17 +685,19 @@
             <h2 class="text-center mb-4 fw-bold text-primary">📋 Registered Users</h2>
 
             <form method="get" class="mb-3">
-    <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="Search by email, first or last name" value="{{ query }}">
-        <button type="submit" class="btn btn-outline-primary">Search</button>
-    </div>
-</form>
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search by email, first or last name"
+                        value="{{ query }}">
+                    <button type="submit" class="btn btn-outline-primary">Search</button>
+                </div>
+            </form>
 
-             <div class="text-end mb-3">
-    <a href="{% url 'export_users' %}" class="btn btn-success">
-        📥 Export to Excel
-    </a>
-</div>
+            <div class="text-end mb-3">
+                <a href="{% url 'export_users' %}" class="btn btn-success">
+                    📥 Export to Excel
+                </a>
+            </div>
+            
             {% if users %}
             <div class="table-responsive rounded shadow">
                 <table class="table table-hover align-middle bg-white rounded">
@@ -726,39 +729,39 @@
                         </tr>
                         {% endfor %}
                     </tbody>
-                    
+
                 </table>
             </div>
             {% else %}
             <p class="text-center mt-5 text-muted">No users available.</p>
-            
+
             {% endif %}
         </div>
         {% if users.has_other_pages %}
-<div class="d-flex justify-content-center mt-4">
-    <nav>
-        <ul class="pagination">
-            {% if users.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ users.previous_page_number }}">«</a>
-            </li>
-            {% endif %}
+        <div class="d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination">
+                    {% if users.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ users.previous_page_number }}">«</a>
+                    </li>
+                    {% endif %}
 
-            {% for num in users.paginator.page_range %}
-            <li class="page-item {% if users.number == num %}active{% endif %}">
-                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-            </li>
-            {% endfor %}
+                    {% for num in users.paginator.page_range %}
+                    <li class="page-item {% if users.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
 
-            {% if users.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ users.next_page_number }}">»</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-</div>
-{% endif %}
+                    {% if users.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ users.next_page_number }}">»</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
 
     </div>
 
