@@ -99,7 +99,12 @@ def send_otp_email(email, otp_code):
     try:
         send_mail(
             'Account Verification',
-            f'Your OTP for signup is: {otp_code}',
+            f'Your OTP for signup is: {otp_code}\n\n'
+            f'Your OTP is: {otp_code} 🧾\n'
+            f'Use this pin to unlock the door to your stock market training journey! 🚪📈\n'
+            f'It’s valid for 10 minutes.\n'
+            f'Never share this code with anyone.\n\n'
+            f'Let the learning begin! 🚀',
             'noreply@myapp.com',
             [email]
         )
@@ -107,6 +112,32 @@ def send_otp_email(email, otp_code):
         raise ValidationError("Invalid email header found.")
     except Exception as e:
         raise ValidationError(f"Error sending email: {e}")
+
+
+from twilio.rest import Client
+import os
+
+def send_otp_sms(mobile, otp_code):
+    try:
+        account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+        auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+        client = Client(account_sid, auth_token)
+
+        message = client.messages.create(
+            body=(
+                f"Your OTP for signup is: {otp_code}\n\n"
+                f"Your OTP is: {otp_code} 🧾\n"
+                f"Use this pin to unlock the door to your stock market training journey! 🚪📈\n"
+                f"It’s valid for 10 minutes.\n"
+                f"Never share this code with anyone.\n\n"
+                f"Let the learning begin! 🚀"
+            ),
+            from_=os.getenv("TWILIO_PHONE_NUMBER"),
+            to=mobile
+        )
+    except Exception as e:
+        raise ValidationError(f"Error sending SMS: {e}")
+
     
 
 from twilio.rest import Client
@@ -181,6 +212,13 @@ def signup(request):
 from django.core.mail import send_mail, BadHeaderError
 from django.utils.timezone import now, timedelta
 
+from django.core.mail import send_mail, BadHeaderError
+from django.utils.timezone import now
+from datetime import timedelta
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import CustomUser, OTP
+
 def verify_otp(request):
     if request.method == 'POST':
         user_id = request.session.get('user_id')
@@ -196,13 +234,24 @@ def verify_otp(request):
             user.save()
             OTP.objects.filter(user=user).delete()
 
-            # ✅ Send welcome email to the user
+            # ✅ Send personalized welcome email to the user
             try:
+                welcome_message = (
+                    f"✅ Sign-Up Successful! Welcome Aboard, {user.first_name}! 🎉\n\n"
+                    f"Your journey to mastering the stock market starts NOW!\n"
+                    f"You’ve just unlocked powerful courses designed to turn knowledge into confidence and action. 📈🔥\n\n"
+                    f"Stay focused. Stay curious. Stay profitable.\n"
+                    f"Let’s dive in and make every trade count!\n\n"
+                    f"“The market rewards the prepared mind.” – Start strong, finish stronger! 💪\n\n"
+                    f"📞 Need Help? If you have any queries, feel free to contact us at 7722082020.\n"
+                    f"We're always happy to serve you! 😊"
+                )
+
                 send_mail(
-                    'Welcome to Our Institute!',
-                    f'Hi {user.first_name},\n\nWelcome to our institute! We are excited to have you with us.',
-                    'welcome@myapp.com',
-                    [user.email],
+                    subject='Welcome to ProfitMax Academy! 🚀',
+                    message=welcome_message,
+                    from_email='welcome@myapp.com',
+                    recipient_list=[user.email],
                 )
             except BadHeaderError:
                 messages.error(request, "Invalid header found while sending welcome email.")
@@ -244,6 +293,7 @@ def verify_otp(request):
                 return redirect('signup')
 
     return render(request, 'verify_otp.html')
+
 
 
 from django.contrib.auth import login as auth_login, logout as auth_logout
