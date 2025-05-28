@@ -36,6 +36,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
 
     # Adding unique related_name values
     groups = models.ManyToManyField(

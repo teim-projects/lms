@@ -1188,8 +1188,7 @@ def user_list(request):
     if query:
         user_list = user_list.filter(
             Q(email__icontains=query) |
-            Q(first_name__icontains=query) |
-            Q(last_name__icontains=query)
+            Q(mobile__icontains=query) 
         )
 
     paginator = Paginator(user_list, 10)  # Show 10 users per page

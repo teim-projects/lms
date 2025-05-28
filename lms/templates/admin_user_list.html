@@ -686,7 +686,7 @@
 
             <form method="get" class="mb-3">
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="Search by email, first or last name"
+                    <input type="text" name="q" class="form-control" placeholder="Search by email, mobile_number"
                         value="{{ query }}">
                     <button type="submit" class="btn btn-outline-primary">Search</button>
                 </div>
@@ -709,6 +709,7 @@
                             <th>Last Name</th>
                             <th>Mobile</th>
                             <th>Status</th>
+                            <th>Created at</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -719,12 +720,16 @@
                             <td>{{ user.first_name|default:"N/A" }}</td>
                             <td>{{ user.last_name|default:"N/A" }}</td>
                             <td>{{ user.mobile|default:"N/A" }}</td>
+
                             <td>
                                 {% if user.is_verified %}
                                 <span class="badge text-success">✔ Verified</span>
                                 {% else %}
                                 <span class="badge ">❌ Not Verified</span>
                                 {% endif %}
+                            </td>
+                            <td>
+                                {{ user.created_at|default:"N/A" }}
                             </td>
                         </tr>
                         {% endfor %}
