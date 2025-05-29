@@ -1011,8 +1011,9 @@ from .models import Notification
 def student_dashboard(request):
     # Fetch all notifications ordered by newest first
     notifications = Notification.objects.all().order_by('-created_at')
+    courses = FreeCourse.objects.prefetch_related("chapters").all()
 
-    return render(request, 'student_dashboard.html', {'notifications': notifications})
+    return render(request, 'student_dashboard.html', {'notifications': notifications,"courses": courses})
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
