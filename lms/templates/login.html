@@ -129,18 +129,19 @@
                         <label>Password:</label>
                         <input type="password" name="password" required class="form-control">
                     </div>
+                    {% if messages %}
+                    <div class="error">
+                        {% for message in messages %}
+                        <p class="text-danger text-center">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                     <button type="submit" class="btn btn-primary btn-block paid-btn">Login</button>
                     <div class="text-center mt-3">
                         <a href="/signup/">Signup</a> | <a href="/subadmin-login/">SubAdmin Login</a> | <a
                             href="/password-reset/">Forgot Password?</a>
                     </div>
-                    {% if messages %}
-                    <div class="error">
-                        {% for message in messages %}
-                        <p>{{ message }}</p>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
+                    
                 </form>
             </div>
         </div>
