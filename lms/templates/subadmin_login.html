@@ -28,6 +28,8 @@
       border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       margin: 0 auto;
+      width: 100%;
+      max-width: 400px;
     }
 
     label {
@@ -74,20 +76,37 @@
       transform: scale(1.02);
     }
 
-    .paid {
+    .btnn {
       background: linear-gradient(to right, #d4382a, #ed071a);
-    }
-
-    .paid:hover {
-      box-shadow: 0 10px 10px rgba(165, 100, 72, 0.5);
-    }
-
-    .heading h1 {
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1.5em;
+      width: 100%;
+      transition: all 0.3s ease;
+      display: block;
       text-align: center;
-      margin: 40px 0;
-      background: linear-gradient(to right, #2575fc, #6a11cb);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    }
+
+    .btnn:hover {
+      background: linear-gradient(to right, #c10c85, #ff1c0b);
+      text-decoration: underline;
+      color: #fff;
+    }
+
+    .main {
+      background-image: url("{% static 'images/LmsBackgroundImg.jpg' %}");
+      background-attachment: fixed;
+      background-size: cover;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     @media (max-width: 767.98px) {
@@ -95,8 +114,11 @@
         padding: 1.5em;
       }
 
-      .heading h1 {
+      h2 {
         font-size: 1.5rem;
+      }
+      .mbf{
+        margin-top: 70px !important;
       }
     }
   </style>
@@ -105,30 +127,27 @@
 <body>
   {% include 'base_without_sidebar.html' %}
 
-  <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
-    <div class="heading w-100">
-      <h1>SubAdmin Login</h1>
-    </div>
+  <div class="main">
+    <div class="container min-vh-100 d-flex flex-column justify-content-center mbf align-items-center mt-4 mb-5">
+      <div class="form-container mt-5">
+        <form method="post">
+          {% csrf_token %}
+          <h2 class="text-center mb-4">SubAdmin Login</h2>
 
-    <div class="col-12 col-sm-10 col-md-6 col-lg-4 form-container">
-      <form method="post">
-        {% csrf_token %}
-        <label>Email:</label>
-        <input type="email" name="email" required />
+          <label>Email:</label>
+          <input type="email" name="email" required />
 
-        <label>Password:</label>
-        <input type="password" name="password" required />
+          <label>Password:</label>
+          <input type="password" name="password" required />
 
-        <button type="submit">Login</button>
+          <button type="submit">Login</button>
+          <a href="/" class="btnn">Back to Login</a>
 
-        <a href="/">
-          <button type="button" class="paid">Back to Login</button>
-        </a>
-      </form>
-
-      {% for message in messages %}
-      <p class="text-danger mt-3">{{ message }}</p>
-      {% endfor %}
+          {% for message in messages %}
+            <p class="text-danger mt-3 text-center">{{ message }}</p>
+          {% endfor %}
+        </form>
+      </div>
     </div>
   </div>
 

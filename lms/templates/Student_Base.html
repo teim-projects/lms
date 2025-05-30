@@ -329,9 +329,13 @@
 
   <!-- Notifications Sidebar -->
   <div class="sidebar2 bg-dark p-1" id="sidebar2">
-    <div class="close-btn2" onclick="toggleSidebar2()">&times;
+    <div >
+      <span class="close-btn2" onclick="toggleSidebar2()">
+        &times;
+      </span>
+      </div>
       <h3 class="text-white nonoti text-center">Notifications</h3>
-    </div>
+    
 
     {% for notification in notifications %}
     <div class="notification card mt-3">

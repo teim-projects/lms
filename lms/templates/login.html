@@ -17,11 +17,10 @@
             /* width: 100%; */
             background: linear-gradient(to right, #6a11cb, #2575fc);
             color: #fff;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border: none;
             border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
+             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1.5em;
@@ -108,6 +107,17 @@
             display: flex !important;
             justify-content: space-between !important;
         }
+        .main {
+            background-image: url("{% static 'images/LmsBackgroundImg.jpg' %}");
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
     </style>
 </head>
 
@@ -117,8 +127,8 @@
     <div class="main" style="min-height: 100vh;">
 
         <div class="container d-flex justify-content-center align-items-center mt-5" style="min-height: 80vh;">
-            <div class="col-md-6 bg-white p-4 shadow rounded mt-5">
-                <form method="post" class=" p-2">
+            <div class="col-md-6 bg-white p-4 shadow rounded  mb-5" style="margin-top:90px;">
+                <form method="post" class=" p-2 ">
                     {% csrf_token %}
                     <h2 class="text-center mb-4">Login</h2>
                     <div class="form-group">
@@ -136,7 +146,13 @@
                         {% endfor %}
                     </div>
                     {% endif %}
-                    <button type="submit" class="btn btn-primary btn-block paid-btn">Login</button>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">  
+                                              <button type="submit" class="btn btn-primary btn-block paid-btn" style="font-size: 20px;">Login</button>
+                                </div>
+                        <div class="col-md-2"></div>
+                    </div>
                     <div class="text-center mt-3">
                         <a href="/signup/">Signup</a> | <a href="/subadmin-login/">SubAdmin Login</a> | <a
                             href="/password-reset/">Forgot Password?</a>
