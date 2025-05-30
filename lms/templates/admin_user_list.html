@@ -272,9 +272,9 @@
 
                             <td>
                                 {% if user.is_verified %}
-                                <span class="badge text-success">✔ Verified</span>
+                                <span class=" text-success">✔ Verified</span>
                                 {% else %}
-                                <span class="badge ">❌ Not Verified</span>
+                                <span class=" text-danger ">❌ Not Verified</span>
                                 {% endif %}
                             </td>
                             <td>
@@ -292,29 +292,47 @@
             {% endif %}
         </div>
         {% if users.has_other_pages %}
-        <div class="d-flex justify-content-center mt-4">
-            <nav>
-                <ul class="pagination">
-                    {% if users.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ users.previous_page_number }}">«</a>
-                    </li>
-                    {% endif %}
+<div class="d-flex justify-content-center mt-4" style="overflow: auto;">
+    <nav>
+        <ul class="pagination">
+            {% if users.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ users.previous_page_number }}">«</a>
+            </li>
+            {% endif %}
 
-                    {% for num in users.paginator.page_range %}
-                    <li class="page-item {% if users.number == num %}active{% endif %}">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                    </li>
-                    {% endfor %}
+            <!-- Show pages 1,2,3 -->
+            {% for num in users.paginator.page_range %}
+                {% if num <= 3 %}
+                <li class="page-item {% if users.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
 
-                    {% if users.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ users.next_page_number }}">»</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
+            <!-- Show ellipsis if there are more pages beyond 3 -->
+            {% if users.paginator.num_pages > 4 %}
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+            {% endif %}
+
+            <!-- Show last page number -->
+            {% if users.paginator.num_pages > 3 %}
+            <li class="page-item {% if users.number == users.paginator.num_pages %}active{% endif %}">
+                <a class="page-link" href="?page={{ users.paginator.num_pages }}">{{ users.paginator.num_pages }}</a>
+            </li>
+            {% endif %}
+
+            {% if users.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ users.next_page_number }}">»</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
         {% endif %}
 
     </div>
