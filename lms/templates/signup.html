@@ -143,7 +143,11 @@
             </div>
             <div class="form-group col-md-6">
               <label for="mobile">Mobile Number:</label>
-              <input type="text" id="mobile" name="mobile" required />
+              <input type="text" id="mobile" name="mobile" required pattern="^[6-9][0-9]{9}$" maxlength="10"
+                inputmode="numeric" title="Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+
+
             </div>
           </div>
 
@@ -158,20 +162,20 @@
             </div>
           </div>
 
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-                  <button type="submit" class="w-100">Sign Up</button>
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+              <button type="submit" class="w-100">Sign Up</button>
 
-    </div>
-    <div class="col-md-3"></div>
-</div>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
           <div class="redirect-text">
             Already have an account? <a href="/">Sign In</a>
           </div>
 
           {% for message in messages %}
-            <p class="text-danger mt-3 text-center">{{ message }}</p>
+          <p class="text-danger mt-3 text-center">{{ message }}</p>
           {% endfor %}
         </form>
       </div>

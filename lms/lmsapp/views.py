@@ -28,8 +28,117 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', {'admin_email': admin_email, 'courses': courses})
 
 
+# def signup(request):
+#     if request.method == 'POST':
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         email = request.POST.get('email')
+#         mobile = request.POST.get('mobile')
+#         password = request.POST.get('password')
+#         confirm_password = request.POST.get('confirm_password')
+
+#         # Validation
+#         if not email or not password or not confirm_password or not mobile:
+#             messages.error(request, 'All fields are required.')
+#             return render(request, 'lmsapp/signup.html')
+
+#         if password != confirm_password:
+#             messages.error(request, 'Passwords do not match.')
+#             return render(request, 'lmsapp/signup.html')
+
+#         if User.objects.filter(email=email).exists():
+#             messages.error(request, 'Email already registered.')
+#             return render(request, 'lmsapp/signup.html')
+
+#         # Create user
+#         user = User.objects.create_user(
+#             username=email,
+#             email=email,
+#             password=make_password(password),
+#             first_name=first_name,
+#             last_name=last_name,
+#         )
+#         user.save()
+
+#         # Send email
+#         subject = 'New LMS Signup'
+#         message = f'''New user signed up:
+
+# First Name: {first_name}
+# Last Name: {last_name}
+# Email: {email}
+# Mobile: {mobile}
+# '''
+#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
+
+#         messages.success(request, 'Signup successful. Please login.')
+#         return redirect('login')
+
+#     return render(request, 'lmsapp/signup.html')
+
+
+
+
+import re
+
+# def signup(request):
+#     if request.method == 'POST':
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         email = request.POST.get('email')
+#         mobile = request.POST.get('mobile')
+#         password = request.POST.get('password')
+#         confirm_password = request.POST.get('confirm_password')
+
+#         # Basic validation
+#         if not email or not password or not confirm_password or not mobile:
+#             messages.error(request, 'All fields are required.')
+#             return render(request, 'lmsapp/signup.html')
+
+#         # Mobile validation
+#         if not re.match(r'^[6-9]\d{9}$', mobile):
+#             messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
+#             return render(request, 'lmsapp/signup.html')
+
+#         if password != confirm_password:
+#             messages.error(request, 'Passwords do not match.')
+#             return render(request, 'lmsapp/signup.html')
+
+#         if User.objects.filter(email=email).exists():
+#             messages.error(request, 'Email already registered.')
+#             return render(request, 'lmsapp/signup.html')
+
+#         # Create user
+#         user = User.objects.create_user(
+#             username=email,
+#             email=email,
+#             password=make_password(password),
+#             first_name=first_name,
+#             last_name=last_name,
+#         )
+#         user.save()
+
+#         # Send email
+#         subject = 'New LMS Signup'
+#         message = f'''New user signed up:
+
+# First Name: {first_name}
+# Last Name: {last_name}
+# Email: {email}
+# Mobile: {mobile}
+# '''
+#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
+
+#         messages.success(request, 'Signup successful. Please login.')
+#         return redirect('login')
+
+#     return render(request, 'lmsapp/signup.html')
+
+
+
 def signup(request):
     if request.method == 'POST':
+        # Get form data
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
@@ -37,15 +146,22 @@ def signup(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Validation
-        if not email or not password or not confirm_password or not mobile:
+        # Check for required fields
+        if not all([first_name, last_name, email, mobile, password, confirm_password]):
             messages.error(request, 'All fields are required.')
             return render(request, 'lmsapp/signup.html')
 
+        # Validate mobile number (starts with 6-9, 10 digits, only digits)
+        if not re.fullmatch(r'^[6-9]\d{9}$', mobile):
+            messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
+            return render(request, 'lmsapp/signup.html')
+
+        # Check password match
         if password != confirm_password:
             messages.error(request, 'Passwords do not match.')
             return render(request, 'lmsapp/signup.html')
 
+        # Check for existing user
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email already registered.')
             return render(request, 'lmsapp/signup.html')
@@ -60,7 +176,7 @@ def signup(request):
         )
         user.save()
 
-        # Send email
+        # Email notification
         subject = 'New LMS Signup'
         message = f'''New user signed up:
 
@@ -75,6 +191,7 @@ Mobile: {mobile}
         return redirect('login')
 
     return render(request, 'lmsapp/signup.html')
+
 
 
 
