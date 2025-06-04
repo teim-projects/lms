@@ -455,37 +455,37 @@
 
 
     </div>
-<script>
-    $(document).ready(function () {
-        // Toggle course details
-        $('.toggle-details-btn').click(function () {
-            const courseId = $(this).data('course-id');
-            $('#details-' + courseId).toggleClass('d-none');
+    <script>
+        $(document).ready(function () {
+            // Toggle course details
+            $('.toggle-details-btn').click(function () {
+                const courseId = $(this).data('course-id');
+                $('#details-' + courseId).toggleClass('d-none');
 
-            // Change button text
-            if ($('#details-' + courseId).hasClass('d-none')) {
-                $(this).text('Course Details');
-            } else {
-                $(this).text('Hide Details');
-            }
+                // Change button text
+                if ($('#details-' + courseId).hasClass('d-none')) {
+                    $(this).text('Course Details');
+                } else {
+                    $(this).text('Hide Details');
+                }
+            });
+
+            // Toggle explore more/less
+            $('.explore-btn').click(function () {
+                const courseId = $(this).data('course-id');
+                const $extraChapters = $('.extra-chapter-' + courseId);
+                const $btn = $(this);
+
+                $extraChapters.toggleClass('d-none');
+
+                if ($extraChapters.hasClass('d-none')) {
+                    $btn.text('Explore More');
+                } else {
+                    $btn.text('Explore Less');
+                }
+            });
         });
-
-        // Toggle explore more/less
-        $('.explore-btn').click(function () {
-            const courseId = $(this).data('course-id');
-            const $extraChapters = $('.extra-chapter-' + courseId);
-            const $btn = $(this);
-
-            $extraChapters.toggleClass('d-none');
-
-            if ($extraChapters.hasClass('d-none')) {
-                $btn.text('Explore More');
-            } else {
-                $btn.text('Explore Less');
-            }
-        });
-    });
-</script>
+    </script>
 
     <script>
         function toggleChapterText(chapterId) {

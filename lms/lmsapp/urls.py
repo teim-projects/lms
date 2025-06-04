@@ -44,6 +44,8 @@ urlpatterns = [
     path("tickets/close/<int:ticket_id>/", views.close_ticket, name="close_ticket"),
     path('admin_user_list/', views.user_list, name='admin_user_list'),
     path('export-users/', views.export_users_to_excel, name='export_users'),
+
+    path('captcha/', include('captcha.urls')),
     
 
     

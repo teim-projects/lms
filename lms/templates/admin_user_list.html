@@ -241,6 +241,40 @@
                 </div>
             </form>
 
+
+
+<form method="get" class="mb-3 d-flex flex-wrap gap-2 align-items-center">
+    <input type="hidden" name="q" value="{{ query }}">
+
+    <!-- ✅ Sort Dropdown -->
+    <label for="sort">🔽 Sort By:</label>
+    <select name="sort" class="form-control mx-2" style="max-width: 200px;" onchange="this.form.submit()">
+        <option value="">-- Select --</option>
+        <option value="first_name_asc" {% if sort == 'first_name_asc' %}selected{% endif %}>First Name (A–Z)</option>
+        <option value="first_name_desc" {% if sort == 'first_name_desc' %}selected{% endif %}>First Name (Z–A)</option>
+        <option value="last_name_asc" {% if sort == 'last_name_asc' %}selected{% endif %}>Last Name (A–Z)</option>
+        <option value="last_name_desc" {% if sort == 'last_name_desc' %}selected{% endif %}>Last Name (Z–A)</option>
+        <option value="created_newest" {% if sort == 'created_newest' %}selected{% endif %}>Created Date (Newest)</option>
+        <option value="created_oldest" {% if sort == 'created_oldest' %}selected{% endif %}>Created Date (Oldest)</option>
+    </select>
+
+    <!-- ✅ Status Filter -->
+    <label for="status">🔍 Status:</label>
+    <select name="status" class="form-control mx-2" style="max-width: 200px;" onchange="this.form.submit()">
+        <option value="">-- All Users --</option>
+        <option value="verified" {% if request.GET.status == 'verified' %}selected{% endif %}>Verified Users</option>
+        <option value="not_verified" {% if request.GET.status == 'not_verified' %}selected{% endif %}>Not Verified Users</option>
+    </select>
+
+    <!-- ✅ Date Filter -->
+    <input type="date" name="created_at" class="form-control mx-2" value="{{ request.GET.created_at }}">
+    <button type="submit" class="btn btn-sm btn-outline-secondary">📅 Filter</button>
+</form>
+
+
+
+
+
             <div class="text-end mb-3">
                 <a href="{% url 'export_users' %}" class="btn btn-success">
                     📥 Export to Excel

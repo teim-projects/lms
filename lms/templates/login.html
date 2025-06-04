@@ -20,7 +20,7 @@
             padding: 8px 15px;
             border: none;
             border-radius: 25px;
-             font-weight: bold;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1.5em;
@@ -107,6 +107,7 @@
             display: flex !important;
             justify-content: space-between !important;
         }
+
         .main {
             background-image: url("{% static 'images/LmsBackgroundImg.jpg' %}");
             background-attachment: fixed;
@@ -117,7 +118,6 @@
             justify-content: center;
             align-items: center;
         }
-
     </style>
 </head>
 
@@ -128,17 +128,26 @@
 
         <div class="container d-flex justify-content-center align-items-center mt-5" style="min-height: 80vh;">
             <div class="col-md-6 bg-white p-4 shadow rounded  mb-5" style="margin-top:90px;">
-                <form method="post" class=" p-2 ">
+                <form method="post" class="p-2">
                     {% csrf_token %}
+                    {{ form.non_field_errors }}
                     <h2 class="text-center mb-4">Login</h2>
+
                     <div class="form-group">
-                        <label>Email:</label>
-                        <input type="email" name="email" required class="form-control">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
                     </div>
+
                     <div class="form-group">
-                        <label>Password:</label>
-                        <input type="password" name="password" required class="form-control">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
                     </div>
+
+                    <div class="form-group">
+                        {{ form.captcha.label_tag }}
+                        {{ form.captcha }}
+                    </div>
+
                     {% if messages %}
                     <div class="error">
                         {% for message in messages %}
@@ -146,19 +155,23 @@
                         {% endfor %}
                     </div>
                     {% endif %}
+
                     <div class="row">
                         <div class="col-md-2"></div>
-                        <div class="col-md-8">  
-                                              <button type="submit" class="btn btn-primary btn-block paid-btn" style="font-size: 20px;">Login</button>
-                                </div>
+                        <div class="col-md-8">
+                            <button type="submit" class="btn btn-primary btn-block paid-btn"
+                                style="font-size: 20px;">Login</button>
+                        </div>
                         <div class="col-md-2"></div>
                     </div>
+
                     <div class="text-center mt-3">
-                        <a href="/signup/">Signup</a> | <a href="/subadmin-login/">SubAdmin Login</a> | <a
-                            href="/password-reset/">Forgot Password?</a>
+                        <a href="/signup/">Signup</a> |
+                        <a href="/subadmin-login/">SubAdmin Login</a> |
+                        <a href="/password-reset/">Forgot Password?</a>
                     </div>
-                    
                 </form>
+
             </div>
         </div>
 

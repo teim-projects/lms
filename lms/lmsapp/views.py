@@ -305,41 +305,46 @@ from .models import CustomUser
 import hashlib
 
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import login as auth_login
+from .models import CustomUser
+from .forms import LoginForm
+
+
 def login(request):
+    form = LoginForm(request.POST or None)
+    
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
 
-        # Clear any existing session data
-        request.session.pop('admin_email', None)
-        request.session.pop('user_email', None)
+            request.session.pop('admin_email', None)
+            request.session.pop('user_email', None)
 
-        # Admin login logic
-        if email == 'admin@gmail.com' and password == 'admin':
-            request.session['admin_email'] = email
-            return redirect('admin_dashboard')  # Redirect to admin dashboard
+            if email == 'admin@gmail.com' and password == 'admin':
+                request.session['admin_email'] = email
+                return redirect('admin_dashboard')
 
-        # Regular user login logic
-        try:
-            user = CustomUser.objects.get(email=email)
-            if user.check_password(password):  # Validate the password
-                
-                # Check if the user has exceeded the session limit
-                if not manage_user_sessions(user, request):
-                    messages.error(request, "You have reached the maximum number of active sessions. Please log out from another device to log in.")
-                    return render(request, 'login.html')
+            try:
+                user = CustomUser.objects.get(email=email)
+                if user.check_password(password):
+                    # if not manage_user_sessions(user, request):
+                    #     messages.error(request, "Maximum sessions reached.")
+                    #     return render(request, 'login.html', {'form': form})
 
-                # Log the user in
-                auth_login(request, user)
-                request.session['user_email'] = user.email
-                return redirect('student_dashboard')
-
-            else:
-                messages.error(request, "Incorrect password. Please try again.")
-        except CustomUser.DoesNotExist:
-            messages.error(request, "User with this email does not exist. Please register.")
-
-    return render(request, 'login.html')
+                    auth_login(request, user)
+                    request.session['user_email'] = user.email
+                    return redirect('student_dashboard')
+                else:
+                    messages.error(request, "Incorrect password.")
+            except CustomUser.DoesNotExist:
+                messages.error(request, "User does not exist.")
+        else:
+            messages.error(request, "Invalid captcha.")
+    
+    return render(request, 'login.html', {'form': form})
 
 
 def manage_user_sessions(user, request):
@@ -1182,21 +1187,72 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import CustomUser
 
+
+   
+
+
+
+
+from datetime import datetime
+
 def user_list(request):
     query = request.GET.get('q', '')
-    user_list = CustomUser.objects.order_by('email')
+    sort = request.GET.get('sort', '')
+    status = request.GET.get('status', '')
+    date_str = request.GET.get('created_at', '')
 
+    user_list = CustomUser.objects.all()
+
+    # 🔍 Query Filter
     if query:
         user_list = user_list.filter(
             Q(email__icontains=query) |
-            Q(mobile__icontains=query) 
+            Q(mobile__icontains=query)
         )
 
-    paginator = Paginator(user_list, 10)  # Show 10 users per page
+    # 📅 Date Filter
+    if date_str:
+        try:
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+            start_datetime = datetime.combine(date_obj, datetime.min.time())
+            end_datetime = datetime.combine(date_obj, datetime.max.time())
+            user_list = user_list.filter(created_at__range=(start_datetime, end_datetime))
+        except ValueError:
+            pass
+
+    # ✅ Status Filter (Separate)
+    if status == 'verified':
+        user_list = user_list.filter(is_verified=True)
+    elif status == 'not_verified':
+        user_list = user_list.filter(is_verified=False)
+
+    # ✅ Sort Logic (Separate)
+    if sort == 'first_name_asc':
+        user_list = user_list.order_by('first_name')
+    elif sort == 'first_name_desc':
+        user_list = user_list.order_by('-first_name')
+    elif sort == 'last_name_asc':
+        user_list = user_list.order_by('last_name')
+    elif sort == 'last_name_desc':
+        user_list = user_list.order_by('-last_name')
+    elif sort == 'created_newest':
+        user_list = user_list.order_by('-created_at')
+    elif sort == 'created_oldest':
+        user_list = user_list.order_by('created_at')
+    else:
+        user_list = user_list.order_by('-created_at')  # Default sort
+
+    paginator = Paginator(user_list, 10)
     page_number = request.GET.get('page')
     users = paginator.get_page(page_number)
 
-    return render(request, 'admin_user_list.html', {'users': users, 'query': query})
+    return render(request, 'admin_user_list.html', {
+        'users': users,
+        'query': query,
+        'sort': sort,
+        'status': status,
+    })
+
 
 
 
