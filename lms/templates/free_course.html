@@ -317,6 +317,40 @@
             color: #0F40BF;
             float: right;
         }
+
+
+
+
+        /* read more button css for tital and description */
+
+        .truncated-title {
+            display: inline-block;
+            max-width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+
+        .truncated-title.expanded {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+        }
+
+        .truncated-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: all 0.3s ease;
+        }
+
+        .truncated-description.expanded {
+            -webkit-line-clamp: unset;
+            overflow: visible;
+        }
     </style>
 </head>
 
@@ -345,8 +379,22 @@
                             {% endif %}
 
                             <div class="card-body">
-                                <h5 class="card-title fw-semibold text-center" style="color:#0F40BF">{{ course.title }}
+                                
+
+                                <h5 class="card-title fw-semibold text-center text-primary">
+                                    <span class="truncated-title" id="title-{{ course.id }}">{{ course.title }}</span>
+                                    {% if course.title|length > 50 %}
+                                    <button type="button" class="read-more-btn"
+                                        onclick="toggleTitleText({{ course.id }})">Read More</button>
+                                    {% endif %}
                                 </h5>
+
+
+
+
+
+
+
 
                                 <div class="text-center">
                                     <button class="btn btn-primary btn-sm toggle-details-btn"
@@ -357,7 +405,23 @@
 
                                 <!-- Hidden details section -->
                                 <div class="course-details mt-3 d-none" id="details-{{ course.id }}">
-                                    <p class="card-text clamp-text">{{ course.description }}</p>
+                                    <!-- <p class="card-text clamp-text">{{ course.description }}</p> -->
+
+
+                                    <p class="card-text truncated-description" id="desc-{{ course.id }}">
+                                        {{ course.description }}
+                                    </p>
+                                    {% if course.description|length > 200 %}
+                                    <button type="button" class="read-more-btn"
+                                        onclick="toggleDescription({{ course.id }})">Read More</button>
+                                    {% endif %}
+
+
+
+
+
+
+
 
                                     <h5 class="chapter-heading mt-3 text-center">Lessons</h5>
                                     <ul class="list-unstyled" id="chapter-list-{{ course.id }}">
@@ -389,7 +453,7 @@
                                     {% endif %}
 
                                     <!-- Delete and Update Buttons -->
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -407,7 +471,35 @@
         </section>
     </main>
 
- 
+
+    <!-- read more button js -->
+
+    <script>
+
+        function toggleTitleText(courseId) {
+            const titleSpan = document.getElementById('title-' + courseId);
+            const button = titleSpan.nextElementSibling;
+
+            titleSpan.classList.toggle('expanded');
+            button.textContent = titleSpan.classList.contains('expanded') ? 'Read Less' : 'Read More';
+        }
+
+        function toggleDescription(courseId) {
+            const desc = document.getElementById('desc-' + courseId);
+            const btn = desc.nextElementSibling;
+
+            desc.classList.toggle('expanded');
+            btn.textContent = desc.classList.contains('expanded') ? 'Read Less' : 'Read More';
+        }
+
+    </script>
+
+
+
+
+
+
+
     <script>
         $(document).ready(function () {
             // Toggle course details

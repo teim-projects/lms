@@ -279,6 +279,37 @@
             padding: 0;
             color: #0F40BF;
         }
+
+
+
+        /* read more button of title and description  */
+
+        .truncated-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            max-width: 85%;
+            vertical-align: middle;
+        }
+
+        .truncated-title.expanded {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+        }
+
+        .line-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* Number of lines to show */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp.expanded {
+            -webkit-line-clamp: unset;
+        }
     </style>
 </head>
 
@@ -384,7 +415,21 @@
                         {% endif %}
 
                         <div class="card-body">
-                            <h5 class="card-title fw-semibold text-center" style="color:#0F40BF">{{ course.title }}</h5>
+                            <!-- <h5 class="card-title fw-semibold text-center" style="color:#0F40BF">{{ course.title }}</h5> -->
+                            <h5 class="card-title fw-semibold text-center" style="color:#0F40BF;">
+                                <span class="truncated-title" id="title-{{ course.id }}">{{ course.title }}</span>
+                                {% if course.title|length > 50 %}
+                                <button class="read-more-btn" id="title-btn-{{ course.id }}"
+                                    onclick="toggleTitle('{{ course.id }}')">Read More</button>
+                                {% endif %}
+                            </h5>
+
+
+
+
+
+
+
 
                             <div class="text-center">
                                 <button class="btn btn-primary btn-sm toggle-details-btn"
@@ -395,7 +440,26 @@
 
                             <!-- Hidden details section -->
                             <div class="course-details mt-3 d-none" id="details-{{ course.id }}">
-                                <p class="card-text clamp-text">{{ course.description }}</p>
+                                <!-- <p class="card-text clamp-text">{{ course.description }}</p> -->
+
+
+
+
+                                <p class="card-text description-text line-clamp" id="desc-{{ course.id }}">
+                                    {{ course.description }}
+                                </p>
+                                {% if course.description|length > 250 %}
+                                <div class="text-center">
+                                    <button class="read-more-btn" id="desc-btn-{{ course.id }}"
+                                        onclick="toggleDescription('{{ course.id }}')">Read More</button>
+                                </div>
+                                {% endif %}
+
+
+
+
+
+
 
                                 <h5 class="chapter-heading mt-3 text-center">Lessons</h5>
                                 <ul class="list-unstyled" id="chapter-list-{{ course.id }}">
@@ -455,6 +519,42 @@
 
 
     </div>
+
+
+
+    <!-- script for read more button of title and description -->
+
+    <script>
+        function toggleTitle(courseId) {
+            const titleSpan = document.getElementById(`title-${courseId}`);
+            const toggleBtn = document.getElementById(`title-btn-${courseId}`);
+            titleSpan.classList.toggle('expanded');
+
+            // Toggle button text
+            if (titleSpan.classList.contains('expanded')) {
+                toggleBtn.textContent = 'Read Less';
+            } else {
+                toggleBtn.textContent = 'Read More';
+            }
+        }
+
+        function toggleDescription(courseId) {
+            const descPara = document.getElementById(`desc-${courseId}`);
+            const toggleBtn = document.getElementById(`desc-btn-${courseId}`);
+            descPara.classList.toggle('expanded');
+            descPara.classList.toggle('line-clamp');
+
+            // Toggle button text
+            if (descPara.classList.contains('expanded')) {
+                toggleBtn.textContent = 'Read Less';
+            } else {
+                toggleBtn.textContent = 'Read More';
+            }
+        }
+
+    </script>
+
+
     <script>
         $(document).ready(function () {
             // Toggle course details
