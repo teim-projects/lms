@@ -133,10 +133,19 @@
                     {{ form.non_field_errors }}
                     <h2 class="text-center mb-4">Login</h2>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         {{ form.email.label_tag }}
                         {{ form.email }}
+                    </div> -->
+
+
+                    <div class="form-group">
+                        {{ form.identifier.label_tag }}
+                        {{ form.identifier }}
                     </div>
+
+
+
 
                     <div class="form-group">
                         {{ form.password.label_tag }}

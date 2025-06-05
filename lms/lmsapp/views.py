@@ -28,111 +28,13 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', {'admin_email': admin_email, 'courses': courses})
 
 
-# def signup(request):
-#     if request.method == 'POST':
-#         first_name = request.POST.get('first_name')
-#         last_name = request.POST.get('last_name')
-#         email = request.POST.get('email')
-#         mobile = request.POST.get('mobile')
-#         password = request.POST.get('password')
-#         confirm_password = request.POST.get('confirm_password')
 
-#         # Validation
-#         if not email or not password or not confirm_password or not mobile:
-#             messages.error(request, 'All fields are required.')
-#             return render(request, 'lmsapp/signup.html')
-
-#         if password != confirm_password:
-#             messages.error(request, 'Passwords do not match.')
-#             return render(request, 'lmsapp/signup.html')
-
-#         if User.objects.filter(email=email).exists():
-#             messages.error(request, 'Email already registered.')
-#             return render(request, 'lmsapp/signup.html')
-
-#         # Create user
-#         user = User.objects.create_user(
-#             username=email,
-#             email=email,
-#             password=make_password(password),
-#             first_name=first_name,
-#             last_name=last_name,
-#         )
-#         user.save()
-
-#         # Send email
-#         subject = 'New LMS Signup'
-#         message = f'''New user signed up:
-
-# First Name: {first_name}
-# Last Name: {last_name}
-# Email: {email}
-# Mobile: {mobile}
-# '''
-#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
-
-#         messages.success(request, 'Signup successful. Please login.')
-#         return redirect('login')
-
-#     return render(request, 'lmsapp/signup.html')
 
 
 
 
 import re
 
-# def signup(request):
-#     if request.method == 'POST':
-#         first_name = request.POST.get('first_name')
-#         last_name = request.POST.get('last_name')
-#         email = request.POST.get('email')
-#         mobile = request.POST.get('mobile')
-#         password = request.POST.get('password')
-#         confirm_password = request.POST.get('confirm_password')
-
-#         # Basic validation
-#         if not email or not password or not confirm_password or not mobile:
-#             messages.error(request, 'All fields are required.')
-#             return render(request, 'lmsapp/signup.html')
-
-#         # Mobile validation
-#         if not re.match(r'^[6-9]\d{9}$', mobile):
-#             messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
-#             return render(request, 'lmsapp/signup.html')
-
-#         if password != confirm_password:
-#             messages.error(request, 'Passwords do not match.')
-#             return render(request, 'lmsapp/signup.html')
-
-#         if User.objects.filter(email=email).exists():
-#             messages.error(request, 'Email already registered.')
-#             return render(request, 'lmsapp/signup.html')
-
-#         # Create user
-#         user = User.objects.create_user(
-#             username=email,
-#             email=email,
-#             password=make_password(password),
-#             first_name=first_name,
-#             last_name=last_name,
-#         )
-#         user.save()
-
-#         # Send email
-#         subject = 'New LMS Signup'
-#         message = f'''New user signed up:
-
-# First Name: {first_name}
-# Last Name: {last_name}
-# Email: {email}
-# Mobile: {mobile}
-# '''
-#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
-
-#         messages.success(request, 'Signup successful. Please login.')
-#         return redirect('login')
-
-#     return render(request, 'lmsapp/signup.html')
 
 
 
@@ -152,7 +54,7 @@ def signup(request):
             return render(request, 'lmsapp/signup.html')
 
         # Validate mobile number (starts with 6-9, 10 digits, only digits)
-        if not re.fullmatch(r'^[6-9]\d{9}$', mobile):
+        if not re.fullmatch(r'^[0-9]\d{9}$', mobile):
             messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
             return render(request, 'lmsapp/signup.html')
 
@@ -277,22 +179,38 @@ def send_otp_sms(mobile, otp_code):
 
 
 
+# 2nd signup
+
 def signup(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
-
-        first_name = request.POST.get('first_name')  # Get the first name
-        last_name = request.POST.get('last_name')  # Get the last name
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Check if user already exists by email
+        # Basic field check
+        if not all([first_name, last_name, email, mobile, password, confirm_password]):
+            messages.error(request, 'All fields are required.')
+            return redirect('signup')
+
+        # Mobile format check
+        if not re.fullmatch(r'^[0-9]\d{9}$', mobile):
+            messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
+            return redirect('signup')
+
+        # Email exists?
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, f"User with email ({email}) already exists.")
             return redirect('signup')
 
-        # Check if passwords match
+        # Mobile exists?
+        if CustomUser.objects.filter(mobile=mobile).exists():
+            messages.error(request, f"Mobile number ({mobile}) already registered.")
+            return redirect('signup')
+
+        # Password match
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return redirect('signup')
@@ -301,11 +219,11 @@ def signup(request):
         user = CustomUser.objects.create_user(
             email=email,
             mobile=mobile,
-            first_name=first_name,  # Pass first name
-            last_name=last_name,    # Pass last name
+            first_name=first_name,
+            last_name=last_name,
             password=password
         )
-        user.is_active = False  # The user will need to verify their email before they can log in
+        user.is_active = False
         user.save()
 
         otp_code = OTP.generate_otp()
@@ -323,6 +241,7 @@ def signup(request):
         return redirect('verify_otp')
 
     return render(request, 'signup.html')
+
 
 
 
@@ -429,28 +348,72 @@ from .models import CustomUser
 from .forms import LoginForm
 
 
+# def login(request):
+#     form = LoginForm(request.POST or None)
+    
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             password = form.cleaned_data['password']
+
+#             request.session.pop('admin_email', None)
+#             request.session.pop('user_email', None)
+
+#             if email == 'admin@gmail.com' and password == 'admin':
+#                 request.session['admin_email'] = email
+#                 return redirect('admin_dashboard')
+
+#             try:
+#                 user = CustomUser.objects.get(email=email)
+#                 if user.check_password(password):
+#                     # if not manage_user_sessions(user, request):
+#                     #     messages.error(request, "Maximum sessions reached.")
+#                     #     return render(request, 'login.html', {'form': form})
+
+#                     auth_login(request, user)
+#                     request.session['user_email'] = user.email
+#                     return redirect('student_dashboard')
+#                 else:
+#                     messages.error(request, "Incorrect password.")
+#             except CustomUser.DoesNotExist:
+#                 messages.error(request, "User does not exist.")
+#         else:
+#             messages.error(request, "Invalid captcha.")
+    
+#     return render(request, 'login.html', {'form': form})
+
+
+
+import re
+from django.contrib.auth import login as auth_login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import CustomUser
+from .forms import LoginForm
+
 def login(request):
     form = LoginForm(request.POST or None)
     
     if request.method == 'POST':
         if form.is_valid():
-            email = form.cleaned_data['email']
+            identifier = form.cleaned_data['identifier']
             password = form.cleaned_data['password']
 
             request.session.pop('admin_email', None)
             request.session.pop('user_email', None)
 
-            if email == 'admin@gmail.com' and password == 'admin':
-                request.session['admin_email'] = email
+            if identifier == 'admin@gmail.com' and password == 'admin':
+                request.session['admin_email'] = identifier
                 return redirect('admin_dashboard')
 
+            # Try email or mobile
             try:
-                user = CustomUser.objects.get(email=email)
-                if user.check_password(password):
-                    # if not manage_user_sessions(user, request):
-                    #     messages.error(request, "Maximum sessions reached.")
-                    #     return render(request, 'login.html', {'form': form})
+                if re.match(r"[^@]+@[^@]+\.[^@]+", identifier):
+                    user = CustomUser.objects.get(email=identifier)
+                else:
+                    user = CustomUser.objects.get(mobile=identifier)
 
+                if user.check_password(password):
                     auth_login(request, user)
                     request.session['user_email'] = user.email
                     return redirect('student_dashboard')
@@ -462,6 +425,13 @@ def login(request):
             messages.error(request, "Invalid captcha.")
     
     return render(request, 'login.html', {'form': form})
+
+
+
+
+
+
+
 
 
 def manage_user_sessions(user, request):
@@ -804,6 +774,11 @@ from .models import CourseChapter  # Import your chapter model
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import FreeCourse, CourseChapter
 
+
+
+    
+
+
 def update_free_course(request, course_id):
     course = get_object_or_404(FreeCourse, id=course_id)
 
@@ -815,14 +790,10 @@ def update_free_course(request, course_id):
             course.thumbnail = request.FILES['thumbnail']
         course.save()
 
-        # Get chapter fields
+        # Update or create chapters
         chapter_ids = request.POST.getlist('chapter_id')
         chapter_titles = request.POST.getlist('chapter_title')
         youtube_links = request.POST.getlist('youtube_link')
-
-
-
-        
 
         for i in range(len(chapter_ids)):
             cid = chapter_ids[i]
@@ -841,13 +812,18 @@ def update_free_course(request, course_id):
                 except CourseChapter.DoesNotExist:
                     continue
 
+        # Delete chapters if marked
+        delete_ids = request.POST.get('delete_chapter_ids', '')
+        if delete_ids:
+            ids_to_delete = [int(id) for id in delete_ids.split(',') if id.isdigit()]
+            CourseChapter.objects.filter(id__in=ids_to_delete, course=course).delete()
+
         return redirect('create_free_course')
 
     chapters = course.chapters.all()
     return render(request, 'update_free_course.html', {'course': course, 'chapters': chapters})
 
 
-    
 
 
 

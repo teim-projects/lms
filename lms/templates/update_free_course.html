@@ -236,27 +236,44 @@
                                     <div class="d-flex flex-wrap gap-2 mb-2 align-items-center chapter-block"
                                         data-chapter-id="{{ chapter.id }}">
                                         <input type="hidden" name="chapter_id" value="{{ chapter.id }}">
-
-                                        <input type="text" class="form-control" name="chapter_title"
+                                        <input type="text" class="form-control mr-2 mb-2" name="chapter_title"
                                             value="{{ chapter.title }}" placeholder="Chapter Title" required>
-
-                                        <input type="url" class="form-control" name="youtube_link"
+                                        <input type="url" class="form-control mr-2 mb-2" name="youtube_link"
                                             value="{{ chapter.youtube_link }}" placeholder="YouTube Link" required>
 
-                                        <!-- Hidden delete input (updated dynamically when button clicked) -->
-                                        <!-- <input type="hidden" name="delete_chapter_ids" value="" disabled> -->
-
                                         <!-- Delete button -->
-                                        <!-- <button type="button" class="btn btn-danger btn-sm" onclick="markForDeletion(this)">Delete</button> -->
+                                        <button type="button" class="btn btn-danger btn-sm mb-2"
+                                            onclick="deleteChapter(this)">Delete</button>
                                     </div>
                                     {% endfor %}
                                 </div>
+
+                                <!-- Hidden input for deleted chapter IDs -->
+                                <input type="hidden" name="delete_chapter_ids" id="delete-chapter-ids">
+
 
                                 <!-- Container for new chapters -->
                                 <div id="new-links-container"></div>
                                 <button type="button" class="btn btn-outline-secondary btn-sm mt-2"
                                     onclick="addYoutubeField()">+ Add New Chapter</button>
                             </div>
+
+                            <!-- script of delete button -->
+                            <script>
+                                let deletedChapters = [];
+
+                                function deleteChapter(button) {
+                                    const block = button.closest('.chapter-block');
+                                    const chapterId = block.dataset.chapterId;
+                                    if (chapterId !== "new") {
+                                        deletedChapters.push(chapterId);
+                                        document.getElementById("delete-chapter-ids").value = deletedChapters.join(",");
+                                    }
+                                    block.remove();  // Remove the HTML block visually
+                                }
+                            </script>
+
+
 
                             <script>
                                 function addYoutubeField() {
