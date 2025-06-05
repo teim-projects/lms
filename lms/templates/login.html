@@ -95,6 +95,16 @@
 
         }
 
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100% !important; /* makes inputs take full container width */
+    max-width: 100%; /* prevent overflow */
+    box-sizing: border-box; /* includes padding/border in width */
+    border: 1px solid silver;
+    padding: 5px;
+    border-radius: 5px;
+}
 
         .textcolor {
             text-decoration: none;
@@ -118,6 +128,7 @@
             justify-content: center;
             align-items: center;
         }
+        
     </style>
 </head>
 
@@ -127,7 +138,7 @@
     <div class="main" style="min-height: 100vh;">
 
         <div class="container d-flex justify-content-center align-items-center mt-5" style="min-height: 80vh;">
-            <div class="col-md-6 bg-white p-4 shadow rounded  mb-5" style="margin-top:90px;">
+            <div class="col-md-6 bg-white p-4 shadow rounded  mb-5" style="margin-top:60px;">
                 <form method="post" class="p-2">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
