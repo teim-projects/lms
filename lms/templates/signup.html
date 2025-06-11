@@ -5,12 +5,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profit Max Share Market Academy</title>
+  <title>Profit Max Share Market Academy - Sign Up</title>
   <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png" />
 
   <!-- Bootstrap 4 CDN -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <style>
@@ -103,6 +107,55 @@
       align-items: center;
     }
 
+    /* CAPTCHA Styles */
+    .captcha-container {
+      display: flex;
+      align-items: center;
+      margin: 1em 0;
+    }
+
+    .captcha-image {
+      margin-right: 10px;
+      border: 1px solid #ddd;
+      padding: 5px;
+      background: #f9f9f9;
+      height: 50px;
+    }
+
+    .captcha-reload {
+      background: none;
+      border: none;
+      color: #2575fc;
+      cursor: pointer;
+      font-size: 1.5em;
+      margin-left: 10px;
+      padding: 5px;
+    }
+
+    .captcha-reload:hover {
+      color: #6a11cb;
+      transform: rotate(180deg);
+      transition: transform 0.5s ease;
+    }
+
+    #id_captcha_1 {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.5em;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    /* Error message styling */
+    .errorlist {
+      color: #dc3545;
+      list-style: none;
+      padding-left: 0;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
     @media (max-width: 767.98px) {
       .form-container {
         padding: 1.5em;
@@ -123,7 +176,7 @@
       <div class="form-container mt-5">
         <form method="post">
           {% csrf_token %}
-          <h2 class="text-center mb-4">Signup</h2>
+          <h2 class="text-center mb-4">Sign Up</h2>
 
           <div class="form-row">
             <div class="form-group col-md-6">
@@ -146,8 +199,6 @@
               <input type="text" id="mobile" name="mobile" required pattern="^[0-9][0-9]{9}$" maxlength="10"
                 inputmode="numeric" title="Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-
-
             </div>
           </div>
 
@@ -162,14 +213,36 @@
             </div>
           </div>
 
+
+          <!-- CAPTCHA Section -->
+          <!-- This will render the CAPTCHA image + input + hidden key -->
+          <div class="form-group">
+            <label>CAPTCHA Verification</label>
+            <div class="d-flex align-items-center mb-2">
+              {{ form.captcha }} <!-- 👈 Use this, don't manually construct hidden + image -->
+              <button type="button" class="btn btn-outline-secondary btn-sm ml-2" id="refresh-captcha">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+            {% if form.captcha.errors %}
+            <div class="text-danger small">{{ form.captcha.errors }}</div>
+            {% endif %}
+          </div>
+
+
+
+
+
+
+
           <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
               <button type="submit" class="w-100">Sign Up</button>
-
             </div>
             <div class="col-md-3"></div>
           </div>
+
           <div class="redirect-text">
             Already have an account? <a href="/">Sign In</a>
           </div>
@@ -183,6 +256,34 @@
   </div>
 
   {% include 'footer.html' %}
+
+  <script>
+  $(document).ready(function () {
+    // CAPTCHA Refresh Function
+    $('#refresh-captcha').click(function () {
+      console.log('Refresh button clicked');
+      $.getJSON("/captcha/refresh/", function (data) {
+        console.log('CAPTCHA refreshed:', data);
+        // Find CAPTCHA image by class
+        $('.captcha').attr('src', data.image_url);
+
+        // Update hidden input and clear text input
+        $("input[name='captcha_0']").val(data.key);
+        $("input[name='captcha_1']").val('');
+      });
+    });
+
+    // Mobile number validation
+    $('#mobile').on('input', function () {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (this.value.length > 10) {
+        this.value = this.value.slice(0, 10);
+      }
+    });
+  });
+</script>
+
+
 </body>
 
 </html>

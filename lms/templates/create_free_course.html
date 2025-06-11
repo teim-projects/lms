@@ -319,9 +319,9 @@
     <div class="main">
         <!-- free course form -->
 
+        <!-- free course form -->
         <div class="container" style="margin-top: 100px;">
             <div class="row justify-content-center">
-
                 <div class="col-12 col-md-6 m-3 p-3 free-form">
                     <!-- Back and home buttons start -->
                     <span onclick="window.location.href='/admin_dashboard/'"
@@ -364,26 +364,61 @@
                                 accept="image/*" required>
                         </div>
 
-                        <!-- YouTube Video Links (Dynamic Fields) -->
+                        <!-- YouTube Video Links with Chapter Titles -->
                         <div class="form-group">
-                            <label for="youtube_links">YouTube Video Links (Add multiple links)</label>
+                            <label>Lessons (Chapters with YouTube Links)</label>
                             <div id="youtube-links-container">
-                                <input type="url" class="form-control mb-2" name="youtube_links[]"
-                                    placeholder="Enter YouTube link" required>
+                                <div class="chapter-input-group mb-2">
+                                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                                        <input type="text" class="form-control" name="chapter_titles[]"
+                                            placeholder="Chapter title" required>
+                                        <input type="url" class="form-control" name="youtube_links[]"
+                                            placeholder="YouTube link" required>
+                                        <button type="button" class="btn btn-danger btn-sm remove-chapter-btn"
+                                            onclick="removeChapterField(this)">Remove</button>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" class="btn btn-secondary btn-sm" onclick="addYoutubeField()">+ Add
-                                Another</button>
+                            <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="addChapterField()">
+                                + Add Another Lesson
+                            </button>
                         </div>
-
-                        <!-- Submit Button -->
-
-
 
                         <button type="submit" class="paid-btn w-100 submitbtn">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
+
+        <script>
+            // Add a new chapter field
+            function addChapterField() {
+                const container = document.getElementById('youtube-links-container');
+                const newChapter = document.createElement('div');
+                newChapter.className = 'chapter-input-group mb-2';
+                newChapter.innerHTML = `
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <input type="text" class="form-control" name="chapter_titles[]" 
+                placeholder="Chapter title" required>
+            <input type="url" class="form-control" name="youtube_links[]" 
+                placeholder="YouTube link" required>
+            <button type="button" class="btn btn-danger btn-sm remove-chapter-btn" 
+                onclick="removeChapterField(this)">Remove</button>
+        </div>
+    `;
+                container.appendChild(newChapter);
+            }
+
+            // Remove a chapter field
+            function removeChapterField(button) {
+                const chapterGroup = button.closest('.chapter-input-group');
+                if (chapterGroup && document.querySelectorAll('.chapter-input-group').length > 1) {
+                    chapterGroup.remove();
+                } else {
+                    alert("You need at least one lesson.");
+                }
+            }
+        </script>
 
         <script>
             function addYoutubeField() {
@@ -466,7 +501,6 @@
                                     {% for chapter in course.chapters.all %}
                                     <li
                                         class="mb-1 {% if forloop.counter > 3 %}d-none extra-chapter-{{ course.id }}{% endif %}">
-
                                         <a href="{{ chapter.youtube_link }}" target="_blank" class="chbtn chapter-title"
                                             id="chapter-title-{{ chapter.id }}">
                                             {{ chapter.title }}

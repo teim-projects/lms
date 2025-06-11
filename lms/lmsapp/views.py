@@ -38,63 +38,84 @@ import re
 
 
 
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
+from django.conf import settings
+import re
+from .forms import CaptchaForm
+
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
+from django.conf import settings
+import re
+from .forms import CaptchaForm  # Make sure this import is correct
+
 def signup(request):
     if request.method == 'POST':
-        # Get form data
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        mobile = request.POST.get('mobile')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        form = CaptchaForm(request.POST)
+        
+        if form.is_valid():  # This validates the CAPTCHA first
+            # Get form data
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            mobile = request.POST.get('mobile')
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
 
-        # Check for required fields
-        if not all([first_name, last_name, email, mobile, password, confirm_password]):
-            messages.error(request, 'All fields are required.')
-            return render(request, 'lmsapp/signup.html')
+            # Check for required fields
+            if not all([first_name, last_name, email, mobile, password, confirm_password]):
+                messages.error(request, 'All fields are required.')
+                return render(request, 'lmsapp/signup.html', {'form': form})
 
-        # Validate mobile number (starts with 6-9, 10 digits, only digits)
-        if not re.fullmatch(r'^[0-9]\d{9}$', mobile):
-            messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
-            return render(request, 'lmsapp/signup.html')
+            # Validate mobile number
+            if not re.fullmatch(r'^[6-9]\d{9}$', mobile):
+                messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
+                return render(request, 'lmsapp/signup.html', {'form': form})
 
-        # Check password match
-        if password != confirm_password:
-            messages.error(request, 'Passwords do not match.')
-            return render(request, 'lmsapp/signup.html')
+            # Check password match
+            if password != confirm_password:
+                messages.error(request, 'Passwords do not match.')
+                return render(request, 'lmsapp/signup.html', {'form': form})
 
-        # Check for existing user
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already registered.')
-            return render(request, 'lmsapp/signup.html')
+            # Check for existing user
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already registered.')
+                return render(request, 'lmsapp/signup.html', {'form': form})
 
-        # Create user
-        user = User.objects.create_user(
-            username=email,
-            email=email,
-            password=make_password(password),
-            first_name=first_name,
-            last_name=last_name,
-        )
-        user.save()
+            # Create user
+            user = User.objects.create_user(
+                username=email,
+                email=email,
+                password=make_password(password),
+                first_name=first_name,
+                last_name=last_name,
+            )
+            user.save()
 
-        # Email notification
-        subject = 'New LMS Signup'
-        message = f'''New user signed up:
+            # Email notification
+            subject = 'New LMS Signup'
+            message = f'''New user signed up:
 
 First Name: {first_name}
 Last Name: {last_name}
 Email: {email}
 Mobile: {mobile}
 '''
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
 
-        messages.success(request, 'Signup successful. Please login.')
-        return redirect('login')
-
-    return render(request, 'lmsapp/signup.html')
-
-
+            messages.success(request, 'Signup successful. Please login.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Invalid CAPTCHA. Please try again.')
+    else:
+        form = CaptchaForm()
+    
+    return render(request, 'lmsapp/signup.html', {'form': form})
 
 
 
@@ -181,66 +202,59 @@ def send_otp_sms(mobile, otp_code):
 
 # 2nd signup
 
+from .forms import SignupForm
+
 def signup(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        mobile = request.POST.get('mobile')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            # Extract cleaned form data
+            email = form.cleaned_data['email']
+            mobile = form.cleaned_data['mobile']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            password = form.cleaned_data['password']
+            confirm_password = form.cleaned_data['confirm_password']
 
-        # Basic field check
-        if not all([first_name, last_name, email, mobile, password, confirm_password]):
-            messages.error(request, 'All fields are required.')
-            return redirect('signup')
+            # (You can keep your validations here or customize clean methods)
 
-        # Mobile format check
-        if not re.fullmatch(r'^[0-9]\d{9}$', mobile):
-            messages.error(request, 'Enter a valid 10-digit mobile number starting with 6-9.')
-            return redirect('signup')
+            if password != confirm_password:
+                messages.error(request, "Passwords do not match.")
+                return redirect('signup')
 
-        # Email exists?
-        if CustomUser.objects.filter(email=email).exists():
-            messages.error(request, f"User with email ({email}) already exists.")
-            return redirect('signup')
+            if CustomUser.objects.filter(email=email).exists():
+                messages.error(request, f"User with email ({email}) already exists.")
+                return redirect('signup')
 
-        # Mobile exists?
-        if CustomUser.objects.filter(mobile=mobile).exists():
-            messages.error(request, f"Mobile number ({mobile}) already registered.")
-            return redirect('signup')
+            if CustomUser.objects.filter(mobile=mobile).exists():
+                messages.error(request, f"Mobile number ({mobile}) already registered.")
+                return redirect('signup')
 
-        # Password match
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match.")
-            return redirect('signup')
+            user = CustomUser.objects.create_user(
+                email=email,
+                mobile=mobile,
+                first_name=first_name,
+                last_name=last_name,
+                password=password
+            )
+            user.is_active = False
+            user.save()
 
-        # Create user
-        user = CustomUser.objects.create_user(
-            email=email,
-            mobile=mobile,
-            first_name=first_name,
-            last_name=last_name,
-            password=password
-        )
-        user.is_active = False
-        user.save()
+            otp_code = OTP.generate_otp()
+            OTP.objects.create(user=user, code=otp_code)
 
-        otp_code = OTP.generate_otp()
-        OTP.objects.create(user=user, code=otp_code)
-
-        # Send OTP via Email
-        try:
             send_otp_email(email, otp_code)
-        except ValidationError as e:
-            messages.error(request, str(e))
-            return redirect('signup')
 
-        messages.success(request, "Signup successful. Please verify your email.")
-        request.session['user_id'] = user.id
-        return redirect('verify_otp')
+            messages.success(request, "Signup successful. Please verify your email.")
+            request.session['user_id'] = user.id
+            return redirect('verify_otp')
 
-    return render(request, 'signup.html')
+        else:
+            messages.error(request, "Invalid form. Please check errors below.")
+    else:
+        form = SignupForm()
+
+    return render(request, 'signup.html', {'form': form})
 
 
 
@@ -535,26 +549,32 @@ def reset_password_confirm(request):
 
 
 
-from .models import FreeCourse,CourseChapter
+# from .models import FreeCourse,CourseChapter
 
-def create_free_course(request):
-    if request.method == "POST":
-        title = request.POST.get("title")
-        description = request.POST.get("description")
-        thumbnail = request.FILES.get("thumbnail")
-        youtube_links = request.POST.getlist("youtube_links[]")
+# def create_free_course(request):
+#     if request.method == "POST":
+#         title = request.POST.get("title")
+#         description = request.POST.get("description")
+#         thumbnail = request.FILES.get("thumbnail")
+#         chapter_titles = request.POST.getlist("chapter_titles[]")  # Get chapter titles
+#         youtube_links = request.POST.getlist("youtube_links[]")   # Get YouTube links
 
-        # Create the course
-        course = FreeCourse.objects.create(title=title, description=description, thumbnail=thumbnail)
+#         # Create the course
+#         course = FreeCourse.objects.create(
+#             title=title, 
+#             description=description, 
+#             thumbnail=thumbnail
+#         )
 
-        # Save each YouTube link as a chapter
-        for index, link in enumerate(youtube_links, start=1):
-            CourseChapter.objects.create(course=course, title=f"Chapter {index}", youtube_link=link)
+#         # Save each chapter with its title and YouTube link
+#         for title, link in zip(chapter_titles, youtube_links):
+#             CourseChapter.objects.create(
+#                 course=course, 
+#                 title=title,  # Use the actual title from form
+#                 youtube_link=link
+#             )
 
-        return redirect("create_free_course")
-
-    return render(request, "create_free_course.html")
-
+#         return redirect("create_free_course")
 
 
 from django.shortcuts import render, redirect
@@ -565,28 +585,30 @@ def create_free_course(request):
         title = request.POST.get("title")
         description = request.POST.get("description")
         thumbnail = request.FILES.get("thumbnail")
-        youtube_links = request.POST.getlist("youtube_links[]")  # ✅ Correct name
+        chapter_titles = request.POST.getlist("chapter_titles[]")  # Get all chapter titles
+        youtube_links = request.POST.getlist("youtube_links[]")    # Get all YouTube links
 
         if title and description and thumbnail:
+            # Create the course first
             course = FreeCourse.objects.create(
                 title=title,
                 description=description,
                 thumbnail=thumbnail
             )
 
-            for link in youtube_links:
-                if link.strip():
+            # Create chapters with the submitted titles
+            for i in range(len(chapter_titles)):
+                if youtube_links[i].strip():  # Only create if there's a YouTube link
                     CourseChapter.objects.create(
                         course=course,
-                        title=f"Chapter {course.chapters.count() + 1}",
-                        youtube_link=link
+                        title=chapter_titles[i],  # Use the submitted title
+                        youtube_link=youtube_links[i]
                     )
 
             return redirect("create_free_course")
 
     courses = FreeCourse.objects.prefetch_related("chapters").all()
     return render(request, "create_free_course.html", {"courses": courses})
-
 
 def update_free_course(request, course_id):
     course = FreeCourse.objects.get(id=course_id)
