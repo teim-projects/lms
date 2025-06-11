@@ -68,9 +68,9 @@
                 margin-top: 30px;
             }
 
-            .align-items-center {
-                margin-top: 67px;
-            }
+.fff input{
+        width: 45%;
+}
 
             .rounded {
                 margin-top: 50px;
@@ -94,7 +94,16 @@
             justify-content: center;
             align-items: center;
         }
-        
+ .fff input{
+    margin-left: 10px;
+ }
+        .ff input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -109,12 +118,12 @@
                     {{ form.non_field_errors }}
                     <h2 class="text-center mb-4">Login</h2>
 
-                    <div class="form-group">
+                    <div class="form-group ff">
                         {{ form.identifier.label_tag }}
                         {{ form.identifier }}
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group ff">
                         {{ form.password.label_tag }}
                         {{ form.password }}
                     </div>
@@ -123,17 +132,17 @@
                     <!-- Captcha with Refresh -->
                     <!-- Captcha with Refresh -->
                     <!-- Captcha with Refresh -->
-<div class="form-group">
-    {{ form.captcha.label_tag }}
+                    <div class="">
+                        {{ form.captcha.label_tag }}
+                        <div class="d-flex align-items-center fff">
+                            {{ form.captcha.image }} <!-- shows initial captcha image -->
+                            {{ form.captcha }}
+                            <button type="button" class="btn btn-outline-secondary btn-sm ml-2" id="refresh-captcha"
+                                title="Refresh Captcha" style="border: none; background-color:white;"><span style="height: 100px; width:100px; font-size:27px;">🔄</span></button>
+                            <!-- this renders both the hidden and text input fields -->
+                        </div>
 
-    <div class="d-flex align-items-center mb-2">
-        {{ form.captcha.image }}  <!-- shows initial captcha image -->
-        <button type="button" class="btn btn-outline-secondary btn-sm ml-2" id="refresh-captcha"
-            title="Refresh Captcha">🔄</button>
-    </div>
-
-    {{ form.captcha }}  <!-- this renders both the hidden and text input fields -->
-</div>
+                    </div>
 
 
 
@@ -168,19 +177,19 @@
 
     <!-- Captcha Refresh Script -->
     <script>
-    $(document).ready(function () {
-        $('#refresh-captcha').click(function (e) {
-            e.preventDefault();
+        $(document).ready(function () {
+            $('#refresh-captcha').click(function (e) {
+                e.preventDefault();
 
-            $.get("/captcha/refresh/", function (data) {
-                // Change image
-                $('.captcha').attr("src", data.image_url);
-                // Update hidden input key
-                $('input[name="captcha_0"]').val(data.key);
+                $.get("/captcha/refresh/", function (data) {
+                    // Change image
+                    $('.captcha').attr("src", data.image_url);
+                    // Update hidden input key
+                    $('input[name="captcha_0"]').val(data.key);
+                });
             });
         });
-    });
-</script>
+    </script>
 
 
 

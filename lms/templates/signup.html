@@ -61,7 +61,7 @@
       background: #fff;
     }
 
-    button {
+    .snpbtn {
       background: linear-gradient(to right, #6a11cb, #2575fc);
       color: #fff;
       padding: 10px 20px;
@@ -75,7 +75,7 @@
       margin-top: 1em;
     }
 
-    button:hover {
+    .snpbtn:hover {
       background: linear-gradient(to right, #2575fc, #6a11cb);
       transform: scale(1.02);
     }
@@ -160,11 +160,23 @@
       .form-container {
         padding: 1.5em;
       }
-
+.fff input{
+        width: 45%;
+}
       h2 {
         font-size: 1.5rem;
       }
     }
+    .fff input{
+    margin-left: 10px;
+ }
+        .ff input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
   </style>
 </head>
 
@@ -216,13 +228,18 @@
 
           <!-- CAPTCHA Section -->
           <!-- This will render the CAPTCHA image + input + hidden key -->
-          <div class="form-group">
+
+
+          <!-- Captcha with Refresh -->
+          <div class="">
             <label>CAPTCHA Verification</label>
-            <div class="d-flex align-items-center mb-2">
+            <div class="d-flex align-items-center fff">
               {{ form.captcha }} <!-- 👈 Use this, don't manually construct hidden + image -->
-              <button type="button" class="btn btn-outline-secondary btn-sm ml-2" id="refresh-captcha">
-                <i class="fas fa-sync-alt"></i>
-              </button>
+
+              <button type="button" class="btn btn-outline-secondary btn-sm ml-2" id="refresh-captcha"
+                title="Refresh Captcha" style="border: none; background-color:white;"><span
+                  style="height: 100px; width:100px; font-size:27px;">🔄</span></button>
+              <!-- this renders both the hidden and text input fields -->
             </div>
             {% if form.captcha.errors %}
             <div class="text-danger small">{{ form.captcha.errors }}</div>
@@ -235,10 +252,11 @@
 
 
 
+
           <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-              <button type="submit" class="w-100">Sign Up</button>
+              <button type="submit" class="w-100 snpbtn">Sign Up</button>
             </div>
             <div class="col-md-3"></div>
           </div>
@@ -258,30 +276,30 @@
   {% include 'footer.html' %}
 
   <script>
-  $(document).ready(function () {
-    // CAPTCHA Refresh Function
-    $('#refresh-captcha').click(function () {
-      console.log('Refresh button clicked');
-      $.getJSON("/captcha/refresh/", function (data) {
-        console.log('CAPTCHA refreshed:', data);
-        // Find CAPTCHA image by class
-        $('.captcha').attr('src', data.image_url);
+    $(document).ready(function () {
+      // CAPTCHA Refresh Function
+      $('#refresh-captcha').click(function () {
+        console.log('Refresh button clicked');
+        $.getJSON("/captcha/refresh/", function (data) {
+          console.log('CAPTCHA refreshed:', data);
+          // Find CAPTCHA image by class
+          $('.captcha').attr('src', data.image_url);
 
-        // Update hidden input and clear text input
-        $("input[name='captcha_0']").val(data.key);
-        $("input[name='captcha_1']").val('');
+          // Update hidden input and clear text input
+          $("input[name='captcha_0']").val(data.key);
+          $("input[name='captcha_1']").val('');
+        });
+      });
+
+      // Mobile number validation
+      $('#mobile').on('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+          this.value = this.value.slice(0, 10);
+        }
       });
     });
-
-    // Mobile number validation
-    $('#mobile').on('input', function () {
-      this.value = this.value.replace(/[^0-9]/g, '');
-      if (this.value.length > 10) {
-        this.value = this.value.slice(0, 10);
-      }
-    });
-  });
-</script>
+  </script>
 
 
 </body>
