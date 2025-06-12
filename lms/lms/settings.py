@@ -145,8 +145,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'lmsprofitmaxacademy@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = 'wsuj zzel kpng maez'  # Your Gmail password or app password
+EMAIL_HOST_USER = 'lmstechmax@gmail.com'  # Your Gmail address
+EMAIL_HOST_PASSWORD = 'yolq euzn bukp rurb'  # Your Gmail password or app password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 

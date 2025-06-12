@@ -106,7 +106,7 @@ Last Name: {last_name}
 Email: {email}
 Mobile: {mobile}
 '''
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmsprofitmaxacademy@gmail.com'])
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['lmstechmax@gmail.com'])
 
             messages.success(request, 'Signup successful. Please login.')
             return redirect('login')
