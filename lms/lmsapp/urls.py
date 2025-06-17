@@ -31,9 +31,7 @@ urlpatterns = [
     path('subadmin_dashboard/', views.subadmin_dashboard, name='subadmin_dashboard'),
     path('subadmin-login/', views.subadmin_login_view, name='subadmin_login'),
 
-    path("payment/<int:course_id>/", views.initiate_payment, name="initiate_payment"),
-    path("payment/success/", views.payment_success, name="payment_success"),
-    path("payment/failure/", views.payment_failure, name="payment_failure"),
+    
 
     path('send_notification/', views.send_notification, name='send_notification'),
     path('course/<int:course_id>/view_content/<int:content_id>/complete/', views.mark_content_completed, name='mark_content_completed'),
@@ -46,6 +44,22 @@ urlpatterns = [
     path('export-users/', views.export_users_to_excel, name='export_users'),
 
     path('captcha/', include('captcha.urls')),
+
+
+    # start
+
+    path('paid-courses/', views.student_paid_courses, name='student_paid_courses'),
+    path('display_paid_content/<int:course_id>/', views.display_paid_content, name='display_paid_content'),
+    
+
+# payment
+    path('new_payment/',views.new_payment,name='new_payment'),
+    # path("payment/<int:course_id>/", views.initiate_payment, name="initiate_payment"),
+    # path("payment/success/", views.payment_success, name="payment_success"),
+    # path("payment/failure/", views.payment_failure, name="payment_failure"),
+
+    
+
     
 
     

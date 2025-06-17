@@ -674,11 +674,15 @@ def view_paid_course(request):
 from django.shortcuts import render, redirect
 from .models import PaidCourse
 from django.core.files.storage import FileSystemStorage
+
+
 def create_paid_course(request):
     if request.method == 'POST':
         course_title = request.POST.get('course_title')
         duration = request.POST.get('duration')
         description = request.POST.get('description')
+        about = request.POST.get('about')  # ✅ new
+        benefits = request.POST.get('benefits')  # ✅ new
         instructor_name = request.POST.get('instructor_name')
         course_level = request.POST.get('course_level')
         course_price = request.POST.get('course_price')
@@ -692,22 +696,23 @@ def create_paid_course(request):
         else:
             thumbnail_url = None
 
-        # Save data to database
+        # Save to database
         PaidCourse.objects.create(
             course_title=course_title,
             duration=duration,
             description=description,
+            about=about,  # ✅
+            benefits=benefits,  # ✅
             instructor_name=instructor_name,
             course_level=course_level,
             course_price=course_price,
             thumbnail=thumbnail
         )
-        return redirect('create_paid_course')  # Redirect to avoid form resubmission
+        return redirect('create_paid_course')
 
-    # Fetch all courses
     courses = PaidCourse.objects.all()
-
     return render(request, 'paid_course.html', {'courses': courses})
+
 
 
 
@@ -718,18 +723,34 @@ from .models import PaidCourse, CourseContent
 
 def upload_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
+
     if request.method == 'POST':
-        title = request.POST.get('title')
-        subtitles = request.POST.getlist('subtitle')
-        resource_files = request.FILES.getlist('resource_file')
+        titles = request.POST.getlist('title[]')
+        subtitles = request.POST.getlist('subtitle[]')
+        resource_files = request.FILES.getlist('resource_file[]')
 
-        if len(subtitles) != len(resource_files):
-            # Handle mismatch between subtitles and files
-            return render(request, 'upload_content.html', {'course': course, 'error': 'Each subtitle must have a corresponding file.'})
+        if not (titles and subtitles and resource_files):
+            return render(request, 'upload_content.html', {'course': course, 'error': 'Missing inputs.'})
 
-        # Save content entries
-        for subtitle, resource in zip(subtitles, resource_files):
-            CourseContent.objects.create(course=course, title=title, subtitle=subtitle, resource_file=resource)
+        # Logic: Assume N subtitle+file for each title, grouped sequentially
+        # JS should store counts per title so we can split subtitles/files accordingly.
+        # You can pass `subtitle_counts` from JS as a hidden input.
+
+        subtitle_counts = request.POST.getlist('subtitle_count[]')  # Hidden input from JS
+        subtitle_counts = [int(x) for x in subtitle_counts]
+
+        sub_idx = 0
+        for title, count in zip(titles, subtitle_counts):
+            for _ in range(count):
+                if sub_idx >= len(subtitles) or sub_idx >= len(resource_files):
+                    break
+                CourseContent.objects.create(
+                    course=course,
+                    title=title,
+                    subtitle=subtitles[sub_idx],
+                    resource_file=resource_files[sub_idx]
+                )
+                sub_idx += 1
 
         return redirect('create_paid_course')
 
@@ -738,44 +759,26 @@ def upload_content(request, course_id):
 
 
 
+
 from django.shortcuts import render, get_object_or_404
 from .models import PaidCourse, CourseContent
 from django.urls import reverse
+
+from collections import defaultdict
 
 def view_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
     contents = course.contents.all()
 
-    # Annotate each content with its type
-    annotated_contents = []
+    # Group contents by title
+    grouped_contents = defaultdict(list)
     for content in contents:
-        file_url = content.resource_file.url
-        print(f"Resource File URL: {file_url}")  # Debugging the file URL
-        
-        # Determine the content type based on the file extension
-        if file_url.endswith('.pdf'):
-            content_type = 'pdf'
-        elif file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
-            content_type = 'image'
-        elif file_url.endswith(('.mp4', '.webm', '.ogg')):
-            content_type = 'video'
-        # elif file_url.endswith('.docx'):
-        #     content_type = 'word'
-        else:
-            content_type = 'unknown'
-
-        annotated_contents.append({
-            'title': content.title,
-            'subtitle': content.subtitle,
-            'resource_file': file_url,
-            'type': content_type,
-        })
+        grouped_contents[content.title].append(content)
 
     return render(request, 'view_content.html', {
         'course': course,
-        'contents': contents,  # This must be passed correctly!
+        'grouped_contents': dict(grouped_contents),  # Convert defaultdict to normal dict
     })
-
 
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -986,103 +989,103 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
-def generate_hash_key(data_dict):
-    """Generate hash key for Easebuzz payment"""
-    hash_sequence = "|".join(str(data_dict[key]) for key in sorted(data_dict.keys()))
-    hash_string = settings.EASEBUZZ_SALT + "|" + hash_sequence + "|" + settings.EASEBUZZ_SALT
-    return hashlib.sha512(hash_string.encode()).hexdigest()
+# def generate_hash_key(data_dict):
+#     """Generate hash key for Easebuzz payment"""
+#     hash_sequence = "|".join(str(data_dict[key]) for key in sorted(data_dict.keys()))
+#     hash_string = settings.EASEBUZZ_SALT + "|" + hash_sequence + "|" + settings.EASEBUZZ_SALT
+#     return hashlib.sha512(hash_string.encode()).hexdigest()
 
-from .models import Payment
-import uuid  # To generate unique transaction IDs
+# from .models import Payment
+# import uuid  # To generate unique transaction IDs
 
 from django.contrib.auth.models import AnonymousUser
 
-import uuid
-import uuid
-import hashlib
+# import uuid
+# import uuid
+# import hashlib
 import requests
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from .models import Payment, PaidCourse
+# from .models import Payment, PaidCourse
 
-def generate_hash_key(data):
-    """Generates a hash for the Easebuzz transaction request"""
-    hash_sequence = "|".join([data[key] for key in sorted(data.keys())]) + "|" + settings.EASEBUZZ_SALT
-    return hashlib.sha512(hash_sequence.encode()).hexdigest()
+# def generate_hash_key(data):
+#     """Generates a hash for the Easebuzz transaction request"""
+#     hash_sequence = "|".join([data[key] for key in sorted(data.keys())]) + "|" + settings.EASEBUZZ_SALT
+#     return hashlib.sha512(hash_sequence.encode()).hexdigest()
 
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 
-@login_required
-def initiate_payment(request, course_id):
-    try:
-        course = get_object_or_404(PaidCourse, id=course_id)
-    except PaidCourse.DoesNotExist:
-        return JsonResponse({"error": "Course not found."})
+# @login_required
+# def initiate_payment(request, course_id):
+#     try:
+#         course = get_object_or_404(PaidCourse, id=course_id)
+#     except PaidCourse.DoesNotExist:
+#         return JsonResponse({"error": "Course not found."})
 
-    txnid = f"Txn{uuid.uuid4().hex[:10]}"  # Generate a unique transaction ID
-    first_name = request.user.first_name.strip() if request.user.first_name else "User"
+#     txnid = f"Txn{uuid.uuid4().hex[:10]}"  # Generate a unique transaction ID
+#     first_name = request.user.first_name.strip() if request.user.first_name else "User"
 
-    if not hasattr(settings, "EASEBUZZ_MERCHANT_KEY") or not settings.EASEBUZZ_MERCHANT_KEY:
-        return JsonResponse({"error": "Invalid merchant key. Please check your settings."})
+#     if not hasattr(settings, "EASEBUZZ_MERCHANT_KEY") or not settings.EASEBUZZ_MERCHANT_KEY:
+#         return JsonResponse({"error": "Invalid merchant key. Please check your settings."})
 
-    phone_number = getattr(request.user, 'mobile', '')
-    if not phone_number:
-        return JsonResponse({"error": "Phone number is required for payment."})
+#     phone_number = getattr(request.user, 'mobile', '')
+#     if not phone_number:
+#         return JsonResponse({"error": "Phone number is required for payment."})
 
-    payment = Payment.objects.create(
-        user=request.user,
-        course=course,
-        transaction_id=txnid,
-        amount=course.course_price,
-        status="Pending"
-    )
+#     payment = Payment.objects.create(
+#         user=request.user,
+#         course=course,
+#         transaction_id=txnid,
+#         amount=course.course_price,
+#         status="Pending"
+#     )
 
-    # Construct payment data for Easebuzz
-    data = {
-        "key": settings.EASEBUZZ_MERCHANT_KEY,
-        "txnid": txnid,
-        "amount": str(course.course_price),
-        "productinfo": course.course_title,
-        "firstname": first_name,
-        "email": request.user.email,
-        "phone": phone_number,
-        "surl": request.build_absolute_uri("/payment/success/"),  # Success URL
-        "furl": request.build_absolute_uri("/payment/failure/"),  # Failure URL
-    }
+#     # Construct payment data for Easebuzz
+#     data = {
+#         "key": settings.EASEBUZZ_MERCHANT_KEY,
+#         "txnid": txnid,
+#         "amount": str(course.course_price),
+#         "productinfo": course.course_title,
+#         "firstname": first_name,
+#         "email": request.user.email,
+#         "phone": phone_number,
+#         "surl": request.build_absolute_uri("/payment/success/"),  # Success URL
+#         "furl": request.build_absolute_uri("/payment/failure/"),  # Failure URL
+#     }
 
-    # Generate hash (if required by Easebuzz)
-    data["hash"] = generate_hash_key(data)  # Ensure you have a function to generate the hash
+#     # Generate hash (if required by Easebuzz)
+#     data["hash"] = generate_hash_key(data)  # Ensure you have a function to generate the hash
 
-    return render(request, "payment_redirect.html", {"data": data, "easebuzz_url": settings.EASEBUZZ_BASE_URL,'course':course})
+#     return render(request, "payment_redirect.html", {"data": data, "easebuzz_url": settings.EASEBUZZ_BASE_URL,'course':course})
 
 
 
 # views.py
 from django.shortcuts import render
-from .models import Payment
+# from .models import Payment
 
-def payment_success(request):
-    txnid = request.GET.get('txnid')  # Get transaction ID from Easebuzz
-    try:
-        payment = Payment.objects.get(transaction_id=txnid)
-        payment.status = "Success"
-        payment.save()
-    except Payment.DoesNotExist:
-        pass  # Handle error properly in production
+# def payment_success(request):
+#     txnid = request.GET.get('txnid')  # Get transaction ID from Easebuzz
+#     try:
+#         payment = Payment.objects.get(transaction_id=txnid)
+#         payment.status = "Success"
+#         payment.save()
+#     except Payment.DoesNotExist:
+#         pass  # Handle error properly in production
 
-    return render(request, "payment_success.html", {"txnid": txnid})
+#     return render(request, "payment_success.html", {"txnid": txnid})
 
-def payment_failure(request):
-    txnid = request.GET.get('txnid')
-    try:
-        payment = Payment.objects.get(transaction_id=txnid)
-        payment.status = "Failed"
-        payment.save()
-    except Payment.DoesNotExist:
-        pass
+# def payment_failure(request):
+#     txnid = request.GET.get('txnid')
+#     try:
+#         payment = Payment.objects.get(transaction_id=txnid)
+#         payment.status = "Failed"
+#         payment.save()
+#     except Payment.DoesNotExist:
+#         pass
 
-    return render(request, "payment_failed.html", {"txnid": txnid})
+#     return render(request, "payment_failed.html", {"txnid": txnid})
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -1409,3 +1412,42 @@ def export_users_to_excel(request):
 
 
 
+# start
+
+def student_paid_courses(request):
+    courses = PaidCourse.objects.all().order_by('-id')
+    return render(request, 'student_paid_courses.html', {'courses': courses})
+
+
+
+
+
+from collections import defaultdict
+from django.shortcuts import render, get_object_or_404
+from .models import PaidCourse
+
+def display_paid_content(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    contents = course.contents.all()
+
+    # Group content by module title
+    grouped_contents = defaultdict(list)
+    for content in contents:
+        grouped_contents[content.title].append(content)
+
+    return render(request, 'display_paid_content.html', {
+        'course': course,
+        'grouped_contents': dict(grouped_contents),
+    })
+
+
+
+
+# payment
+
+def new_payment(request):
+    return render(request,'new_payment.html')
+
+    
+
+    

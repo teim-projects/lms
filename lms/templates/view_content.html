@@ -185,62 +185,66 @@
                 </div>
             </div>
 
-            {% if contents %}
+            {% if grouped_contents %}
             <ul class="list-group">
-                {% for content in contents %}
-                <div class="content-block">
-                    <h3>{{ content.title }}</h3>
-                    <p>{{ content.subtitle }}</p>
+                {% for title, subtitles in grouped_contents.items %}
+                <li class="list-group-item">
+                    <h4 class="title-toggle" style="cursor: pointer;" data-target="content-{{ forloop.counter }}">
+                        ▶ {{ title }}
+                    </h4>
 
-                    <div class="content-container">
-                        {% if content.resource_file %}
-                        {% with file_ext=content.resource_file.name|slice:"-4:"|lower %}
-                        {% if file_ext in ".mp4" or file_ext in ".mov" or file_ext in ".avi" %}
-                        <h3>📹 Video Content</h3>
+                    <div id="content-{{ forloop.counter }}" class="subtitle-section"
+                        style="display: none; padding-left: 20px;">
+                        {% for content in subtitles %}
+                        <div class="content-block my-3">
+                            {% if content.subtitle %}
+                            <h5>
+                                <a href="{{ content.resource_file.url }}" target="_blank"
+                                    style="text-decoration: none; color: inherit;">
+                                    📂 {{ content.subtitle }}
+                                </a>
+                            </h5>
+                            {% endif %}
+                            <!-- <div class="content-container">
+                                {% with file_ext=content.resource_file.name|slice:"-4:"|lower %}
+                                    {% if file_ext in ".mp4" or file_ext in ".mov" or file_ext in ".avi" %}
+                                        <h6>📹 Video Content</h6>
+                                        <video controls playsinline controlsList="nofullscreen" width="100%">
+                                            <source src="{{ content.resource_file.url }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    {% elif file_ext in ".pdf" %}
+                                        <h6>📄 PDF Document</h6>
+                                        <embed src="{{ content.resource_file.url }}" type="application/pdf" width="100%" height="500px"/>
+                                        <br>
+                                        <a href="{{ content.resource_file.url }}" target="_blank">📂 Open PDF</a>
+                                    {% elif file_ext in ".jpg" or file_ext in ".jpeg" or file_ext in ".png" %}
+                                        <h6>🖼️ Image Content</h6>
+                                        <img src="{{ content.resource_file.url }}" alt="Course Image" style="max-width: 100%;">
+                                    {% else %}
+                                        <p class="unsupported">⚠️ Unsupported file format.</p>
+                                    {% endif %}
+                                {% endwith %}
+                            </div> -->
 
-                        <div style="position: relative;">
-                            <div class="moving-email" id="user-email" data-email="{{ customuser.email }}">{{
-                                request.user.email }}</div>
-
-                            <video id="videoElement" controls playsinline controlsList="nofullscreen">
-                                <source src="{{ content.resource_file.url }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+                            {% if content.completed %}
+                            <span class="badge badge-success">Completed</span>
+                            {% else %}
+                            <button class="mark-complete" data-course-id="{{ course.id }}"
+                                data-content-id="{{ content.id }}">
+                                Mark as Completed
+                            </button>
+                            {% endif %}
                         </div>
-                        {% elif file_ext in ".pdf" %}
-                        <h3>📄 PDF Document</h3>
-                        <embed src="{{ content.resource_file.url }}" type="application/pdf" />
-                        <br>
-                        <a href="{{ content.resource_file.url }}" class="pdf-link" target="_blank">📂 Open PDF in a New
-                            Tab</a>
-                        {% elif file_ext in ".jpg" or file_ext in ".png" or file_ext in ".jpeg" %}
-                        <h3>🖼️ Image Content</h3>
-                        <img src="{{ content.resource_file.url }}" alt="Course Image">
-                        {% else %}
-                        <p class="unsupported">⚠️ Unsupported file format.</p>
-                        {% endif %}
-                        {% endwith %}
-                        {% else %}
-                        <p class="unsupported">⚠️ No content available.</p>
-                        {% endif %}
+                        {% endfor %}
                     </div>
-
-
-
-                    {% if content.completed %}
-                    <span class="badge badge-success">Completed</span>
-                    {% else %}
-                    <button class="mark-complete" data-course-id="{{ course.id }}" data-content-id="{{ content.id }}">
-                        Mark as Completed
-                    </button>
-                    {% endif %}
-                </div>
+                </li>
                 {% endfor %}
-
             </ul>
             {% else %}
             <p class="text-center text-muted">No content available for this course.</p>
             {% endif %}
+
             <div class="progress mt-3">
                 <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
                     aria-valuemax="100">
@@ -249,40 +253,38 @@
             </div>
 
         </div>
-
     </div>
 
     <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
 
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let video = document.getElementById("videoElement");
-            let emailOverlay = document.querySelector(".moving-email");
+            const toggles = document.querySelectorAll(".title-toggle");
 
-            if (!video || !emailOverlay) {
-                console.warn("Video element or email overlay not found!");
-                return;
-            }
-            ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange", "MSFullscreenChange"]
-                .forEach(event => {
-                    document.addEventListener(event, preventFullscreen);
+            toggles.forEach(toggle => {
+                toggle.addEventListener("click", function () {
+                    const targetId = this.getAttribute("data-target");
+                    const target = document.getElementById(targetId);
+
+                    // Collapse all other sections
+                    document.querySelectorAll(".subtitle-section").forEach(section => {
+                        if (section.id !== targetId) {
+                            section.style.display = "none";
+                        }
+                    });
+
+                    // Toggle current section
+                    if (target.style.display === "none") {
+                        target.style.display = "block";
+                        this.innerHTML = "▼ " + this.textContent.slice(2);
+                    } else {
+                        target.style.display = "none";
+                        this.innerHTML = "▶ " + this.textContent.slice(2);
+                    }
                 });
-
-            // Disable fullscreen option by removing keyboard shortcuts
-            video.addEventListener("webkitfullscreenchange", preventFullscreen);
-            video.addEventListener("mozfullscreenchange", preventFullscreen);
-            video.addEventListener("fullscreenchange", preventFullscreen);
-            video.addEventListener("MSFullscreenChange", preventFullscreen);
-
-            function preventFullscreen(event) {
-                event.preventDefault(); // Prevent default fullscreen behavior
-                document.exitFullscreen(); // Exit fullscreen immediately
-            }
+            });
         });
     </script>
-
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -302,20 +304,17 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.completed) {
-                                // Immediately update button to show "Completed"
                                 this.textContent = "Completed";
                                 this.style.backgroundColor = "green";
                                 this.style.color = "white";
-                                this.disabled = true;  // Make button permanently disabled
+                                this.disabled = true;
 
-                                // Store the completed content ID in localStorage to persist across refresh
                                 let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
                                 if (!completedContent.includes(contentId)) {
                                     completedContent.push(contentId);
                                     localStorage.setItem("completedContent", JSON.stringify(completedContent));
                                 }
 
-                                // Show a popup confirmation
                                 showCompletionPopup();
                             }
                         })
@@ -323,7 +322,6 @@
                 });
             });
 
-            // Check localStorage for completed content and disable the button if needed
             let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
             document.querySelectorAll(".mark-complete").forEach(button => {
                 let contentId = button.getAttribute("data-content-id");
@@ -338,37 +336,34 @@
             function showCompletionPopup() {
                 let popup = document.createElement("div");
                 popup.innerHTML = `
-            <div style="
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #4CAF50;
-                color: white;
-                padding: 20px;
-                border-radius: 10px;
-                text-align: center;
-                font-size: 18px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            ">
-                ✅ Content Marked as Completed!
-            </div>
-        `;
+                    <div style="
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: #4CAF50;
+                        color: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        text-align: center;
+                        font-size: 18px;
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    ">
+                        ✅ Content Marked as Completed!
+                    </div>
+                `;
 
                 document.body.appendChild(popup);
 
                 setTimeout(() => {
-                    popup.remove();  // Remove popup after 2 seconds
+                    popup.remove();
                 }, 2000);
             }
         });
-
     </script>
 
-
     {% include 'footer.html' %}
-
-
 </body>
+
 
 </html>

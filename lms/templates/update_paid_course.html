@@ -198,12 +198,12 @@
                             <div class="mb-3">
                                 <label for="course_level" class="form-label">Course Level</label>
                                 <select class="form-control" id="course_level" name="course_level">
-                                    {% for level, label in course.COURSE_LEVELS %}
-                                    <option value="{{ level }}" {% if level==course.course_level %}selected{% endif %}>
-                                        {{ label }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+    {% for level, label in course.COURSE_LEVELS %}
+        <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
+            {{ label }}
+        </option>
+    {% endfor %}
+</select>
                             </div>
                             <div class="mb-1">
                                 <label for="course_price" class="form-label">Course Price</label>

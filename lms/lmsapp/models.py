@@ -113,6 +113,8 @@ class CourseChapter(models.Model):
 
 from django.db import models
 
+from django.db import models
+
 class PaidCourse(models.Model):
     COURSE_LEVELS = [
         ('Beginner', 'Beginner'),
@@ -128,6 +130,11 @@ class PaidCourse(models.Model):
     course_price = models.DecimalField(max_digits=10, decimal_places=2)
     thumbnail = models.ImageField(upload_to='thumbnails/')
 
+    # ✅ Newly added fields
+    about = models.TextField(blank=True, null=True)
+    benefits = models.TextField(blank=True, null=True)
+    testimonials = models.TextField(blank=True, null=True)
+
     def __str__(self):
         return self.course_title
 
@@ -139,9 +146,10 @@ class CourseContent(models.Model):
     resource_file = models.FileField(upload_to='course_resources/')
     completed = models.BooleanField(default=False)
 
+    
+
     def __str__(self):
         return self.title
-
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -177,23 +185,23 @@ class SubAdmin(AbstractUser):
     def __str__(self):
         return self.email
 
-class Payment(models.Model):
-    STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Success', 'Success'),
-        ('Failed', 'Failed'),
-    ]
+# class Payment(models.Model):
+#     STATUS_CHOICES = [
+#         ('Pending', 'Pending'),
+#         ('Success', 'Success'),
+#         ('Failed', 'Failed'),
+#     ]
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
-    first_name=models.CharField(max_length=100, null=True)
-    transaction_id = models.CharField(max_length=100, unique=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
-    timestamp = models.DateTimeField(auto_now_add=True)
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#     course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+#     first_name=models.CharField(max_length=100, null=True)
+#     transaction_id = models.CharField(max_length=100, unique=True)
+#     amount = models.DecimalField(max_digits=10, decimal_places=2)
+#     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+#     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.user.user} - {self.course.course} - {self.status}"
+#     def __str__(self):
+#         return f"{self.user.user} - {self.course.course} - {self.status}"
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -250,3 +258,18 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{self.subject} - {self.status}"
 
+
+
+# models.py
+
+
+class NewPayment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    txnid = models.CharField(max_length=100, unique=True)
+    status = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.course.course_title} - {self.txnid}"

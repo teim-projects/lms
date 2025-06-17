@@ -90,117 +90,142 @@
 </style>
 
 <body>
-
-
-
     {% include 'Admin_Base.html' %}
 
-
     <div class="main" style="min-height: 100vh;">
-        <div class="container-fluid my-4 ">
-            <!-- <div class="row "  >
-        <div class="col-md-12 col-12 ucc mt-4" style="ext-decoration: none;  background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradient definition */
--webkit-background-clip: text; 
--webkit-text-fill-color: transparent;"><h3>Upload Course Content</h3></div>
-    </div> -->
-            <div class="row mt-5" style="margin-top: 110px !important;">
+        <div class="container-fluid my-4">
+            <div class="row mt-5">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 col-12">
                     <fieldset>
-                        <form method="POST" enctype="multipart/form-data" class=" p-5">
+                        <form method="POST" enctype="multipart/form-data" class="p-5" id="upload-form">
                             {% csrf_token %}
-                            <div class="form-group">
-                                <label for="title">Title:</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
-                            </div>
-
-                            <div id="subtitle-container">
-                                <div class="subtitle-block">
+                            <div id="title-container">
+                                <!-- Initial Title Block -->
+                                <div class="title-block">
                                     <div class="form-group">
-                                        <label for="subtitle">Subtitle:</label>
-                                        <input type="text" class="form-control" name="subtitle" required>
+                                        <label>Title:</label>
+                                        <input type="text" class="form-control" name="title[]" required>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="resource_type">Resource Type:</label>
-                                        <select class="form-control" name="resource_type" required>
-                                            <option value="pdf">PDF</option>
-                                            <option value="image">Image</option>
-                                            <option value="video">Video</option>
-                                            <!-- <option value="word">Word Document</option> -->
-                                        </select>
+                                    <div class="subtitle-container">
+                                        <div class="subtitle-block">
+                                            <div class="form-group">
+                                                <label>Subtitle:</label>
+                                                <input type="text" class="form-control" name="subtitle[]" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Resource File:</label>
+                                                <input type="file" class="form-control" name="resource_file[]" required>
+                                            </div>
+                                            <button type="button" class="btn btn-danger remove-subtitle">Remove Subtitle</button>
+                                        </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="resource_file">Upload File:</label>
-                                        <input type="file" class="form-control p-1" name="resource_file" required>
-                                    </div>
-                                    <div class="row">
+                                    <!-- Hidden input to track number of subtitles -->
+                                    <input type="hidden" name="subtitle_count[]" class="subtitle-count" value="1">
 
-                                        <div class="col-md-12 "> <button type="button"
-                                                class="btn  remove-subtitle allbutton">Delete Subtitle</button></div>
-                                    </div>
+                                    <button type="button" class="btn btn-secondary add-subtitle">Add Subtitle</button>
+                                    <button type="button" class="btn btn-danger remove-title mt-2">Remove Title</button>
+                                    <hr>
                                 </div>
                             </div>
+
                             <div class="row mt-3">
                                 <div class="col-md-6 col-12 mt-2">
-                                    <button type="button" class="btn btn-primary add-subtitle-btn allbutton"
-                                        id="add-subtitle">Add Subtitle</button>
+                                    <button type="button" class="btn btn-primary" id="add-title">Add Title</button>
                                 </div>
-                                <div class="col-md-6 col-12 mt-2 ">
-                                    <button type="submit" class="btn btn-success submit-btn allbutton">Submit</button>
+                                <div class="col-md-6 col-12 mt-2">
+                                    <button type="submit" class="btn btn-success">Submit</button>
                                 </div>
                             </div>
                         </form>
                     </fieldset>
                 </div>
-                <div class="col-md-3 mt-2 "></div>
-
+                <div class="col-md-3 mt-2"></div>
             </div>
         </div>
-
     </div>
 
+    <!-- JQuery CDN (ensure included) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <!-- JS for dynamic add/remove -->
     <script>
         $(document).ready(function () {
-            $('#add-subtitle').click(function () {
+
+            // Add new Title block
+            $('#add-title').click(function () {
+                const titleBlock = `
+                <div class="title-block">
+                    <div class="form-group">
+                        <label>Title:</label>
+                        <input type="text" class="form-control" name="title[]" required>
+                    </div>
+
+                    <div class="subtitle-container">
+                        <div class="subtitle-block">
+                            <div class="form-group">
+                                <label>Subtitle:</label>
+                                <input type="text" class="form-control" name="subtitle[]" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Resource File:</label>
+                                <input type="file" class="form-control" name="resource_file[]" required>
+                            </div>
+                            <button type="button" class="btn btn-danger remove-subtitle">Remove Subtitle</button>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="subtitle_count[]" class="subtitle-count" value="1">
+                    <button type="button" class="btn btn-secondary add-subtitle">Add Subtitle</button>
+                    <button type="button" class="btn btn-danger remove-title mt-2">Remove Title</button>
+                    <hr>
+                </div>`;
+                $('#title-container').append(titleBlock);
+            });
+
+            // Remove entire Title block
+            $(document).on('click', '.remove-title', function () {
+                $(this).closest('.title-block').remove();
+            });
+
+            // Add Subtitle to current Title
+            $(document).on('click', '.add-subtitle', function () {
                 const subtitleBlock = `
                 <div class="subtitle-block">
                     <div class="form-group">
-                        <label for="subtitle">Subtitle:</label>
-                        <input type="text" class="form-control" name="subtitle" required>
+                        <label>Subtitle:</label>
+                        <input type="text" class="form-control" name="subtitle[]" required>
                     </div>
                     <div class="form-group">
-                        <label for="resource_type">Resource Type:</label>
-                        <select class="form-control" name="resource_type" required>
-                            <option value="pdf">PDF</option>
-                            <option value="image">Image</option>
-                            <option value="video">Video</option>
-                            <option value="word">Word Document</option>
-                        </select>
+                        <label>Resource File:</label>
+                        <input type="file" class="form-control" name="resource_file[]" required>
                     </div>
-                    <div class="form-group">
-                        <label for="resource_file">Upload File:</label>
-                        <input type="file" class="form-control p-1" name="resource_file" required>
-                    </div>
-<div class="row">
+                    <button type="button" class="btn btn-danger remove-subtitle">Remove Subtitle</button>
+                </div>`;
+                const container = $(this).siblings('.subtitle-container');
+                container.append(subtitleBlock);
 
-               <div class="col-md-12 " > <button type="button" class="btn  remove-subtitle allbutton" >Delete Subtitle</button></div>
-            </div>
-        </div>       
-        </div>
-            `;
-                $('#subtitle-container').append(subtitleBlock);
+                // Update subtitle count
+                const countInput = $(this).siblings('.subtitle-count');
+                countInput.val(container.find('.subtitle-block').length);
             });
 
+            // Remove a subtitle
             $(document).on('click', '.remove-subtitle', function () {
+                const subtitleContainer = $(this).closest('.subtitle-container');
                 $(this).closest('.subtitle-block').remove();
+
+                // Update subtitle count
+                const countInput = subtitleContainer.siblings('.subtitle-count');
+                countInput.val(subtitleContainer.find('.subtitle-block').length);
             });
         });
     </script>
-    {% include 'footer.html' %}
 
+    {% include 'footer.html' %}
 </body>
+
 
 </html>
