@@ -178,7 +178,7 @@
     <span class="close-btn" onclick="toggleSidebar()">&times;</span>
     <ul class="nav flex-column px-3">
       <li class="nav-item">
-        <a href="/admin_dashboard/" class="nav-link"> Dashboard</a>
+        <a href="/admin_dashboard/" class="nav-link"> Dashboard {{ request.user }}</a>
       </li>
 
       <li class="nav-item">
@@ -192,7 +192,8 @@
       <li class="nav-item">
         <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu2" role="button">Enrollment Management</a>
         <div class="collapse" id="menu2">
-          <a class="nav-link pl-4" href="#">Give Access</a>
+          <a class="nav-link pl-4" href="/grant-access/">Give Access</a>
+
           <a class="nav-link pl-4" href="#">Enrollment Tracking</a>
         </div>
       </li>

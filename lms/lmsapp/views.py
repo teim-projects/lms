@@ -975,7 +975,7 @@ def subadmin_login_view(request):
             if user.check_password(password) and user.is_subadmin:
                 auth_login(request, user)
                 request.session['subadmin_email'] = user.email
-                return redirect('admin_dashboard')  # Redirect to subadmin dashboard
+                return redirect('subadmin_dashboard')  # Redirect to subadmin dashboard
             else:
                 messages.error(request, "Invalid credentials or SubAdmin access denied.")
         except SubAdmin.DoesNotExist:
@@ -1414,6 +1414,7 @@ def export_users_to_excel(request):
 
 # start
 
+@login_required
 def student_paid_courses(request):
     courses = PaidCourse.objects.all().order_by('-id')
     return render(request, 'student_paid_courses.html', {'courses': courses})
@@ -1426,28 +1427,170 @@ from collections import defaultdict
 from django.shortcuts import render, get_object_or_404
 from .models import PaidCourse
 
+# @login_required
+# def display_paid_content(request, course_id):
+#     course = get_object_or_404(PaidCourse, id=course_id)
+#     payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
+    
+#     if not payment:
+#         return redirect('initiate_payment', course_id=course.id)
+
+#     contents = course.contents.all()
+#     grouped_contents = defaultdict(list)
+#     for content in contents:
+#         grouped_contents[content.title].append(content)
+
+#     return render(request, 'display_paid_content.html', {
+#         'course': course,
+#         'grouped_contents': dict(grouped_contents),
+#     })
+
+
+
+# @login_required
+# def display_paid_content(request, course_id):
+#     course = get_object_or_404(PaidCourse, id=course_id)
+#     payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
+#     contents = course.contents.all()
+    
+#     grouped_contents = defaultdict(list)
+#     for content in contents:
+#         grouped_contents[content.title].append(content)
+
+#     has_access = bool(payment)
+#     return render(request, 'display_paid_content.html', {
+#         'course': course,
+#         'grouped_contents': dict(grouped_contents),
+#         'has_access': has_access
+#     })
+
+
+from .models import UserCourseAccess  # Add this import
+
+@login_required
 def display_paid_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
+    payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
+    manual_access = UserCourseAccess.objects.filter(user=request.user, course=course).exists()
+    
     contents = course.contents.all()
-
-    # Group content by module title
     grouped_contents = defaultdict(list)
     for content in contents:
         grouped_contents[content.title].append(content)
 
+    has_access = bool(payment) or manual_access
     return render(request, 'display_paid_content.html', {
         'course': course,
         'grouped_contents': dict(grouped_contents),
+        'has_access': has_access
     })
-
-
 
 
 # payment
 
-def new_payment(request):
-    return render(request,'new_payment.html')
 
     
-
     
+# go
+ 
+
+import hashlib, random, string
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from .models import PaidCourse, NewPayment
+from collections import defaultdict
+
+def generate_txnid():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+
+
+
+
+@login_required
+def initiate_payment(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    user = request.user
+
+    txnid = generate_txnid()
+    amount = str(course.course_price)
+    productinfo = course.course_title
+    firstname = user.first_name or user.username
+    email = user.email
+    phone = "9999999999"  # Or from user profile
+
+    key = settings.EASEBUZZ_MERCHANT_KEY
+    salt = settings.EASEBUZZ_SALT
+
+    hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
+    hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
+
+    payment = NewPayment.objects.create(
+        user=user,
+        course=course,
+        amount=amount,
+        txnid=txnid,
+        status="initiated"
+    )
+
+    context = {
+        "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
+        "MERCHANT_KEY": key,
+        "txnid": txnid,
+        "amount": amount,
+        "productinfo": productinfo,
+        "firstname": firstname,
+        "email": email,
+        "phone": phone,
+        "surl": request.build_absolute_uri('/payment/success/'),
+        "furl": request.build_absolute_uri('/payment/failure/'),
+        "hashh": hashh
+    }
+    return render(request, "initiate_payment.html", context)
+
+
+
+
+@csrf_exempt
+def payment_success(request):
+    txnid = request.POST.get("txnid")
+    status = request.POST.get("status")
+
+    try:
+        payment = NewPayment.objects.get(txnid=txnid)
+        payment.status = status
+        payment.save()
+        return redirect('display_paid_content', course_id=payment.course.id)
+    except NewPayment.DoesNotExist:
+        return render(request, 'payment_failed.html')
+
+@csrf_exempt
+def payment_failure(request):
+    txnid = request.POST.get("txnid")
+    try:
+        payment = NewPayment.objects.get(txnid=txnid)
+        payment.status = "failed"
+        payment.save()
+    except NewPayment.DoesNotExist:
+        pass
+    return render(request, 'payment_failed.html')
+
+
+
+
+def grant_course_access(request):
+    users = CustomUser.objects.filter(is_staff=False, is_superuser=False).order_by('email')
+    courses = PaidCourse.objects.all()
+
+    if request.method == "POST":
+        user_id = request.POST.get("user_id")
+        course_id = request.POST.get("course_id")
+
+        user = CustomUser.objects.get(id=user_id)  # ✅ NOT SubAdmin
+        course = PaidCourse.objects.get(id=course_id)
+
+        UserCourseAccess.objects.get_or_create(user=user, course=course)
+        return redirect('grant_course_access')
+
+    return render(request, "grant_course_access.html", {"users": users, "courses": courses})

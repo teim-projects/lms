@@ -306,7 +306,7 @@
 
             <!-- Dashboard Menu -->
             <li class="nav-item">
-                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
+                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard{{ request.user }}</span></a>
             </li>
             <!-- Course Management Menu -->
             <li class="nav-item">
@@ -368,7 +368,7 @@
 
     <center>
         <h1 class="h1">Welcome to SubAdmin Dashboard!</h1>
-        <p class="p">Hello, {{ request.user.username }}!</p>
+        <p class="p">Hello, {{ request.user }}!</p>
     </center>
 
     <footer class="footer {% if not courses %}fixed-footer{% endif %}">

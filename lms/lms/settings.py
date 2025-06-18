@@ -165,13 +165,20 @@ APPEND_SLASH = False
 # settings.py
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
-SESSION_COOKIE_AGE = 40  # Session expires in 40 seconds
+SESSION_COOKIE_AGE = 3600  # Session expires in 40 seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Ensures session is saved on every request
+
+# EASEBUZZ_MERCHANT_KEY = "Z40SWGFKH"
+# EASEBUZZ_SALT = "BWX48AF75"
+# EASEBUZZ_USE_SANDBOX = False  # Set to False for production
+# EASEBUZZ_BASE_URL = "`https://easebuzz.in/demo/?amount=rs{course_price}&productinfo=${course_title}&firstname=${userName}`" if EASEBUZZ_USE_SANDBOX else "https://easebuzz.in/live/"
+#   # For production
 
 EASEBUZZ_MERCHANT_KEY = "Z40SWGFKH"
 EASEBUZZ_SALT = "BWX48AF75"
-EASEBUZZ_USE_SANDBOX = False  # Set to False for production
-EASEBUZZ_BASE_URL = "`https://easebuzz.in/demo/?amount=rs{course_price}&productinfo=${course_title}&firstname=${userName}`" if EASEBUZZ_USE_SANDBOX else "https://easebuzz.in/live/"
-  # For production
+EASEBUZZ_USE_SANDBOX = True  # Set to False for live mode
+
 
 AUTH_USER_MODEL = 'lmsapp.CustomUser'
+# AUTH_USER_MODEL = 'lmsapp.SubAdmin'
+

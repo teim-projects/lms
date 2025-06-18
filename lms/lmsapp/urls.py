@@ -53,10 +53,21 @@ urlpatterns = [
     
 
 # payment
-    path('new_payment/',views.new_payment,name='new_payment'),
+    
     # path("payment/<int:course_id>/", views.initiate_payment, name="initiate_payment"),
     # path("payment/success/", views.payment_success, name="payment_success"),
     # path("payment/failure/", views.payment_failure, name="payment_failure"),
+    
+
+
+    path('course/<int:course_id>/pay/', views.initiate_payment, name='initiate_payment'),
+    path('payment/success/', views.payment_success, name='payment_success'),
+    path('payment/failure/', views.payment_failure, name='payment_failure'),
+
+
+    # access to paid course
+    path('grant-access/', views.grant_course_access, name='grant_course_access')
+
 
     
 

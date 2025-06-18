@@ -158,9 +158,14 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 class SubAdmin(AbstractUser):
+    email = models.EmailField(unique=True)  # 👈 Make email unique
+
     phone_number = models.CharField(max_length=15, blank=True, null=True)
-    plain_password = models.CharField(max_length=128, blank=True, null=True)  # Store plain-text password
+    plain_password = models.CharField(max_length=128, blank=True, null=True)
     is_subadmin = models.BooleanField(default=True)
 
     groups = models.ManyToManyField(
@@ -174,16 +179,18 @@ class SubAdmin(AbstractUser):
         blank=True,
     )
 
-    # Remove unused fields and override username to None
+    # Remove unused fields and override username
     username = None
     first_name = None
     last_name = None
-    address = None
+    address = None  # You can remove this if not declared elsewhere
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number']
 
     def __str__(self):
         return self.email
+
 
 # class Payment(models.Model):
 #     STATUS_CHOICES = [
@@ -273,3 +280,16 @@ class NewPayment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.course.course_title} - {self.txnid}"
+
+
+# models.py
+
+# models.py
+
+class UserCourseAccess(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ✅ make sure it's CustomUser
+    course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+    granted_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.course.course_title}"

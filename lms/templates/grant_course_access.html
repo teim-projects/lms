@@ -1,0 +1,21 @@
+<h2>Grant Manual Course Access (Offline Payment)</h2>
+
+<form method="POST">
+  {% csrf_token %}
+
+  <label for="user_id">Select User:</label>
+  <select name="user_id" required>
+    {% for user in users %}
+      <option value="{{ user.id }}">{{ user.email }} ({{ user.mobile }})</option>
+    {% endfor %}
+  </select>
+
+  <label for="course_id">Select Course:</label>
+  <select name="course_id" required>
+    {% for course in courses %}
+      <option value="{{ course.id }}">{{ course.course_title }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Grant Access</button>
+</form>
