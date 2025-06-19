@@ -168,149 +168,41 @@
 <body>
     {% include 'Student_Base.html' %}
 
-    <div class="div" style="min-height: 100vh;">
-        <div class="container my-4" style="margin-top: 100px !important;">
-            <div class="text-center mb-4">
-                <h2>Available Courses</h2>
-                <hr class="w-25 mx-auto border-primary">
-            </div>
-
-            {% if courses %}
-            <div class="row">
-                {% for course in courses %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 card-box">
-                        {% if course.thumbnail %}
-                        <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
-                            style="width: 100%; height: 200px; object-fit: cover;">
-                        {% else %}
-                        <p>No thumbnail available</p>
-                        {% endif %}
-
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold text-center text-primary">
-                                <span class="truncated-title" id="title-{{ course.id }}">{{ course.title }}</span>
-                                {% if course.title|length > 50 %}
-                                <button type="button" class="read-more-btn"
-                                    onclick="toggleTitleText({{ course.id }})">Read More</button>
-                                {% endif %}
-                            </h5>
-
-                            <div class="text-center">
-                                <button class="btn btn-primary btn-sm toggle-details-btn"
-                                    data-course-id="{{ course.id }}">
-                                    Course Details
-                                </button>
+    <div id="courseCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <!-- Replace this image with your desired carousel background -->
+                <img src="{% static 'images/background2.jpg' %}" class="d-block w-100" alt="Courses Background" style="height: 100vh; object-fit: cover;">
+                <div class="carousel-caption d-flex flex-column justify-content-center align-items-center h-100">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4 mb-4">
+                                <a href="/paid-courses/" class="text-decoration-none">
+                                    <div class="card text-white bg-primary shadow-lg text-center">
+                                        <div class="card-body py-5">
+                                            <h3 class="card-title">Paid Courses</h3>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
-
-                            <!-- Hidden details section -->
-                            <div class="course-details mt-3 d-none" id="details-{{ course.id }}">
-                                <p class="card-text truncated-description" id="desc-{{ course.id }}">
-                                    {{ course.description }}
-                                </p>
-                                {% if course.description|length > 200 %}
-                                <button type="button" class="read-more-btn"
-                                    onclick="toggleDescription({{ course.id }})">Read More</button>
-                                {% endif %}
-
-                                <h5 class="chapter-heading mt-3 text-center">Lessons</h5>
-                                <ul class="list-unstyled" id="chapter-list-{{ course.id }}">
-                                    {% for chapter in course.chapters.all %}
-                                    <li class="mb-1 {% if forloop.counter > 3 %}d-none extra-chapter-{{ course.id }}{% endif %}">
-                                        <a href="{{ chapter.youtube_link }}" target="_blank" class="chbtn chapter-title"
-                                            id="chapter-title-{{ chapter.id }}">
-                                            {{ chapter.title }}
-                                        </a>
-                                        {% if chapter.title|length > 50 %}
-                                        <button type="button" class="read-more-btn text-primary small ms-1"
-                                            onclick="toggleChapterText({{ chapter.id }})">Read More</button>
-                                        {% endif %}
-                                    </li>
-                                    {% empty %}
-                                    <li class="text-muted text-center text-info">No Lessons available</li>
-                                    {% endfor %}
-                                </ul>
-
-                                {% if course.chapters.count > 3 %}
-                                <div class="text-center mt-2">
-                                    <button class="btn btn-outline-primary btn-sm explore-btn"
-                                        data-course-id="{{ course.id }}">
-                                        Explore More
-                                    </button>
-                                </div>
-                                {% endif %}
+                            <div class="col-md-4 mb-4">
+                                <a href="/free-course/" class="text-decoration-none">
+                                    <div class="card text-white bg-success shadow-lg text-center">
+                                        <div class="card-body py-5">
+                                            <h3 class="card-title">Free Courses</h3>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-            {% else %}
-            <div class="text-center text-muted py-5">
-                <i class="bi bi-folder-x fs-1"></i>
-                <p class="mt-2">No courses available</p>
-            </div>
-            {% endif %}
+            <!-- Add more carousel items if needed -->
         </div>
     </div>
 
-    <!-- JavaScript from free_course.html -->
-    <script>
-        function toggleTitleText(courseId) {
-            const titleSpan = document.getElementById('title-' + courseId);
-            const button = titleSpan.nextElementSibling;
-
-            titleSpan.classList.toggle('expanded');
-            button.textContent = titleSpan.classList.contains('expanded') ? 'Read Less' : 'Read More';
-        }
-
-        function toggleDescription(courseId) {
-            const desc = document.getElementById('desc-' + courseId);
-            const btn = desc.nextElementSibling;
-
-            desc.classList.toggle('expanded');
-            btn.textContent = desc.classList.contains('expanded') ? 'Read Less' : 'Read More';
-        }
-
-        function toggleChapterText(chapterId) {
-            const titleEl = document.getElementById(`chapter-title-${chapterId}`);
-            const btn = titleEl.nextElementSibling;
-
-            titleEl.classList.toggle("expanded");
-            btn.textContent = titleEl.classList.contains("expanded") ? "Read Less" : "Read More";
-        }
-
-        $(document).ready(function () {
-            // Toggle course details
-            $('.toggle-details-btn').click(function () {
-                const courseId = $(this).data('course-id');
-                $('#details-' + courseId).toggleClass('d-none');
-
-                // Change button text
-                if ($('#details-' + courseId).hasClass('d-none')) {
-                    $(this).text('Course Details');
-                } else {
-                    $(this).text('Hide Details');
-                }
-            });
-
-            // Toggle explore more/less
-            $('.explore-btn').click(function () {
-                const courseId = $(this).data('course-id');
-                const $extraChapters = $('.extra-chapter-' + courseId);
-                const $btn = $(this);
-
-                $extraChapters.toggleClass('d-none');
-
-                if ($extraChapters.hasClass('d-none')) {
-                    $btn.text('Explore More');
-                } else {
-                    $btn.text('Explore Less');
-                }
-            });
-        });
-    </script>
-
     {% include 'footer.html' %}
 </body>
+
 </html>

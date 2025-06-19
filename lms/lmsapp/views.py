@@ -1427,23 +1427,6 @@ from collections import defaultdict
 from django.shortcuts import render, get_object_or_404
 from .models import PaidCourse
 
-# @login_required
-# def display_paid_content(request, course_id):
-#     course = get_object_or_404(PaidCourse, id=course_id)
-#     payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
-    
-#     if not payment:
-#         return redirect('initiate_payment', course_id=course.id)
-
-#     contents = course.contents.all()
-#     grouped_contents = defaultdict(list)
-#     for content in contents:
-#         grouped_contents[content.title].append(content)
-
-#     return render(request, 'display_paid_content.html', {
-#         'course': course,
-#         'grouped_contents': dict(grouped_contents),
-#     })
 
 
 
