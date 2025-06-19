@@ -405,6 +405,11 @@ from django.contrib import messages
 from .models import CustomUser
 from .forms import LoginForm
 
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User  # or CustomUser if you're using it
+import re
+
 def login(request):
     form = LoginForm(request.POST or None)
     
@@ -413,33 +418,29 @@ def login(request):
             identifier = form.cleaned_data['identifier']
             password = form.cleaned_data['password']
 
-            request.session.pop('admin_email', None)
-            request.session.pop('user_email', None)
-
-            if identifier == 'admin@gmail.com' and password == 'admin':
-                request.session['admin_email'] = identifier
-                return redirect('admin_dashboard')
-
-            # Try email or mobile
+            user = None
             try:
                 if re.match(r"[^@]+@[^@]+\.[^@]+", identifier):
                     user = CustomUser.objects.get(email=identifier)
                 else:
                     user = CustomUser.objects.get(mobile=identifier)
-
-                if user.check_password(password):
-                    auth_login(request, user)
-                    request.session['user_email'] = user.email
-                    return redirect('student_dashboard')
-                else:
-                    messages.error(request, "Incorrect password.")
             except CustomUser.DoesNotExist:
                 messages.error(request, "User does not exist.")
+                return render(request, 'login.html', {'form': form})
+
+            user = authenticate(request, username=user.username, password=password)
+            if user:
+                auth_login(request, user)
+                if user.is_superuser:
+                    return redirect('admin_dashboard')
+                else:
+                    return redirect('student_dashboard')
+            else:
+                messages.error(request, "Incorrect password.")
         else:
             messages.error(request, "Invalid captcha.")
     
     return render(request, 'login.html', {'form': form})
-
 
 
 
@@ -1562,6 +1563,9 @@ def payment_failure(request):
 
 
 
+# use user pass test to know weather the login is of admin or user
+@login_required
+@user_passes_test(lambda u: u.is_superuser)  
 def grant_course_access(request):
     users = CustomUser.objects.filter(is_staff=False, is_superuser=False).order_by('email')
     courses = PaidCourse.objects.all()

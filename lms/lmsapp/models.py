@@ -30,8 +30,6 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     mobile = models.CharField(max_length=12, unique=True)
-  # Mobile number field
-
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
@@ -39,17 +37,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
 
-    # Adding unique related_name values
     groups = models.ManyToManyField(
         Group,
-        related_name="customuser_groups",  # Unique related_name
+        related_name="customuser_groups",
         blank=True,
         help_text=_("The groups this user belongs to."),
         verbose_name=_("groups"),
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name="customuser_permissions",  # Unique related_name
+        related_name="customuser_permissions",
         blank=True,
         help_text=_("Specific permissions for this user."),
         verbose_name=_("user permissions"),
@@ -63,6 +60,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+    @property
+    def username(self):
+        return self.email  # Fallback so Django admin etc. works
 
 
 
