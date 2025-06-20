@@ -1,0 +1,53 @@
+{% include 'Admin_Base.html' %}
+<div class="container mt-4">
+    <h2 class="text-center">Course Student Progress Report</h2>
+
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        <label>Select Course:</label>
+        <select name="course_id" class="form-control" required>
+            <option value="">-- Select --</option>
+            {% for course in courses %}
+                <option value="{{ course.id }}" {% if selected_course and course.id == selected_course.id %}selected{% endif %}>
+                    {{ course.course_title }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary mt-2">View Progress</button>
+    </form>
+
+    {% if selected_course %}
+    <h4>Course: {{ selected_course.course_title }}</h4>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <h5>✅ Completed Students (100%)</h5>
+            <ul class="list-group">
+                {% for student in completed_students %}
+                    <li class="list-group-item">{{ student.get_full_name }} ({{ student.username }})</li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No students have completed this course yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-4">
+            <h5>🚧 Ongoing Students (Not Completed)</h5>
+            <ul class="list-group">
+                {% for student in ongoing_students %}
+                    <li class="list-group-item">{{ student.get_full_name }} ({{ student.username }})</li>
+                {% empty %}
+                    <li class="list-group-item text-muted">All students have completed the course.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-4">
+            <h5>📊 Total Enrolled Students</h5>
+            <div class="alert alert-info text-center mt-4">
+                <h3>{{ total_students }}</h3>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

@@ -237,13 +237,18 @@ from .models import CustomUser
 from .models import PaidCourse, CourseContent
 
 class CourseProgress(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Ensure it is linked to the user
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
-    content = models.ForeignKey(CourseContent, on_delete=models.CASCADE,default='',null=True)  # Track specific content
-    completed = models.BooleanField(default=False)  # Track whether the content is completed
+    completed = models.BooleanField(default=False)
+    progress_percentage = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('user', 'course')
 
     def __str__(self):
-        return f"{self.user} - {self.course} - {self.content} - {'Completed' if self.completed else 'Not Completed'}"
+        return f"{self.user} - {self.course} - {self.progress_percentage}%"
+
+
 
 
 
@@ -284,7 +289,6 @@ class NewPayment(models.Model):
 
 # models.py
 
-# models.py
 
 class UserCourseAccess(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ✅ make sure it's CustomUser
@@ -293,3 +297,6 @@ class UserCourseAccess(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.course.course_title}"
+
+
+# course completion model

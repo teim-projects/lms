@@ -66,7 +66,12 @@ urlpatterns = [
 
 
     # access to paid course
-    path('grant-access/', views.grant_course_access, name='grant_course_access')
+    path('grant-access/', views.grant_course_access, name='grant_course_access'),
+
+    path('mark-complete/', views.mark_content_complete, name='mark_content_complete'),
+
+    path('enrollment_tracking/', views.enrollment_tracking, name='enrollment_tracking'),
+
 
 
     

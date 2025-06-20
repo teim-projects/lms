@@ -1451,6 +1451,13 @@ from .models import PaidCourse
 
 from .models import UserCourseAccess  # Add this import
 
+
+from django.db.models import Q
+from collections import defaultdict
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render
+from .models import PaidCourse, NewPayment, UserCourseAccess, CourseContent, CourseProgress
+
 @login_required
 def display_paid_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
@@ -1463,11 +1470,19 @@ def display_paid_content(request, course_id):
         grouped_contents[content.title].append(content)
 
     has_access = bool(payment) or manual_access
+
+    # ✅ Fetch from DB, not recalculate
+    progress = CourseProgress.objects.filter(user=request.user, course=course).first()
+    progress_percentage = progress.progress_percentage if progress else 0
+
     return render(request, 'display_paid_content.html', {
         'course': course,
         'grouped_contents': dict(grouped_contents),
-        'has_access': has_access
+        'has_access': has_access,
+        'progress_percentage': progress_percentage
     })
+
+
 
 
 # payment
@@ -1581,3 +1596,86 @@ def grant_course_access(request):
         return redirect('grant_course_access')
 
     return render(request, "grant_course_access.html", {"users": users, "courses": courses})
+
+
+
+# from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import CourseProgress, PaidCourse, CourseContent
+
+@login_required
+def mark_content_complete(request):
+    if request.method == "POST":
+        user = request.user
+        course_id = request.POST.get("course_id")
+        content_id = request.POST.get("content_id")  # Still needed to calculate progress
+
+        course = get_object_or_404(PaidCourse, id=course_id)
+        content = get_object_or_404(CourseContent, id=content_id)
+
+        # ✅ Store list of completed content in session (or DB if needed)
+        completed_contents = request.session.get('completed_contents', [])
+        content_key = f"{course.id}-{content.id}"
+
+        if content_key not in completed_contents:
+            completed_contents.append(content_key)
+            request.session['completed_contents'] = completed_contents
+
+        # ✅ Calculate progress
+        total_content = CourseContent.objects.filter(course=course).count()
+        completed_count = sum(1 for key in completed_contents if key.startswith(f"{course.id}-"))
+        percentage = int((completed_count / total_content) * 100) if total_content > 0 else 0
+
+        # ✅ Update or create progress record
+        progress, created = CourseProgress.objects.get_or_create(user=user, course=course)
+        progress.progress_percentage = percentage
+        progress.completed = percentage == 100
+        progress.save()
+
+        return redirect('display_paid_content', course_id=course.id)
+
+
+
+
+# views.py
+from django.shortcuts import render, get_object_or_404
+from .models import PaidCourse, CourseProgress, NewPayment, UserCourseAccess
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def enrollment_tracking(request):
+    courses = PaidCourse.objects.all()
+    selected_course = None
+    completed_students = []
+    ongoing_students = []
+    total_students = 0
+
+    if request.method == "POST":
+        course_id = request.POST.get("course_id")
+        selected_course = get_object_or_404(PaidCourse, id=course_id)
+
+        # Get users who have access (either paid or manually added)
+        paid_users = NewPayment.objects.filter(course=selected_course, status="success").values_list('user', flat=True)
+        manual_users = UserCourseAccess.objects.filter(course=selected_course).values_list('user', flat=True)
+        all_user_ids = set(list(paid_users) + list(manual_users))
+        users = CustomUser.objects.filter(id__in=all_user_ids)
+
+        for user in users:
+            progress = CourseProgress.objects.filter(user=user, course=selected_course).first()
+            if progress and progress.progress_percentage == 100:
+                completed_students.append(user)
+            else:
+                ongoing_students.append(user)
+
+        total_students = len(users)
+
+    return render(request, "enrollment_tracking.html", {
+        "courses": courses,
+        "selected_course": selected_course,
+        "completed_students": completed_students,
+        "ongoing_students": ongoing_students,
+        "total_students": total_students
+    })
