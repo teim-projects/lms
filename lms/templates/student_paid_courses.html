@@ -141,12 +141,13 @@
 
 <body>
     {% include 'Student_Base.html' %}
+<div class="main" style="min-height: 100vh;">
 
-    <div class="course-header text-center">
+
+    <div class="  text-center mb-3" style="margin-top: 100px;">
         <div class="container">
-            <h1 class="display-4">Premium Courses {{ request.user }}</h1>
-            <p class="lead">Enhance your trading skills with our expert-led courses</p>
-        </div>
+            <h1>Premium Courses </h1>
+         </div>
     </div>
 
     <div class="container" style="margin-bottom: 5rem;">
@@ -195,7 +196,7 @@
             {% endfor %}
         </div>
     </div>
-
+</div>
     {% include 'footer.html' %}
 </body>
 
