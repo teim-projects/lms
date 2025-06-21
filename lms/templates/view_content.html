@@ -174,195 +174,117 @@
 </head>
 
 <body>
-
     {% include 'Admin_Base.html' %}
+    <div class="container content-wrapper">
+        <h2 class="text-center">{{ course.course_title }}</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <img src="{{ course.thumbnail.url }}" alt="Course Thumbnail" class="img-fluid rounded">
+            </div>
+            <div class="col-md-8">
+                <p><strong>Price:</strong> Rs. {{ course.course_price }}</p>
+                <p><strong>Duration:</strong> {{ course.duration }}</p>
+                <p><strong>Instructor:</strong> {{ course.instructor_name }}</p>
+                <p><strong>Level:</strong> {{ course.course_level }}</p>
+                <p><strong>Description:</strong><br>{{ course.description }}</p>
+            </div>
+        </div>
 
-    <div class="main" style="min-height: 100vh;">
-        <div class="container my-4">
-            <div class="row" style="margin-top: 100px;">
-                <div class="col-md-12 couresname col-12">
-                    <h2 class="text-center">{{ course.course_title }}</h2>
-                </div>
+        <ul class="nav nav-tabs mt-4" id="courseTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="modules-tab" data-toggle="tab" href="#modules" role="tab">Modules</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="benefit-tab" data-toggle="tab" href="#benefit" role="tab">Benefit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="testimonials-tab" data-toggle="tab" href="#testimonials"
+                    role="tab">Testimonial</a>
+            </li>
+           
+        </ul>
+
+        <div class="tab-content" id="courseTabContent">
+
+            <div class="tab-pane fade show active" id="about" role="tabpanel">
+                <p class="mt-3">{{ course.about }}</p>
             </div>
 
-            {% if grouped_contents %}
-            <ul class="list-group">
-                {% for title, subtitles in grouped_contents.items %}
-                <li class="list-group-item">
-                    <h4 class="title-toggle" style="cursor: pointer;" data-target="content-{{ forloop.counter }}">
-                        ▶ {{ title }}
-                    </h4>
-
-                    <div id="content-{{ forloop.counter }}" class="subtitle-section"
-                        style="display: none; padding-left: 20px;">
-                        {% for content in subtitles %}
-                        <div class="content-block my-3">
-                            {% if content.subtitle %}
-                            <h5>
-                                <a href="{{ content.resource_file.url }}" target="_blank"
-                                    style="text-decoration: none; color: inherit;">
-                                    📂 {{ content.subtitle }}
-                                </a>
-                            </h5>
-                            {% endif %}
-                            <!-- <div class="content-container">
-                                {% with file_ext=content.resource_file.name|slice:"-4:"|lower %}
-                                    {% if file_ext in ".mp4" or file_ext in ".mov" or file_ext in ".avi" %}
-                                        <h6>📹 Video Content</h6>
-                                        <video controls playsinline controlsList="nofullscreen" width="100%">
-                                            <source src="{{ content.resource_file.url }}" type="video/mp4">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    {% elif file_ext in ".pdf" %}
-                                        <h6>📄 PDF Document</h6>
-                                        <embed src="{{ content.resource_file.url }}" type="application/pdf" width="100%" height="500px"/>
-                                        <br>
-                                        <a href="{{ content.resource_file.url }}" target="_blank">📂 Open PDF</a>
-                                    {% elif file_ext in ".jpg" or file_ext in ".jpeg" or file_ext in ".png" %}
-                                        <h6>🖼️ Image Content</h6>
-                                        <img src="{{ content.resource_file.url }}" alt="Course Image" style="max-width: 100%;">
+            <div class="tab-pane fade" id="modules" role="tabpanel">
+                {% for title, contents in grouped_contents.items %}
+                <div class="mt-4">
+                    <h5>
+                        <a data-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button"
+                            aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                            {{ title }}
+                        </a>
+                    </h5>
+                    <div class="collapse" id="collapse{{ forloop.counter }}">
+                        <ul>
+                            {% for content in contents %}
+                            <li class="video-box d-flex justify-content-between align-items-center">
+                                <div>
+                                    {% if ".mp4" in content.resource_file.url %}
+                                    <a href="{{ content.resource_file.url }}" target="_blank">🎥 {{ content.subtitle }}</a>
                                     {% else %}
-                                        <p class="unsupported">⚠️ Unsupported file format.</p>
+                                    <a href="{{ content.resource_file.url }}" target="_blank">📄 {{ content.subtitle }}</a>
                                     {% endif %}
-                                {% endwith %}
-                            </div> -->
-
-                            {% if content.completed %}
-                            <span class="badge badge-success">Completed</span>
-                            {% else %}
-                            <button class="mark-complete" data-course-id="{{ course.id }}"
-                                data-content-id="{{ content.id }}">
-                                Mark as Completed
-                            </button>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p class="text-center text-muted">No content available for this course.</p>
-            {% endif %}
-
-            <div class="progress mt-3">
-                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
-                    aria-valuemax="100">
-                    0% Completed
                 </div>
+                {% endfor %}
             </div>
+
+            <div class="tab-pane fade" id="benefit" role="tabpanel">
+                <p class="mt-3">{{ course.benefits }}</p>
+            </div>
+
+            <div class="tab-pane fade" id="testimonials" role="tabpanel">
+    <h5>All Student Reviews</h5>
+    {% for review in reviews %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-title mb-1">
+                {{ review.user.get_full_name|default:review.user.username }}
+            </h6>
+            <p class="mb-1">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        <span style="color: gold;">★</span>
+                    {% else %}
+                        <span style="color: lightgray;">★</span>
+                    {% endif %}
+                {% endfor %}
+            </p>
+            <p class="card-text">{{ review.review }}</p>
+            <small class="text-muted">Posted on {{ review.created_at|date:"d M Y" }}</small>
+
+            {% if is_admin_view %}
+            <div class="mt-2">
+                <a href="?delete_review={{ review.id }}" class="btn btn-sm btn-danger"
+                    onclick="return confirm('Are you sure you want to delete this review?');">Delete</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p>No reviews yet.</p>
+    {% endfor %}
+</div>
+
+            
 
         </div>
     </div>
 
-    <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const toggles = document.querySelectorAll(".title-toggle");
-
-            toggles.forEach(toggle => {
-                toggle.addEventListener("click", function () {
-                    const targetId = this.getAttribute("data-target");
-                    const target = document.getElementById(targetId);
-
-                    // Collapse all other sections
-                    document.querySelectorAll(".subtitle-section").forEach(section => {
-                        if (section.id !== targetId) {
-                            section.style.display = "none";
-                        }
-                    });
-
-                    // Toggle current section
-                    if (target.style.display === "none") {
-                        target.style.display = "block";
-                        this.innerHTML = "▼ " + this.textContent.slice(2);
-                    } else {
-                        target.style.display = "none";
-                        this.innerHTML = "▶ " + this.textContent.slice(2);
-                    }
-                });
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".mark-complete").forEach(button => {
-                button.addEventListener("click", function () {
-                    let courseId = this.getAttribute("data-course-id");
-                    let contentId = this.getAttribute("data-content-id");
-
-                    fetch(`/course/${courseId}/view_content/${contentId}/complete/`, {
-                        method: "POST",
-                        headers: {
-                            "X-CSRFToken": "{{ csrf_token }}",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({})
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.completed) {
-                                this.textContent = "Completed";
-                                this.style.backgroundColor = "green";
-                                this.style.color = "white";
-                                this.disabled = true;
-
-                                let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
-                                if (!completedContent.includes(contentId)) {
-                                    completedContent.push(contentId);
-                                    localStorage.setItem("completedContent", JSON.stringify(completedContent));
-                                }
-
-                                showCompletionPopup();
-                            }
-                        })
-                        .catch(error => console.error("Error:", error));
-                });
-            });
-
-            let completedContent = JSON.parse(localStorage.getItem("completedContent")) || [];
-            document.querySelectorAll(".mark-complete").forEach(button => {
-                let contentId = button.getAttribute("data-content-id");
-                if (completedContent.includes(contentId)) {
-                    button.textContent = "Completed";
-                    button.style.backgroundColor = "green";
-                    button.style.color = "white";
-                    button.disabled = true;
-                }
-            });
-
-            function showCompletionPopup() {
-                let popup = document.createElement("div");
-                popup.innerHTML = `
-                    <div style="
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background: #4CAF50;
-                        color: white;
-                        padding: 20px;
-                        border-radius: 10px;
-                        text-align: center;
-                        font-size: 18px;
-                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                    ">
-                        ✅ Content Marked as Completed!
-                    </div>
-                `;
-
-                document.body.appendChild(popup);
-
-                setTimeout(() => {
-                    popup.remove();
-                }, 2000);
-            }
-        });
-    </script>
-
-    {% include 'footer.html' %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 

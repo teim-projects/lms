@@ -761,25 +761,7 @@ def upload_content(request, course_id):
 
 
 
-from django.shortcuts import render, get_object_or_404
-from .models import PaidCourse, CourseContent
-from django.urls import reverse
 
-from collections import defaultdict
-
-def view_content(request, course_id):
-    course = get_object_or_404(PaidCourse, id=course_id)
-    contents = course.contents.all()
-
-    # Group contents by title
-    grouped_contents = defaultdict(list)
-    for content in contents:
-        grouped_contents[content.title].append(content)
-
-    return render(request, 'view_content.html', {
-        'course': course,
-        'grouped_contents': dict(grouped_contents),  # Convert defaultdict to normal dict
-    })
 
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -1458,12 +1440,43 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from .models import PaidCourse, NewPayment, UserCourseAccess, CourseContent, CourseProgress
 
+# @login_required
+# def display_paid_content(request, course_id):
+#     course = get_object_or_404(PaidCourse, id=course_id)
+#     payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
+#     manual_access = UserCourseAccess.objects.filter(user=request.user, course=course).exists()
+    
+#     contents = course.contents.all()
+#     grouped_contents = defaultdict(list)
+#     for content in contents:
+#         grouped_contents[content.title].append(content)
+
+#     has_access = bool(payment) or manual_access
+
+#     # ✅ Fetch from DB, not recalculate
+#     progress = CourseProgress.objects.filter(user=request.user, course=course).first()
+#     progress_percentage = progress.progress_percentage if progress else 0
+
+#     return render(request, 'display_paid_content.html', {
+#         'course': course,
+#         'grouped_contents': dict(grouped_contents),
+#         'has_access': has_access,
+#         'progress_percentage': progress_percentage
+#     })
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from collections import defaultdict
+from .models import PaidCourse, CourseReview, NewPayment, UserCourseAccess, CourseProgress
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def display_paid_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
     payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
     manual_access = UserCourseAccess.objects.filter(user=request.user, course=course).exists()
-    
+
     contents = course.contents.all()
     grouped_contents = defaultdict(list)
     for content in contents:
@@ -1471,15 +1484,47 @@ def display_paid_content(request, course_id):
 
     has_access = bool(payment) or manual_access
 
-    # ✅ Fetch from DB, not recalculate
     progress = CourseProgress.objects.filter(user=request.user, course=course).first()
     progress_percentage = progress.progress_percentage if progress else 0
+
+    reviews = CourseReview.objects.filter(course=course).order_by('-created_at')
+
+    # ✅ Handle POST Actions
+    if request.method == "POST":
+        if "submit_review" in request.POST:
+            review_text = request.POST.get("review", "").strip()
+            rating = int(request.POST.get("rating", 0))
+            if 1 <= rating <= 5 and review_text:
+                CourseReview.objects.create(
+                    course=course,
+                    user=request.user,
+                    review=review_text,
+                    rating=rating
+                )
+            return redirect('display_paid_content', course_id=course.id)
+
+        elif "update_review" in request.POST:
+            review_id = request.POST.get("review_id")
+            review_obj = get_object_or_404(CourseReview, id=review_id, user=request.user)
+            review_text = request.POST.get("review", "").strip()
+            rating = int(request.POST.get("rating", 0))
+            if 1 <= rating <= 5 and review_text:
+                review_obj.review = review_text
+                review_obj.rating = rating
+                review_obj.save()
+            return redirect('display_paid_content', course_id=course.id)
+
+        elif "delete_review" in request.POST:
+            review_id = request.POST.get("review_id")
+            CourseReview.objects.filter(id=review_id, user=request.user).delete()
+            return redirect('display_paid_content', course_id=course.id)
 
     return render(request, 'display_paid_content.html', {
         'course': course,
         'grouped_contents': dict(grouped_contents),
         'has_access': has_access,
-        'progress_percentage': progress_percentage
+        'progress_percentage': progress_percentage,
+        'reviews': reviews,
     })
 
 
@@ -1679,3 +1724,46 @@ def enrollment_tracking(request):
         "ongoing_students": ongoing_students,
         "total_students": total_students
     })
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import PaidCourse, CourseContent
+from django.urls import reverse
+
+from collections import defaultdict
+
+from django.shortcuts import render, get_object_or_404
+
+
+# paid course view for admin
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import PaidCourse, CourseContent, CourseReview
+from django.contrib.admin.views.decorators import staff_member_required
+
+def view_content(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+
+    # Optional: Delete review if GET param is passed
+    if 'delete_review' in request.GET:
+        review_id = request.GET.get('delete_review')
+        CourseReview.objects.filter(id=review_id).delete()
+        return redirect('view_content', course_id=course.id)
+
+    contents = CourseContent.objects.filter(course=course).order_by('title')
+    grouped_contents = {}
+    for content in contents:
+        grouped_contents.setdefault(content.title, []).append(content)
+
+    reviews = CourseReview.objects.filter(course=course).order_by('-created_at')
+
+    context = {
+        'course': course,
+        'grouped_contents': grouped_contents,
+        'reviews': reviews,
+        'is_admin_view': True,
+    }
+    return render(request, 'view_content.html', context)

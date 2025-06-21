@@ -144,7 +144,77 @@
         </div>
 
         <div class="tab-pane fade" id="testimonials" role="tabpanel">
-            <p class="mt-3">{{ course.testimonials }}</p>
+            <!-- If user has access, show review form -->
+{% if has_access %}
+    <h5>Write a Review</h5>
+    <form method="POST" class="mb-3">
+        {% csrf_token %}
+        <input type="hidden" name="submit_review" value="1">
+
+        <div class="form-group">
+            <textarea name="review" class="form-control" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Rate the Course:</label><br>
+            {% for i in "12345" %}
+                <label class="mr-2">
+                    <input type="radio" name="rating" value="{{ i }}"> {{ i }} ★
+                </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+{% else %}
+    <p class="text-muted">Buy the course to write a review.</p>
+{% endif %}
+
+<hr>
+
+<!-- Display All Reviews -->
+<h5>All Reviews</h5>
+{% for review in reviews %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-title mb-1">
+                {{ review.user.get_full_name|default:review.user.username }}
+            </h6>
+            <p class="mb-1">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        <span style="color: gold;">★</span>
+                    {% else %}
+                        <span style="color: lightgray;">★</span>
+                    {% endif %}
+                {% endfor %}
+            </p>
+            <p class="card-text">{{ review.review }}</p>
+            <small class="text-muted">Posted on {{ review.created_at|date:"d M Y" }}</small>
+
+            <!-- If current user is author, show update/delete -->
+            {% if review.user == request.user %}
+                <form method="POST" class="mt-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="review_id" value="{{ review.id }}">
+                    <textarea name="review" class="form-control mb-2" rows="2" required>{{ review.review }}</textarea>
+                    <div class="form-group">
+                        {% for i in "12345" %}
+                            <label class="mr-1">
+                                <input type="radio" name="rating" value="{{ i }}" {% if review.rating == i|add:"0" %}checked{% endif %}> {{ i }} ★
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" name="update_review" class="btn btn-sm btn-success">Update</button>
+                    <button type="submit" name="delete_review" class="btn btn-sm btn-danger ml-2">Delete</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% empty %}
+    <p>No reviews yet.</p>
+{% endfor %}
+
         </div>
 
 

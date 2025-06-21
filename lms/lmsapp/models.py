@@ -299,4 +299,19 @@ class UserCourseAccess(models.Model):
         return f"{self.user.email} - {self.course.course_title}"
 
 
-# course completion model
+# testimonials models
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class CourseReview(models.Model):
+    course = models.ForeignKey('PaidCourse', on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    review = models.TextField()
+    rating = models.PositiveSmallIntegerField()  # 1 to 5
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s review on {self.course.course_title}"
+
+

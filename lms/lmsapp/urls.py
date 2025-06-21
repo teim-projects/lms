@@ -71,7 +71,9 @@ urlpatterns = [
     path('mark-complete/', views.mark_content_complete, name='mark_content_complete'),
 
     path('enrollment_tracking/', views.enrollment_tracking, name='enrollment_tracking'),
+    
 
+    
 
 
     
