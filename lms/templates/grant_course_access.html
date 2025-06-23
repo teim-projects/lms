@@ -1,21 +1,73 @@
-<h2>Grant Manual Course Access (Offline Payment)</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grant Manual Access</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f4f7fa;
+    }
+    .card {
+      margin-top: 60px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      background: #007bff;
+      color: #fff;
+      border-radius: 15px 15px 0 0;
+    }
+    .form-group label {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+{% include 'Admin_Base.html' %}
+<div class="main" style="min-height: 100vh;">
 
-<form method="POST">
-  {% csrf_token %}
 
-  <label for="user_id">Select User:</label>
-  <select name="user_id" required>
-    {% for user in users %}
-      <option value="{{ user.id }}">{{ user.email }} ({{ user.mobile }})</option>
-    {% endfor %}
-  </select>
+<div class="container" style="margin-top: 100px;">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h4 class="mb-0">Grant Manual Course Access</h4>
+          <small>(Offline Payment)</small>
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            {% csrf_token %}
 
-  <label for="course_id">Select Course:</label>
-  <select name="course_id" required>
-    {% for course in courses %}
-      <option value="{{ course.id }}">{{ course.course_title }}</option>
-    {% endfor %}
-  </select>
+            <div class="form-group">
+              <label for="user_id">Select User</label>
+              <select name="user_id" class="form-control" required>
+                {% for user in users %}
+                  <option value="{{ user.id }}">{{ user.email }} ({{ user.mobile }})</option>
+                {% endfor %}
+              </select>
+            </div>
 
-  <button type="submit">Grant Access</button>
-</form>
+            <div class="form-group">
+              <label for="course_id">Select Course</label>
+              <select name="course_id" class="form-control" required>
+                {% for course in courses %}
+                  <option value="{{ course.id }}">{{ course.course_title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Grant Access</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+        {% include 'footer.html' %}
+
+</body>
+</html>
