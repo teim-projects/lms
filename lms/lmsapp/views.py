@@ -204,19 +204,72 @@ def send_otp_sms(mobile, otp_code):
 
 from .forms import SignupForm
 
+
+# if you dont enter otp then alos the data of user will be saved but he will be not verified user 
+
+# def signup(request):
+#     if request.method == 'POST':
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             # Extract cleaned form data
+#             email = form.cleaned_data['email']
+#             mobile = form.cleaned_data['mobile']
+#             first_name = form.cleaned_data['first_name']
+#             last_name = form.cleaned_data['last_name']
+#             password = form.cleaned_data['password']
+#             confirm_password = form.cleaned_data['confirm_password']
+
+#             # (You can keep your validations here or customize clean methods)
+
+#             if password != confirm_password:
+#                 messages.error(request, "Passwords do not match.")
+#                 return redirect('signup')
+
+#             if CustomUser.objects.filter(email=email).exists():
+#                 messages.error(request, f"User with email ({email}) already exists.")
+#                 return redirect('signup')
+
+#             if CustomUser.objects.filter(mobile=mobile).exists():
+#                 messages.error(request, f"Mobile number ({mobile}) already registered.")
+#                 return redirect('signup')
+
+#             user = CustomUser.objects.create_user(
+#                 email=email,
+#                 mobile=mobile,
+#                 first_name=first_name,
+#                 last_name=last_name,
+#                 password=password
+#             )
+#             user.is_active = False
+#             user.save()
+
+#             otp_code = OTP.generate_otp()
+#             OTP.objects.create(user=user, code=otp_code)
+
+#             send_otp_email(email, otp_code)
+
+#             messages.success(request, "Signup successful. Please verify your email.")
+#             request.session['user_id'] = user.id
+#             return redirect('verify_otp')
+
+#         else:
+#             messages.error(request, "Invalid form. Please check errors below.")
+#     else:
+#         form = SignupForm()
+
+#     return render(request, 'signup.html', {'form': form})
+
+
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            # Extract cleaned form data
             email = form.cleaned_data['email']
             mobile = form.cleaned_data['mobile']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             password = form.cleaned_data['password']
             confirm_password = form.cleaned_data['confirm_password']
-
-            # (You can keep your validations here or customize clean methods)
 
             if password != confirm_password:
                 messages.error(request, "Passwords do not match.")
@@ -230,25 +283,22 @@ def signup(request):
                 messages.error(request, f"Mobile number ({mobile}) already registered.")
                 return redirect('signup')
 
-            user = CustomUser.objects.create_user(
-                email=email,
-                mobile=mobile,
-                first_name=first_name,
-                last_name=last_name,
-                password=password
-            )
-            user.is_active = False
-            user.save()
+            # Temporarily store user data in session
+            request.session['signup_data'] = {
+                'email': email,
+                'mobile': mobile,
+                'first_name': first_name,
+                'last_name': last_name,
+                'password': password,
+            }
 
+            # Generate and send OTP
             otp_code = OTP.generate_otp()
-            OTP.objects.create(user=user, code=otp_code)
-
+            request.session['otp_code'] = otp_code
             send_otp_email(email, otp_code)
 
             messages.success(request, "Signup successful. Please verify your email.")
-            request.session['user_id'] = user.id
             return redirect('verify_otp')
-
         else:
             messages.error(request, "Invalid form. Please check errors below.")
     else:
@@ -269,46 +319,126 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from .models import CustomUser, OTP
 
+
+
+# if you dont enter otp then alos the data of user will be saved but he will be not verified user 
+
+# def verify_otp(request):
+#     if request.method == 'POST':
+#         user_id = request.session.get('user_id')
+#         user = CustomUser.objects.get(id=user_id)
+#         entered_otp = request.POST['otp']
+
+#         otp = OTP.objects.filter(user=user, code=entered_otp).first()
+#         otp_attempts = request.session.get('otp_attempts', 0)
+
+#         if otp and otp.created_at >= now() - timedelta(minutes=10):
+#             user.is_active = True
+#             user.is_verified = True
+#             user.save()
+#             OTP.objects.filter(user=user).delete()
+
+#             # ✅ Send personalized welcome email to the user
+#             try:
+#                 welcome_message = (
+#                     f"✅ Sign-Up Successful! Welcome Aboard, {user.first_name}! 🎉\n\n"
+#                     f"Your journey to mastering the stock market starts NOW!\n"
+#                     f"You’ve just unlocked powerful courses designed to turn knowledge into confidence and action. 📈🔥\n\n"
+#                     f"Stay focused. Stay curious. Stay profitable.\n"
+#                     f"Let’s dive in and make every trade count!\n\n"
+#                     f"“The market rewards the prepared mind.” – Start strong, finish stronger! 💪\n\n"
+#                     f"📞 Need Help? If you have any queries, feel free to contact us at 7722082020.\n"
+#                     f"We're always happy to serve you! 😊"
+#                 )
+
+#                 send_mail(
+#                     subject='Welcome to ProfitMax Academy! 🚀',
+#                     message=welcome_message,
+#                     from_email='welcome@myapp.com',
+#                     recipient_list=[user.email],
+#                 )
+#             except BadHeaderError:
+#                 messages.error(request, "Invalid header found while sending welcome email.")
+#             except Exception as e:
+#                 messages.error(request, f"Error sending welcome email: {e}")
+
+#             # ✅ Notify Admin via email
+#             try:
+#                 send_mail(
+#                     subject='New User Signup Notification',
+#                     message=(
+#                         f'New user signed up:\n\n'
+#                         f'First Name: {user.first_name}\n'
+#                         f'Last Name: {user.last_name}\n'
+#                         f'Email: {user.email}\n'
+#                         f'Mobile: {user.mobile}\n'
+#                     ),
+#                     from_email='welcome@myapp.com',
+#                     recipient_list=['lmsprofitmaxacademy@gmail.com'],
+#                 )
+#             except Exception as e:
+#                 messages.error(request, f"Failed to notify admin: {e}")
+
+#             # ✅ Clear OTP attempts
+#             request.session.pop('otp_attempts', None)
+
+#             # ✅ Add success message for popup
+#             messages.success(request, "Signup successful. Please login.")
+#             return render(request, 'verify_otp.html', {'show_popup': True})
+
+#         else:
+#             otp_attempts += 1
+#             request.session['otp_attempts'] = otp_attempts
+#             messages.error(request, "Invalid OTP. Please try again.")
+
+#             if otp_attempts >= 2:
+#                 OTP.objects.filter(user=user).delete()
+#                 request.session.pop('otp_attempts', None)
+#                 return redirect('signup')
+
+#     return render(request, 'verify_otp.html')
+
+
 def verify_otp(request):
     if request.method == 'POST':
-        user_id = request.session.get('user_id')
-        user = CustomUser.objects.get(id=user_id)
         entered_otp = request.POST['otp']
-
-        otp = OTP.objects.filter(user=user, code=entered_otp).first()
+        otp_code = request.session.get('otp_code')
+        signup_data = request.session.get('signup_data')
         otp_attempts = request.session.get('otp_attempts', 0)
 
-        if otp and otp.created_at >= now() - timedelta(minutes=10):
+        if not signup_data:
+            messages.error(request, "Session expired. Please sign up again.")
+            return redirect('signup')
+
+        if entered_otp == otp_code:
+            # Create the user now
+            user = CustomUser.objects.create_user(
+                email=signup_data['email'],
+                mobile=signup_data['mobile'],
+                first_name=signup_data['first_name'],
+                last_name=signup_data['last_name'],
+                password=signup_data['password']
+            )
             user.is_active = True
             user.is_verified = True
             user.save()
-            OTP.objects.filter(user=user).delete()
 
-            # ✅ Send personalized welcome email to the user
+            # Send welcome email
             try:
                 welcome_message = (
                     f"✅ Sign-Up Successful! Welcome Aboard, {user.first_name}! 🎉\n\n"
-                    f"Your journey to mastering the stock market starts NOW!\n"
-                    f"You’ve just unlocked powerful courses designed to turn knowledge into confidence and action. 📈🔥\n\n"
-                    f"Stay focused. Stay curious. Stay profitable.\n"
-                    f"Let’s dive in and make every trade count!\n\n"
-                    f"“The market rewards the prepared mind.” – Start strong, finish stronger! 💪\n\n"
-                    f"📞 Need Help? If you have any queries, feel free to contact us at 7722082020.\n"
-                    f"We're always happy to serve you! 😊"
+                    f"Your journey to mastering the stock market starts NOW!..."
                 )
-
                 send_mail(
                     subject='Welcome to ProfitMax Academy! 🚀',
                     message=welcome_message,
                     from_email='welcome@myapp.com',
                     recipient_list=[user.email],
                 )
-            except BadHeaderError:
-                messages.error(request, "Invalid header found while sending welcome email.")
             except Exception as e:
-                messages.error(request, f"Error sending welcome email: {e}")
+                messages.error(request, f"Email error: {e}")
 
-            # ✅ Notify Admin via email
+            # Notify admin
             try:
                 send_mail(
                     subject='New User Signup Notification',
@@ -325,24 +455,24 @@ def verify_otp(request):
             except Exception as e:
                 messages.error(request, f"Failed to notify admin: {e}")
 
-            # ✅ Clear OTP attempts
+            # Clear session
+            request.session.pop('signup_data', None)
+            request.session.pop('otp_code', None)
             request.session.pop('otp_attempts', None)
 
-            # ✅ Add success message for popup
             messages.success(request, "Signup successful. Please login.")
             return render(request, 'verify_otp.html', {'show_popup': True})
-
         else:
             otp_attempts += 1
             request.session['otp_attempts'] = otp_attempts
             messages.error(request, "Invalid OTP. Please try again.")
 
             if otp_attempts >= 2:
-                OTP.objects.filter(user=user).delete()
-                request.session.pop('otp_attempts', None)
+                request.session.flush()  # Clear all signup session data
                 return redirect('signup')
 
     return render(request, 'verify_otp.html')
+
 
 
 

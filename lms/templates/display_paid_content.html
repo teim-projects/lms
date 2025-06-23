@@ -179,9 +179,18 @@
 {% for review in reviews %}
     <div class="card mb-3">
         <div class="card-body">
+            <!-- <h6 class="card-title mb-1"> -->
+                <!-- {{ review.user.get_full_name|default:review.user.username }} -->
+            <!-- </h6> -->
+
             <h6 class="card-title mb-1">
-                {{ review.user.get_full_name|default:review.user.username }}
-            </h6>
+    {% if review.user.first_name or review.user.last_name %}
+        {{ review.user.first_name }} {{ review.user.last_name }}
+    {% else %}
+        {{ review.user.email }}
+    {% endif %}
+</h6>
+
             <p class="mb-1">
                 {% for i in "12345" %}
                     {% if forloop.counter <= review.rating %}
