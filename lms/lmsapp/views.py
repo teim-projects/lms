@@ -905,7 +905,7 @@ def upload_content(request, course_id):
                 )
                 sub_idx += 1
 
-        return redirect('create_paid_course')
+        return redirect('view_paid_course')
 
     return render(request, 'upload_content.html', {'course': course})
 
@@ -1005,8 +1005,8 @@ def delete_paid_course(request, course_id):
             course.contents.all().delete()  # Delete all related CourseContent records
             course.delete()  # Delete the PaidCourse record
 
-        return redirect('paid_course')  # Redirect to the course list
-    return redirect('paid_course')  # Fallback for non-POST requests
+        return redirect('view_paid_course')  # Redirect to the course list
+    return redirect('view_paid_course')  # Fallback for non-POST requests
 
 
 # Update Paid Course
