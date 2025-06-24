@@ -801,6 +801,17 @@ def view_paid_course(request):
 
 
 
+import random
+from .models import PaidCourse
+
+def generate_unique_course_code(course_name):
+    while True:
+        num = random.randint(10, 99)
+        code = f"{course_name.lower()}{num}"
+        if not PaidCourse.objects.filter(course_code=code).exists():
+            return code
+
+
 
 from django.shortcuts import render, redirect
 from .models import PaidCourse
@@ -819,6 +830,11 @@ def create_paid_course(request):
         course_price = request.POST.get('course_price')
         thumbnail = request.FILES.get('thumbnail')
 
+        course_name = request.POST.get('course_name')
+
+        course_code = generate_unique_course_code(course_name)
+
+
         # Save thumbnail file if provided
         if thumbnail:
             fs = FileSystemStorage()
@@ -832,12 +848,18 @@ def create_paid_course(request):
             course_title=course_title,
             duration=duration,
             description=description,
-            about=about,  # ✅
-            benefits=benefits,  # ✅
+            about=about,  
+            benefits=benefits,  
             instructor_name=instructor_name,
             course_level=course_level,
             course_price=course_price,
-            thumbnail=thumbnail
+            thumbnail=thumbnail,
+
+            course_name=course_name,
+            course_code=course_code,
+
+            
+
         )
         return redirect('create_paid_course')
 
@@ -1755,22 +1777,36 @@ def payment_failure(request):
 
 # use user pass test to know weather the login is of admin or user
 @login_required
-@user_passes_test(lambda u: u.is_superuser)  
+@user_passes_test(lambda u: u.is_superuser)
 def grant_course_access(request):
-    users = CustomUser.objects.filter(is_staff=False, is_superuser=False).order_by('email')
+    user_query = request.GET.get('user_search', '')
+    course_query = request.GET.get('course_search', '')
+
+    users = CustomUser.objects.filter(is_staff=False, is_superuser=False)
+    if user_query:
+        users = users.filter(mobile__icontains=user_query)
+
     courses = PaidCourse.objects.all()
+    if course_query:
+        courses = courses.filter(course_code__icontains=course_query)
 
     if request.method == "POST":
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
 
-        user = CustomUser.objects.get(id=user_id)  # ✅ NOT SubAdmin
+        user = CustomUser.objects.get(id=user_id)
         course = PaidCourse.objects.get(id=course_id)
 
         UserCourseAccess.objects.get_or_create(user=user, course=course)
         return redirect('grant_course_access')
 
-    return render(request, "grant_course_access.html", {"users": users, "courses": courses})
+    return render(request, "grant_course_access.html", {
+        "users": users,
+        "courses": courses,
+        "user_query": user_query,
+        "course_query": course_query,
+    })
+
 
 
 

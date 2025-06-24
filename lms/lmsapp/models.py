@@ -134,6 +134,9 @@ class PaidCourse(models.Model):
     about = models.TextField(blank=True, null=True)
     benefits = models.TextField(blank=True, null=True)
     testimonials = models.TextField(blank=True, null=True)
+    course_name = models.CharField(max_length=255, default='python')
+
+    course_code = models.CharField(max_length=100, unique=True, default='pending')
 
     def __str__(self):
         return self.course_title
