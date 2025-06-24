@@ -175,7 +175,7 @@
 
 <body>
     {% include 'Admin_Base.html' %}
-    <div class="container content-wrapper">
+    <div class="container content-wrapper" style="margin-top: 100px;">
         <h2 class="text-center">{{ course.course_title }}</h2>
         <div class="row mt-4">
             <div class="col-md-4">
@@ -217,10 +217,11 @@
                 {% for title, contents in grouped_contents.items %}
                 <div class="mt-4">
                     <h5>
-                        <a data-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button"
-                            aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
-                            {{ title }}
-                        </a>
+                       <a class="d-block" data-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button"
+   aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+   {{ title }}
+</a>
+
                     </h5>
                     <div class="collapse" id="collapse{{ forloop.counter }}">
                         <ul>
