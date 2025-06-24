@@ -459,80 +459,78 @@
             background-color: #28a745 !important;
             /* Force green */
         }
+        .delet-btn {
+            background: linear-gradient(to right, #cb1111, #fc5025);
+            color: #fff;
+            padding: 5px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5em;
+        }
+
+        .update-btn {
+            background: linear-gradient(to right, #059144, #1a520e);
+            color: #fff;
+            padding: 5px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5em;
+        }
+
+        .viwe-btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 5px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5em;
+        }
+
+        .uplode-btn {
+            background: linear-gradient(to right, #940889, #ed0606);
+            color: #fff;
+            padding: 5px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5em;
+        }
+
+        .viwe-btn a {
+            text-decoration: none;
+            background: none;
+            color: aliceblue;
+        }
+
+        .uplode-btn a {
+            text-decoration: none;
+            background: none;
+            color: aliceblue;
+
+        }
+
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-light bg-light">
-        <div class="logo1">
-            <i class="navbar-brand fa fa-bars toggle-btn text-black  p-2" onclick="toggleSidebar()"></i><a href="#">
-                <img class="logo navbar-brand" src="../static/images/pmxlogo_c.png" alt="" width="80px" height="55px">
-            </a>
-        </div>
-        <div class="logo1">
-            <form class="form-inline">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Help</button>
-            </form>
-        </div>
-    </nav>
+        {% include 'Admin_Base.html' %}
 
+    <div class="main" style="min-height: 100vh;">
 
-    <!-- Sidebar -->
-    <div class="sidebar bg-dark" id="sidebar">
-        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
-        <ul class="nav flex-column p-3">
-            <!-- Dashboard Menu -->
-            <li class="nav-item">
-                <a href="/student_dashboard/" style="text-decoration: none;"><span class="nav-link">Dashboard</span></a>
-            </li>
-
-            <!-- Course Management Menu -->
-            <li class="nav-item">
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="collapse" data-target="#menu1"
-                    aria-expanded="false" aria-controls="menu1">
-                    Course Management
-                </a>
-                <!-- Collapsible Submenu -->
-                <div class="collapse" id="menu1">
-                    <a class="nav-link pl-4" href="#">Paid Course</a>
-
-                    <a class="nav-link pl-4" href="/free-course/">Free Course</a>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link " href="#">Enrollment Tracking</a>
-
-                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
-                    aria-controls="menu1">
-                    Certificates
-                </a>
-                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
-                    aria-controls="menu1">
-                    Invoices
-                </a>
-                <a class="nav-link " href="#" data-toggle="" data-target="#menu" aria-expanded="false"
-                    aria-controls="menu1">
-                    Notifications
-                </a>
-
-            </li>
-            <button class="Btn ml-3" onclick="location.href='/'">
-                <div class="sign">
-                    <svg viewBox="0 0 512 512">
-                        <path
-                            d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="text"> Logout</div>
-            </button>
-        </ul>
-
-    </div>
-    <!-- main Menu -->
-    <div class="container my-2">
+    
+     <!-- main Menu -->
+    <div class="container " style="margin-top: 100px ;" >
         <div class="row">
             {% for course in courses %}
             <div class="col-md-4 mb-4">
@@ -548,27 +546,29 @@
                         <p class="card-text"><strong>Instructor:</strong> {{ course.instructor_name }}</p>
                         <p class="card-text"><strong>Level:</strong> {{ course.course_level }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ course.course_price }}</p>
+ 
 
-                        <!-- Progress Bar Section -->
-                        <div class="progress" style="height: 20px; margin-bottom: 10px;">
-                            <div class="progress-bar bg-success progress-bar-striped" role="progressbar"
-                                style="width: {{ course.progress_percentage|default:0|floatformat:0 }}%;"
-                                aria-valuenow="{{ course.progress_percentage|default:0|floatformat:0 }}"
-                                aria-valuemin="0" aria-valuemax="100" id="progress-bar-{{ course.id }}">
-                                {{ course.progress_percentage|default:0|floatformat:0 }}%
+                         <div class="d-flex justify-content-around mt-3">
+                                <a href="{% url 'upload_content' course.id %}"><button class="uplode-btn">
+
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                                    </button></a>
+                                <a href="{% url 'view_content' course.id %}"><button class="viwe-btn">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </button>
+                                </a>
+                                <form action="{% url 'delete_paid_course' course.id %}" method="POST"
+                                    style="display:inline;">
+                                    {% csrf_token %}
+                                    <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+
+                                <a href="{% url 'update_paid_course' course.id %}"><button class=" update-btn"><i
+                                            class="fa-solid fa-pen-to-square"></i></i></button></a>
                             </div>
-                        </div>
-
-                        <p>Progress: <span id="progress-text-{{ course.id }}">{{
-                                course.progress_percentage|floatformat:0 }}</span>% Completed</p>
-
-
-                        <form action="{% url 'initiate_payment' course.id %}" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="amount" value="{{ course.course_price }}">
-                            <button type="submit" class="btn btn-success btn-block">Buy Now</button>
-                        </form>
-
 
                         <!-- Continue Course Button -->
                         <!-- <a href="{% url 'view_content' course.id %}" class="btn btn-primary btn-block">Continue Course</a> -->
@@ -578,35 +578,11 @@
             {% endfor %}
         </div>
     </div>
+</div>
 
+    {% include 'footer.html' %}
 
-
-
-
-
-    <footer class="footer {% if not courses %}fixed-footer{% endif %}">
-        <div class="container mt-2">
-            <!-- Footer Content -->
-            <p style="margin: 0; font-weight: 600; word-wrap: break-word;">
-                © 2024. Powered by
-                <img src="{% static 'images/logoweb.png' %}" alt="Chronoanalytics Logo"
-                    style="height: 20px; vertical-align: middle;">
-                <a href="http://www.chronoanalytics.in/"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">Chronoanalytics
-                    Solution</a>
-                All Rights Reserved.
-            </p>
-            <p style="font-weight: 600; word-wrap: break-word;">
-                Marketed by
-                <img src="{% static 'images/TeimLogo.png' %}" alt="Teim Logo"
-                    style="height: 20px; vertical-align: middle;">
-                <a href="http://teim.in/"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 0.8rem;">TEIM</a>
-                All Rights Reserved.
-            </p>
-        </div>
-    </footer>
-
+ 
 
 
     <script>
@@ -646,22 +622,7 @@
 
 
 
-    <!-- JavaScript -->
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.toggle-btn');
-
-            sidebar.classList.toggle('show');
-
-            // Toggle button icon
-            if (sidebar.classList.contains('show')) {
-                toggleBtn.style.display = 'none';
-            } else {
-                toggleBtn.style.display = 'block';
-            }
-        }
-    </script>
+ 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let completedContents = JSON.parse(localStorage.getItem("completedContents")) || [];
