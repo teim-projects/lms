@@ -61,21 +61,39 @@
     </div>
 
     <!-- Course Selection Form -->
-    <form method="POST" class="bg-white p-4 rounded shadow-sm animated fadeIn">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="course_id"><strong>Select Course:</strong></label>
-        <select name="course_id" class="form-control" required>
-          <option value="">-- Select --</option>
-          {% for course in courses %}
-            <option value="{{ course.id }}" {% if selected_course and course.id == selected_course.id %}selected{% endif %}>
-              {{ course.course_title }}
-            </option>
-          {% endfor %}
-        </select>
+   <form method="POST" class="bg-white p-4 rounded shadow-sm animated fadeIn">
+  {% csrf_token %}
+  
+  <!-- 🔍 Search by Course Code -->
+  <div class="form-group">
+    <label for="search_code"><strong>Search by Course Code:</strong></label>
+    <div class="input-group">
+      <input type="text" name="search_code" class="form-control" placeholder="Enter course code"
+             value="{{ search_code }}">
+      <div class="input-group-append">
+        <button type="submit" name="action" value="search" class="btn btn-outline-primary">Search</button>
       </div>
-      <button type="submit" class="btn btn-primary btn-block mt-3">View Progress</button>
-    </form>
+    </div>
+    <small class="text-muted">Search a course by code. Matching courses will be shown in the dropdown.</small>
+  </div>
+
+  <!-- 🔽 Course Dropdown -->
+  <div class="form-group mt-3">
+    <label for="course_id"><strong>Select Course:</strong></label>
+    <select name="course_id" class="form-control" >
+      <option value="">-- Select --</option>
+      {% for course in courses %}
+        <option value="{{ course.id }}" {% if selected_course and course.id == selected_course.id %}selected{% endif %}>
+          {{ course.course_title }} ({{ course.course_code }})
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 🔘 View Progress -->
+  <button type="submit" name="action" value="view" class="btn btn-primary btn-block mt-3">View Progress</button>
+</form>
+
 
     <!-- Results Section -->
     {% if selected_course %}

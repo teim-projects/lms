@@ -1863,34 +1863,45 @@ def enrollment_tracking(request):
     completed_students = []
     ongoing_students = []
     total_students = 0
+    search_code = ""
 
     if request.method == "POST":
+        action = request.POST.get("action")  # "search" or "view"
+        search_code = request.POST.get("search_code", "").strip()
         course_id = request.POST.get("course_id")
-        selected_course = get_object_or_404(PaidCourse, id=course_id)
 
-        # Get users who have access (either paid or manually added)
-        paid_users = NewPayment.objects.filter(course=selected_course, status="success").values_list('user', flat=True)
-        manual_users = UserCourseAccess.objects.filter(course=selected_course).values_list('user', flat=True)
-        all_user_ids = set(list(paid_users) + list(manual_users))
-        users = CustomUser.objects.filter(id__in=all_user_ids)
+        # 🔍 Search Action
+        if action == "search" and search_code:
+            courses = PaidCourse.objects.filter(course_code__icontains=search_code)
+            if courses.count() == 1:
+                selected_course = courses.first()
 
-        for user in users:
-            progress = CourseProgress.objects.filter(user=user, course=selected_course).first()
-            if progress and progress.progress_percentage == 100:
-                completed_students.append(user)
-            else:
-                ongoing_students.append(user)
+        # 📊 View Progress Action
+        if action == "view" and course_id:
+            selected_course = get_object_or_404(PaidCourse, id=course_id)
 
-        total_students = len(users)
+            paid_users = NewPayment.objects.filter(course=selected_course, status="success").values_list('user', flat=True)
+            manual_users = UserCourseAccess.objects.filter(course=selected_course).values_list('user', flat=True)
+            all_user_ids = set(list(paid_users) + list(manual_users))
+            users = CustomUser.objects.filter(id__in=all_user_ids)
+
+            for user in users:
+                progress = CourseProgress.objects.filter(user=user, course=selected_course).first()
+                if progress and progress.progress_percentage == 100:
+                    completed_students.append(user)
+                else:
+                    ongoing_students.append(user)
+
+            total_students = len(users)
 
     return render(request, "enrollment_tracking.html", {
         "courses": courses,
         "selected_course": selected_course,
         "completed_students": completed_students,
         "ongoing_students": ongoing_students,
-        "total_students": total_students
+        "total_students": total_students,
+        "search_code": search_code,
     })
-
 
 
 from django.shortcuts import render, get_object_or_404
