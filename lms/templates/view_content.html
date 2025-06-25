@@ -204,7 +204,7 @@
                 <a class="nav-link" id="testimonials-tab" data-toggle="tab" href="#testimonials"
                     role="tab">Testimonial</a>
             </li>
-           
+
         </ul>
 
         <div class="tab-content" id="courseTabContent">
@@ -217,11 +217,9 @@
                 {% for title, contents in grouped_contents.items %}
                 <div class="mt-4">
                     <h5>
-                       <a class="d-block" data-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button"
-   aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
-   {{ title }}
-</a>
-
+                        <a class="d-block chapter-toggle" data-target="#collapse{{ forloop.counter }}" role="button">
+                            {{ title }}
+                        </a>
                     </h5>
                     <div class="collapse" id="collapse{{ forloop.counter }}">
                         <ul>
@@ -247,45 +245,54 @@
             </div>
 
             <div class="tab-pane fade" id="testimonials" role="tabpanel">
-    <h5>All Student Reviews</h5>
-    {% for review in reviews %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h6 class="card-title mb-1">
-                {{ review.user.get_full_name|default:review.user.username }}
-            </h6>
-            <p class="mb-1">
-                {% for i in "12345" %}
-                    {% if forloop.counter <= review.rating %}
-                        <span style="color: gold;">★</span>
-                    {% else %}
-                        <span style="color: lightgray;">★</span>
-                    {% endif %}
+                <h5>All Student Reviews</h5>
+                {% for review in reviews %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title mb-1">
+                            {{ review.user.get_full_name|default:review.user.username }}
+                        </h6>
+                        <p class="mb-1">
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %} <span style="color: gold;">★</span>
+                                {% else %}
+                                <span style="color: lightgray;">★</span>
+                                {% endif %}
+                                {% endfor %}
+                        </p>
+                        <p class="card-text">{{ review.review }}</p>
+                        <small class="text-muted">Posted on {{ review.created_at|date:"d M Y" }}</small>
+
+                        {% if is_admin_view %}
+                        <div class="mt-2">
+                            <a href="?delete_review={{ review.id }}" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this review?');">Delete</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p>No reviews yet.</p>
                 {% endfor %}
-            </p>
-            <p class="card-text">{{ review.review }}</p>
-            <small class="text-muted">Posted on {{ review.created_at|date:"d M Y" }}</small>
-
-            {% if is_admin_view %}
-            <div class="mt-2">
-                <a href="?delete_review={{ review.id }}" class="btn btn-sm btn-danger"
-                    onclick="return confirm('Are you sure you want to delete this review?');">Delete</a>
             </div>
-            {% endif %}
-        </div>
-    </div>
-    {% empty %}
-    <p>No reviews yet.</p>
-    {% endfor %}
-</div>
 
-            
+
 
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.chapter-toggle').click(function () {
+                var targetId = $(this).data('target');
+                $(targetId).collapse('toggle');
+            });
+        });
+    </script>
+
 </body>
 
 
