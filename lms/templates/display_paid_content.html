@@ -51,7 +51,15 @@
                 <img src="{{ course.thumbnail.url }}" alt="Course Thumbnail" class="img-fluid rounded">
             </div>
             <div class="col-md-8">
-                <p><strong>Price:</strong> Rs. {{ course.course_price }}</p>
+                <p>
+    Price:
+    <span style="text-decoration: line-through; color: gray;">₹{{ course.original_price }}</span>
+    <strong style="color: green;">₹{{ course.course_price }}</strong>
+    <span style="color: red;">
+        (You save ₹{{ course.discount_amount }})
+    </span>
+</p>
+
                 <p><strong>Duration:</strong> {{ course.duration }}</p>
                 <p><strong>Instructor:</strong> {{ course.instructor_name }}</p>
                 <p><strong>Level:</strong> {{ course.course_level }}</p>
@@ -184,10 +192,13 @@
             <!-- </h6> -->
 
             <h6 class="card-title mb-1">
+
+                
     {% if review.user.first_name or review.user.last_name %}
         {{ review.user.first_name }} {{ review.user.last_name }}
     {% else %}
-        {{ review.user.email }}
+    {{ review.display_name }}
+        <!-- {{ review.user.email }} -->
     {% endif %}
 </h6>
 

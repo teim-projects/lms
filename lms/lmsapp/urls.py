@@ -71,7 +71,14 @@ urlpatterns = [
     path('mark-complete/', views.mark_content_complete, name='mark_content_complete'),
 
     path('enrollment_tracking/', views.enrollment_tracking, name='enrollment_tracking'),
+
+    path('course-list/', views.paid_course_list, name='paid_course_list'),
     
+    path('paid-students/', views.paid_students_list, name='paid_students_list'),
+
+    path('user-detail/<int:user_id>/', views.user_detail_view, name='user_detail'),
+
+    path('invoice/<int:payment_id>/', views.generate_invoice_view, name='generate_invoice'),
 
     
 

@@ -173,7 +173,15 @@
                             <i class="fas fa-chalkboard-teacher"></i> Instructor: {{ course.instructor_name }}
                         </div>
                         
-                        <div class="course-price">${{ course.course_price }}</div>
+                        <p>
+    Price:
+    <span style="text-decoration: line-through; color: gray;">₹{{ course.original_price }}</span>
+    <strong style="color: green;">₹{{ course.course_price }}</strong>
+    <span style="color: red;">
+        (You save ₹{{ course.discount_amount }})
+    </span>
+</p>
+
                         
                         <p class="text-muted" style="font-size: 0.9rem;">
                             {{ course.description|truncatewords:20 }}

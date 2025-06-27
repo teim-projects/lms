@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice - Profitmax Academy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .invoice-box {
+      max-width: 800px;
+      margin: auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      max-width: 120px;
+    }
+    .company-name {
+      color: #3a0ca3;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    .sub-header {
+      font-size: 14px;
+      color: #444;
+      margin-top: 5px;
+    }
+    .contact-info {
+      font-size: 13px;
+      color: #000;
+      margin-top: 5px;
+    }
+    .invoice-details {
+      margin-top: 20px;
+    }
+    .invoice-details table {
+      width: 100%;
+      font-size: 14px;
+    }
+    .invoice-details td {
+      padding: 5px;
+    }
+    .table-heading {
+      background: #c00;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+    }
+    .table-body td {
+      text-align: center;
+    }
+    .totals {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: right;
+    }
+    .totals strong {
+      font-size: 15px;
+    }
+    .thank-you {
+      margin-top: 40px;
+      font-size: 16px;
+    }
+    .notes {
+      font-size: 12px;
+      margin-top: 10px;
+      color: #333;
+      border-left: 3px solid #4db8ff;
+      padding-left: 10px;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+    }
+    .footer strong {
+      color: red;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="invoice-box">
+  <div class="header">
+    <img src="{% static 'images/pmxlogo_c.png' %}" class="logo" alt="Logo">
+    <div>
+      <div class="company-name">PROFITMAX ACADEMY</div>
+      <div class="sub-header">Prosperous Root Profitmax Academy</div>
+      <div class="contact-info">
+        Correspondence Address - Office No. 6, Sahil Arcade, near to Panchali hotel, Jangali Maharaj Road, Deccan<br>
+        Web: www.profitmaxacademy.com | Email: profitmaxacademy@gmail.com | Call: <strong style="color:red;">+91-7722 08 2020</strong>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="invoice-details">
+    <table>
+      <tr>
+        <td><strong>INVOICE TO:</strong><br>
+          {{ invoice.first_name }} {{ invoice.last_name }}<br>
+          {{ invoice.email }} / {{ invoice.mobile }}<br>
+          {{ invoice.user.username|upper }} :
+        </td>
+        <td style="text-align:right;">
+          <strong style="color:#c00;">INVOICE {{ invoice.invoice_number }}</strong><br>
+          Date of Invoice: {{ invoice.date_created|date:"d-m-Y" }}<br>
+          Expiry: {{ invoice.date_created|date:"d-m-Y" }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <br>
+
+  <table border="1" cellspacing="0" cellpadding="5" width="100%">
+    <tr class="table-heading">
+      <td>#</td>
+      <td>Description</td>
+      <td>Course Fee</td>
+      <td>Discount</td>
+      <td>Paid Amount</td>
+    </tr>
+    <tr class="table-body">
+      <td>01</td>
+      <td><strong>{{ invoice.course_title }}</strong></td>
+      <td>{{ invoice.course_fee }}</td>
+      <td>{{ invoice.discount }}</td>
+      <td><strong style="color:#c00;">{{ invoice.paid_amount }}</strong></td>
+    </tr>
+  </table>
+
+  <div class="totals">
+    <p>Total: <strong>{{ invoice.paid_amount }}</strong></p>
+    <p>Tax %: <strong>0</strong></p>
+    <p style="color:#c00; font-weight:bold;">GRAND TOTAL: {{ invoice.paid_amount }}</p>
+  </div>
+
+  <div class="thank-you">
+    Thank you!
+  </div>
+
+  <div class="notes">
+    • Payment is subject to realization.<br>
+    • Please make sure to read and sign Declaration form before start of training.<br>
+    • For Terms and Conditions visit <a href="http://www.profitmaxacademy.com" target="_blank">www.profitmaxacademy.com</a>.
+  </div>
+
+  <div class="footer">
+    <br><strong>PUNE</strong><br>
+    Invoice was created on a computer and is valid without the signature and seal.
+  </div>
+</div>
+
+</body>
+</html>

@@ -127,19 +127,22 @@ class PaidCourse(models.Model):
     description = models.TextField()
     instructor_name = models.CharField(max_length=255)
     course_level = models.CharField(max_length=20, choices=COURSE_LEVELS, default='Beginner')
+    
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     course_price = models.DecimalField(max_digits=10, decimal_places=2)
-    thumbnail = models.ImageField(upload_to='thumbnails/')
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    # ✅ Newly added fields
+    thumbnail = models.ImageField(upload_to='thumbnails/')
     about = models.TextField(blank=True, null=True)
     benefits = models.TextField(blank=True, null=True)
     testimonials = models.TextField(blank=True, null=True)
     course_name = models.CharField(max_length=255, default='python')
-
     course_code = models.CharField(max_length=100, unique=True, default='pending')
 
     def __str__(self):
         return self.course_title
+
+
 
 
 class CourseContent(models.Model):
@@ -314,7 +317,60 @@ class CourseReview(models.Model):
     rating = models.PositiveSmallIntegerField()  # 1 to 5
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # ✅ Added Fields
+    display_name = models.CharField(max_length=255, blank=True, null=True)  # Admin-set display name
+    is_admin_generated = models.BooleanField(default=False)  # To distinguish fake review
+
     def __str__(self):
-        return f"{self.user.username}'s review on {self.course.course_title}"
+        return f"{self.display_name or self.user.username}'s review on {self.course.course_title}"
 
 
+
+
+# models.py or a separate models file
+from django.db import models
+from django.contrib.sessions.models import Session
+from lmsapp.models import CustomUser  # update this import path accordingly
+
+class UserSession(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    session_key = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.session_key}"
+
+
+# models.py
+import random
+from django.db import models
+from django.utils import timezone
+from lmsapp.models import PaidCourse, CustomUser  # adjust as needed
+
+class Invoice(models.Model):
+    invoice_number = models.CharField(max_length=30, unique=True, editable=False)
+    
+    # Foreign key relations
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='invoices')
+    course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+
+    # Snapshots at time of invoice generation
+    course_title = models.CharField(max_length=255)
+    course_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.DecimalField(max_digits=10, decimal_places=2)
+    paid_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    mobile = models.CharField(max_length=12)
+    email = models.EmailField()
+
+    date_created = models.DateTimeField(default=timezone.now)
+
+    def save(self, *args, **kwargs):
+        if not self.invoice_number:
+            rand = random.randint(10000, 99999)
+            self.invoice_number = f"PMAX_{rand}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.invoice_number} - {self.course_title} ({self.user.email})"

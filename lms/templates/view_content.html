@@ -205,6 +205,11 @@
                     role="tab">Testimonial</a>
             </li>
 
+            <li class="nav-item">
+    <a class="nav-link" id="fake-tab" data-toggle="tab" href="#fake-review" role="tab">Fake Review</a>
+</li>
+
+
         </ul>
 
         <div class="tab-content" id="courseTabContent">
@@ -250,8 +255,11 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h6 class="card-title mb-1">
-                            {{ review.user.get_full_name|default:review.user.username }}
+                          {{ review.user.first_name }}-{{ review.user.last_name }}  {{ review.display_name|default:review.user.username }}
+
+                            
                         </h6>
+
                         <p class="mb-1">
                             {% for i in "12345" %}
                             {% if forloop.counter <= review.rating %} <span style="color: gold;">★</span>
@@ -275,6 +283,33 @@
                 <p>No reviews yet.</p>
                 {% endfor %}
             </div>
+
+
+            <div class="tab-pane fade" id="fake-review" role="tabpanel">
+    <h5 class="mt-3">Post a Fake Review (Admin Only)</h5>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="display_name">Display Name</label>
+            <input type="text" class="form-control" id="display_name" name="display_name" required>
+        </div>
+        <div class="form-group">
+            <label for="rating">Rating (1 to 5)</label>
+            <select class="form-control" id="rating" name="rating" required>
+                <option value="">Select Rating</option>
+                {% for i in "12345" %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="review">Review Text</label>
+            <textarea class="form-control" id="review" name="review" rows="3" required></textarea>
+        </div>
+        <button type="submit" name="submit_fake_review" class="btn btn-primary">Submit Review</button>
+    </form>
+</div>
+
 
 
 

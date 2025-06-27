@@ -232,9 +232,10 @@
                             </div>
 
                             <div class="col-12 col-md-6 mb-3">
-        <label for="course_name">Course Name</label> <!-- ✅ Added field -->
-        <input type="text" class="form-control" id="course_name" name="course_name" placeholder="e.g. python, java, etc.">
-    </div>
+                                <label for="course_name">Course Name</label> <!-- ✅ Added field -->
+                                <input type="text" class="form-control" id="course_name" name="course_name"
+                                    placeholder="e.g. python, java, etc.">
+                            </div>
 
 
                             <div class="col-12 col-md-6 mb-3">
@@ -279,11 +280,25 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-12 col-md-6 mb-3">
-                                <label for="course_price">Course Price</label>
-                                <input type="text" class="form-control" id="course_price" name="course_price"
-                                    placeholder="Price">
-                            </div>
+    <div class="col-12 col-md-4 mb-3">
+        <label for="original_price">Original Price</label>
+        <input type="number" class="form-control" id="original_price" name="original_price" placeholder="e.g. 1000">
+    </div>
+
+    <div class="col-12 col-md-4 mb-3">
+        <label for="course_price">Discounted Price</label>
+        <input type="number" class="form-control" id="course_price" name="course_price" placeholder="e.g. 799">
+    </div>
+
+    <div class="col-12 col-md-4 mb-3">
+        <label for="discount_amount">You Save (₹)</label>
+        <input type="text" class="form-control" id="discount_amount" name="discount_amount" readonly>
+    </div>
+</div>
+
+
+                        <div class="row">
+                            
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="thumbnail">Thumbnail</label>
                                 <input type="file" class="form-control-file" id="thumbnail" name="thumbnail">
@@ -353,6 +368,29 @@
 
     </div>
     {% include 'footer.html' %}
+
+
+    <script>
+    const originalInput = document.getElementById('original_price');
+    const discountedInput = document.getElementById('course_price');
+    const discountAmountInput = document.getElementById('discount_amount');
+
+    function calculateDiscountAmount() {
+        const original = parseFloat(originalInput.value);
+        const discounted = parseFloat(discountedInput.value);
+
+        if (!isNaN(original) && !isNaN(discounted) && original >= discounted) {
+            const discount = original - discounted;
+            discountAmountInput.value = discount.toFixed(2);
+        } else {
+            discountAmountInput.value = '';
+        }
+    }
+
+    originalInput.addEventListener('input', calculateDiscountAmount);
+    discountedInput.addEventListener('input', calculateDiscountAmount);
+</script>
+
 </body>
 
 </html>

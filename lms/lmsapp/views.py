@@ -801,15 +801,17 @@ def view_paid_course(request):
 
 
 
-import random
-from .models import PaidCourse
+from datetime import datetime
 
-def generate_unique_course_code(course_name):
+def generate_unique_course_code():
+    
+
     while True:
-        num = random.randint(10, 99)
-        code = f"{course_name.lower()}{num}"
+        unique_number = random.randint(1000, 9999)  # Or use UUID if needed
+        code = f"PMAX-{unique_number}"
         if not PaidCourse.objects.filter(course_code=code).exists():
             return code
+
 
 
 
@@ -827,12 +829,16 @@ def create_paid_course(request):
         benefits = request.POST.get('benefits')  # ✅ new
         instructor_name = request.POST.get('instructor_name')
         course_level = request.POST.get('course_level')
-        course_price = request.POST.get('course_price')
+        original_price = float(request.POST.get('original_price'))
+        course_price = float(request.POST.get('course_price'))
+        discount_amount = original_price - course_price
+        
         thumbnail = request.FILES.get('thumbnail')
 
         course_name = request.POST.get('course_name')
 
-        course_code = generate_unique_course_code(course_name)
+        course_code = generate_unique_course_code()
+
 
 
         # Save thumbnail file if provided
@@ -853,10 +859,15 @@ def create_paid_course(request):
             instructor_name=instructor_name,
             course_level=course_level,
             course_price=course_price,
+            original_price=original_price,
+            discount_amount=discount_amount,
+
+            
             thumbnail=thumbnail,
 
             course_name=course_name,
             course_code=course_code,
+            
 
             
 
@@ -1776,11 +1787,15 @@ def payment_failure(request):
 
 
 # use user pass test to know weather the login is of admin or user
+import uuid  # Add this at the top
+from django.utils import timezone
+from django.shortcuts import get_object_or_404
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def grant_course_access(request):
-    user_query = request.GET.get('user_search', '')
-    course_query = request.GET.get('course_search', '')
+    user_query = request.GET.get('user_search', '').strip()
+    course_query = request.GET.get('course_search', '').strip()
 
     users = CustomUser.objects.filter(is_staff=False, is_superuser=False)
     if user_query:
@@ -1794,10 +1809,24 @@ def grant_course_access(request):
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
 
-        user = CustomUser.objects.get(id=user_id)
-        course = PaidCourse.objects.get(id=course_id)
+        user = get_object_or_404(CustomUser, id=user_id)
+        course = get_object_or_404(PaidCourse, id=course_id)
 
-        UserCourseAccess.objects.get_or_create(user=user, course=course)
+        # Grant manual course access
+        access, created = UserCourseAccess.objects.get_or_create(user=user, course=course)
+
+        # Also record a manual payment
+        if created:
+            txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"  # Unique manual transaction ID
+            NewPayment.objects.create(
+                user=user,
+                course=course,
+                amount=course.course_price,  # assuming your PaidCourse has a 'fee' field
+                txnid=txn_id,
+                status="manual",  # or "success" if you prefer
+                created_at=timezone.now()
+            )
+
         return redirect('grant_course_access')
 
     return render(request, "grant_course_access.html", {
@@ -1852,8 +1881,8 @@ def mark_content_complete(request):
 # views.py
 from django.shortcuts import render, get_object_or_404
 from .models import PaidCourse, CourseProgress, NewPayment, UserCourseAccess
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import CustomUser  # Make sure this is correctly imported
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -1872,13 +1901,16 @@ def enrollment_tracking(request):
 
         # 🔍 Search Action
         if action == "search" and search_code:
-            courses = PaidCourse.objects.filter(course_code__icontains=search_code)
-            if courses.count() == 1:
-                selected_course = courses.first()
+            matched_courses = PaidCourse.objects.filter(course_code__icontains=search_code)
+            courses = matched_courses  # Filtered list in dropdown
+            if matched_courses.count() == 1:
+                selected_course = matched_courses.first()
+                course_id = selected_course.id  # Prepare for progress fetch
 
-        # 📊 View Progress Action
-        if action == "view" and course_id:
-            selected_course = get_object_or_404(PaidCourse, id=course_id)
+        # 📊 View Progress Action (also triggered after successful search)
+        if (action == "view" and course_id) or (action == "search" and selected_course):
+            if not selected_course:
+                selected_course = get_object_or_404(PaidCourse, id=course_id)
 
             paid_users = NewPayment.objects.filter(course=selected_course, status="success").values_list('user', flat=True)
             manual_users = UserCourseAccess.objects.filter(course=selected_course).values_list('user', flat=True)
@@ -1921,13 +1953,58 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import PaidCourse, CourseContent, CourseReview
 from django.contrib.admin.views.decorators import staff_member_required
 
+# def view_content(request, course_id):
+#     course = get_object_or_404(PaidCourse, id=course_id)
+
+#     # Optional: Delete review if GET param is passed
+#     if 'delete_review' in request.GET:
+#         review_id = request.GET.get('delete_review')
+#         CourseReview.objects.filter(id=review_id).delete()
+#         return redirect('view_content', course_id=course.id)
+
+#     contents = CourseContent.objects.filter(course=course).order_by('title')
+#     grouped_contents = {}
+#     for content in contents:
+#         grouped_contents.setdefault(content.title, []).append(content)
+
+#     reviews = CourseReview.objects.filter(course=course).order_by('-created_at')
+
+#     context = {
+#         'course': course,
+#         'grouped_contents': grouped_contents,
+#         'reviews': reviews,
+#         'is_admin_view': True,
+#     }
+#     return render(request, 'view_content.html', context)
+
+
+from django.contrib.auth.decorators import login_required
+from .models import PaidCourse, CourseContent, CourseReview, CustomUser
+
+@staff_member_required
 def view_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
 
-    # Optional: Delete review if GET param is passed
+    # ✅ Handle deletion
     if 'delete_review' in request.GET:
         review_id = request.GET.get('delete_review')
         CourseReview.objects.filter(id=review_id).delete()
+        return redirect('view_content', course_id=course.id)
+
+    # ✅ Handle Fake Review Form
+    if request.method == "POST" and "submit_fake_review" in request.POST:
+        display_name = request.POST.get("display_name")
+        rating = int(request.POST.get("rating"))
+        review_text = request.POST.get("review")
+
+        CourseReview.objects.create(
+            course=course,
+            user=request.user,  # required field, but won't be shown
+            review=review_text,
+            rating=rating,
+            display_name=display_name,
+            is_admin_generated=True,
+        )
         return redirect('view_content', course_id=course.id)
 
     contents = CourseContent.objects.filter(course=course).order_by('title')
@@ -1944,3 +2021,98 @@ def view_content(request, course_id):
         'is_admin_view': True,
     }
     return render(request, 'view_content.html', context)
+
+
+
+from django.shortcuts import render
+from .models import PaidCourse
+
+def paid_course_list(request):
+    courses = PaidCourse.objects.all()
+    return render(request, 'course_list.html', {'courses': courses})
+
+
+from django.shortcuts import render
+from .models import NewPayment
+
+def paid_students_list(request):
+    seen_emails = set()
+    unique_payments = []
+
+    all_payments = NewPayment.objects.select_related('user').all()
+
+    for payment in all_payments:
+        email = payment.user.email
+        if email not in seen_emails:
+            unique_payments.append(payment)
+            seen_emails.add(email)
+
+    return render(request, 'paid_students_list.html', {'payments': unique_payments})
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import CustomUser, NewPayment  # ✅ Single import line
+
+def user_detail_view(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    payments = NewPayment.objects.filter(user=user).select_related('course').order_by('-created_at')
+    return render(request, 'user_detail.html', {'user': user, 'payments': payments})
+
+
+from .models import Invoice, PaidCourse, CustomUser, NewPayment
+
+def generate_invoice_view(request, payment_id):
+    payment = get_object_or_404(NewPayment, id=payment_id)
+    course = payment.course
+    user = payment.user
+
+    # Check if invoice already exists for this user + course + payment
+    invoice_exists = Invoice.objects.filter(user=user, course=course, paid_amount=payment.amount).first()
+
+    if invoice_exists:
+        return render(request, 'invoice_detail.html', {'invoice': invoice_exists})
+
+    # Create a new invoice
+    invoice = Invoice.objects.create(
+        user=user,
+        course=course,
+        course_title=course.course_title,
+        course_fee=course.original_price,
+        discount=course.discount_amount,
+        paid_amount=payment.amount,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        mobile=user.mobile,
+        email=user.email,
+    )
+    return render(request, 'invoice_detail.html', {'invoice': invoice})
+
+
+
+
+# single device login
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
+from django.contrib.sessions.models import Session
+from lmsapp.models import UserSession  # adjust as needed
+
+@receiver(user_logged_in)
+def enforce_single_session(sender, request, user, **kwargs):
+    if request.session.session_key is None:
+        request.session.save()
+
+    session_key = request.session.session_key
+
+    try:
+        existing_session = UserSession.objects.get(user=user)
+        if existing_session.session_key != session_key:
+            # Delete the old session
+            Session.objects.filter(session_key=existing_session.session_key).delete()
+    except UserSession.DoesNotExist:
+        existing_session = UserSession(user=user)
+
+    # Save the new session key
+    existing_session.session_key = session_key
+    existing_session.save()
