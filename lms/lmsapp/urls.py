@@ -79,6 +79,11 @@ urlpatterns = [
     path('user-detail/<int:user_id>/', views.user_detail_view, name='user_detail'),
 
     path('invoice/<int:payment_id>/', views.generate_invoice_view, name='generate_invoice'),
+    path('invoice/<int:invoice_id>/cancel/', views.cancel_invoice_view, name='cancel_invoice'),
+    path('invoice/<int:invoice_id>/toggle/', views.toggle_invoice_status_view, name='toggle_invoice'),
+
+    path('dashboard/', views.invoice_dashboard_view, name='invoice_dashboard'),
+
 
     
 

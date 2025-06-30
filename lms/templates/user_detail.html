@@ -39,9 +39,23 @@
                 {% endif %}
             </td>
 
-            <td>
-    <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary">Invoice</a>
+           <td>
+  <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary">Invoice</a>
+
+  {% for invoice in invoices %}
+    {% if invoice.course == payment.course and invoice.paid_amount == payment.amount %}
+      <form action="{% url 'toggle_invoice' invoice.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        {% if invoice.is_canceled %}
+          <button type="submit" class="btn btn-sm btn-success">Restore</button>
+        {% else %}
+          <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+        {% endif %}
+      </form>
+    {% endif %}
+  {% endfor %}
 </td>
+
         </tr>
         {% endfor %}
     </tbody>

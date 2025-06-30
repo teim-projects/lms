@@ -174,9 +174,11 @@ SESSION_SAVE_EVERY_REQUEST = True  # Ensures session is saved on every request
 # EASEBUZZ_BASE_URL = "`https://easebuzz.in/demo/?amount=rs{course_price}&productinfo=${course_title}&firstname=${userName}`" if EASEBUZZ_USE_SANDBOX else "https://easebuzz.in/live/"
 #   # For production
 
-EASEBUZZ_MERCHANT_KEY = "Z40SWGFKH"
-EASEBUZZ_SALT = "BWX48AF75"
-EASEBUZZ_USE_SANDBOX = True  # Set to False for live mode
+# settings.py
+
+EASEBUZZ_MERCHANT_KEY = "UVLEZ17N6D"
+EASEBUZZ_SALT = "NZ1JHQ95X3"
+EASEBUZZ_USE_SANDBOX = False  # Important: switch to False for real payments
 
 
 AUTH_USER_MODEL = 'lmsapp.CustomUser'

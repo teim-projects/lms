@@ -366,6 +366,8 @@ class Invoice(models.Model):
 
     date_created = models.DateTimeField(default=timezone.now)
 
+    is_canceled = models.BooleanField(default=False)  # New field to track canceled invoice
+
     def save(self, *args, **kwargs):
         if not self.invoice_number:
             rand = random.randint(10000, 99999)
@@ -374,3 +376,5 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"{self.invoice_number} - {self.course_title} ({self.user.email})"
+
+

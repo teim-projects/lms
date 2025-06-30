@@ -2058,7 +2058,12 @@ from .models import CustomUser, NewPayment  # ✅ Single import line
 def user_detail_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     payments = NewPayment.objects.filter(user=user).select_related('course').order_by('-created_at')
-    return render(request, 'user_detail.html', {'user': user, 'payments': payments})
+    invoices = Invoice.objects.filter(user=user)
+    return render(request, 'user_detail.html', {
+        'user': user,
+        'payments': payments,
+        'invoices': invoices
+    })
 
 
 from .models import Invoice, PaidCourse, CustomUser, NewPayment
@@ -2116,3 +2121,41 @@ def enforce_single_session(sender, request, user, **kwargs):
     # Save the new session key
     existing_session.session_key = session_key
     existing_session.save()
+
+
+
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404, redirect
+from .models import Invoice
+
+@require_POST
+def cancel_invoice_view(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id)
+    if not invoice.is_canceled:
+        invoice.is_canceled = True
+        invoice.save()
+    return redirect('user_detail', user_id=invoice.user.id)
+
+
+@require_POST
+def toggle_invoice_status_view(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id)
+    invoice.is_canceled = not invoice.is_canceled
+    invoice.save()
+    return redirect('user_detail', user_id=invoice.user.id)
+
+
+from django.db.models import Sum
+from .models import Invoice
+
+def invoice_dashboard_view(request):
+    active_total = Invoice.objects.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    canceled_total = Invoice.objects.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    total_amount = active_total + canceled_total
+
+    return render(request, 'dashboard.html', {
+        'active_total': active_total,
+        'canceled_total': canceled_total,
+        'total_amount': total_amount
+    })
+
