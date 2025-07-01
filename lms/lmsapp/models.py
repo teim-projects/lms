@@ -29,13 +29,19 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
-    mobile = models.CharField(max_length=12, unique=True)
+    
+    mobile = models.CharField(max_length=12, unique=True, null=True, blank=True)
+
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
+    is_subadmin = models.BooleanField(default=False)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    plain_password = models.CharField(max_length=128, blank=True, null=True)
+
 
     groups = models.ManyToManyField(
         Group,
@@ -167,35 +173,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-class SubAdmin(AbstractUser):
-    email = models.EmailField(unique=True)  # 👈 Make email unique
-
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    plain_password = models.CharField(max_length=128, blank=True, null=True)
-    is_subadmin = models.BooleanField(default=True)
-
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='subadmin_set',
-        blank=True,
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='subadmin_permissions_set',
-        blank=True,
-    )
-
-    # Remove unused fields and override username
-    username = None
-    first_name = None
-    last_name = None
-    address = None  # You can remove this if not declared elsewhere
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone_number']
-
-    def __str__(self):
-        return self.email
 
 
 # class Payment(models.Model):
