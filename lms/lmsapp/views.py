@@ -1040,7 +1040,7 @@ def update_paid_course(request, course_id):
     return render(request, 'update_paid_course.html', {'course': course})
 
 from django.shortcuts import render, redirect
-from .models import SubAdmin
+# from .models import SubAdmin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password
 
@@ -1050,37 +1050,41 @@ def is_admin(user):
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-from .models import SubAdmin
+# from .models import SubAdmin
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-from .models import SubAdmin
+# from .models import SubAdmin
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+
+User = get_user_model()
 
 def manage_subadmins(request):
     if request.method == 'POST':
-        # Extract form data
         email = request.POST.get('email')
         password = request.POST.get('password')
-        phone_number = request.POST.get('phone_number')
+        phone_number = request.POST.get('phone_number') or None  # Avoid empty string
 
-        # Ensure no duplicate emails for SubAdmin
-        if SubAdmin.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             messages.error(request, "A SubAdmin with this email already exists.")
         else:
-            # Save new SubAdmin
-            subadmin = SubAdmin.objects.create(
-                email=email,
-                password=make_password(password),  # Hash the password
-                plain_password=password,  # Store plain-text password
-                phone_number=phone_number,
-                is_subadmin=True  # Ensure subadmin role
-            )
-            messages.success(request, "SubAdmin created successfully!")
+            try:
+                user = User.objects.create(
+                    email=email,
+                    password=make_password(password),
+                    plain_password=password,
+                    mobile=phone_number,
+                    is_subadmin=True
+                )
+                messages.success(request, "SubAdmin created successfully!")
+            except IntegrityError as e:
+                messages.error(request, f"Error creating SubAdmin: {e}")
 
         return redirect('manage_subadmins')
 
-    # Retrieve all SubAdmins
-    subadmins = SubAdmin.objects.filter(is_subadmin=True)
+    subadmins = User.objects.filter(is_subadmin=True)
     return render(request, 'manage_subadmin.html', {'subadmins': subadmins})
 
 
@@ -1091,43 +1095,57 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 def is_subadmin(user):
     return user.is_authenticated and user.is_subadmin
 
+# if you wnat both subadmin and admin to acces same functionality 
+def is_admin_or_subadmin(user):
+    return user.is_authenticated and (user.is_superuser or user.is_subadmin)    
+
 
 def subadmin_dashboard(request):
-    return render(request, 'subadmin_dashboard.html', {})
+    is_subadmin = getattr(request.user, 'is_subadmin', False)
+    return render(request, 'subadmin_dashboard.html', {
+        'is_subadmin': is_subadmin
+    })
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib import messages
-from .models import SubAdmin
-
-from django.contrib.auth import authenticate, login as auth_login
-from django.shortcuts import render, redirect
-from django.contrib import messages
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
-from .models import SubAdmin
+# from .models import SubAdmin
+
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
+# from .models import SubAdmin
+
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 def subadmin_login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Authenticate as SubAdmin using email and password
-        try:
-            user = SubAdmin.objects.get(email=email)
-            if user.check_password(password) and user.is_subadmin:
-                auth_login(request, user)
-                request.session['subadmin_email'] = user.email
-                return redirect('subadmin_dashboard')  # Redirect to subadmin dashboard
-            else:
-                messages.error(request, "Invalid credentials or SubAdmin access denied.")
-        except SubAdmin.DoesNotExist:
-            messages.error(request, "SubAdmin with this email does not exist.")
+        user = authenticate(request, email=email, password=password)
+
+        if user and user.is_subadmin:
+            auth_login(request, user)
+            request.session['subadmin_email'] = user.email
+            return redirect('subadmin_dashboard')
+        else:
+            messages.error(request, "Invalid credentials or not a SubAdmin.")
+            return redirect('subadmin_login')
 
     return render(request, 'subadmin_login.html')
+
 
 import hashlib
 import requests
@@ -1885,7 +1903,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import CustomUser  # Make sure this is correctly imported
 
 @login_required
-@user_passes_test(lambda u: u.is_superuser)
+# @user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(is_admin_or_subadmin)
 def enrollment_tracking(request):
     courses = PaidCourse.objects.all()
     selected_course = None
@@ -1981,7 +2000,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from .models import PaidCourse, CourseContent, CourseReview, CustomUser
 
-@staff_member_required
+@user_passes_test(is_admin_or_subadmin)
 def view_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
 
@@ -2027,6 +2046,7 @@ def view_content(request, course_id):
 from django.shortcuts import render
 from .models import PaidCourse
 
+
 def paid_course_list(request):
     courses = PaidCourse.objects.all()
     return render(request, 'course_list.html', {'courses': courses})
@@ -2034,6 +2054,7 @@ def paid_course_list(request):
 
 from django.shortcuts import render
 from .models import NewPayment
+
 
 def paid_students_list(request):
     seen_emails = set()

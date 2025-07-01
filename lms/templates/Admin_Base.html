@@ -195,7 +195,10 @@
       <li class="nav-item">
         <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu2" role="button">Enrollment Management</a>
         <div class="collapse" id="menu2">
-          <a class="nav-link pl-4" href="/grant-access/">Give Access</a>
+          {% if not is_subadmin %}
+  <a class="nav-link pl-4" href="/grant-access/">Give Access</a>
+{% endif %}
+
 
           <a class="nav-link pl-4" href="/enrollment_tracking/">Enrollment Tracking</a>
         </div>
