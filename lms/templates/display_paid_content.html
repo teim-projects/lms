@@ -1,6 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head> {% load static %}
+  <head> 
     <meta charset="UTF-8">
     <title>{{ course.course_title }}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -232,35 +233,28 @@
       margin-bottom: 15px;
     }
   }
+  .bos{
+    box-shadow: 0px 0px 10px rgb(138, 142, 145);
+  }
+  .boss{
+        box-shadow: 0px 0px 10px rgb(228, 229, 231);
+
+  }
+ 
     </style>
   </head>
   <body> 
     
     {% include 'Student_Base.html' %} <div class="main" style="min-height: 100vh;">
       <div class="container content-wrapper">
-        <div class="card shadow-sm border-0 fade-in section-box rounded-3 p-4 headercard">
+        <div class="card bos border-0 fade-in section-box rounded-3 p-4 headercard">
           <div class="row g-4 align-items-center">
             <!-- Thumbnail -->
 
 
-<<<<<<< HEAD
-            <h3>Average Rating: {{ average_rating }} / 5</h3>
-
-<!-- Optionally, show stars: -->
-<div>
-   {% for i in "12345" %}
-    {% if forloop.counter <= average_rating %}
-        <span>★</span>
-    {% else %}
-        <span>☆</span>
-    {% endif %}
-{% endfor %}
-
-</div>
+      
 
 
-=======
->>>>>>> dd66efdd36555f60f8bd5a0128d406c6a5a33f28
             <h5 class="text-center text-primary fw-bold ">{{ course.course_title }}</h5>
             <div class="col-md-5 mb-5">
               <img src="{{ course.thumbnail.url }}" alt="Course Thumbnail" class="img-fluid rounded-3 shadow-sm w-100">
@@ -302,7 +296,7 @@
           </div>
         </div>
       </div>
- <div class="container my-4">
+ <div class="container my-4 ">
   <div class="p-4 bg-white rounded shadow-sm course-info-box">
     <div class="row text-center">
       
@@ -367,7 +361,7 @@
       </div>
       <!-- Container for all sections -->
       <div class="container px-4 px-md-5">
-        <section id="about-section" class="mt-5 fade-in">
+        <section id="about-section" class="mt-5 fade-in bos">
           <h4 class="text-primary mb-4">
             <i class="fas fa-info-circle text-primary mr-2"></i>About
           </h4>
@@ -391,11 +385,11 @@
           </script>
         </section>
 <section id="modules-benefit-wrapper" class="mt-5">
-  <div class="row align-items-stretch">
+  <div class="row align-items-stretch ">
 
    <!-- Modules Section -->
-<div class="col-md-6 d-flex">
-  <div id="modules-section" class="p-4 bg-white rounded shadow w-100">
+<div class="col-md-6 d-flex ">
+  <div id="modules-section" class="p-4 bg-white rounded  w-100 boss">
     <h4 class="text-primary mb-4">📚 Modules</h4>
     <div class="row" id="modules-wrapper">
       {% for title, contents in grouped_contents.items %}
@@ -403,7 +397,7 @@
           <div class="col-12 mb-3 module-box {% if forloop.counter > 3 %}d-none extra-module{% endif %}">
             <div class="d-flex align-items-start border rounded p-3 bg-light">
               <div class="flex-grow-1">
-                <a class="text-dark text-decoration-none fw-bold fs-5 d-block module-toggle"
+                <a class="text-dark titlee text-decoration-none fw-bold fs-6 d-block module-toggle"
                    data-bs-toggle="collapse" href="#collapseModule{{ forloop.counter }}">
                   {{ title }}
                 </a>
@@ -418,21 +412,21 @@
               </div>
             </div>
 
-            <div class="collapse mt-2" id="collapseModule{{ forloop.counter }}">
+            <div class="collapse mt-2 mb-2" id="collapseModule{{ forloop.counter }}">
               <ul class="list-group mt-2">
                 {% for content in contents %}
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-2">
                       {% if ".mp4" in content.resource_file.url %}
-                        <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline">
-                          <span class="text-danger fs-5">▶</span> {{ content.subtitle }}
+                        <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline ">
+                          <span class="text-danger fs-5 ">▶</span> {{ content.subtitle }}
                         </a>
-                        <span class="badge bg-danger ms-2">Video</span>
+                        <span class="badge bg-danger ms-2 ">Video</span>
                       {% else %}
                         <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline">
-                          <span class="text-primary fs-5">📄</span> {{ content.subtitle }}
+                          <span class="text-primary fs-5 ">📄</span> {{ content.subtitle }}
                         </a>
-                        <span class="badge bg-primary ms-2">PDF</span>
+                        <span class="badge bg-primary ms-2 ">PDF</span>
                       {% endif %}
                     </div>
 
@@ -441,7 +435,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="course_id" value="{{ course.id }}">
                         <input type="hidden" name="content_id" value="{{ content.id }}">
-                        <button type="submit" class="btn btn-sm btn-outline-success" title="Mark as Complete">✔</button>
+                        <button type="submit" class="btn btn-sm btn-outline-success mt-1"  title="Mark as Complete">✔</button>
                       </form>
                     {% endif %}
                   </li>
@@ -493,7 +487,7 @@
 
     <!-- Benefits Section -->
     <div class="col-md-6 d-flex">
-      <div id="benefit-section" class="p-4 bg-white rounded shadow w-100">
+      <div id="benefit-section" class="p-4 bg-white rounded   w-100">
         <h4 class="text-primary mb-4">🎯 Benefits</h4>
         <p style="white-space: pre-line; word-wrap: break-word;">{{ course.benefits }}</p>
       </div>
@@ -504,7 +498,7 @@
 
  
 
-        <section id="testimonials-section" class="mt-5 section-box fade-in">
+        <section id="testimonials-section" class="mt-5 section-box fade-in bos">
           <hr>
           <!-- Reviews Header -->
           <div class="text-center my-5">
@@ -563,7 +557,7 @@
           </div> {% else %} <p class="text-muted text-center">Buy the course to write a review.</p> {% endif %}
         </section>
         <section id="progress-section" class="mt-5">
-          <div class="section-box fade-in p-4 rounded bg-light shadow-sm progress-section">
+          <div class="section-box fade-in p-4 rounded bg-light bos progress-section">
             <h4 class="text-primary mb-3">📈 Your Course Progress</h4> {% if progress_percentage is not None %} <div class="d-flex justify-content-between align-items-center mb-2">
               <h5 class="mb-0">Completed:</h5>
               <span class="badge bg-success">{{ progress_percentage }}%</span>
