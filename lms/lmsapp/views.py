@@ -1023,21 +1023,27 @@ def delete_paid_course(request, course_id):
 # Update Paid Course
 def update_paid_course(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
+
     if request.method == 'POST':
         course.course_title = request.POST.get('course_title', course.course_title)
         course.duration = request.POST.get('duration', course.duration)
         course.description = request.POST.get('description', course.description)
+        course.about = request.POST.get('about', course.about)
+        course.benefits = request.POST.get('benefits', course.benefits)
         course.instructor_name = request.POST.get('instructor_name', course.instructor_name)
         course.course_level = request.POST.get('course_level', course.course_level)
-        course.course_price = request.POST.get('course_price', course.course_price)
+        course.original_price = float(request.POST.get('original_price', course.original_price))
+        course.course_price = float(request.POST.get('course_price', course.course_price))
+        course.discount_amount = course.original_price - course.course_price
 
         if 'thumbnail' in request.FILES:
             course.thumbnail = request.FILES['thumbnail']
 
         course.save()
-        return redirect('create_paid_course')  # Redirect to the paid course list page
+        return redirect('view_paid_course')
 
     return render(request, 'update_paid_course.html', {'course': course})
+
 
 from django.shortcuts import render, redirect
 # from .models import SubAdmin
@@ -1054,6 +1060,8 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.db import IntegrityError
+
 # from .models import SubAdmin
 
 from django.contrib.auth import get_user_model
@@ -1651,6 +1659,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from collections import defaultdict
 from .models import PaidCourse, CourseReview, NewPayment, UserCourseAccess, CourseProgress
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
 
 @login_required
 def display_paid_content(request, course_id):
@@ -1669,6 +1678,8 @@ def display_paid_content(request, course_id):
     progress_percentage = progress.progress_percentage if progress else 0
 
     reviews = CourseReview.objects.filter(course=course).order_by('-created_at')
+    title_count = CourseContent.objects.filter(course=course).values('title').distinct().count()
+    average_rating = CourseReview.objects.filter(course=course).aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
 
     # ✅ Handle POST Actions
     if request.method == "POST":
@@ -1706,6 +1717,8 @@ def display_paid_content(request, course_id):
         'has_access': has_access,
         'progress_percentage': progress_percentage,
         'reviews': reviews,
+        'title_count': title_count,
+        'average_rating': round(average_rating, 1),
     })
 
 
@@ -1751,13 +1764,14 @@ def initiate_payment(request, course_id):
     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
     hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
 
-    payment = NewPayment.objects.create(
-        user=user,
-        course=course,
-        amount=amount,
-        txnid=txnid,
-        status="initiated"
-    )
+
+    # payment = NewPayment.objects.create(
+    #     user=user,
+    #     course=course,
+    #     amount=amount,
+    #     txnid=txnid,
+    #     status="initiated"
+    # )
 
     context = {
         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
@@ -1777,18 +1791,32 @@ def initiate_payment(request, course_id):
 
 
 
+
+
 @csrf_exempt
 def payment_success(request):
     txnid = request.POST.get("txnid")
     status = request.POST.get("status")
+    amount = request.POST.get("amount")
+    email = request.POST.get("email")
+    productinfo = request.POST.get("productinfo")
 
-    try:
-        payment = NewPayment.objects.get(txnid=txnid)
-        payment.status = status
-        payment.save()
-        return redirect('display_paid_content', course_id=payment.course.id)
-    except NewPayment.DoesNotExist:
+    user = CustomUser.objects.filter(email=email).first()
+    course = PaidCourse.objects.filter(course_title=productinfo).first()
+
+    if status == "success" and user and course:
+        # Only save successful payment
+        NewPayment.objects.create(
+            user=user,
+            course=course,
+            amount=amount,
+            txnid=txnid,
+            status=status
+        )
+        return redirect('display_paid_content', course_id=course.id)
+    else:
         return render(request, 'payment_failed.html')
+
 
 @csrf_exempt
 def payment_failure(request):

@@ -114,12 +114,12 @@
         <td><strong>INVOICE TO:</strong><br>
           {{ invoice.first_name }} {{ invoice.last_name }}<br>
           {{ invoice.email }} / {{ invoice.mobile }}<br>
-          {{ invoice.user.username|upper }} :
+          <!-- {{ invoice.user.username|upper }} : -->
         </td>
         <td style="text-align:right;">
           <strong style="color:#c00;">INVOICE {{ invoice.invoice_number }}</strong><br>
           Date of Invoice: {{ invoice.date_created|date:"d-m-Y" }}<br>
-          Expiry: {{ invoice.date_created|date:"d-m-Y" }}
+          <!-- Expiry: {{ invoice.date_created|date:"d-m-Y" }} -->
         </td>
       </tr>
     </table>
@@ -146,7 +146,7 @@
 
   <div class="totals">
     <p>Total: <strong>{{ invoice.paid_amount }}</strong></p>
-    <p>Tax %: <strong>0</strong></p>
+    <!-- <p>Tax %: <strong>0</strong></p> -->
     <p style="color:#c00; font-weight:bold;">GRAND TOTAL: {{ invoice.paid_amount }}</p>
   </div>
 
