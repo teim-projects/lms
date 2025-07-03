@@ -1,433 +1,183 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy </title>
-    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+    <title>Invoice Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+   <style>
+    body {
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+    }
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+    .dashboard-container {
+        margin-top: 100px;  /* Increased space from top */
+        flex: 1;  /* Pushes footer to bottom */
+    }
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    .chart-card {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            overflow-x: hidden;
-            font-family: Verdana, sans-serif;
-        }
+    .invoice-summary-list {
+        margin-bottom: 80px; /* Adds space after Total Invoices */
+    }
 
-
-
-
-
-
-        /* .logo {
-            margin-left: 40px;
-        } */
-
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        a:hover {
-            /* background-color: rgb(94, 94, 93); */
-            /* font-size: 18px; */
-            /* border: 1px solid; */
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-
-        }
-
-        .paid-btn {
-            width: 100%;
-        }
-
-        .paid-form {
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            border-radius: 10px;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: 25px;
-        }
-
-
-        /* Logout Button Styles */
-
-
-
-
-
-        /* .logo {
-            margin-left: 40px;
-        } */
-
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-
-
-        .container {
-            padding-bottom: 10px;
-        }
-
-        .main {
-            min-height: 100vh;
-            margin-top: 100px;
-        }
-
-        /*Footer Css End*/
-
-        .chbtn {
-            margin-top: 1rem !important;
-            width: 100%;
-            text-align: left !important;
-
-        }
-
-        .chapter-heading {
-            background: linear-gradient(90deg, #181818, #000000);
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            font-weight: 500;
-        }
-
-        .chbtn {
-            display: inline-block;
-            padding: 8px 12px;
-            color: #0d6efd;
-            /* Primary blue */
-            font-weight: 500;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            position: relative;
-            background-color: #eaf4ff;
-            box-shadow: 0px 0px 2px rgb(75, 74, 74);
-
-        }
-
-        .chbtn::before {
-            content: "▶ ";
-            color: #0d6efd;
-            margin-right: 5px;
-        }
-
-        .chbtn:hover {
-            background-color: #eaf4ff;
-            color: #0a58ca;
-            text-decoration: none;
-        }
-
-        .chbtn:hover::before {
-            color: #0a58ca;
-            text-decoration: none;
-        }
-
-        .frecardd {
-            box-shadow: 0px 0px 5px rgba(198, 192, 192, 0.763);
-
-        }
-
-        .frecardd:hover {
-            box-shadow: 0px 0px 10px #000000;
-        }
-
-        .Our-Mission {
-
-            text-align: center;
-            text-decoration: none;
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 20px;
-            font-weight: 400;
-            margin-bottom: 20px;
-        }
-
-        .frecardd:hover {
-            box-shadow: 0px 0px 10px #000000;
-        }
-
-        .chapter-title {
-            display: inline-block;
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            vertical-align: middle;
-        }
-
-        .chapter-title.expanded {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: unset;
-        }
-
-        .read-more-btn {
-            border: none;
-            background: none;
-            font-size: 0.85rem;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .truncated-title {
-            display: inline-block;
-            max-width: 85%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            vertical-align: middle;
-        }
-
-        .truncated-title.expanded {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: unset;
-        }
-
-        .read-more-btn {
-            background: none;
-            border: none;
-            font-size: 0.85rem;
-            cursor: pointer;
-            padding: 0;
-            color: #0F40BF;
-        }
-
-
-
-
-
-        .line-clamp {
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Show 3 lines */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.expanded {
-    display: block;
-    -webkit-line-clamp: unset;
-    overflow: visible;
-}
-
-    </style>
+    footer {
+        background: #f8f9fa;
+    }
+</style>
 
 </head>
 
 <body>
 
     {% include 'Admin_Base.html' %}
-    <div class="main">
-        <div class="container my-4">
-            <div class="text-center mb-5">
-                <!-- <h1>Available Courses</h1> -->
-                <h4>Welcome to Your Profit Journey! with <br><span class="Our-Mission">Profitmax Share Market
-                        Academy.
-                    {{ request.user }}</span> </h4>
-            </div>
 
-            {% if courses %}
-            <div class="row">
-                {% for course in courses %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 card-box">
-                        {% if course.thumbnail %}
-                        <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
-                            style="width: 100%; height: 200px; object-fit: inherit;">
-                        {% else %}
-                        <p>No thumbnail available</p>
-                        {% endif %}
+    <div class="container dashboard-container">
+        <!-- <h2 class="mb-4 text-center text-primary">📊 Invoice Summary Dashboard</h2> -->
 
-                        <div class="card-body">
-
-
-
-                            <h5 class="card-title fw-semibold text-center" style="color:#0F40BF;">
-                                <span class="truncated-title" id="title-{{ course.id }}">{{ course.title }}</span>
-                                {% if course.title|length > 50 %}
-                                <button class="read-more-btn" id="title-btn-{{ course.id }}"
-                                    onclick="toggleTitle('{{ course.id }}')">
-                                    Read More
-                                </button>
-                                {% endif %}
-                            </h5>
-
-                            <div class="text-center">
-                                <button class="btn btn-primary btn-sm toggle-details-btn"
-                                    data-course-id="{{ course.id }}">
-                                    Course Details
-                                </button>
-                            </div>
-
-                            <!-- Hidden details section -->
-                            <div class="course-details mt-3 d-none" id="details-{{ course.id }}">
-
-
-
-                                <p class="card-text description-text line-clamp" id="desc-{{ course.id }}">
-                                    {{ course.description }}
-                                </p>
-                                {% if course.description|length > 250 %}
-                                <div class="text-center">
-                                    <button class="read-more-btn" id="desc-btn-{{ course.id }}"
-                                        onclick="toggleDescription('{{ course.id }}')">
-                                        Read More
-                                    </button>
-                                </div>
-                                {% endif %}
-
-
-                                <h5 class="chapter-heading mt-3 text-center">Lessons</h5>
-                                <ul class="list-unstyled" id="chapter-list-{{ course.id }}">
-                                    {% for chapter in course.chapters.all %}
-                                    <li
-                                        class="mb-1 {% if forloop.counter > 3 %}d-none extra-chapter-{{ course.id }}{% endif %}">
-
-                                        <a href="{{ chapter.youtube_link }}" target="_blank" class="chbtn chapter-title"
-                                            id="chapter-title-{{ chapter.id }}">
-                                            {{ chapter.title }}
-                                        </a>
-                                        {% if chapter.title|length > 50 %}
-                                        <button type="button" class="read-more-btn text-primary small ms-1"
-                                            onclick="toggleChapterText({{ chapter.id }})">Read More</button>
-                                        {% endif %}
-                                    </li>
-                                    {% empty %}
-                                    <li class="text-muted text-center text-info">No Lessons available</li>
-                                    {% endfor %}
-                                </ul>
-
-                                {% if course.chapters.count > 3 %}
-                                <div class="text-center mt-2">
-                                    <button class="btn btn-outline-primary btn-sm explore-btn"
-                                        data-course-id="{{ course.id }}">
-                                        Explore More
-                                    </button>
-                                </div>
-                                {% endif %}
-
-                            </div>
-                        </div>
-                    </div>
+        <!-- Charts Row: Side-by-side Charts -->
+        <div class="row mb-5">
+            <!-- Invoice Summary Chart -->
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="chart-card">
+                    <h5 class="text-center mb-3 text-success">💰 Invoice Amount Summary</h5>
+                    <canvas id="invoiceChart"></canvas>
                 </div>
-                {% endfor %}
             </div>
-
-            {% else %}
-            <p>No courses available</p>
-            {% endif %}
+            <!-- Top 5 Courses Chart -->
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <h5 class="text-center mb-3 text-info">🔥 Top 5 Most Purchased Courses</h5>
+                    <canvas id="topCoursesChart"></canvas>
+                </div>
+            </div>
         </div>
 
+        <!-- Invoice Total Info Summary -->
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Active Invoices
+                        <span class="badge bg-success rounded-pill">₹{{ active_total }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Canceled Invoices
+                        <span class="badge bg-danger rounded-pill">₹{{ canceled_total }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total Invoices
+                        <span class="badge bg-primary rounded-pill">₹{{ total_amount }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-
-
+    <!-- Invoice Chart Script -->
     <script>
-        function toggleTitle(courseId) {
-            const titleSpan = document.getElementById(`title-${courseId}`);
-            const titleBtn = document.getElementById(`title-btn-${courseId}`);
-            titleSpan.classList.toggle('expanded');
+        const ctx = document.getElementById('invoiceChart').getContext('2d');
 
-            if (titleSpan.classList.contains('expanded')) {
-                titleBtn.textContent = 'Read Less';
-            } else {
-                titleBtn.textContent = 'Read More';
-            }
-        }
-
-        function toggleDescription(courseId) {
-            const descPara = document.getElementById(`desc-${courseId}`);
-            const descBtn = document.getElementById(`desc-btn-${courseId}`);
-
-            descPara.classList.toggle('expanded');
-            descPara.classList.toggle('line-clamp');
-
-            if (descPara.classList.contains('expanded')) {
-                descBtn.textContent = 'Read Less';
-            } else {
-                descBtn.textContent = 'Read More';
-            }
-        }
-
-
-
-    </script>
-
-
-
-
-    <script>
-        $(document).ready(function () {
-            // Toggle course details
-            $('.toggle-details-btn').click(function () {
-                const courseId = $(this).data('course-id');
-                $('#details-' + courseId).toggleClass('d-none');
-
-                // Change button text
-                if ($('#details-' + courseId).hasClass('d-none')) {
-                    $(this).text('Course Details');
-                } else {
-                    $(this).text('Hide Details');
+        const invoiceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Active Invoices', 'Canceled Invoices', 'Total Invoices'],
+                datasets: [{
+                    label: 'Amount in ₹',
+                    data: [{{ active_total }}, {{ canceled_total }}, {{ total_amount }}],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.7)',   // Green
+                        'rgba(220, 53, 69, 0.7)',   // Red
+                        'rgba(0, 123, 255, 0.7)'    // Blue
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => '₹' + value
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return '₹' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
                 }
-            });
-
-            // Toggle explore more/less
-            $('.explore-btn').click(function () {
-                const courseId = $(this).data('course-id');
-                const $extraChapters = $('.extra-chapter-' + courseId);
-                const $btn = $(this);
-
-                $extraChapters.toggleClass('d-none');
-
-                if ($extraChapters.hasClass('d-none')) {
-                    $btn.text('Explore More');
-                } else {
-                    $btn.text('Explore Less');
-                }
-            });
+            }
         });
     </script>
 
+    <!-- Top Courses Chart Script -->
     <script>
-        function toggleChapterText(chapterId) {
-            const titleEl = document.getElementById(`chapter-title-${chapterId}`);
-            const btn = titleEl.nextElementSibling;
-
-            titleEl.classList.toggle("expanded");
-            btn.textContent = titleEl.classList.contains("expanded") ? "Read Less" : "Read More";
-        }
-
-        function toggleExplore(courseId) {
-            const extraChapters = document.querySelectorAll(`.extra-${courseId}`);
-            const btn = document.querySelector(`button.explore-btn[onclick*="${courseId}"]`);
-
-            const isCurrentlyExpanded = !extraChapters[0].classList.contains("d-none");
-
-            extraChapters.forEach(chap => {
-                chap.classList.toggle("d-none", isCurrentlyExpanded);
-            });
-
-            btn.textContent = isCurrentlyExpanded ? "Explore More" : "Show Less";
-        }
+        const ctxTopCourses = document.getElementById('topCoursesChart').getContext('2d');
+        const topCoursesChart = new Chart(ctxTopCourses, {
+            type: 'bar',
+            data: {
+                labels: {{ course_labels|safe }},
+                datasets: [{
+                    label: 'No. of Purchases',
+                    data: {{ course_data|safe }},
+                    backgroundColor: 'rgba(255, 193, 7, 0.7)',  // Yellow
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.parsed.y + ' Purchases';
+                            }
+                        }
+                    }
+                }
+            }
+        });
     </script>
+
     {% include 'footer.html' %}
+
 </body>
 
 </html>

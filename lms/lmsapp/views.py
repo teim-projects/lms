@@ -22,10 +22,44 @@ def student_dashboard(request):
     return render(request, 'student_dashboard.html')
 
 
+from django.db.models import Sum, Count
+from .models import Invoice, NewPayment
+from django.db.models import F
+
+
+from django.db.models import Count, F, Sum
+from django.shortcuts import render
+
 def admin_dashboard(request):
-    admin_email = request.session.get('admin_email', 'Admin Email')
-    courses = FreeCourse.objects.all()
-    return render(request, 'admin_dashboard.html', {'admin_email': admin_email, 'courses': courses})
+    active_total = Invoice.objects.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    canceled_total = Invoice.objects.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    total_amount = active_total + canceled_total
+
+    # Get top 5 purchased courses with title and course code
+    top_courses = (
+        NewPayment.objects
+        .values('course_id')
+        .annotate(
+            course_title=F('course__course_title'),
+            course_code=F('course__course_code'),
+            purchase_count=Count('id')
+        )
+        .order_by('-purchase_count')[:5]
+    )
+
+    # Format: Title (CODE123)
+    course_labels = [f"{item['course_title']} ({item['course_code']})" for item in top_courses]
+    course_data = [item['purchase_count'] for item in top_courses]
+
+    return render(request, 'admin_dashboard.html', {
+        'active_total': active_total,
+        'canceled_total': canceled_total,
+        'total_amount': total_amount,
+        'course_labels': course_labels,
+        'course_data': course_data,
+    })
+
+
 
 
 

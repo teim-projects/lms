@@ -3,69 +3,101 @@
 <head>
   <title>User Details</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .user-info-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .course-card {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+    .course-card img {
+      max-height: 180px;
+      object-fit: cover;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    .course-card .card-body {
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <h2>User Details</h2>
-<p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-<p><strong>Email:</strong> {{ user.email }}</p>
-<p><strong>Mobile:</strong> {{ user.mobile }}</p>
-<p><strong>Account Created:</strong> {{ user.created_at|date:"Y-m-d H:i" }}</p>
 
-<hr>
-
-<h3>Purchased Courses</h3>
-{% if payments %}
-<table border="1" cellpadding="10">
-    <thead>
-        <tr>
-            <th>Course Title</th>
-            <th>Price (₹)</th>
-            <th>Date of Purchase</th>
-            <th>Payment Type</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for payment in payments %}
-        <tr>
-            <td>{{ payment.course.course_title }}</td>
-            <td>{{ payment.amount }}</td>
-            <td>{{ payment.created_at|date:"Y-m-d H:i" }}</td>
-            <td>
-                {% if payment.status == 'manual' %}
-                    Offline Payment(Cash) 
-                {% else %}
-                    Online Payment
-                {% endif %}
-            </td>
-
-           <td>
-  <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary">Invoice</a>
-
-  {% for invoice in invoices %}
-    {% if invoice.course == payment.course and invoice.paid_amount == payment.amount %}
-      <form action="{% url 'toggle_invoice' invoice.id %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        {% if invoice.is_canceled %}
-          <button type="submit" class="btn btn-sm btn-success">Restore</button>
-        {% else %}
-          <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
-        {% endif %}
-      </form>
-    {% endif %}
-  {% endfor %}
-</td>
-
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>No course purchases found for this user.</p>
-{% endif %}
-
-      
-    <a href="{% url 'paid_students_list' %}" class="btn btn-secondary mt-3">Back to List</a>
+   {% include 'Admin_Base.html' %}
+  <div class="container my-5">
+    
+    <div class="d-flex justify-content mb-4">
+  <div class="user-info-box" style="max-width: 450px; width: 100%;">
+    <h4 class="mb-3 text-center text-primary">👤 User Information</h4>
+    <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Mobile:</strong> {{ user.mobile }}</p>
+    <p><strong>Account Created:</strong> {{ user.created_at|date:"Y-m-d H:i" }}</p>
   </div>
+</div>
+
+
+    <h3 class="mb-3">Purchased Courses</h3>
+
+    {% if payments %}
+    <div class="row">
+      {% for payment in payments %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card course-card">
+          
+
+          {% if payment.course.thumbnail %}
+                    <img class="card-img-top" src="{{ payment.course.thumbnail.url }}" alt="{{ course.course_title }} Thumbnail"
+                        style="width: 100%; height: 200px; object-fit: cover;">
+                    {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ payment.course.course_title }}</h5>
+            <p><strong>Price:</strong> ₹{{ payment.amount }}</p>
+            <p><strong>Purchased On:</strong> {{ payment.created_at|date:"Y-m-d H:i" }}</p>
+            <p><strong>Payment Type:</strong> 
+              {% if payment.status == 'manual' %}
+                Offline Payment (Cash)
+              {% else %}
+                Online Payment
+              {% endif %}
+            </p>
+
+            <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary me-2">Invoice</a>
+
+            {% for invoice in invoices %}
+              {% if invoice.course == payment.course and invoice.paid_amount == payment.amount %}
+              <form action="{% url 'toggle_invoice' invoice.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                {% if invoice.is_canceled %}
+                  <button type="submit" class="btn btn-sm btn-success">Restore</button>
+                {% else %}
+                  <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                {% endif %}
+              </form>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>No course purchases found for this user.</p>
+    {% endif %}
+
+    <a href="{% url 'paid_students_list' %}" class="btn btn-secondary mt-4">Back to List</a>
+
+  </div>
+  {% include 'footer.html' %}
 </body>
 </html>

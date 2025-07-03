@@ -1,53 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Invoice Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .dashboard-container {
+            margin-top: 80px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
+
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Invoice Summary Dashboard</h2>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <canvas id="invoiceChart"></canvas>
+    {% include 'Admin_Base.html' %}
+
+    <div class="container dashboard-container">
+        <h2 class="mb-4 text-center text-primary">📊 Invoice Summary Dashboard</h2>
+
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="chart-card">
+                    <canvas id="invoiceChart"></canvas>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <a href="{% url 'paid_students_list' %}" class="btn btn-secondary mt-4">Back to Paid Students</a>
+        <div class="text-center mt-4 mb-5">
+            <a href="{% url 'paid_students_list' %}" class="btn btn-secondary">⬅ Back to Paid Students</a>
+        </div>
+
+
+
+        <!-- PIE CHART SECTION -->
+<h4 class="mt-5 mb-3 text-center text-success">💰 Invoice Amount Breakdown</h4>
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="chart-card">
+      <canvas id="pieChart"></canvas>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-3 d-flex align-items-center">
+    <ul class="list-group w-100">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Active Invoices
+        <span class="badge bg-success rounded-pill">₹{{ active_total }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Canceled Invoices
+        <span class="badge bg-danger rounded-pill">₹{{ canceled_total }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Total Invoices
+        <span class="badge bg-primary rounded-pill">₹{{ total_amount }}</span>
+      </li>
+    </ul>
+  </div>
 </div>
 
-<script>
-    const ctx = document.getElementById('invoiceChart').getContext('2d');
 
-    const invoiceChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Active Invoices', 'Canceled Invoices', 'Total Invoices'],
-            datasets: [{
-                label: 'Amount in ₹',
-                data: [{{ active_total }}, {{ canceled_total }}, {{ total_amount }}],
-                backgroundColor: [
-                    'rgba(40, 167, 69, 0.7)',   // Green
-                    'rgba(220, 53, 69, 0.7)',   // Red
-                    'rgba(0, 123, 255, 0.7)'    // Blue
-                ],
-                borderColor: [
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(220, 53, 69, 1)',
-                    'rgba(0, 123, 255, 1)'
-                ],
-                borderWidth: 1
-            }]
+    </div>
+
+
+    <script>
+  const pieCtx = document.getElementById('pieChart').getContext('2d');
+
+  const pieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Active Invoices', 'Canceled Invoices'],
+      datasets: [{
+        data: [{{ active_total }}, {{ canceled_total }}],
+        backgroundColor: [
+          'rgba(40, 167, 69, 0.7)',   // Green
+          'rgba(220, 53, 69, 0.7)'    // Red
+        ],
+        borderColor: [
+          'rgba(40, 167, 69, 1)',
+          'rgba(220, 53, 69, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.parsed;
+              return `${label}: ₹${value.toLocaleString()}`;
+            }
+          }
         },
+        legend: {
+          position: 'bottom',
+        }
+      }
+    }
+  });
+</script>
+
+    <script>
+        const ctx = document.getElementById('invoiceChart').getContext('2d');
+
+        const invoiceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Active Invoices', 'Canceled Invoices', 'Total Invoices'],
+                datasets: [{
+                    label: 'Amount in ₹',
+                    data: [{{ active_total }}, {{ canceled_total }}, {{ total_amount }}],
+        backgroundColor: [
+            'rgba(40, 167, 69, 0.7)',   // Green
+            'rgba(220, 53, 69, 0.7)',   // Red
+            'rgba(0, 123, 255, 0.7)'    // Blue
+        ],
+            borderColor: [
+                'rgba(40, 167, 69, 1)',
+                'rgba(220, 53, 69, 1)',
+                'rgba(0, 123, 255, 1)'
+            ],
+                borderWidth: 1
+                }]
+            },
         options: {
             responsive: true,
-            scales: {
+                scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: {
+                        ticks: {
                         callback: value => '₹' + value
                     }
                 }
@@ -65,7 +162,10 @@
                 }
             }
         }
-    });
-</script>
+        });
+    </script>
+
+    {% include 'footer.html' %}
 </body>
+
 </html>
