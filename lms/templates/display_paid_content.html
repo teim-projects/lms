@@ -211,15 +211,39 @@
       .star-radio label:hover {
         color: gold;
       }
+       .course-info-box {
+    transition: all 0.3s ease;
+  }
+
+  .course-info-box:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+  }
+
+  .course-stars span {
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: 767.98px) {
+    .border-md-right {
+      border-right: none !important;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+  }
     </style>
   </head>
-  <body> {% include 'Student_Base.html' %} <div class="main" style="min-height: 100vh;">
+  <body> 
+    
+    {% include 'Student_Base.html' %} <div class="main" style="min-height: 100vh;">
       <div class="container content-wrapper">
         <div class="card shadow-sm border-0 fade-in section-box rounded-3 p-4 headercard">
           <div class="row g-4 align-items-center">
             <!-- Thumbnail -->
 
 
+<<<<<<< HEAD
             <h3>Average Rating: {{ average_rating }} / 5</h3>
 
 <!-- Optionally, show stars: -->
@@ -235,6 +259,8 @@
 </div>
 
 
+=======
+>>>>>>> dd66efdd36555f60f8bd5a0128d406c6a5a33f28
             <h5 class="text-center text-primary fw-bold ">{{ course.course_title }}</h5>
             <div class="col-md-5 mb-5">
               <img src="{{ course.thumbnail.url }}" alt="Course Thumbnail" class="img-fluid rounded-3 shadow-sm w-100">
@@ -276,6 +302,48 @@
           </div>
         </div>
       </div>
+ <div class="container my-4">
+  <div class="p-4 bg-white rounded shadow-sm course-info-box">
+    <div class="row text-center">
+      
+      <!-- Average Rating -->
+      <div class="col-md-3 mb-3 mb-md-0 border-md-right">
+        <h5><strong>Average Rating: {{ average_rating }} / 5</strong></h5>
+        <div class="course-stars">
+          {% for i in "12345" %}
+            {% if forloop.counter <= average_rating %}
+              <span class="text-warning">★</span>
+            {% else %}
+              <span class="text-muted">☆</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Titles Uploaded -->
+      <div class="col-md-3 mb-3 mb-md-0 border-md-right">
+        <h5 class="mb-1"><strong>Total Titles Uploaded</strong></h5>
+        <p class="text-muted mb-0">{{ title_count }}</p>
+      </div>
+
+      <!-- Course Level -->
+      <div class="col-md-3 mb-3 mb-md-0 border-md-right">
+        <h5 class="mb-1"><strong>📈 Level</strong></h5>
+        <p class="text-muted mb-0">{{ course.course_level }}</p>
+      </div>
+
+     <!-- Market Insight -->
+<div class="col-md-3">
+  <h5 class="mb-1"><strong>📊 Market Insight</strong></h5>
+  <p class="text-muted mb-0">Master the art of investing with confidence in the share market.</p>
+</div>
+
+
+    </div>
+  </div>
+</div>
+
+
       <div class="sticky-top bg-light" style="top: 80px; z-index: 899;">
         <div class="container">
           <ul class="nav nav-pills justify-content-left py-2" id="scrollTabs">
@@ -325,82 +393,103 @@
 <section id="modules-benefit-wrapper" class="mt-5">
   <div class="row align-items-stretch">
 
-    <!-- Modules Section -->
-    <div class="col-md-6 d-flex">
-      <div id="modules-section" class="p-4 bg-white rounded shadow w-100">
-        <h4 class="text-primary mb-4">📚 Modules</h4>
-        <div class="row" id="modules-wrapper">
-          {% for title, contents in grouped_contents.items %}
-            {% if has_access or forloop.counter <= 2 %}
-              <div class="col-12 mb-3 module-box {% if forloop.counter > 3 %}d-none extra-module{% endif %}">
-                <div class="d-flex align-items-start border rounded p-3 bg-light">
-                  <div class="flex-grow-1">
-                    <a class="text-dark text-decoration-none fw-bold fs-5 d-block module-toggle"
-                       data-bs-toggle="collapse" href="#collapseModule{{ forloop.counter }}">
-                      {{ title }}
-                    </a>
-                    <div class="text-muted small">
-                      • Course {{ forloop.counter }} • {{ contents|length }} modules
-                    </div>
-                  </div>
-                  <div>
-                    <a class="btn btn-sm" data-bs-toggle="collapse" href="#collapseModule{{ forloop.counter }}">
-                      <span class="fs-4">▾</span>
-                    </a>
-                  </div>
-                </div>
-
-                <div class="collapse mt-2" id="collapseModule{{ forloop.counter }}">
-                  <ul class="list-group mt-2">
-                    {% for content in contents %}
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-2">
-                          {% if ".mp4" in content.resource_file.url %}
-                            <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline">
-                              <span class="text-danger fs-5">▶</span> {{ content.subtitle }}
-                            </a>
-                            <span class="badge bg-danger ms-2">Video</span>
-                          {% else %}
-                            <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline">
-                              <span class="text-primary fs-5">📄</span> {{ content.subtitle }}
-                            </a>
-                            <span class="badge bg-primary ms-2">PDF</span>
-                          {% endif %}
-                        </div>
-
-                        {% if has_access %}
-                          <form method="POST" action="{% url 'mark_content_complete' %}" class="ms-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="course_id" value="{{ course.id }}">
-                            <input type="hidden" name="content_id" value="{{ content.id }}">
-                            <button type="submit" class="btn btn-sm btn-outline-success" title="Mark as Complete">✔</button>
-                          </form>
-                        {% endif %}
-                      </li>
-                    {% endfor %}
-                  </ul>
+   <!-- Modules Section -->
+<div class="col-md-6 d-flex">
+  <div id="modules-section" class="p-4 bg-white rounded shadow w-100">
+    <h4 class="text-primary mb-4">📚 Modules</h4>
+    <div class="row" id="modules-wrapper">
+      {% for title, contents in grouped_contents.items %}
+        {% if has_access or forloop.counter <= 2 %}
+          <div class="col-12 mb-3 module-box {% if forloop.counter > 3 %}d-none extra-module{% endif %}">
+            <div class="d-flex align-items-start border rounded p-3 bg-light">
+              <div class="flex-grow-1">
+                <a class="text-dark text-decoration-none fw-bold fs-5 d-block module-toggle"
+                   data-bs-toggle="collapse" href="#collapseModule{{ forloop.counter }}">
+                  {{ title }}
+                </a>
+                <div class="text-muted small">
+                  • Course {{ forloop.counter }} • {{ contents|length }} modules
                 </div>
               </div>
-            {% else %}
-              {% if forloop.counter == 3 %}
-                <div class="col-12">
-                  <div class="alert alert-secondary">
-                    🔒 Modules locked — <strong>Please <a href="{% url 'initiate_payment' course.id %}" class="text-success">buy the course</a> to unlock remaining content.</strong>
-                  </div>
-                </div>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        </div>
+              <div>
+                <a class="btn btn-sm" data-bs-toggle="collapse" href="#collapseModule{{ forloop.counter }}">
+                  <span class="fs-4">▾</span>
+                </a>
+              </div>
+            </div>
 
-        {% if grouped_contents|length > 3 %}
-          <!-- Toggle Button -->
-          <div class="text-center mt-3">
-            <button class="btn btn-outline-primary btn-sm" id="toggle-modules-btn">View More</button>
+            <div class="collapse mt-2" id="collapseModule{{ forloop.counter }}">
+              <ul class="list-group mt-2">
+                {% for content in contents %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                      {% if ".mp4" in content.resource_file.url %}
+                        <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline">
+                          <span class="text-danger fs-5">▶</span> {{ content.subtitle }}
+                        </a>
+                        <span class="badge bg-danger ms-2">Video</span>
+                      {% else %}
+                        <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline">
+                          <span class="text-primary fs-5">📄</span> {{ content.subtitle }}
+                        </a>
+                        <span class="badge bg-primary ms-2">PDF</span>
+                      {% endif %}
+                    </div>
+
+                    {% if has_access %}
+                      <form method="POST" action="{% url 'mark_content_complete' %}" class="ms-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="course_id" value="{{ course.id }}">
+                        <input type="hidden" name="content_id" value="{{ content.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-success" title="Mark as Complete">✔</button>
+                      </form>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
           </div>
+        {% else %}
+          {% if forloop.counter == 3 %}
+            <div class="col-12">
+              <div class="alert alert-secondary">
+                🔒 Modules locked — <strong>Please <a href="{% url 'initiate_payment' course.id %}" class="text-success">buy the course</a> to unlock remaining content.</strong>
+              </div>
+            </div>
+          {% endif %}
         {% endif %}
-      </div>
+      {% endfor %}
     </div>
+
+    {% if grouped_contents|length > 3 %}
+    <!-- Toggle Button -->
+    <div class="text-center mt-3">
+      <button class="btn btn-outline-primary btn-sm" id="toggle-modules-btnn">View More</button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Toggle Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById("toggle-modules-btnn");
+    const extraModules = document.querySelectorAll(".extra-module");
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", function () {
+        const isExpanded = toggleBtn.innerText === "View Less";
+
+        extraModules.forEach(el => {
+          el.classList.toggle("d-none", isExpanded);
+        });
+
+        toggleBtn.innerText = isExpanded ? "View More" : "View Less";
+      });
+    }
+  });
+</script>
+
 
     <!-- Benefits Section -->
     <div class="col-md-6 d-flex">
@@ -413,22 +502,7 @@
   </div>
 </section>
 
-<!-- JS for View More/Less toggle -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById("toggle-modules-btn");
-    if (toggleBtn) {
-      const extraModules = document.querySelectorAll(".extra-module");
-      let expanded = false;
-
-      toggleBtn.addEventListener("click", () => {
-        extraModules.forEach(el => el.classList.toggle("d-none"));
-        expanded = !expanded;
-        toggleBtn.textContent = expanded ? "View Less" : "View More";
-      });
-    }
-  });
-</script>
+ 
 
         <section id="testimonials-section" class="mt-5 section-box fade-in">
           <hr>
