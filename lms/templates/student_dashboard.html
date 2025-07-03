@@ -77,7 +77,7 @@
 
     .card-text {
       font-size: 1rem;
-      color: #f1f1f1;
+      color: #000000;
     }
 
     @media (max-width: 767px) {
@@ -94,6 +94,20 @@
         padding-bottom: 60px;
       }
     }
+    /* For WebKit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 0px; /* Thin scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Track background */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0F40BF; /* Scrollbar thumb color */
+  border-radius: 10px;
+  border: 1px solid #fff; /* Optional border */
+}
   </style>
 </head>
 
@@ -103,14 +117,14 @@
 <div class="main" style="min-height: 100vh;">
 
 
-  <div class="container container-custom">
-    <div class="row justify-content-center g-4">
+  <div class="container container-custom mt-5">
+    <div class="row justify-content-center g-4 mt-5">
       <!-- Paid Courses Card -->
       <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
         <a href="/paid-courses/" class="text-decoration-none">
           <div class="glass-card">
             <div class="card-img-top-wrap">
-              <img src="https://img.freepik.com/free-vector/online-certification-illustration_23-2148576841.jpg" class="card-img-top" alt="Paid Courses">
+              <img src="{% static 'images/paid1.jpg' %}" class="card-img-top" alt="Paid Courses">
             </div>
             <div class="card-body">
               <h3 class="card-title">Paid Courses</h3>
@@ -127,7 +141,7 @@
         <a href="/free-course/" class="text-decoration-none">
           <div class="glass-card">
             <div class="card-img-top-wrap">
-              <img src="https://img.freepik.com/free-vector/flat-online-education-illustration_23-2148908030.jpg" class="card-img-top" alt="Free Courses">
+              <img src="{% static 'images/free1.jpg' %}" class="card-img-top" alt="Free Courses">
             </div>
             <div class="card-body">
               <h3 class="card-title">Free Courses</h3>
