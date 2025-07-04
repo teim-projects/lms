@@ -84,6 +84,9 @@ urlpatterns = [
 
     path('dashboard/', views.invoice_dashboard_view, name='invoice_dashboard'),
 
+    path('view-file/<int:content_id>/', views.view_file, name='view_file'),
+
+
 
     
 

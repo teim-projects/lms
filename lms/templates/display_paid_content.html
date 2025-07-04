@@ -417,7 +417,7 @@
                 {% for content in contents %}
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-2">
-                      {% if ".mp4" in content.resource_file.url %}
+                      <!-- {% if ".mp4" in content.resource_file.url %}
                         <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline ">
                           <span class="text-danger fs-5 ">▶</span> {{ content.subtitle }}
                         </a>
@@ -427,7 +427,17 @@
                           <span class="text-primary fs-5 ">📄</span> {{ content.subtitle }}
                         </a>
                         <span class="badge bg-primary ms-2 ">PDF</span>
-                      {% endif %}
+                      {% endif %} -->
+
+
+                      <a href="{% url 'view_file' content.id %}" target="_blank" class="fw-semibold text-dark hover-underline">
+  {% if ".mp4" in content.resource_file.url %}
+    <span class="text-danger fs-5">▶</span> {{ content.subtitle }}
+  {% else %}
+    <span class="text-primary fs-5">📄</span> {{ content.subtitle }}
+  {% endif %}
+</a>
+
                     </div>
 
                     {% if has_access %}

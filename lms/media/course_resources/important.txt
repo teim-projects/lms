@@ -1,0 +1,299 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.course_title }} - Profit Max Academy</title>
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+    <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .course-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .content-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-item {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .video-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .mark-complete {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mark-complete:hover {
+            background: #218838;
+        }
+
+        .mark-complete.completed {
+            background: #6c757d;
+            cursor: default;
+        }
+
+        .progress-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-btn {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            background: #2575fc;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'Student_Base.html' %}
+
+    <div class="course-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'student_paid_courses' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Courses
+                </a>
+                <h1 class="mb-0">{{ course.course_title }}</h1>
+                <div></div> <!-- Empty div for alignment -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 2rem; margin-bottom: 5rem;">
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Course Progress</span>
+                <span>{{ completion_percentage }}% Complete</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar bg-success" role="progressbar" 
+                     style="width: {{ completion_percentage }}%" 
+                     aria-valuenow="{{ completion_percentage }}" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100"></div>
+            </div>
+        </div>
+
+        {% if contents %}
+        <div class="content-container">
+            {% for content in contents %}
+            <div class="content-item">
+                <h3>{{ content.title }}</h3>
+                {% if content.subtitle %}<p class="text-muted">{{ content.subtitle }}</p>{% endif %}
+                
+                {% if content.resource_file %}
+                    {% with file_ext=content.resource_file.name|slice:"-4:"|lower %}
+                        {% if file_ext in ".mp4" or file_ext in ".mov" or file_ext in ".avi" %}
+                            <div class="video-container">
+                                <div class="watermark">{{ request.user.email }}</div>
+                                <video id="video-{{ content.id }}" controls playsinline controlsList="nodownload" 
+                                       class="video-js vjs-default-skin" style="width: 100%;">
+                                    <source src="{{ content.resource_file.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        {% elif file_ext in ".pdf" %}
+                            <div class="pdf-container mb-3">
+                                <embed src="{{ content.resource_file.url }}" 
+                                       type="application/pdf" 
+                                       width="100%" 
+                                       height="500px">
+                            </div>
+                            <a href="{{ content.resource_file.url }}" 
+                               class="btn btn-primary" 
+                               target="_blank" 
+                               download>
+                                <i class="fas fa-download"></i> Download PDF
+                            </a>
+                        {% elif file_ext in ".jpg" or file_ext in ".png" or file_ext in ".jpeg" %}
+                            <img src="{{ content.resource_file.url }}" 
+                                 alt="{{ content.title }}" 
+                                 class="img-fluid mb-3" 
+                                 style="max-height: 500px; width: auto;">
+                        {% else %}
+                            <div class="alert alert-warning">
+                                Unsupported file format. Please download the file to view it.
+                                <a href="{{ content.resource_file.url }}" 
+                                   class="alert-link" 
+                                   download>
+                                    Download File
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                {% else %}
+                    <div class="alert alert-info">No content available for this section.</div>
+                {% endif %}
+                
+                <div class="mt-3">
+                    {% if content.completed %}
+                        <button class="mark-complete completed" disabled>
+                            <i class="fas fa-check-circle"></i> Completed
+                        </button>
+                    {% else %}
+                        <button class="mark-complete" 
+                                data-course-id="{{ course.id }}" 
+                                data-content-id="{{ content.id }}">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="content-container text-center">
+            <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+            <h3>No Content Available</h3>
+            <p class="text-muted">This course doesn't have any content yet.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+    <script>
+        // Initialize all video players
+        document.querySelectorAll('video').forEach(video => {
+            video.addEventListener('contextmenu', e => e.preventDefault());
+        });
+
+        // Mark as complete functionality
+        document.querySelectorAll('.mark-complete:not(.completed)').forEach(button => {
+            button.addEventListener('click', function() {
+                const courseId = this.getAttribute('data-course-id');
+                const contentId = this.getAttribute('data-content-id');
+                const button = this;
+                
+                fetch(`/course/${courseId}/content/${contentId}/complete/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        button.innerHTML = '<i class="fas fa-check-circle"></i> Completed';
+                        button.classList.add('completed');
+                        button.disabled = true;
+                        
+                        // Show success message
+                        const alert = document.createElement('div');
+                        alert.className = 'alert alert-success alert-dismissible fade show';
+                        alert.style.position = 'fixed';
+                        alert.style.top = '20px';
+                        alert.style.right = '20px';
+                        alert.style.zIndex = '9999';
+                        alert.style.maxWidth = '300px';
+                        alert.innerHTML = `
+                            <strong>Success!</strong> Content marked as completed.
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                        `;
+                        document.body.appendChild(alert);
+                        
+                        // Reload progress after 1 second
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+
+        // Prevent fullscreen
+        document.addEventListener('fullscreenchange', exitFullscreen);
+        document.addEventListener('webkitfullscreenchange', exitFullscreen);
+        document.addEventListener('mozfullscreenchange', exitFullscreen);
+        document.addEventListener('MSFullscreenChange', exitFullscreen);
+
+        function exitFullscreen() {
+            if (document.fullscreenElement || 
+                document.webkitFullscreenElement || 
+                document.mozFullScreenElement || 
+                document.msFullscreenElement) {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

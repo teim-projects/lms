@@ -2242,3 +2242,18 @@ def invoice_dashboard_view(request):
         'total_amount': total_amount
     })
 
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render
+from .models import CourseContent  # adjust if your model name differs
+
+@login_required
+def view_file(request, content_id):
+    content = get_object_or_404(CourseContent, id=content_id)
+    user = request.user
+
+    return render(request, 'view_file.html', {
+        'content': content,
+        'user': user,
+    })
