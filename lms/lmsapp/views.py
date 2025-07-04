@@ -1714,6 +1714,8 @@ def display_paid_content(request, course_id):
     reviews = CourseReview.objects.filter(course=course).order_by('-created_at')
     title_count = CourseContent.objects.filter(course=course).values('title').distinct().count()
     average_rating = CourseReview.objects.filter(course=course).aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
+    completed_ids = CompletedContent.objects.filter(user=request.user, course=course).values_list('content_id', flat=True)
+
 
     # ✅ Handle POST Actions
     if request.method == "POST":
@@ -1753,6 +1755,8 @@ def display_paid_content(request, course_id):
         'reviews': reviews,
         'title_count': title_count,
         'average_rating': round(average_rating, 1),
+        'completed_ids': list(completed_ids),
+
     })
 
 
@@ -1922,35 +1926,30 @@ def grant_course_access(request):
 # from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import CourseProgress, PaidCourse, CourseContent
+from .models import CourseProgress, PaidCourse, CourseContent,CompletedContent
 
 @login_required
 def mark_content_complete(request):
     if request.method == "POST":
         user = request.user
         course_id = request.POST.get("course_id")
-        content_id = request.POST.get("content_id")  # Still needed to calculate progress
+        content_id = request.POST.get("content_id")
 
         course = get_object_or_404(PaidCourse, id=course_id)
         content = get_object_or_404(CourseContent, id=content_id)
 
-        # ✅ Store list of completed content in session (or DB if needed)
-        completed_contents = request.session.get('completed_contents', [])
-        content_key = f"{course.id}-{content.id}"
-
-        if content_key not in completed_contents:
-            completed_contents.append(content_key)
-            request.session['completed_contents'] = completed_contents
+        # ✅ Store completed content in the database
+        CompletedContent.objects.get_or_create(user=user, course=course, content=content)
 
         # ✅ Calculate progress
         total_content = CourseContent.objects.filter(course=course).count()
-        completed_count = sum(1 for key in completed_contents if key.startswith(f"{course.id}-"))
+        completed_count = CompletedContent.objects.filter(user=user, course=course).count()
         percentage = int((completed_count / total_content) * 100) if total_content > 0 else 0
 
-        # ✅ Update or create progress record
+        # ✅ Update progress
         progress, created = CourseProgress.objects.get_or_create(user=user, course=course)
         progress.progress_percentage = percentage
-        progress.completed = percentage == 100
+        progress.completed = (percentage == 100)
         progress.save()
 
         return redirect('display_paid_content', course_id=course.id)

@@ -151,6 +151,9 @@ class PaidCourse(models.Model):
 
 
 
+
+
+
 class CourseContent(models.Model):
     course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE, related_name='contents')
     title = models.CharField(max_length=255)
@@ -162,6 +165,16 @@ class CourseContent(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CompletedContent(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+    content = models.ForeignKey(CourseContent, on_delete=models.CASCADE)
+    completed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'course', 'content')  # avoid duplicate entries
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser

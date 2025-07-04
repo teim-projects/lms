@@ -29,12 +29,16 @@
     .course-card .card-body {
       padding: 20px;
     }
+    .main{
+      margin-top: 150px;
+    }
   </style>
 </head>
 <body>
 
    {% include 'Admin_Base.html' %}
-  <div class="container my-5">
+ <div class="main">
+    <div class="container my-5">
     
     <div class="d-flex justify-content mb-4">
   <div class="user-info-box" style="max-width: 450px; width: 100%;">
@@ -98,6 +102,7 @@
     <a href="{% url 'paid_students_list' %}" class="btn btn-secondary mt-4">Back to List</a>
 
   </div>
+ </div>
   {% include 'footer.html' %}
 </body>
 </html>

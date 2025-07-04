@@ -440,14 +440,17 @@
 
                     </div>
 
-                    {% if has_access %}
-                      <form method="POST" action="{% url 'mark_content_complete' %}" class="ms-3">
-                        {% csrf_token %}
-                        <input type="hidden" name="course_id" value="{{ course.id }}">
-                        <input type="hidden" name="content_id" value="{{ content.id }}">
-                        <button type="submit" class="btn btn-sm btn-outline-success mt-1"  title="Mark as Complete">✔</button>
-                      </form>
-                    {% endif %}
+                    {% if has_access and content.id not in completed_ids %}
+  <form method="POST" action="{% url 'mark_content_complete' %}" class="ms-3">
+    {% csrf_token %}
+    <input type="hidden" name="course_id" value="{{ course.id }}">
+    <input type="hidden" name="content_id" value="{{ content.id }}">
+    <button type="submit" class="btn btn-sm btn-outline-success mt-1" title="Mark as Complete">✔</button>
+  </form>
+{% elif content.id in completed_ids %}
+  <span class="badge bg-success">Completed</span>
+{% endif %}
+
                   </li>
                 {% endfor %}
               </ul>

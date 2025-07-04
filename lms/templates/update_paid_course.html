@@ -132,6 +132,10 @@
         .container {
             padding-bottom: 10px;
         }
+
+        .update-paid{
+            padding: 0px 15px;
+        }
     </style>
 
 
@@ -209,7 +213,8 @@
                         </div>
 
 
-                        <div class="mb-3">
+<div class="update-paid">
+                            <div class="mb-3">
     <label for="about" class="form-label">About</label>
     <textarea class="form-control" id="about" name="about">{{ course.about }}</textarea>
 </div>
@@ -237,6 +242,7 @@
            name="discount_amount" value="{{ course.discount_amount }}" readonly>
 </div>
 
+</div>
 
                         <div class="  mb-2 card-footer bg-white ">
                             <button type="submit" class="btn   buttonn">Update Course</button>
