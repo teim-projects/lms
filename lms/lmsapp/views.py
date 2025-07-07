@@ -6,6 +6,23 @@ from django.contrib.auth.hashers import make_password
 
 
 
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+# Function to check if user is a sub-admin
+def is_subadmin(user):
+    return user.is_authenticated and user.is_subadmin
+
+# if you wnat both subadmin and admin to acces same functionality 
+def is_admin_or_subadmin(user):
+    return user.is_authenticated and (user.is_superuser or user.is_subadmin)    
+
+
+def is_admin(user):
+    return user.is_superuser
+
+
+
+
 def index(request):
     # Render a simple dashboard with a header
     return render(request, 'index.html')
@@ -18,6 +35,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
+@login_required
 def student_dashboard(request):
     return render(request, 'student_dashboard.html')
 
@@ -30,6 +48,8 @@ from django.db.models import F
 from django.db.models import Count, F, Sum
 from django.shortcuts import render
 
+@login_required
+@user_passes_test(is_admin_or_subadmin)
 def admin_dashboard(request):
     active_total = Invoice.objects.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
     canceled_total = Invoice.objects.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
@@ -815,6 +835,7 @@ from .models import PaidCourse, CourseProgress
 from django.shortcuts import render
 from .models import PaidCourse, CourseProgress
 
+@user_passes_test(is_admin_or_subadmin)
 def view_paid_course(request):
     courses = PaidCourse.objects.all()
 
@@ -853,7 +874,7 @@ from django.shortcuts import render, redirect
 from .models import PaidCourse
 from django.core.files.storage import FileSystemStorage
 
-
+@user_passes_test(is_admin_or_subadmin)
 def create_paid_course(request):
     if request.method == 'POST':
         course_title = request.POST.get('course_title')
@@ -919,6 +940,7 @@ def create_paid_course(request):
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import PaidCourse, CourseContent
 
+@user_passes_test(is_admin_or_subadmin)
 def upload_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
 
@@ -1083,6 +1105,9 @@ from django.shortcuts import render, redirect
 # from .models import SubAdmin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password
+
+
+
 
 def is_admin(user):
     return user.is_superuser
@@ -1636,22 +1661,6 @@ from .models import PaidCourse
 
 
 
-# @login_required
-# def display_paid_content(request, course_id):
-#     course = get_object_or_404(PaidCourse, id=course_id)
-#     payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
-#     contents = course.contents.all()
-    
-#     grouped_contents = defaultdict(list)
-#     for content in contents:
-#         grouped_contents[content.title].append(content)
-
-#     has_access = bool(payment)
-#     return render(request, 'display_paid_content.html', {
-#         'course': course,
-#         'grouped_contents': dict(grouped_contents),
-#         'has_access': has_access
-#     })
 
 
 from .models import UserCourseAccess  # Add this import
@@ -2256,3 +2265,7 @@ def view_file(request, content_id):
         'content': content,
         'user': user,
     })
+
+
+def certificate(request):
+    return render(request,'certificate.html')

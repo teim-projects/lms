@@ -187,6 +187,50 @@
   }
 }
 
+
+
+
+/* Proper spacing and responsive layout for filters and buttons */
+form .row.gx-3 {
+  row-gap: 1rem;
+  column-gap: 1rem;
+}
+
+/* Make sure selects and inputs stretch full width */
+form .form-select,
+form .form-control {
+  width: 100%;
+}
+
+/* Space below the filter form and above the table */
+form {
+  margin-bottom: 30px;
+}
+
+/* Ensure buttons have consistent spacing and alignment */
+form .btn {
+  width: 100%;
+}
+
+/* Group search and export in a new row properly */
+form .row.mb-4.align-items-center {
+  margin-top: 10px;
+  gap: 1rem;
+}
+
+/* Make export & search area wrap on small screens */
+@media (max-width: 768px) {
+  form .row.mb-4.align-items-center {
+    flex-direction: column;
+  }
+
+  form .col-md-6,
+  form .col-md-3 {
+    width: 100%;
+  }
+}
+
+
     </style>
 
 
@@ -222,48 +266,7 @@
 
 
     {% include 'Admin_Base.html' %}
-    <!-- Notification Container -->
-    <!-- <div class="notification-container sidebar2 mt-5" id="notificationContainer">
-        <button class="close-btnn" onclick="closeNotifications()">✖</button>
-
-        <div class="row">
-            <div class="col-md-12">
-
-                <h2>Notifications</h2>
-
-                
-                    {% for notification in notifications %}
-                    <div class="notification card mt-5 p-3">
-                        <p><small>Posted on: {{ notification.created_at }}</small></p>
-
-                        <div class="card-header" style="padding: 0px;">  
-                             {% if notification.image %}
-                            <img src="{{ notification.image.url }}" alt="Notification Image" height="100%" width="100%">
-                            {% endif %}</div>
-
-                        <h3>{{ notification.title }}</h3>
-                        <p>{{ notification.description }}</p>
-                       
-                    </div>
-                    {% empty %}
-                    <p>No notifications available.</p>
-                    {% endfor %}
-               
-            </div>
-        </div>
-    </div> -->
-
-
-    <!-- Sidebar right -->
-    <!-- Sidebar -->
-
-    <!-- <script>
-        // Toggle notification container
-        function toggleNotifications() {
-            const container = document.getElementById('notificationContainer');
-            
-        }
-    </script> -->
+    
 
 
 <div class="main" style="min-height: 100vh;">
@@ -304,15 +307,11 @@
           <input type="date" name="created_at" class="form-control" value="{{ request.GET.created_at }}">
         </div>
 
-        <!-- Filter Button -->
-        <div class="col-lg-3 col-md-6">
+<div class="col-lg-3 col-md-6">
           <button type="submit" class="btn btn-success w-100 mt-2">📅 Apply Filter</button>
         </div>
-      </div>
-    </form>
 
-<!-- Search and Export - Structured Row -->
-<div class="row mb-4 align-items-center">
+        <div class="row mb-4 align-items-center">
   
   <!-- Search Input -->
   <div class="col-md-6 col-lg-6">
@@ -330,6 +329,14 @@
   </div>
 
 </div>
+
+        <!-- Filter Button -->
+        
+      </div>
+    </form>
+
+<!-- Search and Export - Structured Row -->
+
 
 
 

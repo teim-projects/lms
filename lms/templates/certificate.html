@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Certificate of Completion</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #eaeaea;
+      margin: 0;
+      padding: 40px 0;
+    }
+
+    .certificate-container {
+      width: 1000px;
+      margin: auto;
+      background: #fff;
+      border: 15px solid #1f3a56;
+      padding: 60px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .certificate-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .certificate-header img {
+      max-height: 80px;
+    }
+
+    .academy-name {
+      font-size: 26px;
+      font-weight: bold;
+      color: #1f3a56;
+      margin-top: 10px;
+    }
+
+    .certificate-title {
+      font-size: 42px;
+      font-family: 'Playfair Display', serif;
+      color: #1f3a56;
+      margin: 30px 0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-top: 2px solid #1f3a56;
+      border-bottom: 2px solid #1f3a56;
+      display: inline-block;
+      padding: 10px 20px;
+    }
+
+    .certificate-body {
+      text-align: center;
+      margin-top: 50px;
+      line-height: 1.6;
+    }
+
+    .certificate-body h2 {
+      font-size: 24px;
+      color: #333;
+      font-weight: normal;
+    }
+
+    .student-name {
+      font-size: 30px;
+      font-weight: bold;
+      color: #118c7e;
+      margin: 20px 0;
+      font-family: 'Playfair Display', serif;
+      text-decoration: underline;
+    }
+
+    .certificate-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 80px;
+      padding: 0 30px;
+    }
+
+    .footer-box {
+      text-align: center;
+    }
+
+    .footer-box hr {
+      border: none;
+      border-top: 2px solid #1f3a56;
+      width: 200px;
+      margin-bottom: 5px;
+    }
+
+    .footer-box p {
+      font-weight: bold;
+      color: #1f3a56;
+    }
+
+    .issue-date {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    /* Optional watermark style */
+    .watermark {
+      position: absolute;
+      opacity: 0.05;
+      font-size: 140px;
+      transform: rotate(-30deg);
+      top: 35%;
+      left: 20%;
+      color: #000;
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="certificate-container">
+    <div class="watermark">PMX</div>
+
+    <div class="certificate-header">
+      <img src="{% static 'images/pmxlogo_c.png' %}" alt="Profit Max Academy Logo">
+      <div class="academy-name">Profit Max Academy</div>
+      <div class="certificate-title">Certificate of Completion</div>
+    </div>
+
+    <div class="certificate-body">
+      <h2>This is to certify that</h2>
+      <div class="student-name">{{ student.full_name }}</div>
+
+      <h2>has successfully completed the course</h2>
+      <div class="student-name">{{ course.title }}</div>
+
+      <h2>with dedication and excellence</h2>
+
+      <div class="issue-date">
+        Awarded on: <strong>{{ completion_date|date:"F d, Y" }}</strong>
+      </div>
+    </div>
+
+    <div class="certificate-footer">
+      <div class="footer-box">
+        <hr>
+        <p>Authorized Signatory</p>
+      </div>
+      <div class="footer-box">
+        <hr>
+        <p>Director<br>Profit Max Academy</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
