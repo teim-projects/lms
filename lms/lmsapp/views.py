@@ -2073,6 +2073,8 @@ from .models import PaidCourse, CourseContent, CourseReview, CustomUser
 @user_passes_test(is_admin_or_subadmin)
 def view_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
+    title_count = CourseContent.objects.filter(course=course).values('title').distinct().count()
+    average_rating = CourseReview.objects.filter(course=course).aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
 
     # ✅ Handle deletion
     if 'delete_review' in request.GET:
@@ -2085,6 +2087,7 @@ def view_content(request, course_id):
         display_name = request.POST.get("display_name")
         rating = int(request.POST.get("rating"))
         review_text = request.POST.get("review")
+       
 
         CourseReview.objects.create(
             course=course,
@@ -2108,6 +2111,8 @@ def view_content(request, course_id):
         'grouped_contents': grouped_contents,
         'reviews': reviews,
         'is_admin_view': True,
+        'title_count': title_count,
+        'average_rating': round(average_rating, 1),
     }
     return render(request, 'view_content.html', context)
 
@@ -2269,3 +2274,22 @@ def view_file(request, content_id):
 
 def certificate(request):
     return render(request,'certificate.html')
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import NewPayment
+
+@login_required
+def your_course(request):
+    # Fetch only successful or manual payments
+    purchased_payments = NewPayment.objects.filter(
+        user=request.user,
+        status__in=["success", "manual"]
+    ).select_related('course')  # To avoid extra queries
+
+    # Get the related courses
+    purchased_courses = [payment.course for payment in purchased_payments]
+
+    return render(request, 'your_course.html', {'courses': purchased_courses})
+

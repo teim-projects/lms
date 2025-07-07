@@ -86,7 +86,9 @@ urlpatterns = [
 
     path('view-file/<int:content_id>/', views.view_file, name='view_file'),
 
-    path('certificate/',views.certificate,name='certificate')
+    path('certificate/',views.certificate,name='certificate'),
+
+    path('your_course/',views.your_course,name='your_course')
 
 
 
