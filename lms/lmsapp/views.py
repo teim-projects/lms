@@ -1879,6 +1879,10 @@ def payment_failure(request):
 
 
 
+
+
+
+
 # use user pass test to know weather the login is of admin or user
 import uuid  # Add this at the top
 from django.utils import timezone
@@ -2293,3 +2297,50 @@ def your_course(request):
 
     return render(request, 'your_course.html', {'courses': purchased_courses})
 
+
+
+# views.py
+import json
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from lmsapp.models import NewPayment, UserCourseAccess  # adjust as needed
+
+@csrf_exempt
+@require_POST
+def easebuzz_webhook(request):
+    try:
+        data = json.loads(request.body)
+
+        # Example data structure
+        txn_status = data.get("status")
+        txn_id = data.get("txnid")
+        user_email = data.get("buyer_email")
+        product_id = data.get("productinfo")  # or your custom field
+
+        # Handle transaction success
+        if txn_status == "success":
+            # Update your models
+            payment = NewPayment.objects.filter(transaction_id=txn_id).first()
+            if payment:
+                payment.status = "Success"
+                payment.save()
+
+                # Give course access (optional)
+                UserCourseAccess.objects.get_or_create(
+                    user=payment.user,
+                    course=payment.course
+                )
+
+        elif txn_status == "failure":
+            # Update status if needed
+            payment = NewPayment.objects.filter(transaction_id=txn_id).first()
+            if payment:
+                payment.status = "Failed"
+                payment.save()
+
+        return HttpResponse("Webhook received", status=200)
+
+    except Exception as e:
+        print("Webhook Error:", e)
+        return HttpResponse("Error", status=400)

@@ -88,7 +88,9 @@ urlpatterns = [
 
     path('certificate/',views.certificate,name='certificate'),
 
-    path('your_course/',views.your_course,name='your_course')
+    path('your_course/',views.your_course,name='your_course'),
+
+    path("payment/webhook/", views.easebuzz_webhook, name="easebuzz_webhook"),
 
 
 

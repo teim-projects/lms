@@ -212,7 +212,7 @@
 
 <body>
     {% include 'Admin_Base.html' %}
-    <div class="moving-email">Admin View</div>
+    <!-- <div class="moving-email">Admin View</div> -->
     
     <div class="container content-wrapper" style="margin-top: 100px;">
         <div class="card bos border-0 fade-in section-box rounded-3 p-4 headercard">
@@ -378,7 +378,9 @@
                                     </div>
                                     <div>
                                         <h6 class="mb-1 font-weight-bold">
-                                            {{ review.user.first_name }} {{ review.user.last_name }}
+                                            <!-- {{ review.user.first_name }} {{ review.user.last_name }} -->
+
+                                                {{ review.user.first_name }}-{{ review.user.last_name }}  {{ review.display_name|default:review.user.username }}
                                         </h6>
                                         <p class="mb-1">
                                             {% for i in "12345" %}
@@ -412,7 +414,7 @@
 
             <section id="fake-review" class="mt-5 section-box fade-in bos">
                 <h4 class="text-primary mb-4">
-                    <i class="fas fa-edit text-primary mr-2"></i>Upload Fake Review
+                    <i class="fas fa-edit text-primary mr-2"></i>Upload  Review
                 </h4>
                 <div class="card shadow-sm review-carddd p-4 bg-white">
                     <div class="card-body">
