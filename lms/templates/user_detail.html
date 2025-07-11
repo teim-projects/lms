@@ -76,23 +76,23 @@
               {% endif %}
             </p>
 
-            {% if payment.status == "manual" and not payment.invoice_created %}
-  <!-- Don't show invoice or cancel buttons -->
-{% else %}
-  <!-- Invoice Button -->
-  <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary me-2">Invoice</a>
+            <!-- Invoice Button - Show if invoice exists OR if payment is not manual -->
+{% if payment.invoice_created or payment.status != "manual" %}
+  <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary me-2">
+    {% if payment.invoice_created %}View{% else %}Generate{% endif %} Invoice
+  </a>
 
   <!-- Cancel/Restore Button if Invoice Exists -->
- {% if payment.invoice_created %}
-  <form action="{% url 'toggle_invoice' payment.invoice.id %}" method="post" style="display:inline;">
-    {% csrf_token %}
-    {% if payment.invoice_canceled %}
-      <button type="submit" class="btn btn-sm btn-success">Restore</button>
-    {% else %}
-      <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
-    {% endif %}
-  </form>
-{% endif %}
+  {% if payment.invoice %}
+    <form action="{% url 'toggle_invoice' payment.invoice.id %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      {% if payment.invoice_canceled %}
+        <button type="submit" class="btn btn-sm btn-success">Restore</button>
+      {% else %}
+        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+      {% endif %}
+    </form>
+  {% endif %}
 {% endif %}
 
 

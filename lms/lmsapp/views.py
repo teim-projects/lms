@@ -50,30 +50,19 @@ from django.shortcuts import render
 
 from django.db.models import Q
 
-from django.db.models import Sum, Count, F
-
 @login_required
 @user_passes_test(is_admin_or_subadmin)
 def admin_dashboard(request):
-    # Active Invoices = Created and not canceled
-    active_total = NewPayment.objects.filter(invoice_created=True, canceled_invoice=False).aggregate(
-        total=Sum('amount')
-    )['total'] or 0
-
-    # Canceled Invoices = Created but canceled
-    canceled_total = NewPayment.objects.filter(invoice_created=True, canceled_invoice=True).aggregate(
-        total=Sum('amount')
-    )['total'] or 0
-
-    # Total = All created invoices regardless of status
+    active_total = Invoice.objects.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    canceled_total = Invoice.objects.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
     total_amount = active_total + canceled_total
 
-    # Pending = Not yet created
+    # ➕ Calculate unpaid invoice amount (payments without invoice)
     unpaid_invoice_amount = NewPayment.objects.filter(invoice_created=False).aggregate(
         total=Sum('amount')
     )['total'] or 0
 
-    # Top 5 Purchased Courses
+    # Get top 5 purchased courses with title and course code
     top_courses = (
         NewPayment.objects
         .values('course_id')
@@ -85,6 +74,7 @@ def admin_dashboard(request):
         .order_by('-purchase_count')[:5]
     )
 
+    # Format: Title (CODE123)
     course_labels = [f"{item['course_title']} ({item['course_code']})" for item in top_courses]
     course_data = [item['purchase_count'] for item in top_courses]
 
@@ -92,10 +82,13 @@ def admin_dashboard(request):
         'active_total': active_total,
         'canceled_total': canceled_total,
         'total_amount': total_amount,
-        'unpaid_invoice_amount': unpaid_invoice_amount,
+        'unpaid_invoice_amount': unpaid_invoice_amount,  # Pass to template
         'course_labels': course_labels,
         'course_data': course_data,
     })
+
+
+
 
 
 
@@ -1740,7 +1733,8 @@ def display_paid_content(request, course_id):
     for content in contents:
         grouped_contents[content.title].append(content)
 
-    has_access = bool(payment) or manual_access
+    has_access = UserCourseAccess.objects.filter(user=request.user, course=course).exists()
+
 
     progress = CourseProgress.objects.filter(user=request.user, course=course).first()
     progress_percentage = progress.progress_percentage if progress else 0
@@ -1940,25 +1934,14 @@ def grant_course_access(request):
     if request.method == "POST":
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
-        create_invoice = bool(request.POST.get("create_invoice"))  # will be True if checkbox checked
+        create_invoice = request.POST.get("create_invoice") == "on"  # More reliable way to check checkbox
 
         user = get_object_or_404(CustomUser, id=user_id)
         course = get_object_or_404(PaidCourse, id=course_id)
 
-        # Grant manual course access
-        
-
-# Check if payment already exists with this invoice_created status
-        payment_exists = NewPayment.objects.filter(
-            user=user,
-            course=course,
-            status="manual",
-            invoice_created=create_invoice
-        ).exists()
-
-        if not payment_exists:
-            txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"
-            NewPayment.objects.create(
+        # Create payment record (don't check for existing ones)
+        txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"
+        payment = NewPayment.objects.create(
             user=user,
             course=course,
             amount=course.course_price,
@@ -1966,19 +1949,25 @@ def grant_course_access(request):
             status="manual",
             created_at=timezone.now(),
             invoice_created=create_invoice
+        )
+
+        # Create invoice if checkbox was checked
+        if create_invoice:
+            Invoice.objects.create(
+                user=user,
+                course=course,
+                course_title=course.course_title,
+                course_fee=course.original_price,
+                discount=course.discount_amount,
+                paid_amount=course.course_price,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                mobile=user.mobile,
+                email=user.email,
             )
 
-        UserCourseAccess.objects.get_or_create(
-            user=user,
-            course=course
-            )    
-    
-
-
-
-
-
-
+        # Grant course access
+        UserCourseAccess.objects.get_or_create(user=user, course=course)
 
         return redirect('grant_course_access')
 
@@ -1988,9 +1977,6 @@ def grant_course_access(request):
         "user_query": user_query,
         "course_query": course_query,
     })
-
-
-
 
 # from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
@@ -2214,19 +2200,18 @@ def user_detail_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     payments = NewPayment.objects.filter(user=user).select_related('course').order_by('-created_at')
 
-    # Attach invoice info
-    for payment in payments:
-        invoice = Invoice.objects.filter(
-            user=payment.user,
-            course=payment.course,
-            paid_amount=payment.amount
-        ).first()
+    # Get all invoices for this user in one query
+    invoices = Invoice.objects.filter(user=user)
+    invoice_map = {(inv.course.id, inv.paid_amount): inv for inv in invoices}
 
+    # Attach invoice info to each payment
+    for payment in payments:
+        invoice = invoice_map.get((payment.course.id, payment.amount))
         payment.invoice = invoice
         payment.invoice_created = bool(invoice)
         payment.invoice_canceled = invoice.is_canceled if invoice else False
 
-    # ✅ Fetch access info for each course
+    # Fetch access info
     access_entries = UserCourseAccess.objects.filter(user=user)
     course_access_map = {entry.course.id: True for entry in access_entries}
 
@@ -2235,7 +2220,6 @@ def user_detail_view(request, user_id):
         'payments': payments,
         'course_access_map': course_access_map,
     })
-
 
 
 from .models import Invoice, PaidCourse, CustomUser, NewPayment
@@ -2332,6 +2316,7 @@ def toggle_invoice_status_view(request, invoice_id):
 from django.db.models import Sum
 from .models import Invoice
 
+# this is invoice calculation page which is not shifted to admin_dashboard page
 def invoice_dashboard_view(request):
     active_total = Invoice.objects.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
     canceled_total = Invoice.objects.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
