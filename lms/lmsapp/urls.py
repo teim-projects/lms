@@ -93,6 +93,23 @@ urlpatterns = [
     path("payment/webhook/", views.easebuzz_webhook, name="easebuzz_webhook"),
 
 
+    path('canceled_invoices/', views.canceled_invoice_view, name='canceled_invoices'),
+
+
+    path('revoke-access/<int:user_id>/<int:course_id>/', views.revoke_course_access, name='revoke_course_access'),
+
+
+    path('reports/manual-access/', views.manual_access_report, name='manual_access_report'),
+
+    path('reports/course/', views.course_report, name='course_report'),
+
+    path('reports/course/<int:course_id>/', views.course_enrollment_detail, name='course_enrollment_detail'),
+
+     
+
+
+
+
 
     
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    {% include 'Admin_Base.html' %}
+
+<div class="d-flex flex-column min-vh-100">
+
+    <!-- Page content -->
+    <div class="container flex-grow-1" style="margin-top: 100px;">
+        <h3 class="mb-4">👨‍🎓 Students Enrolled in {{ course.title }}</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Access Type</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in enrollments %}
+                <tr>
+                    <td>{{ entry.user.first_name }} {{ entry.user.last_name }}</td>
+                    <td>{{ entry.user.email }}</td>
+                    <td>{{ entry.user.mobile }}</td>
+                    <td>{{ entry.status|title }}</td>
+                    <td>{{ entry.created_at|date:"Y-m-d" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No enrollments found for this course.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include 'footer.html' %}
+</div>
+
+    
+</body>
+</html>

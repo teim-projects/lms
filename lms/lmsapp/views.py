@@ -48,14 +48,32 @@ from django.db.models import F
 from django.db.models import Count, F, Sum
 from django.shortcuts import render
 
+from django.db.models import Q
+
+from django.db.models import Sum, Count, F
+
 @login_required
 @user_passes_test(is_admin_or_subadmin)
 def admin_dashboard(request):
-    active_total = Invoice.objects.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
-    canceled_total = Invoice.objects.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    # Active Invoices = Created and not canceled
+    active_total = NewPayment.objects.filter(invoice_created=True, canceled_invoice=False).aggregate(
+        total=Sum('amount')
+    )['total'] or 0
+
+    # Canceled Invoices = Created but canceled
+    canceled_total = NewPayment.objects.filter(invoice_created=True, canceled_invoice=True).aggregate(
+        total=Sum('amount')
+    )['total'] or 0
+
+    # Total = All created invoices regardless of status
     total_amount = active_total + canceled_total
 
-    # Get top 5 purchased courses with title and course code
+    # Pending = Not yet created
+    unpaid_invoice_amount = NewPayment.objects.filter(invoice_created=False).aggregate(
+        total=Sum('amount')
+    )['total'] or 0
+
+    # Top 5 Purchased Courses
     top_courses = (
         NewPayment.objects
         .values('course_id')
@@ -67,7 +85,6 @@ def admin_dashboard(request):
         .order_by('-purchase_count')[:5]
     )
 
-    # Format: Title (CODE123)
     course_labels = [f"{item['course_title']} ({item['course_code']})" for item in top_courses]
     course_data = [item['purchase_count'] for item in top_courses]
 
@@ -75,11 +92,10 @@ def admin_dashboard(request):
         'active_total': active_total,
         'canceled_total': canceled_total,
         'total_amount': total_amount,
+        'unpaid_invoice_amount': unpaid_invoice_amount,
         'course_labels': course_labels,
         'course_data': course_data,
     })
-
-
 
 
 
@@ -1608,39 +1624,48 @@ def user_list(request):
 
 import openpyxl
 from django.http import HttpResponse
-from .models import CustomUser
+from .models import NewPayment
 
 def export_users_to_excel(request):
-    # Create an in-memory workbook
+    # Get unique users who made a payment
+    seen_emails = set()
+    unique_payments = []
+
+    all_payments = NewPayment.objects.select_related('user').all()
+
+    for payment in all_payments:
+        email = payment.user.email
+        if email not in seen_emails:
+            unique_payments.append(payment)
+            seen_emails.add(email)
+
+    # Create Excel workbook
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Registered Users"
+    ws.title = "Paid Students"
 
-    # Define header
-    headers = ['Sr. No.', 'Email', 'First Name', 'Last Name', 'Mobile', 'Verified']
+    # Headers
+    headers = ['Sr. No.', 'Email', 'First Name', 'Last Name', 'Mobile']
     ws.append(headers)
 
-    # Fetch users ordered by first name
-    users = CustomUser.objects.order_by('email')
-
-    # Populate data rows
-    for index, user in enumerate(users, start=1):
+    # Data rows
+    for index, payment in enumerate(unique_payments, start=1):
+        user = payment.user
         ws.append([
             index,
             user.email,
             user.first_name or 'N/A',
             user.last_name or 'N/A',
             user.mobile or 'N/A',
-            'Yes' if user.is_verified else 'No'
         ])
 
-    # Create HTTP response with Excel content
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=registered_users.xlsx'
+    # Create HTTP response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=paid_students.xlsx'
     wb.save(response)
     return response
-
-
 
 
 # start
@@ -1858,8 +1883,15 @@ def payment_success(request):
             course=course,
             amount=amount,
             txnid=txnid,
-            status=status
+            status=status,
+            invoice_created=True,  # Always True for online
+            created_at=timezone.now()
         )
+
+        UserCourseAccess.objects.get_or_create(user=user, course=course)
+
+
+
         return redirect('display_paid_content', course_id=course.id)
     else:
         return render(request, 'payment_failed.html')
@@ -1888,6 +1920,9 @@ import uuid  # Add this at the top
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
+from django.utils import timezone
+import uuid
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def grant_course_access(request):
@@ -1905,24 +1940,45 @@ def grant_course_access(request):
     if request.method == "POST":
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
+        create_invoice = bool(request.POST.get("create_invoice"))  # will be True if checkbox checked
 
         user = get_object_or_404(CustomUser, id=user_id)
         course = get_object_or_404(PaidCourse, id=course_id)
 
         # Grant manual course access
-        access, created = UserCourseAccess.objects.get_or_create(user=user, course=course)
+        
 
-        # Also record a manual payment
-        if created:
-            txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"  # Unique manual transaction ID
+# Check if payment already exists with this invoice_created status
+        payment_exists = NewPayment.objects.filter(
+            user=user,
+            course=course,
+            status="manual",
+            invoice_created=create_invoice
+        ).exists()
+
+        if not payment_exists:
+            txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"
             NewPayment.objects.create(
-                user=user,
-                course=course,
-                amount=course.course_price,  # assuming your PaidCourse has a 'fee' field
-                txnid=txn_id,
-                status="manual",  # or "success" if you prefer
-                created_at=timezone.now()
+            user=user,
+            course=course,
+            amount=course.course_price,
+            txnid=txn_id,
+            status="manual",
+            created_at=timezone.now(),
+            invoice_created=create_invoice
             )
+
+        UserCourseAccess.objects.get_or_create(
+            user=user,
+            course=course
+            )    
+    
+
+
+
+
+
+
 
         return redirect('grant_course_access')
 
@@ -2152,18 +2208,34 @@ def paid_students_list(request):
 
 
 
-from django.shortcuts import render, get_object_or_404
-from .models import CustomUser, NewPayment  # ✅ Single import line
+from .models import CustomUser, NewPayment, Invoice, UserCourseAccess
 
 def user_detail_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     payments = NewPayment.objects.filter(user=user).select_related('course').order_by('-created_at')
-    invoices = Invoice.objects.filter(user=user)
+
+    # Attach invoice info
+    for payment in payments:
+        invoice = Invoice.objects.filter(
+            user=payment.user,
+            course=payment.course,
+            paid_amount=payment.amount
+        ).first()
+
+        payment.invoice = invoice
+        payment.invoice_created = bool(invoice)
+        payment.invoice_canceled = invoice.is_canceled if invoice else False
+
+    # ✅ Fetch access info for each course
+    access_entries = UserCourseAccess.objects.filter(user=user)
+    course_access_map = {entry.course.id: True for entry in access_entries}
+
     return render(request, 'user_detail.html', {
         'user': user,
         'payments': payments,
-        'invoices': invoices
+        'course_access_map': course_access_map,
     })
+
 
 
 from .models import Invoice, PaidCourse, CustomUser, NewPayment
@@ -2192,6 +2264,11 @@ def generate_invoice_view(request, payment_id):
         mobile=user.mobile,
         email=user.email,
     )
+
+    payment.invoice_created = True
+    payment.save()
+
+
     return render(request, 'invoice_detail.html', {'invoice': invoice})
 
 
@@ -2242,6 +2319,13 @@ def toggle_invoice_status_view(request, invoice_id):
     invoice = get_object_or_404(Invoice, id=invoice_id)
     invoice.is_canceled = not invoice.is_canceled
     invoice.save()
+
+    # Sync with NewPayment model
+    payment = NewPayment.objects.filter(user=invoice.user, course=invoice.course, amount=invoice.paid_amount).first()
+    if payment:
+        payment.canceled_invoice = invoice.is_canceled
+        payment.save()
+
     return redirect('user_detail', user_id=invoice.user.id)
 
 
@@ -2344,3 +2428,59 @@ def easebuzz_webhook(request):
     except Exception as e:
         print("Webhook Error:", e)
         return HttpResponse("Error", status=400)
+
+
+
+from django.shortcuts import render
+from .models import Invoice
+
+def canceled_invoice_view(request):
+    canceled_invoices = Invoice.objects.filter(is_canceled=True).select_related('course', 'user').order_by('-date_created')
+    return render(request, 'canceled_invoice.html', {
+        'canceled_invoices': canceled_invoices
+    })
+
+
+
+
+# views.py
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import UserCourseAccess, CustomUser, PaidCourse, RevokedAccess  # include RevokedAccess
+
+def revoke_course_access(request, user_id, course_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Permission denied.")
+        return redirect('admin_dashboard')
+
+    access = get_object_or_404(UserCourseAccess, user_id=user_id, course_id=course_id)
+    access.delete()
+
+    # Optionally log this revocation
+    RevokedAccess.objects.create(user_id=user_id, course_id=course_id)
+
+    messages.success(request, "Access to the course has been revoked.")
+    return redirect('user_detail', user_id=user_id)
+
+
+def manual_access_report(request):
+    manual_payments = NewPayment.objects.filter(status='manual').select_related('user', 'course')
+    return render(request, 'manual_access_report.html', {'manual_payments': manual_payments})
+
+
+
+def course_report(request):
+    from django.db.models import Count
+    courses = PaidCourse.objects.filter(newpayment__status__in=['manual', 'success']) \
+               .annotate(total_enrollments=Count('newpayment')) \
+               .distinct()
+    return render(request, 'course_report.html', {'courses': courses})
+
+
+def course_enrollment_detail(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    enrollments = NewPayment.objects.filter(course=course, status__in=['manual', 'success']).select_related('user')
+    return render(request, 'course_enrollment_detail.html', {
+        'course': course,
+        'enrollments': enrollments
+    })

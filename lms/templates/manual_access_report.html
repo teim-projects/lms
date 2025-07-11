@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+
+
+<style>
+    html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer {
+    margin-top: auto;
+}
+
+</style>
+<body>
+
+
+
+
+    {% include 'Admin_Base.html' %}
+
+<div class="d-flex flex-column min-vh-100">
+
+    <!-- Content section with more top space -->
+    <div class="container flex-grow-1" style="margin-top: 100px;">
+
+        <h3 class="mb-4">📋 Students with Manual Access</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Course</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in manual_payments %}
+                <tr>
+                    <td>{{ entry.user.first_name }} {{ entry.user.last_name }}</td>
+                    <td>{{ entry.user.email }}</td>
+                    <td>{{ entry.user.mobile }}</td>
+                    <td>{{ entry.course.course_title }}</td>
+                    <td>{{ entry.created_at|date:"Y-m-d" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No manual access records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    
+
+    <!-- Footer always at the bottom -->
+    
+
+</div>
+{% include 'footer.html' %}
+
+    
+</body>
+</html>

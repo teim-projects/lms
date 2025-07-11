@@ -279,6 +279,10 @@ class NewPayment(models.Model):
     status = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    
+    invoice_created = models.BooleanField(default=False)
+    canceled_invoice = models.BooleanField(default=False)  
+
     def __str__(self):
         return f"{self.user.username} - {self.course.course_title} - {self.txnid}"
 
@@ -293,6 +297,15 @@ class UserCourseAccess(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.course.course_title}"
+
+
+class RevokedAccess(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+    revoked_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Revoked: {self.user.email} - {self.course.course_title}"
 
 
 # testimonials models

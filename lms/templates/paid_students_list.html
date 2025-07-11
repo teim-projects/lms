@@ -52,6 +52,8 @@
 <body>
     {% include 'Admin_Base.html' %}
 
+
+
     <div class="container content-wrapper">
         <h2>Students Who Purchased a Course</h2>
         <table class="table table-bordered table-striped">
@@ -80,7 +82,9 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+    </div><br><br>
+
+    <a href="{% url 'export_users' %}" class="btn btn-success">Export to Excel</a>
 
     {% include 'footer.html' %}
 </body>

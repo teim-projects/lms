@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canceled Invoices</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        background-color: #f9f9f9;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    .container {
+        margin-top: 100px;
+    }
+
+    .table thead {
+        background-color: #343a40;
+        color: #ffffff;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #2c3e50;
+    }
+
+    footer {
+        background-color: #f1f1f1;
+        padding: 10px 0;
+        text-align: center;
+    }
+</style>
+
+</head>
+<body>
+{% include 'Admin_Base.html' %}
+
+<main>
+    <div class="container">
+        <h2 class="title">🧾 Canceled Invoices</h2>
+
+        {% if canceled_invoices %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Course Title</th>
+                        <th>Course Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in canceled_invoices %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ invoice.first_name }} {{ invoice.last_name }}</td>
+                        <td>{{ invoice.email }}</td>
+                        <td>{{ invoice.mobile }}</td>
+                        <td>{{ invoice.course_title }}</td>
+                        <td>{{ invoice.course.course_code }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="text-center">No canceled invoices found.</p>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+        </div>
+    </div>
+</main>
+
+{% include 'footer.html' %}
+</body>
+</html>

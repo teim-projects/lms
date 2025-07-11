@@ -568,11 +568,14 @@
 
                                     </button>
                                 </a>
+
+                                {% if not is_subadmin %}
                                 <form action="{% url 'delete_paid_course' course.id %}" method="POST"
                                     style="display:inline;">
                                     {% csrf_token %}
                                     <button class="delet-btn"><i class="fa-solid fa-trash"></i></button>
                                 </form>
+                                {% endif %}
 
                                 <a href="{% url 'update_paid_course' course.id %}"><button class=" update-btn"><i
                                             class="fa-solid fa-pen-to-square"></i></i></button></a>

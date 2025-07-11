@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+
+<body>
+
+
+    {% include 'Admin_Base.html' %}
+
+<div class="d-flex flex-column min-vh-100">
+
+    <!-- Content section with top spacing -->
+    <div class="container flex-grow-1" style="margin-top: 100px;">
+        <h3 class="mb-4">📘 Course-wise Enrollment Report</h3>
+
+        <table class="table table-hover table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Course</th>
+                    <th>Enrollments</th>
+                    <th>View Students</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.course_title }}</td>
+                    <td>{{ course.total_enrollments }}</td>
+                    <td>
+                        <a href="{% url 'course_enrollment_detail' course.id %}" class="btn btn-sm btn-primary">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">No courses with enrollments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include 'footer.html' %}
+</div>
+
+    
+</body>
+</html>

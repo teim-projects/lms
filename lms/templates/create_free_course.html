@@ -526,12 +526,14 @@
 
                                 <!-- Delete and Update Buttons -->
                                 <div class="buttonsv d-flex justify-content-center align-items-center gap-2 mt-3">
+                                    {% if not is_subadmin %}
                                     <form method="post" action="{% url 'delete_free_course' course.id %}"
                                         onsubmit="return confirm('Are you sure you want to delete this course?');">
                                         {% csrf_token %}
                                         <button type="submit" class="delet-btn"><i
                                                 class="fa-solid fa-trash"></i></button>
                                     </form>
+                                    {% endif %}
 
                                     <a href="{% url 'update_free_course' course.id %}">
                                         <button class="update-btn"><i class="fa-solid fa-pen-to-square"></i></button>

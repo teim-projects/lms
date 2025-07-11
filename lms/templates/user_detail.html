@@ -76,20 +76,40 @@
               {% endif %}
             </p>
 
-            <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary me-2">Invoice</a>
+            {% if payment.status == "manual" and not payment.invoice_created %}
+  <!-- Don't show invoice or cancel buttons -->
+{% else %}
+  <!-- Invoice Button -->
+  <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary me-2">Invoice</a>
 
-            {% for invoice in invoices %}
-              {% if invoice.course == payment.course and invoice.paid_amount == payment.amount %}
-              <form action="{% url 'toggle_invoice' invoice.id %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                {% if invoice.is_canceled %}
-                  <button type="submit" class="btn btn-sm btn-success">Restore</button>
-                {% else %}
-                  <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
-                {% endif %}
-              </form>
-              {% endif %}
-            {% endfor %}
+  <!-- Cancel/Restore Button if Invoice Exists -->
+ {% if payment.invoice_created %}
+  <form action="{% url 'toggle_invoice' payment.invoice.id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    {% if payment.invoice_canceled %}
+      <button type="submit" class="btn btn-sm btn-success">Restore</button>
+    {% else %}
+      <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+    {% endif %}
+  </form>
+{% endif %}
+{% endif %}
+
+
+
+<!-- Revoke Access Button -->
+{% if payment.course.id in course_access_map %}
+  <a href="{% url 'revoke_course_access' user.id payment.course.id %}"
+     class="btn btn-sm btn-warning mt-2"
+     onclick="return confirm('Are you sure you want to revoke access to this course?');">
+     Revoke Access
+  </a>
+{% else %}
+  <span class="badge bg-secondary mt-2">Access Revoked</span>
+{% endif %}
+
+
+
           </div>
         </div>
       </div>
@@ -98,6 +118,8 @@
     {% else %}
       <p>No course purchases found for this user.</p>
     {% endif %}
+
+
 
     <a href="{% url 'paid_students_list' %}" class="btn btn-secondary mt-4">Back to List</a>
 
