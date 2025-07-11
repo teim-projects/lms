@@ -53,9 +53,12 @@
     {% include 'Admin_Base.html' %}
 
 
+<div class="main">
 
     <div class="container content-wrapper">
         <h2>Students Who Purchased a Course</h2>
+                <a href="{% url 'export_users' %}" class="btn btn-primary mt-2 mb-2" style="float: right;">Export to Excel</a>
+
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
@@ -82,9 +85,8 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div><br><br>
-
-    <a href="{% url 'export_users' %}" class="btn btn-success">Export to Excel</a>
+    </div> 
+</div>
 
     {% include 'footer.html' %}
 </body>

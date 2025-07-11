@@ -21,13 +21,7 @@
             position: relative;
             font-family: Verdana, sans-serif;
         }
-
-
-
-
-
-
-        /* .logo {
+       /* .logo {
             margin-left: 40px;
         } */
 
@@ -273,67 +267,79 @@ form .row.mb-4.align-items-center {
   <div class="container py-5 bg-light" style="margin-top: 120px;">
     <h4 class="text-center mb-5 "> Registered Users</h4>
 
-    <!-- Filter Form -->
-    <form method="get">
-      <input type="hidden" name="q" value="{{ query }}">
-      <div class="row mb-4 gx-3 gy-3 align-items-end">
-        <!-- Sort Dropdown -->
-        <div class="col-lg-3 col-md-6">
-          <label class="form-label">🔽 Sort By:</label>
-          <select name="sort" class="form-select" onchange="this.form.submit()">
-            <option value="">Select</option>
-            <option value="first_name_asc" {% if sort == 'first_name_asc' %}selected{% endif %}>First Name (A–Z)</option>
-            <option value="first_name_desc" {% if sort == 'first_name_desc' %}selected{% endif %}>First Name (Z–A)</option>
-            <option value="last_name_asc" {% if sort == 'last_name_asc' %}selected{% endif %}>Last Name (A–Z)</option>
-            <option value="last_name_desc" {% if sort == 'last_name_desc' %}selected{% endif %}>Last Name (Z–A)</option>
-            <option value="created_newest" {% if sort == 'created_newest' %}selected{% endif %}>Created Date (Newest)</option>
-            <option value="created_oldest" {% if sort == 'created_oldest' %}selected{% endif %}>Created Date (Oldest)</option>
-          </select>
-        </div>
+ <!-- Filter Toggle Button -->
+<button type="button" class="btn btn-primary mb-3" onclick="toggleFilter()">🔍 Filter</button>
 
-        <!-- Status Filter -->
-        <div class="col-lg-3 col-md-6">
-          <label class="form-label">🧾 Status:</label>
-          <select name="status" class="form-select" onchange="this.form.submit()">
-            <option value="">All Users</option>
-            <option value="verified" {% if request.GET.status == 'verified' %}selected{% endif %}>Verified</option>
-            <option value="not_verified" {% if request.GET.status == 'not_verified' %}selected{% endif %}>Not Verified</option>
-          </select>
-        </div>
-
-        <!-- Date Filter -->
-        <div class="col-lg-3 col-md-6">
-          <label class="form-label">📅 Created Date:</label>
-          <input type="date" name="created_at" class="form-control" value="{{ request.GET.created_at }}">
-        </div>
-
-<div class="col-lg-3 col-md-6">
-          <button type="submit" class="btn btn-success w-100 mt-2">📅 Apply Filter</button>
-        </div>
-
-        <div class="row mb-4 align-items-center">
-  
-  <!-- Search Input -->
-  <div class="col-md-6 col-lg-6">
-    <input type="text" name="q" class="form-control" placeholder="Search by email or mobile" value="{{ query }}">
-  </div>
-
-  <!-- Search Button -->
-  <div class="col-md-3 col-lg-3 mt-2 mt-md-0">
-    <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
-  </div>
-
-  <!-- Export Button -->
-  <div class="col-md-3 col-lg-3 mt-2 mt-md-0">
-    <a href="{% url 'export_users' %}" class="btn btn-success w-100">📥 Export</a>
-  </div>
-
-</div>
-
-        <!-- Filter Button -->
-        
+<!-- Filter Section -->
+<div id="filter-section" style="display: none;">
+  <form method="get">
+    <input type="hidden" name="q" value="{{ query }}">
+    <div class="row mb-4 gx-3 gy-3 align-items-end">
+      
+      <!-- Sort Dropdown -->
+      <div class="col-lg-3 col-md-6">
+        <label class="form-label">🔽 Sort By:</label>
+        <select name="sort" class="form-select" onchange="this.form.submit()">
+          <option value="">Select</option>
+          <option value="first_name_asc" {% if sort == 'first_name_asc' %}selected{% endif %}>First Name (A–Z)</option>
+          <option value="first_name_desc" {% if sort == 'first_name_desc' %}selected{% endif %}>First Name (Z–A)</option>
+          <option value="last_name_asc" {% if sort == 'last_name_asc' %}selected{% endif %}>Last Name (A–Z)</option>
+          <option value="last_name_desc" {% if sort == 'last_name_desc' %}selected{% endif %}>Last Name (Z–A)</option>
+          <option value="created_newest" {% if sort == 'created_newest' %}selected{% endif %}>Created Date (Newest)</option>
+          <option value="created_oldest" {% if sort == 'created_oldest' %}selected{% endif %}>Created Date (Oldest)</option>
+        </select>
       </div>
-    </form>
+
+      <!-- Status Filter -->
+      <div class="col-lg-3 col-md-6">
+        <label class="form-label">🧾 Status:</label>
+        <select name="status" class="form-select" onchange="this.form.submit()">
+          <option value="">All Users</option>
+          <option value="verified" {% if request.GET.status == 'verified' %}selected{% endif %}>Verified</option>
+          <option value="not_verified" {% if request.GET.status == 'not_verified' %}selected{% endif %}>Not Verified</option>
+        </select>
+      </div>
+
+      <!-- Date Filter -->
+      <div class="col-lg-3 col-md-6">
+        <label class="form-label">📅 Created Date:</label>
+        <input type="date" name="created_at" class="form-control" value="{{ request.GET.created_at }}">
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <button type="submit" class="btn btn-success w-100 mt-2">📅 Apply Filter</button>
+      </div>
+
+    </div>
+
+    <!-- Search + Export Section -->
+    <div class="row mb-4 align-items-center">
+      <!-- Search Input -->
+      <div class="col-md-6 col-lg-6">
+        <input type="text" name="q" class="form-control" placeholder="Search by email or mobile" value="{{ query }}">
+      </div>
+
+      <!-- Search Button -->
+      <div class="col-md-3 col-lg-3 mt-2 mt-md-0">
+        <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
+      </div>
+
+      <!-- Export Button -->
+      <div class="col-md-3 col-lg-3 mt-2 mt-md-0">
+        <a href="{% url 'export_users' %}" class="btn btn-success w-100">📥 Export</a>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  function toggleFilter() {
+    const filterSection = document.getElementById('filter-section');
+    filterSection.style.display = (filterSection.style.display === 'none' || filterSection.style.display === '') 
+      ? 'block' 
+      : 'none';
+  }
+</script>
+
 
 <!-- Search and Export - Structured Row -->
 

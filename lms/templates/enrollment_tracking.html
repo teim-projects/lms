@@ -63,9 +63,10 @@
     <!-- Course Selection Form -->
    <form method="POST" class="bg-white p-4 rounded shadow-sm animated fadeIn">
   {% csrf_token %}
-  
+  <div class="row">
+    <div class="col-md-6">
   <!-- 🔍 Search by Course Code -->
-  <div class="form-group">
+  <div class="form-group mt-4">
     <label for="search_code"><strong>Search by Course Code:</strong></label>
     <div class="input-group">
       <input type="text" name="search_code" class="form-control" placeholder="Enter course code"
@@ -76,9 +77,12 @@
     </div>
     <small class="text-muted">Search a course by code. Matching courses will be shown in the dropdown.</small>
   </div>
-
+  </div>
+    <div class="col-md-6">
+<div class="row">
+  <div class="col-md-8">
   <!-- 🔽 Course Dropdown -->
-  <div class="form-group mt-3">
+  <div class="form-group mt-4">
     <label for="course_id"><strong>Select Course:</strong></label>
     <select name="course_id" class="form-control" >
       <option value="">-- Select --</option>
@@ -89,9 +93,16 @@
       {% endfor %}
     </select>
   </div>
-
+  </div>
+  <div class="col-md-4">
   <!-- 🔘 View Progress -->
-  <button type="submit" name="action" value="view" class="btn btn-primary btn-block mt-3">View Progress</button>
+
+  <button type="submit" name="action" value="view" class="btn btn-primary btn-block mt-5">View Progress</button>
+  </div>
+</div>
+
+  </div>
+  </div>
 </form>
 
 

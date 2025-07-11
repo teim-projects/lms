@@ -18,7 +18,7 @@
     }
 
     .content-wrapper {
-        margin-top: 80px;
+        margin-top: 100px;
         background-color: #ffffff;
         padding: 30px;
         border-radius: 10px;
@@ -47,8 +47,8 @@
 </head>
 <body>
     {% include 'Admin_Base.html' %}
-
-    <div class="container content-wrapper">
+<div class="MAIN" style="min-height: 100vh;">
+    <div class="container content-wrapper ">
         <h2 class="mb-4 text-center">Paid Course List</h2>
 
         {% if courses %}
@@ -74,7 +74,7 @@
             <div class="alert alert-info text-center">No courses found.</div>
         {% endif %}
     </div>
-
+</div>
     {% include 'footer.html' %}
 </body>
 </html>
