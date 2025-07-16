@@ -148,7 +148,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'lmstechmax@gmail.com'  # Your Gmail address
 EMAIL_HOST_PASSWORD = 'yolq euzn bukp rurb'  # Your Gmail password or app password
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'lmstechmax@gmail.com'
 
 
 
