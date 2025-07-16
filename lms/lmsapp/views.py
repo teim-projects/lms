@@ -1948,6 +1948,9 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 import uuid
 
+from django.core.mail import send_mail
+from django.conf import settings
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def grant_course_access(request):
@@ -1965,12 +1968,12 @@ def grant_course_access(request):
     if request.method == "POST":
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
-        create_invoice = request.POST.get("create_invoice") == "on"  # More reliable way to check checkbox
+        create_invoice = request.POST.get("create_invoice") == "on"
 
         user = get_object_or_404(CustomUser, id=user_id)
         course = get_object_or_404(PaidCourse, id=course_id)
 
-        # Create payment record (don't check for existing ones)
+        # Create payment record
         txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"
         payment = NewPayment.objects.create(
             user=user,
@@ -1982,7 +1985,7 @@ def grant_course_access(request):
             invoice_created=create_invoice
         )
 
-        # Create invoice if checkbox was checked
+        # Create invoice if checked
         if create_invoice:
             Invoice.objects.create(
                 user=user,
@@ -2000,6 +2003,56 @@ def grant_course_access(request):
         # Grant course access
         UserCourseAccess.objects.get_or_create(user=user, course=course)
 
+        # ========== ✅ Send Email to User ==========
+        subject_user = "🎉 Course Access Granted – Welcome to the Course!"
+        message_user = f"""
+Hi {user.first_name},
+
+Congratulations! You have been granted access to the course:
+
+📘 Course: {course.course_title}
+
+You can now log in and start learning right away.
+
+If you have any questions, feel free to contact our support team.
+
+Best regards,  
+Team {settings.DEFAULT_FROM_EMAIL}
+        """
+        send_mail(
+            subject_user,
+            message_user,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=False
+        )
+
+        # ========== ✅ Send Email to Admin ==========
+        full_name = f"{user.first_name} {user.last_name}".strip()
+        subject_admin = f"✔️ Course Access Granted to {full_name}"
+        message_admin = f"""
+Hello Admin,
+
+The following user has been granted course access manually:
+
+👤  Name: {full_name}
+📧 Email: {user.email}
+📱 Mobile: {user.mobile}
+📘 Course: {course.course_title}
+
+This was done through the admin grant access panel.
+
+Regards,  
+System Notification
+        """
+        send_mail(
+            subject_admin,
+            message_admin,
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.DEFAULT_FROM_EMAIL],  # Admin email (or use a custom admin email)
+            fail_silently=False
+        )
+
         return redirect('grant_course_access')
 
     return render(request, "grant_course_access.html", {
@@ -2008,6 +2061,7 @@ def grant_course_access(request):
         "user_query": user_query,
         "course_query": course_query,
     })
+
 
 # from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
