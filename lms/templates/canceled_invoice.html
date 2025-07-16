@@ -49,6 +49,13 @@
 <body>
 {% include 'Admin_Base.html' %}
 
+<br><br><br>
+
+<a href="{% url 'export_to_excel' %}?report_type=canceled&{{ request.GET.urlencode }}" class="btn btn-danger btn-sm">
+    ⬇️ Export Canceled Invoices
+</a>
+
+
 
 <!-- Add this at the top of each report template, after the body tag -->
 <div class="container" style="margin-top: 100px;">

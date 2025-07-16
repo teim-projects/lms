@@ -9,11 +9,17 @@
 
     {% include 'Admin_Base.html' %}
 
+    <br><br><br><br>
+    <a href="{% url 'export_to_excel' %}?report_type=enrollment_detail&course_id={{ course.id }}" class="btn btn-success mb-3">
+    Export to Excel
+</a>
+
+
 <div class="d-flex flex-column min-vh-100">
 
     <!-- Page content -->
     <div class="container flex-grow-1" style="margin-top: 100px;">
-        <h3 class="mb-4">👨‍🎓 Students Enrolled in {{ course.title }}</h3>
+        <h3 class="mb-4">👨‍🎓 Students Enrolled in {{ course.course_title  }}</h3>
 
         <table class="table table-bordered table-striped">
             <thead class="table-light">

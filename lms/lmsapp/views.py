@@ -2674,3 +2674,152 @@ def password_change_done_view(request):
     return render(request, 'password_change_done.html')
 
 
+
+from openpyxl import Workbook
+from django.http import HttpResponse
+from .models import NewPayment
+
+from openpyxl import Workbook
+from django.http import HttpResponse
+from .models import NewPayment, Invoice, PaidCourse, RevokedAccess
+from django.db.models import Count
+
+# excel button to reports section
+
+def export_to_excel(request):
+    report_type = request.GET.get('report_type')  # manual / canceled / course / revoked
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+
+    wb = Workbook()
+    ws = wb.active
+
+    if report_type == 'manual':
+        payments = NewPayment.objects.filter(status='manual')
+        if specific_date:
+            payments = payments.filter(created_at__date=specific_date)
+        else:
+            if date_from:
+                payments = payments.filter(created_at__gte=date_from)
+            if date_to:
+                payments = payments.filter(created_at__lte=date_to)
+        if course_id:
+            payments = payments.filter(course_id=course_id)
+        payments = payments.select_related('user', 'course')
+        ws.title = "Manual Access Report"
+        ws.append(['Sr. No.', 'Student Name', 'Email', 'Mobile', 'Course', 'Date'])
+        for idx, p in enumerate(payments, start=1):
+            ws.append([
+                idx,
+                f"{p.user.first_name or ''} {p.user.last_name or ''}".strip(),
+                p.user.email,
+                p.user.mobile,
+                p.course.course_title if p.course else 'N/A',
+                p.created_at.strftime("%Y-%m-%d")
+            ])
+
+    elif report_type == 'canceled':
+        invoices = Invoice.objects.filter(is_canceled=True)
+        if specific_date:
+            invoices = invoices.filter(date_created__date=specific_date)
+        else:
+            if date_from:
+                invoices = invoices.filter(date_created__gte=date_from)
+            if date_to:
+                invoices = invoices.filter(date_created__lte=date_to)
+        if course_id:
+            invoices = invoices.filter(course_id=course_id)
+        invoices = invoices.select_related('user', 'course')
+        ws.title = "Canceled Invoices"
+        ws.append(['Sr. No.', 'Student Name', 'Email', 'Mobile', 'Course', 'Invoice No.', 'Date'])
+        for idx, inv in enumerate(invoices, start=1):
+            ws.append([
+                idx,
+                f"{inv.user.first_name or ''} {inv.user.last_name or ''}".strip(),
+                inv.user.email,
+                inv.user.mobile,
+                inv.course.course_title if inv.course else 'N/A',
+                inv.invoice_number,
+                inv.date_created.strftime("%Y-%m-%d")
+            ])
+
+    elif report_type == 'course':
+        courses = PaidCourse.objects.filter(newpayment__status__in=['manual', 'success'])
+        if specific_date:
+            courses = courses.filter(newpayment__created_at__date=specific_date)
+        else:
+            if date_from:
+                courses = courses.filter(newpayment__created_at__gte=date_from)
+            if date_to:
+                courses = courses.filter(newpayment__created_at__lte=date_to)
+        if course_id:
+            courses = courses.filter(id=course_id)
+        courses = courses.annotate(total_enrollments=Count('newpayment')).distinct()
+        ws.title = "Course Report"
+        ws.append(['Sr. No.', 'Course Title', 'Course Price', 'Total Enrollments'])
+        for idx, c in enumerate(courses, start=1):
+            ws.append([
+                idx,
+                c.course_title,
+                c.course_price,
+                c.total_enrollments
+            ])
+
+    elif report_type == 'revoked':
+        revoked = RevokedAccess.objects.all()
+        if specific_date:
+            revoked = revoked.filter(revoked_on__date=specific_date)
+        else:
+            if date_from:
+                revoked = revoked.filter(revoked_on__gte=date_from)
+            if date_to:
+                revoked = revoked.filter(revoked_on__lte=date_to)
+        if course_id:
+            revoked = revoked.filter(course_id=course_id)
+        revoked = revoked.select_related('user', 'course')
+        ws.title = "Revoked Access List"
+        ws.append(['Sr. No.', 'Student Name', 'Email', 'Mobile', 'Course', 'Revoked On'])
+        for idx, r in enumerate(revoked, start=1):
+            ws.append([
+                idx,
+                f"{r.user.first_name or ''} {r.user.last_name or ''}".strip(),
+                r.user.email,
+                r.user.mobile,
+                r.course.course_title if r.course else 'N/A',
+                r.revoked_on.strftime("%Y-%m-%d")
+            ])
+
+
+    elif report_type == 'enrollment_detail':
+        course_id = request.GET.get('course_id')
+        course = get_object_or_404(PaidCourse, id=course_id)
+        enrollments = NewPayment.objects.filter(course=course, status__in=['manual', 'success']).select_related('user')
+
+        ws.title = f"Enrollments - {course.course_title[:20]}"
+        ws.append(['Sr. No.', 'Student Name', 'Email', 'Mobile', 'Course', 'Payment Status', 'Date'])
+
+        for idx, e in enumerate(enrollments, start=1):
+            ws.append([
+                idx,
+                f"{e.user.first_name or ''} {e.user.last_name or ''}".strip(),
+                e.user.email,
+                e.user.mobile,
+                course.course_title,
+                e.status,
+                e.created_at.strftime("%Y-%m-%d")
+            ])
+       
+
+    else:
+        ws.title = "Invalid Report"
+        ws.append(['Invalid report type specified.'])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename={report_type}_report.xlsx'
+    wb.save(response)
+    return response
+

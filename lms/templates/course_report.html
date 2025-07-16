@@ -13,6 +13,13 @@
 
     {% include 'Admin_Base.html' %}
 
+    <br><br><br>
+
+    <a href="{% url 'export_to_excel' %}?report_type=course&{{ request.GET.urlencode }}" class="btn btn-primary btn-sm">
+    ⬇️ Export Course Report
+</a>
+
+
 
 <!-- Add this at the top of each report template, after the body tag -->
 <div class="container" style="margin-top: 100px;">

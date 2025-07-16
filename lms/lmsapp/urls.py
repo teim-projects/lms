@@ -119,6 +119,9 @@ urlpatterns = [
     path('change-password/', views.change_password_view, name='change_password'),
     path('password-change-done/', views.password_change_done_view, name='password_change_done'),
 
+    path('export/excel/', views.export_to_excel, name='export_to_excel'),
+
+
      
 
 
