@@ -6,62 +6,162 @@
     <title>Invoice Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-   <style>
-    body {
-        background-color: #f8f9fa;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        margin: 0;
-    }
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
 
-    .dashboard-container {
-        margin-top: 100px;  /* Increased space from top */
-        flex: 1;  /* Pushes footer to bottom */
-    }
+        .dashboard-container {
+            margin-top: 100px;
+            flex: 1;
+        }
 
-    .chart-card {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        height: 100%;
-    }
+        .chart-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
 
-    .invoice-summary-list {
-        margin-bottom: 80px; /* Adds space after Total Invoices */
-    }
+        .invoice-summary-list {
+            margin-bottom: 80px;
+        }
 
-    footer {
-        background: #f8f9fa;
-    }
-</style>
+        footer {
+            background: #f8f9fa;
+        }
 
+        /* New filter styles */
+        .filter-container {
+            position: absolute;
+            top: 100px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .filter-dropdown-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 280px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 8px;
+        }
+
+        .filter-content.show {
+            display: block;
+        }
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .reports-btn {
+            position: absolute;
+            top: 100px;
+            right: 180px;
+            z-index: 1000;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .filter-container, .reports-btn {
+                position: static;
+                margin-bottom: 20px;
+                margin-top: 20px;
+            }
+            
+            .filter-content {
+                position: relative;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
     {% include 'Admin_Base.html' %}
 
- 
-
-
-
     <div class="container dashboard-container">
-        <!-- <h2 class="mb-4 text-center text-primary">📊 Invoice Summary Dashboard</h2> -->
+        <!-- Reports Button -->
+        <div class="reports-btn">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="reportsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    📁 Reports
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reportsDropdown">
+                    <li><a class="dropdown-item" href="{% url 'manual_access_report' %}?{{ request.GET.urlencode }}">Manual Access</a></li>
+                    <li><a class="dropdown-item" href="{% url 'course_report' %}?{{ request.GET.urlencode }}">Course Report</a></li>
+                    <li><a class="dropdown-item" href="{% url 'canceled_invoices' %}?{{ request.GET.urlencode }}">Canceled Invoices</a></li>
+                    <li><a class="dropdown-item" href="{% url 'revoked_courses_list' %}?{{ request.GET.urlencode }}">Revoked Access</a></li>
+                </ul>
+            </div>
+        </div>
 
-        <!-- Charts Row: Side-by-side Charts -->
-        <div class="row mb-5">
-                <div class="dropdown text-end mt-2 mb-2" >
-        <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="reportsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            📁 Reports
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reportsDropdown">
-            <li><a class="dropdown-item" href="/reports/manual-access/">Manual Access</a></li>
-            <li><a class="dropdown-item" href="/reports/course/">Course Report</a></li>
-            <li><a class="nav-link pl-4" href="/canceled_invoices/"> Cancled Invoices </a></li>
-        </ul>
-    </div>
+        <!-- Filter Button and Content -->
+        <div class="filter-container">
+            <button class="btn btn-primary btn-sm filter-dropdown-btn" id="filterToggle">
+                <span>🔍 Filters</span>
+                <span>▼</span>
+            </button>
+            
+            <div class="filter-content" id="filterContent">
+                <form method="get" id="dashboardFilterForm">
+                    <div class="filter-group">
+                        <label for="date_from" class="form-label">From Date</label>
+                        <input type="date" class="form-control" id="date_from" name="date_from" 
+                               value="{{ request.GET.date_from }}">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="date_to" class="form-label">To Date</label>
+                        <input type="date" class="form-control" id="date_to" name="date_to"
+                               value="{{ request.GET.date_to }}">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="course" class="form-label">Course</label>
+                        <select class="form-select" id="course" name="course">
+                            <option value="">All Courses</option>
+                            {% for course in all_courses %}
+                            <option value="{{ course.id }}" 
+                                    {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
+                                {{ course.course_title }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary btn-sm">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row">
             <!-- Invoice Summary Chart -->
             <div class="col-md-6 mb-4 mb-md-0">
                 <div class="chart-card">
@@ -79,7 +179,7 @@
         </div>
 
         <!-- Invoice Total Info Summary -->
-        <div class="row ">
+        <div class="row mt-3">
             <div class="col-md-6 col-lg-4 mb-5">
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -94,138 +194,195 @@
                         Total Invoices
                         <span class="badge bg-primary rounded-pill">₹{{ total_amount }}</span>
                     </li>
-
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-  Invoices not created manual access(uncreated invoice)
-  <span class="badge bg-warning text-dark rounded-pill">₹{{ unpaid_invoice_amount }}</span>
-</li>
-
+                        Invoices not created manual access(uncreated invoice)
+                        <span class="badge bg-warning text-dark rounded-pill">₹{{ unpaid_invoice_amount }}</span>
+                    </li>
                 </ul>
             </div>
+            <div class="col-md-6"></div>
         </div>
     </div>
 
+    <script>
+        // Toggle filter visibility
+        document.getElementById('filterToggle').addEventListener('click', function() {
+            document.getElementById('filterContent').classList.toggle('show');
+        });
 
+        // Close filter when clicking outside
+        document.addEventListener('click', function(event) {
+            const filterContainer = document.querySelector('.filter-container');
+            if (!filterContainer.contains(event.target)) {
+                document.getElementById('filterContent').classList.remove('show');
+            }
+        });
 
-    
+        // Existing filter form script
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterForm = document.getElementById('dashboardFilterForm');
+            const specificDate = document.getElementById('specific_date');
+            const dateFrom = document.getElementById('date_from');
+            const dateTo = document.getElementById('date_to');
+            
+            // Disable range filters when specific date is selected
+            specificDate.addEventListener('change', function() {
+                if (this.value) {
+                    dateFrom.disabled = true;
+                    dateTo.disabled = true;
+                    dateFrom.value = '';
+                    dateTo.value = '';
+                } else {
+                    dateFrom.disabled = false;
+                    dateTo.disabled = false;
+                }
+            });
+            
+            // Disable specific date when range filters are used
+            dateFrom.addEventListener('change', disableSpecificDate);
+            dateTo.addEventListener('change', disableSpecificDate);
+            
+            function disableSpecificDate() {
+                if (dateFrom.value || dateTo.value) {
+                    specificDate.disabled = true;
+                    specificDate.value = '';
+                } else {
+                    specificDate.disabled = false;
+                }
+            }
+            
+            // Initialize form state
+            if (specificDate.value) {
+                dateFrom.disabled = true;
+                dateTo.disabled = true;
+            } else if (dateFrom.value || dateTo.value) {
+                specificDate.disabled = true;
+            }
+            
+            // Handle form submission
+            filterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const params = new URLSearchParams(formData).toString();
+                window.location.search = params;
+            });
+        });
+    </script>
 
     <!-- Invoice Chart Script -->
-   <script>
-    const ctx = document.getElementById('invoiceChart').getContext('2d');
-
-    const invoiceChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Active Invoices', 'Canceled Invoices', 'Total Invoices', 'uncreated Invoices'],
-            datasets: [{
-                label: 'Invoice Amounts',
-                data: [{{ active_total }}, {{ canceled_total }}, {{ total_amount }}, {{ unpaid_invoice_amount }}],
-                backgroundColor: [
-                    'rgba(40, 167, 69, 0.7)',   // Green
-                    'rgba(220, 53, 69, 0.7)',   // Red
-                    'rgba(0, 123, 255, 0.7)',   // Blue
-                    'rgba(255, 193, 7, 0.7)'    // Yellow (Pending)
-                ],
-                borderColor: [
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(220, 53, 69, 1)',
-                    'rgba(0, 123, 255, 1)',
-                    'rgba(255, 193, 7, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: value => '₹' + value
-                    }
-                }
+    <script>
+        const ctx = document.getElementById('invoiceChart').getContext('2d');
+        const invoiceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Active Invoices', 'Canceled Invoices', 'Total Invoices', 'uncreated Invoices'],
+                datasets: [{
+                    label: 'Invoice Amounts',
+                    data: [{{ active_total }}, {{ canceled_total }}, {{ total_amount }}, {{ unpaid_invoice_amount }}],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.7)',   // Green
+                        'rgba(220, 53, 69, 0.7)',   // Red
+                        'rgba(0, 123, 255, 0.7)',   // Blue
+                        'rgba(255, 193, 7, 0.7)'    // Yellow (Pending)
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(0, 123, 255, 1)',
+                        'rgba(255, 193, 7, 1)'
+                    ],
+                    borderWidth: 1
+                }]
             },
-            plugins: {
-                legend: {
-                    display: false
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => '₹' + value
+                        }
+                    }
                 },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            return '₹' + context.parsed.y.toLocaleString();
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return '₹' + context.parsed.y.toLocaleString();
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-</script>
+        });
+    </script>
 
-   <!-- Top Courses Chart Script -->
-<script>
-    const ctxTopCourses = document.getElementById('topCoursesChart').getContext('2d');
-    const topCoursesChart = new Chart(ctxTopCourses, {
-        type: 'bar',
-        data: {
-            labels: {{ course_labels|safe }},
-            datasets: [{
-                label: 'No. of Purchases',
-                data: {{ course_data|safe }},
-                backgroundColor: [
-                    '#FF6384', // Red
-                    '#36A2EB', // Blue
-                    '#FFCE56', // Yellow
-                    '#4BC0C0', // Teal
-                    '#9966FF', // Purple
-                    '#FF9F40', // Orange
-                    '#00C49F', // Mint
-                    '#F95F62', // Coral
-                    '#8E44AD', // Deep Purple
-                    '#2ECC71'  // Green
-                ],
-                borderColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                    '#4BC0C0',
-                    '#9966FF',
-                    '#FF9F40',
-                    '#00C49F',
-                    '#F95F62',
-                    '#8E44AD',
-                    '#2ECC71'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
-                    }
-                }
+    <!-- Top Courses Chart Script -->
+    <script>
+        const ctxTopCourses = document.getElementById('topCoursesChart').getContext('2d');
+        const topCoursesChart = new Chart(ctxTopCourses, {
+            type: 'bar',
+            data: {
+                labels: {{ course_labels|safe }},
+                datasets: [{
+                    label: 'No. of Purchases',
+                    data: {{ course_data|safe }},
+                    backgroundColor: [
+                        '#FF6384', // Red
+                        '#36A2EB', // Blue
+                        '#FFCE56', // Yellow
+                        '#4BC0C0', // Teal
+                        '#9966FF', // Purple
+                        '#FF9F40', // Orange
+                        '#00C49F', // Mint
+                        '#F95F62', // Coral
+                        '#8E44AD', // Deep Purple
+                        '#2ECC71'  // Green
+                    ],
+                    borderColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                        '#FF9F40',
+                        '#00C49F',
+                        '#F95F62',
+                        '#8E44AD',
+                        '#2ECC71'
+                    ],
+                    borderWidth: 1
+                }]
             },
-            plugins: {
-                legend: {
-                    display: false
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
                 },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            return context.parsed.y + ' Purchases';
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.parsed.y + ' Purchases';
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-</script>
+        });
+    </script>
 
     {% include 'footer.html' %}
-
 </body>
-
 </html>

@@ -53,18 +53,47 @@ from django.db.models import Q
 @login_required
 @user_passes_test(is_admin_or_subadmin)
 def admin_dashboard(request):
-    active_total = Invoice.objects.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
-    canceled_total = Invoice.objects.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    # Get filter parameters
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+    
+    # Base querysets
+    invoice_qs = Invoice.objects.all()
+    payment_qs = NewPayment.objects.all()
+    
+    # Apply date filters
+    if specific_date:
+        # Filter for a specific single date
+        invoice_qs = invoice_qs.filter(date_created__date=specific_date)
+        payment_qs = payment_qs.filter(created_at__date=specific_date)
+    else:
+        # Apply date range filters if no specific date
+        if date_from:
+            invoice_qs = invoice_qs.filter(date_created__gte=date_from)
+            payment_qs = payment_qs.filter(created_at__gte=date_from)
+        if date_to:
+            invoice_qs = invoice_qs.filter(date_created__lte=date_to)
+            payment_qs = payment_qs.filter(created_at__lte=date_to)
+    
+    # Apply course filter if selected
+    if course_id:
+        invoice_qs = invoice_qs.filter(course_id=course_id)
+        payment_qs = payment_qs.filter(course_id=course_id)
+    
+    # Calculate totals with filters applied
+    active_total = invoice_qs.filter(is_canceled=False).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
+    canceled_total = invoice_qs.filter(is_canceled=True).aggregate(Sum('paid_amount'))['paid_amount__sum'] or 0
     total_amount = active_total + canceled_total
-
-    # ➕ Calculate unpaid invoice amount (payments without invoice)
-    unpaid_invoice_amount = NewPayment.objects.filter(invoice_created=False).aggregate(
+    
+    unpaid_invoice_amount = payment_qs.filter(invoice_created=False).aggregate(
         total=Sum('amount')
     )['total'] or 0
 
-    # Get top 5 purchased courses with title and course code
+    # Get top courses with filters applied
     top_courses = (
-        NewPayment.objects
+        payment_qs
         .values('course_id')
         .annotate(
             course_title=F('course__course_title'),
@@ -74,20 +103,22 @@ def admin_dashboard(request):
         .order_by('-purchase_count')[:5]
     )
 
-    # Format: Title (CODE123)
     course_labels = [f"{item['course_title']} ({item['course_code']})" for item in top_courses]
     course_data = [item['purchase_count'] for item in top_courses]
+    
+    # Get all courses for filter dropdown
+    all_courses = PaidCourse.objects.all()
 
     return render(request, 'admin_dashboard.html', {
         'active_total': active_total,
         'canceled_total': canceled_total,
         'total_amount': total_amount,
-        'unpaid_invoice_amount': unpaid_invoice_amount,  # Pass to template
+        'unpaid_invoice_amount': unpaid_invoice_amount,
         'course_labels': course_labels,
         'course_data': course_data,
+        'all_courses': all_courses,
+        'filter_params': request.GET,
     })
-
-
 
 
 
@@ -2193,33 +2224,65 @@ def paid_students_list(request):
 
 
 
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import UserCourseAccess, CustomUser, PaidCourse, RevokedAccess, NewPayment
+
+def revoke_course_access(request, user_id, course_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Permission denied.")
+        return redirect('admin_dashboard')
+
+    user = get_object_or_404(CustomUser, id=user_id)
+    course = get_object_or_404(PaidCourse, id=course_id)
+
+    # Get the most recent payment for this course
+    latest_payment = NewPayment.objects.filter(user=user, course=course).order_by('-created_at').first()
+
+    # Delete access and mark this payment as revoked
+    UserCourseAccess.objects.filter(user=user, course=course).delete()
+
+    if latest_payment:
+        RevokedAccess.objects.create(user=user, course=course, payment=latest_payment)
+
+    messages.success(request, "Access to the course has been revoked.")
+    return redirect('user_detail', user_id=user_id)
+
+
+
+
 
 from .models import CustomUser, NewPayment, Invoice, UserCourseAccess
+
+from .models import CustomUser, NewPayment, Invoice, UserCourseAccess, RevokedAccess
 
 def user_detail_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     payments = NewPayment.objects.filter(user=user).select_related('course').order_by('-created_at')
 
-    # Get all invoices for this user in one query
+    # Get all revoked payments for this user
+    revoked_payment_ids = set(
+        RevokedAccess.objects.filter(user=user).values_list('payment_id', flat=True)
+    )
+
+    # Get invoices
     invoices = Invoice.objects.filter(user=user)
     invoice_map = {(inv.course.id, inv.paid_amount): inv for inv in invoices}
 
-    # Attach invoice info to each payment
     for payment in payments:
         invoice = invoice_map.get((payment.course.id, payment.amount))
         payment.invoice = invoice
         payment.invoice_created = bool(invoice)
         payment.invoice_canceled = invoice.is_canceled if invoice else False
 
-    # Fetch access info
-    access_entries = UserCourseAccess.objects.filter(user=user)
-    course_access_map = {entry.course.id: True for entry in access_entries}
+        has_access = UserCourseAccess.objects.filter(user=user, course=payment.course).exists()
+        payment.access_revoked = payment.id in revoked_payment_ids or not has_access
 
     return render(request, 'user_detail.html', {
         'user': user,
         'payments': payments,
-        'course_access_map': course_access_map,
     })
+
 
 
 from .models import Invoice, PaidCourse, CustomUser, NewPayment
@@ -2420,11 +2483,33 @@ from django.shortcuts import render
 from .models import Invoice
 
 def canceled_invoice_view(request):
-    canceled_invoices = Invoice.objects.filter(is_canceled=True).select_related('course', 'user').order_by('-date_created')
+    # Get filter parameters
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+    
+    canceled_invoices = Invoice.objects.filter(is_canceled=True)
+    
+    # Apply date filters
+    if specific_date:
+        canceled_invoices = canceled_invoices.filter(date_created__date=specific_date)
+    else:
+        if date_from:
+            canceled_invoices = canceled_invoices.filter(date_created__gte=date_from)
+        if date_to:
+            canceled_invoices = canceled_invoices.filter(date_created__lte=date_to)
+    
+    # Apply course filter
+    if course_id:
+        canceled_invoices = canceled_invoices.filter(course_id=course_id)
+    
+    canceled_invoices = canceled_invoices.select_related('course', 'user').order_by('-date_created')
+    
     return render(request, 'canceled_invoice.html', {
-        'canceled_invoices': canceled_invoices
+        'canceled_invoices': canceled_invoices,
+        'filter_params': request.GET,
     })
-
 
 
 
@@ -2433,34 +2518,84 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from .models import UserCourseAccess, CustomUser, PaidCourse, RevokedAccess  # include RevokedAccess
 
-def revoke_course_access(request, user_id, course_id):
-    if not request.user.is_superuser:
-        messages.error(request, "Permission denied.")
-        return redirect('admin_dashboard')
+# def revoke_course_access(request, user_id, course_id):
+#     if not request.user.is_superuser:
+#         messages.error(request, "Permission denied.")
+#         return redirect('admin_dashboard')
 
-    access = get_object_or_404(UserCourseAccess, user_id=user_id, course_id=course_id)
-    access.delete()
+#     access = get_object_or_404(UserCourseAccess, user_id=user_id, course_id=course_id)
+#     access.delete()
 
-    # Optionally log this revocation
-    RevokedAccess.objects.create(user_id=user_id, course_id=course_id)
+#     # Optionally log this revocation
+#     RevokedAccess.objects.create(user_id=user_id, course_id=course_id)
 
-    messages.success(request, "Access to the course has been revoked.")
-    return redirect('user_detail', user_id=user_id)
+#     messages.success(request, "Access to the course has been revoked.")
+#     return redirect('user_detail', user_id=user_id)
 
 
 def manual_access_report(request):
-    manual_payments = NewPayment.objects.filter(status='manual').select_related('user', 'course')
-    return render(request, 'manual_access_report.html', {'manual_payments': manual_payments})
-
+    # Get filter parameters
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+    
+    manual_payments = NewPayment.objects.filter(status='manual')
+    
+    # Apply date filters
+    if specific_date:
+        manual_payments = manual_payments.filter(created_at__date=specific_date)
+    else:
+        if date_from:
+            manual_payments = manual_payments.filter(created_at__gte=date_from)
+        if date_to:
+            manual_payments = manual_payments.filter(created_at__lte=date_to)
+    
+    # Apply course filter
+    if course_id:
+        manual_payments = manual_payments.filter(course_id=course_id)
+    
+    manual_payments = manual_payments.select_related('user', 'course')
+    
+    # Get all courses for filter display (if needed in template)
+    all_courses = PaidCourse.objects.all()
+    
+    return render(request, 'manual_access_report.html', {
+        'manual_payments': manual_payments,
+        'all_courses': all_courses,
+        'filter_params': request.GET,
+    })
 
 
 def course_report(request):
-    from django.db.models import Count
-    courses = PaidCourse.objects.filter(newpayment__status__in=['manual', 'success']) \
-               .annotate(total_enrollments=Count('newpayment')) \
-               .distinct()
-    return render(request, 'course_report.html', {'courses': courses})
-
+    # Get filter parameters
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+    
+    courses = PaidCourse.objects.filter(newpayment__status__in=['manual', 'success'])
+    
+    # Apply date filters
+    if specific_date:
+        courses = courses.filter(newpayment__created_at__date=specific_date)
+    else:
+        if date_from:
+            courses = courses.filter(newpayment__created_at__gte=date_from)
+        if date_to:
+            courses = courses.filter(newpayment__created_at__lte=date_to)
+    
+    # Apply course filter if selected
+    if course_id:
+        courses = courses.filter(id=course_id)
+    
+    courses = courses.annotate(total_enrollments=Count('newpayment')).distinct()
+    
+    return render(request, 'course_report.html', {
+        'courses': courses,
+        'all_courses': PaidCourse.objects.all(),  # For filter display
+        'filter_params': request.GET,
+    })
 
 def course_enrollment_detail(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
@@ -2469,3 +2604,73 @@ def course_enrollment_detail(request, course_id):
         'course': course,
         'enrollments': enrollments
     })
+
+    
+    
+def revoked_access_list_view(request):
+    if not request.user.is_superuser:
+        return redirect('admin_dashboard')
+    
+    # Get filter parameters
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+    
+    revoked_entries = RevokedAccess.objects.all()
+    
+    # Apply date filters
+    if specific_date:
+        revoked_entries = revoked_entries.filter(revoked_on__date=specific_date)
+    else:
+        if date_from:
+            revoked_entries = revoked_entries.filter(revoked_on__gte=date_from)
+        if date_to:
+            revoked_entries = revoked_entries.filter(revoked_on__lte=date_to)
+    
+    # Apply course filter
+    if course_id:
+        revoked_entries = revoked_entries.filter(course_id=course_id)
+    
+    revoked_entries = revoked_entries.select_related('user', 'course').order_by('-revoked_on')
+    
+    return render(request, 'revoked_courses_list.html', {
+        'revoked_entries': revoked_entries,
+        'all_courses': PaidCourse.objects.all(),  # For filter display
+        'filter_params': request.GET,
+    })
+
+
+
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+# Restrict to superuser
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def change_password_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Keeps the user logged in
+            return redirect('password_change_done')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'change_password.html', {'form': form})
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def password_change_done_view(request):
+    return render(request, 'password_change_done.html')
+
+

@@ -49,6 +49,50 @@
 <body>
 {% include 'Admin_Base.html' %}
 
+
+<!-- Add this at the top of each report template, after the body tag -->
+<div class="container" style="margin-top: 100px;">
+    <!-- Filter Status Display -->
+    <div class="alert alert-info mb-4">
+        <strong>Active Filters:</strong>
+        {% if filter_params.specific_date %}
+            Date: {{ filter_params.specific_date }}
+        {% else %}
+            {% if filter_params.date_from %}From: {{ filter_params.date_from }}{% endif %}
+            {% if filter_params.date_to %}To: {{ filter_params.date_to }}{% endif %}
+        {% endif %}
+        {% if filter_params.course %}
+            | Course: 
+            {% for course in all_courses %}
+                {% if filter_params.course == course.id|stringformat:"s" %}
+                    {{ course.course_title }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if not filter_params.specific_date and not filter_params.date_from and not filter_params.date_to and not filter_params.course %}
+            No filters applied - showing all records
+        {% endif %}
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="mb-4">
+        <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
+            ← Back to Dashboard
+        </a>
+        <a href="{{ request.path }}?{{ request.GET.urlencode }}" class="btn btn-primary btn-sm ms-2">
+            🔄 Refresh
+        </a>
+    </div>
+
+    <!-- Rest of your template content goes here -->
+    <h2 class="mb-4">
+        {% block report_title %}{% endblock %}
+    </h2>
+    
+    <!-- Your existing table/content -->
+
+
+
 <main>
     <div class="container">
         <h2 class="title">🧾 Canceled Invoices</h2>

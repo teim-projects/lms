@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path , include
 from lmsapp import views
+from django.contrib.auth import views as auth_views
+
 
 
 
@@ -93,17 +95,29 @@ urlpatterns = [
     path("payment/webhook/", views.easebuzz_webhook, name="easebuzz_webhook"),
 
 
-    path('canceled_invoices/', views.canceled_invoice_view, name='canceled_invoices'),
+    # path('canceled_invoices/', views.canceled_invoice_view, name='canceled_invoices'),
 
 
     path('revoke-access/<int:user_id>/<int:course_id>/', views.revoke_course_access, name='revoke_course_access'),
 
 
-    path('reports/manual-access/', views.manual_access_report, name='manual_access_report'),
+    # path('reports/manual-access/', views.manual_access_report, name='manual_access_report'),
 
-    path('reports/course/', views.course_report, name='course_report'),
+    # path('reports/course/', views.course_report, name='course_report'),
 
     path('reports/course/<int:course_id>/', views.course_enrollment_detail, name='course_enrollment_detail'),
+
+   
+    # path('reports/revoked-courses/', views.revoked_access_list_view, name='revoked_courses_list'),/
+
+
+    path('reports/manual-access/', views.manual_access_report, name='manual_access_report'),
+    path('reports/course/', views.course_report, name='course_report'),
+    path('reports/canceled-invoices/', views.canceled_invoice_view, name='canceled_invoices'),
+    path('reports/revoked-courses/', views.revoked_access_list_view, name='revoked_courses_list'), 
+
+    path('change-password/', views.change_password_view, name='change_password'),
+    path('password-change-done/', views.password_change_done_view, name='password_change_done'),
 
      
 

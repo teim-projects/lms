@@ -302,10 +302,12 @@ class UserCourseAccess(models.Model):
 class RevokedAccess(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+    payment = models.ForeignKey(NewPayment, on_delete=models.CASCADE,default=True)  # NEW
     revoked_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Revoked: {self.user.email} - {self.course.course_title}"
+        return f"Revoked: {self.user.email} - {self.course.course_title} (Payment ID: {self.payment.id})"
+
 
 
 # testimonials models
