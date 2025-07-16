@@ -37,13 +37,19 @@
         }
 
         /* New filter styles */
-        .filter-container {
+        /* .filter-container {
             position: absolute;
             top: 100px;
             right: 30px;
             z-index: 1000;
-        }
+        } */
 
+        .filter-report-btn{
+            display: flex;
+            justify-content: end;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
         .filter-dropdown-btn {
             display: flex;
             align-items: center;
@@ -76,12 +82,12 @@
             margin-top: 15px;
         }
 
-        .reports-btn {
+        /* .reports-btn {
             position: absolute;
             top: 100px;
             right: 180px;
             z-index: 1000;
-        }
+        } */
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
@@ -103,7 +109,8 @@
     {% include 'Admin_Base.html' %}
 
     <div class="container dashboard-container">
-        <!-- Reports Button -->
+      <div class="filter-report-btn">
+          <!-- Reports Button -->
         <div class="reports-btn">
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="reportsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -159,6 +166,7 @@
                 </form>
             </div>
         </div>
+      </div>
 
         <!-- Charts Row -->
         <div class="row">
