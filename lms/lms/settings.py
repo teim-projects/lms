@@ -185,9 +185,3 @@ EASEBUZZ_USE_SANDBOX = False  # Important: switch to False for real payments
 AUTH_USER_MODEL = 'lmsapp.CustomUser'
 # AUTH_USER_MODEL = 'lmsapp.SubAdmin'
 
-
-# settings.py
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-

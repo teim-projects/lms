@@ -1861,9 +1861,14 @@ def initiate_payment(request, course_id):
     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
     hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
 
-    # ✅ Enforce HTTPS for success and failure URLs
-    surl = request.build_absolute_uri('/payment/success/').replace("http://", "https://")
-    furl = request.build_absolute_uri('/payment/failure/').replace("http://", "https://")
+
+    # payment = NewPayment.objects.create(
+    #     user=user,
+    #     course=course,
+    #     amount=amount,
+    #     txnid=txnid,
+    #     status="initiated"
+    # )
 
     context = {
         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
@@ -1874,11 +1879,10 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        "surl": surl,
-        "furl": furl,
-        "hashh": hashh,
+        "surl": request.build_absolute_uri('/payment/success/'),
+        "furl": request.build_absolute_uri('/payment/failure/'),
+        "hashh": hashh
     }
-
     return render(request, "initiate_payment.html", context)
 
 
