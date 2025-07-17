@@ -133,13 +133,13 @@
         </div>
 
         <div class="export-refresh-btn mb-4">
-            <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
+            <!-- <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
                 ← Back to Dashboard
-            </a>
+            </a> -->
             <a href="{{ request.path }}?{{ request.GET.urlencode }}" class="btn btn-primary btn-sm">
                 🔄 Refresh
             </a>
-            <a href="{% url 'export_to_excel' %}?report_type=revoked&{{ request.GET.urlencode }}" class="btn btn-warning btn-sm">
+            <a href="{% url 'export_to_excel' %}?report_type=revoked&{{ request.GET.urlencode }}" class="btn btn-primary btn-sm">
                 ⬇️ Export Revoked Access
             </a>
         </div>
@@ -170,13 +170,20 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                
             </div>
         {% else %}
             <div class="alert alert-info">
                 No revoked course access found.
             </div>
         {% endif %}
+          <div>
+                    <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
+                ← Back to Dashboard
+            </a>
+                 </div>
     </div>
+   
 </div>
 
 {% include 'footer.html' %}

@@ -106,13 +106,15 @@
 
 <div class="main">
     <div class="container content-wrapper">
+           <h3 class="mb-4">👨‍🎓 Students Enrolled in {{ course.course_title }}</h3>
         <div class="export-btn">
+         
             <a href="{% url 'export_to_excel' %}?report_type=enrollment_detail&course_id={{ course.id }}" class="btn btn-success">
                 Export to Excel
             </a>
         </div>
 
-        <h3 class="mb-4">👨‍🎓 Students Enrolled in {{ course.course_title }}</h3>
+        
 
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
@@ -141,6 +143,11 @@
                     {% endfor %}
                 </tbody>
             </table>
+             <div class="col-md-12">
+                 <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
+            ← Back to Dashboard
+        </a>
+            </div>
         </div>
     </div>
 </div>

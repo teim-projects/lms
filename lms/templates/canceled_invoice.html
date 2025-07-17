@@ -133,13 +133,13 @@
         </div>
 
         <div class="export-refresh-btn mb-4">
-            <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
+            <!-- <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
                 ← Back to Dashboard
-            </a>
+            </a> -->
             <a href="{{ request.path }}?{{ request.GET.urlencode }}" class="btn btn-primary btn-sm">
                 🔄 Refresh
             </a>
-            <a href="{% url 'export_to_excel' %}?report_type=canceled&{{ request.GET.urlencode }}" class="btn btn-danger btn-sm">
+            <a href="{% url 'export_to_excel' %}?report_type=canceled&{{ request.GET.urlencode }}" class="btn btn-primary btn-sm">
                 ⬇️ Export Canceled Invoices
             </a>
         </div>
@@ -172,6 +172,9 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
+                ← Back to Dashboard
+            </a>
             </div>
         {% else %}
             <div class="alert alert-info">
