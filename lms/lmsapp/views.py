@@ -1853,7 +1853,7 @@ def initiate_payment(request, course_id):
     productinfo = course.course_title
     firstname = user.first_name or user.username
     email = user.email
-    phone = "9999999999"  # Or from user profile
+    phone = user.mobile  # Or from user profile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
