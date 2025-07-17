@@ -120,6 +120,7 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
                     <tr>
+                          <th>Sr.No</th>
                         <th>Student Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
@@ -130,6 +131,7 @@
                 <tbody>
                     {% for entry in enrollments %}
                     <tr>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ entry.user.first_name }} {{ entry.user.last_name }}</td>
                         <td>{{ entry.user.email }}</td>
                         <td>{{ entry.user.mobile }}</td>
