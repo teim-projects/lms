@@ -1879,8 +1879,11 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        "surl": request.build_absolute_uri('/payment/success/'),
-        "furl": request.build_absolute_uri('/payment/failure/'),
+        # "surl": request.build_absolute_uri('/payment/success/'),
+        # "furl": request.build_absolute_uri('/payment/failure/'),
+        "surl": "https://profitmaxacademy.in/payment/success/",
+        "furl": "https://profitmaxacademy.in/payment/failure/",
+
         "hashh": hashh
     }
     return render(request, "initiate_payment.html", context)
