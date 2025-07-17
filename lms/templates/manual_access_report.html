@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,79 +11,120 @@
 
 
 <style>
-    html, body {
-    height: 100%;
-    margin: 0;
-}
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+    }
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-footer {
-    margin-top: auto;
-}
-
+    h2 {
+        text-align: center;
+        color: #343a40;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+    footer {
+        margin-top: auto;
+    }
+     .content-wrapper {
+        margin-top: 80px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        flex: 1; /* Fills remaining space and pushes footer down */
+    }
 </style>
+
 <body>
 
 
-
-
     {% include 'Admin_Base.html' %}
-<br><br><br>
 
 
-    <a href="{% url 'export_to_excel' %}?report_type=manual&{{ request.GET.urlencode }}" class="btn btn-success btn-sm">
-    ⬇️ Export Manual Access
-</a>
+    <div class="main">
+        <div class="container content-wrapper">
+          <div class="row">
+            <div class="col-md-12">
+            <div class="alert alert-info mb-4">
+        <strong>Active Filters:</strong>
+        {% if filter_params.specific_date %}
+            Date: {{ filter_params.specific_date }}
+        {% else %}
+            {% if filter_params.date_from %}From: {{ filter_params.date_from }}{% endif %}
+            {% if filter_params.date_to %}To: {{ filter_params.date_to }}{% endif %}
+        {% endif %}
+        {% if filter_params.course %}
+            | Course: 
+            {% for course in all_courses %}
+                {% if filter_params.course == course.id|stringformat:"s" %}
+                    {{ course.course_title }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if not filter_params.specific_date and not filter_params.date_from and not filter_params.date_to and not filter_params.course %}
+            No filters applied - showing all records
+        {% endif %}
+    </div>
+        </div>
+             <div class="col-md-12">
+                 <h2>Students with Manual Access</h2>
+            <a href="{% url 'export_to_excel' %}?report_type=manual&{{ request.GET.urlencode }}"
+                class="btn btn-primary mt-2 mb-2" style="float: right;">
+                Export Manual Access
+            </a>
+             </div>
+          
+            <div class="col-md-12">
+                <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Course</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in manual_payments %}
+                    <tr>
+                        <td>{{ entry.user.first_name }} {{ entry.user.last_name }}</td>
+                        <td>{{ entry.user.email }}</td>
+                        <td>{{ entry.user.mobile }}</td>
+                        <td>{{ entry.course.course_title }}</td>
+                        <td>{{ entry.created_at|date:"Y-m-d" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No manual access records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+            </div>
+             <div class="col-md-12">
+                 <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-secondary btn-sm">
+            ← Back to Dashboard
+        </a>
+            </div>
+        </div>
+        </div>
+        
+    </div>
 
 
+        {% include 'footer.html' %}
 
-<div class="d-flex flex-column min-vh-100">
 
-    <!-- Content section with more top space -->
-    <div class="container flex-grow-1" style="margin-top: 100px;">
-
-        <h3 class="mb-4">📋 Students with Manual Access</h3>
-
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Student Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Course</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for entry in manual_payments %}
-                <tr>
-                    <td>{{ entry.user.first_name }} {{ entry.user.last_name }}</td>
-                    <td>{{ entry.user.email }}</td>
-                    <td>{{ entry.user.mobile }}</td>
-                    <td>{{ entry.course.course_title }}</td>
-                    <td>{{ entry.created_at|date:"Y-m-d" }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center">No manual access records found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-    
-
-    <!-- Footer always at the bottom -->
-    
-
-</div>
-{% include 'footer.html' %}
-
-    
 </body>
+
 </html>

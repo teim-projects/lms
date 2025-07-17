@@ -56,13 +56,18 @@
 <div class="main">
 
     <div class="container content-wrapper">
-        <h2>Students Who Purchased a Course</h2>
+        <div class="row">
+            <div class="col-md-12">
+                    <h2>Students Who Purchased a Course</h2>
                 <a href="{% url 'export_users' %}" class="btn btn-primary mt-2 mb-2" style="float: right;">Export to Excel</a>
-
+  
+            </div>
+        <div class="col-md-12">
+    <div class="tableraper" style="overflow: auto;">
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
-                    <th>#</th>
+                    <th>Sr.No</th>
                     <th>Email</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -85,6 +90,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
+        </div>
+        </div>
     </div> 
 </div>
 
