@@ -281,7 +281,9 @@ class NewPayment(models.Model):
 
     
     invoice_created = models.BooleanField(default=False)
-    canceled_invoice = models.BooleanField(default=False)  
+    canceled_invoice = models.BooleanField(default=False) 
+
+    is_revoked = models.BooleanField(default=False) 
 
     def __str__(self):
         return f"{self.user.username} - {self.course.course_title} - {self.txnid}"
@@ -345,7 +347,7 @@ class UserSession(models.Model):
         return f"{self.user.email} - {self.session_key}"
 
 
-# models.py
+# models.py  
 import random
 from django.db import models
 from django.utils import timezone
@@ -357,6 +359,8 @@ class Invoice(models.Model):
     # Foreign key relations
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='invoices')
     course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
+    payment = models.ForeignKey(NewPayment, on_delete=models.CASCADE, null=True, blank=True)
+    
 
     # Snapshots at time of invoice generation
     course_title = models.CharField(max_length=255)

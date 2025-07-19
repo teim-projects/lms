@@ -148,6 +148,19 @@
       padding: 6px 10px;
     }
     
+    /* Updated course grid layout */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    @media (max-width: 992px) {
+      .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
     @media (max-width: 768px) {
       .main-content {
         margin-top: 80px;
@@ -167,6 +180,10 @@
       
       .course-detail strong {
         margin-bottom: 3px;
+      }
+      
+      .courses-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -210,9 +227,8 @@
       <h3 class="section-title">Purchased Courses</h3>
       
       {% if payments %}
-        <div class="row">
+        <div class="courses-grid">
           {% for payment in payments %}
-          <div class="col-md-6 col-lg-4">
             <div class="card course-card">
               {% if payment.course.thumbnail %}
                 <img src="{{ payment.course.thumbnail.url }}" alt="{{ payment.course.course_title }} thumbnail">
@@ -247,40 +263,48 @@
                 </div>
                 
                 <div class="action-buttons">
-                  <!-- Invoice Button -->
-                  {% if payment.invoice_created or payment.status != "manual" %}
+                  <!-- Invoice Actions -->
+                  {% if payment.invoice_exists %}
                     <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary">
-                      {% if payment.invoice_created %}View Invoice{% else %}Generate Invoice{% endif %}
+                      View Invoice
                     </a>
-                    
-                    <!-- Cancel/Restore Button -->
                     {% if payment.invoice %}
-                      <form action="{% url 'toggle_invoice' payment.invoice.id %}" method="post" style="display:inline;">
+                      <form action="{% url 'toggle_invoice' payment.invoice.id %}" method="post">
                         {% csrf_token %}
-                        {% if payment.invoice_canceled %}
-                          <button type="submit" class="btn btn-sm btn-success">Restore Invoice</button>
-                        {% else %}
-                          <button type="submit" class="btn btn-sm btn-danger">Cancel Invoice</button>
-                        {% endif %}
+                        <button type="submit" class="btn btn-sm {% if payment.invoice.is_canceled %}btn-success{% else %}btn-danger{% endif %}">
+                          {% if payment.invoice.is_canceled %}Restore{% else %}Cancel{% endif %} Invoice
+                        </button>
                       </form>
                     {% endif %}
+                  {% elif payment.status != "manual" or payment.invoice_created %}
+                    <!-- Show Generate Invoice for:
+                         - Online payments (status != "manual") 
+                         - Manual payments where invoice_created was checked -->
+                    <a href="{% url 'generate_invoice' payment.id %}" class="btn btn-sm btn-primary">
+                      Generate Invoice
+                    </a>
                   {% endif %}
                   
-                  <!-- Revoke Access Button -->
+                  <!-- Access Actions -->
                   {% if not payment.access_revoked %}
-  <a href="{% url 'revoke_course_access' user.id payment.course.id %}"
-     class="btn btn-sm btn-warning"
-     onclick="return confirm('Are you sure you want to revoke access to this course?');">
-     Revoke Access
-  </a>
-{% else %}
-  <span class="badge bg-secondary">Access Revoked</span>
-{% endif %}
-
+                    <form action="{% url 'revoke_course_access' payment.id %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-warning"
+                              onclick="return confirm('Revoke access to this course?')">
+                        Revoke Access
+                      </button>
+                    </form>
+                  {% else %}
+                    <form action="{% url 'restore_course_access' payment.id %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-success">
+                        Restore Access
+                      </button>
+                    </form>
+                  {% endif %}
                 </div>
               </div>
             </div>
-          </div>
           {% endfor %}
         </div>
       {% else %}

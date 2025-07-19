@@ -62,7 +62,8 @@
 
 
 
-              <form method="POST">
+              <form method="POST" onsubmit="return confirmGrantAccess();">
+
   {% csrf_token %}
   
   <div class="form-group">
@@ -99,6 +100,14 @@
       </div>
     </div>
   </div>
+
+
+<script>
+  function confirmGrantAccess() {
+    return confirm("Are you sure you want to grant access to this user?");
+  }
+</script>
+
 
   {% include 'footer.html' %}
 

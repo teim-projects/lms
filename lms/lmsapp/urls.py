@@ -78,11 +78,11 @@ urlpatterns = [
     
     path('paid-students/', views.paid_students_list, name='paid_students_list'),
 
-    path('user-detail/<int:user_id>/', views.user_detail_view, name='user_detail'),
+    # path('user-detail/<int:user_id>/', views.user_detail_view, name='user_detail'),
 
-    path('invoice/<int:payment_id>/', views.generate_invoice_view, name='generate_invoice'),
+    # path('invoice/<int:payment_id>/', views.generate_invoice_view, name='generate_invoice'),
     path('invoice/<int:invoice_id>/cancel/', views.cancel_invoice_view, name='cancel_invoice'),
-    path('invoice/<int:invoice_id>/toggle/', views.toggle_invoice_status_view, name='toggle_invoice'),
+    # path('invoice/<int:invoice_id>/toggle/', views.toggle_invoice_status_view, name='toggle_invoice'),
 
     path('dashboard/', views.invoice_dashboard_view, name='invoice_dashboard'),
 
@@ -98,7 +98,7 @@ urlpatterns = [
     # path('canceled_invoices/', views.canceled_invoice_view, name='canceled_invoices'),
 
 
-    path('revoke-access/<int:user_id>/<int:course_id>/', views.revoke_course_access, name='revoke_course_access'),
+    # path('revoke-access/<int:user_id>/<int:course_id>/', views.revoke_course_access, name='revoke_course_access'),
 
 
     # path('reports/manual-access/', views.manual_access_report, name='manual_access_report'),
@@ -120,6 +120,17 @@ urlpatterns = [
     path('password-change-done/', views.password_change_done_view, name='password_change_done'),
 
     path('export/excel/', views.export_to_excel, name='export_to_excel'),
+
+
+
+
+ 
+    path('user-detail/<int:user_id>/', views.user_detail_view, name='user_detail'),
+    path('invoice/<int:payment_id>/', views.generate_invoice_view, name='generate_invoice'),
+    path('invoice/toggle/<int:invoice_id>/', views.toggle_invoice_status_view, name='toggle_invoice'),
+    path('revoke-access/<int:payment_id>/', views.revoke_course_access, name='revoke_course_access'),
+    path('restore-access/<int:payment_id>/', views.restore_course_access_view, name='restore_course_access'),
+
 
 
      

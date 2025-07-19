@@ -1951,29 +1951,26 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 import uuid
 
+import uuid
+from django.utils import timezone
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import CustomUser, PaidCourse, NewPayment, Invoice, UserCourseAccess
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def grant_course_access(request):
-    user_query = request.GET.get('user_search', '').strip()
-    course_query = request.GET.get('course_search', '').strip()
-
-    users = CustomUser.objects.filter(is_staff=False, is_superuser=False)
-    if user_query:
-        users = users.filter(mobile__icontains=user_query)
-
-    courses = PaidCourse.objects.all()
-    if course_query:
-        courses = courses.filter(course_code__icontains=course_query)
-
     if request.method == "POST":
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
-        create_invoice = request.POST.get("create_invoice") == "on"  # More reliable way to check checkbox
+        create_invoice = request.POST.get("create_invoice") == "on"
 
         user = get_object_or_404(CustomUser, id=user_id)
         course = get_object_or_404(PaidCourse, id=course_id)
 
-        # Create payment record (don't check for existing ones)
+        # Create payment record
         txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"
         payment = NewPayment.objects.create(
             user=user,
@@ -1981,13 +1978,12 @@ def grant_course_access(request):
             amount=course.course_price,
             txnid=txn_id,
             status="manual",
-            created_at=timezone.now(),
             invoice_created=create_invoice
         )
 
-        # Create invoice if checkbox was checked
+        # Create invoice if requested
         if create_invoice:
-            Invoice.objects.create(
+            invoice = Invoice.objects.create(
                 user=user,
                 course=course,
                 course_title=course.course_title,
@@ -1999,17 +1995,71 @@ def grant_course_access(request):
                 mobile=user.mobile,
                 email=user.email,
             )
+            # Link invoice to payment if applicable
+            if hasattr(Invoice, 'payment'):
+                invoice.payment = payment
+                invoice.save()
 
         # Grant course access
         UserCourseAccess.objects.get_or_create(user=user, course=course)
 
+        # ========== ✅ Send Email to Admin ==========
+        full_name = f"{user.first_name} {user.last_name}".strip() or user.username
+        subject_admin = f"✔️ Course Access Granted to {full_name}"
+        message_admin = f"""
+Hello Admin,
+
+The following user has been granted course access manually:
+
+👤 Name: {full_name}
+📧 Email: {user.email}
+📱 Mobile: {user.mobile}
+📘 Course: {course.course_title}
+
+This was done through the admin grant access panel.
+
+Regards,  
+System Notification
+"""
+        send_mail(
+            subject_admin,
+            message_admin,
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.DEFAULT_FROM_EMAIL],
+            fail_silently=True,
+        )
+
+        # ========== ✅ Send Congratulations Email to User ==========
+        subject_user = f"🎉 Course Access Granted for {course.course_title}"
+        message_user = f"""
+Hi {full_name},
+
+Congratulations! You have been granted access to the course:
+
+📘 Course: {course.course_title}
+💰 Price: ₹{course.course_price}
+
+You can now log in to your dashboard and start learning.
+
+Best regards,  
+{settings.DEFAULT_FROM_EMAIL}
+"""
+        send_mail(
+            subject_user,
+            message_user,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=True,
+        )
+
         return redirect('grant_course_access')
 
+    # GET request — render form
     return render(request, "grant_course_access.html", {
-        "users": users,
-        "courses": courses,
-        "user_query": user_query,
-        "course_query": course_query,
+        "users": CustomUser.objects.filter(is_staff=False, is_superuser=False),
+        "courses": PaidCourse.objects.all(),
+        "user_query": request.GET.get('user_search', '').strip(),
+        "course_query": request.GET.get('course_search', '').strip(),
     })
 
 # from django.db.models import Count, Q
@@ -2231,27 +2281,55 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from .models import UserCourseAccess, CustomUser, PaidCourse, RevokedAccess, NewPayment
 
-def revoke_course_access(request, user_id, course_id):
-    if not request.user.is_superuser:
-        messages.error(request, "Permission denied.")
-        return redirect('admin_dashboard')
+# @require_POST
+def revoke_course_access(request, payment_id):
+    payment = get_object_or_404(NewPayment, id=payment_id)
+    
+    if not payment.is_revoked:
+        payment.is_revoked = True
+        payment.save()
+        
+        # Create revocation record
+        RevokedAccess.objects.create(
+            user=payment.user,
+            course=payment.course,
+            payment=payment
+        )
+        
+        # Remove access if using UserCourseAccess
+        UserCourseAccess.objects.filter(user=payment.user, course=payment.course).delete()
+        
+        messages.success(request, "Course access revoked successfully")
+    else:
+        messages.warning(request, "Access was already revoked")
+    
+    return redirect('user_detail', user_id=payment.user.id)
 
-    user = get_object_or_404(CustomUser, id=user_id)
-    course = get_object_or_404(PaidCourse, id=course_id)
-
-    # Get the most recent payment for this course
-    latest_payment = NewPayment.objects.filter(user=user, course=course).order_by('-created_at').first()
-
-    # Delete access and mark this payment as revoked
-    UserCourseAccess.objects.filter(user=user, course=course).delete()
-
-    if latest_payment:
-        RevokedAccess.objects.create(user=user, course=course, payment=latest_payment)
-
-    messages.success(request, "Access to the course has been revoked.")
-    return redirect('user_detail', user_id=user_id)
 
 
+
+# @require_POST
+def restore_course_access_view(request, payment_id):
+    payment = get_object_or_404(NewPayment, id=payment_id)
+    
+    if payment.is_revoked:
+        payment.is_revoked = False
+        payment.save()
+        
+        # Restore access
+        UserCourseAccess.objects.get_or_create(
+            user=payment.user,
+            course=payment.course
+        )
+        
+        # Remove revocation record
+        RevokedAccess.objects.filter(payment=payment).delete()
+        
+        messages.success(request, "Course access restored successfully")
+    else:
+        messages.warning(request, "Access was not revoked")
+    
+    return redirect('user_detail', user_id=payment.user.id)
 
 
 
@@ -2262,64 +2340,76 @@ from .models import CustomUser, NewPayment, Invoice, UserCourseAccess, RevokedAc
 def user_detail_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     payments = NewPayment.objects.filter(user=user).select_related('course').order_by('-created_at')
-
-    # Get all revoked payments for this user
-    revoked_payment_ids = set(
-        RevokedAccess.objects.filter(user=user).values_list('payment_id', flat=True)
-    )
-
-    # Get invoices
+    
+    # Get all invoices for this user
     invoices = Invoice.objects.filter(user=user)
-    invoice_map = {(inv.course.id, inv.paid_amount): inv for inv in invoices}
-
+    
+    # Create mapping of payment IDs to invoices
+    invoice_map = {}
+    for invoice in invoices:
+        # For online payments, match by course and amount
+        if invoice.payment:
+            invoice_map[invoice.payment_id] = invoice
+        else:
+            # For manual payments without direct payment reference
+            key = (invoice.course_id, float(invoice.paid_amount))
+            invoice_map[key] = invoice
+    
     for payment in payments:
-        invoice = invoice_map.get((payment.course.id, payment.amount))
-        payment.invoice = invoice
-        payment.invoice_created = bool(invoice)
-        payment.invoice_canceled = invoice.is_canceled if invoice else False
-
-        has_access = UserCourseAccess.objects.filter(user=user, course=payment.course).exists()
-        payment.access_revoked = payment.id in revoked_payment_ids or not has_access
-
+        # Find invoice - check direct payment reference first
+        payment.invoice = None
+        
+        # Check for direct payment reference in invoice
+        if hasattr(Invoice, 'payment'):
+            payment.invoice = Invoice.objects.filter(payment=payment).first()
+        
+        # If not found, try matching by course and amount
+        if not payment.invoice:
+            payment.invoice = invoice_map.get((payment.course_id, float(payment.amount)))
+        
+        # Set flags for template
+        payment.invoice_exists = bool(payment.invoice)
+        payment.access_revoked = payment.is_revoked
+    
     return render(request, 'user_detail.html', {
         'user': user,
         'payments': payments,
     })
 
-
-
 from .models import Invoice, PaidCourse, CustomUser, NewPayment
 
 def generate_invoice_view(request, payment_id):
     payment = get_object_or_404(NewPayment, id=payment_id)
-    course = payment.course
-    user = payment.user
-
-    # Check if invoice already exists for this user + course + payment
-    invoice_exists = Invoice.objects.filter(user=user, course=course, paid_amount=payment.amount).first()
-
-    if invoice_exists:
-        return render(request, 'invoice_detail.html', {'invoice': invoice_exists})
-
-    # Create a new invoice
-    invoice = Invoice.objects.create(
-        user=user,
-        course=course,
-        course_title=course.course_title,
-        course_fee=course.original_price,
-        discount=course.discount_amount,
-        paid_amount=payment.amount,
-        first_name=user.first_name,
-        last_name=user.last_name,
-        mobile=user.mobile,
-        email=user.email,
-    )
-
-    payment.invoice_created = True
-    payment.save()
-
-
-    return render(request, 'invoice_detail.html', {'invoice': invoice})
+    
+    # Check for existing invoice for THIS payment
+    invoice = Invoice.objects.filter(payment=payment).first()
+    
+    if invoice:
+        return render(request, 'invoice_detail.html', {'invoice': invoice})
+    
+    try:
+        invoice = Invoice.objects.create(
+            payment=payment,  # Critical link
+            user=payment.user,
+            course=payment.course,
+            course_title=payment.course.course_title,
+            course_fee=payment.course.original_price,
+            discount=payment.course.discount_amount,
+            paid_amount=payment.amount,
+            first_name=payment.user.first_name,
+            last_name=payment.user.last_name,
+            mobile=payment.user.mobile,
+            email=payment.user.email,
+        )
+        
+        payment.invoice_created = True
+        payment.save()
+        
+        return render(request, 'invoice_detail.html', {'invoice': invoice})
+    
+    except Exception as e:
+        messages.error(request, f"Error generating invoice: {str(e)}")
+        return redirect('user_detail', user_id=payment.user.id)
 
 
 
@@ -2427,8 +2517,14 @@ def your_course(request):
         status__in=["success", "manual"]
     ).select_related('course')  # To avoid extra queries
 
-    # Get the related courses
-    purchased_courses = [payment.course for payment in purchased_payments]
+    # Get unique courses by using a dictionary to eliminate duplicates
+    unique_courses = {}
+    for payment in purchased_payments:
+        if payment.course.id not in unique_courses:
+            unique_courses[payment.course.id] = payment.course
+
+    # Convert dictionary values to list
+    purchased_courses = list(unique_courses.values())
 
     return render(request, 'your_course.html', {'courses': purchased_courses})
 
