@@ -1,0 +1,40 @@
+<!-- categories.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category Cards</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            width: 200px;
+            text-align: center;
+            background-color: #f0f0f0;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+
+        .card:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <h2>All Categories</h2>
+    <div>
+        {% for category in categories %}
+            <a href="{% url 'courses_by_category' category.id %}" class="card">{{ category.name }}</a>
+        {% empty %}
+            <p>No categories found.</p>
+        {% endfor %}
+    </div>
+
+    <br>
+    <a href="{% url 'create_category' %}">Create New Category</a>
+</body>
+</html>

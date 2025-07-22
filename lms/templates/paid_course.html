@@ -226,6 +226,18 @@
                     <form method="post" enctype="multipart/form-data" class="bg-white p-3 rounded shadow-sm">
                         {% csrf_token %}
                         <div class="row">
+
+                            <div class="col-12 col-md-6 mb-3">
+    <label for="category">Category</label>
+    <select class="form-control" id="category" name="category" required>
+        <option value="">-- Select Category --</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="course_title">Course Title</label>
                                 <input type="text" class="form-control" id="course_title" name="course_title">

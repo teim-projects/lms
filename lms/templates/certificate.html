@@ -1,159 +1,138 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Certificate of Completion</title>
+  <meta charset="UTF-8" />
+  <title>Certificate</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap');
-
     body {
-      font-family: 'Roboto', sans-serif;
-      background: #eaeaea;
       margin: 0;
-      padding: 40px 0;
-    }
-
-    .certificate-container {
-      width: 1000px;
-      margin: auto;
+      padding: 0;
+      font-family: 'Georgia', serif;
       background: #fff;
-      border: 15px solid #1f3a56;
-      padding: 60px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    .certificate {
+      width: 1000px;
+      height: 700px;
+      padding: 40px;
       position: relative;
+      margin: 40px auto;
+      background: linear-gradient(to right, #c6f0f9 0%, white 50%, #c6f0f9 100%);
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border: 10px solid #fff;
+      box-sizing: border-box;
     }
 
-    .certificate-header {
+    /* Background shapes */
+    .certificate::before,
+    .certificate::after {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 100%;
+      background: rgba(0, 153, 204, 0.1);
+      transform: skewX(-20deg);
+      z-index: 0;
+    }
+
+    .certificate::before {
+      left: -100px;
+    }
+
+    .certificate::after {
+      right: -100px;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      margin-bottom: 40px;
     }
 
-    .certificate-header img {
-      max-height: 80px;
+    .logo-left {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 120px;
+      z-index: 1;
     }
 
-    .academy-name {
+    .logo-right {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      width: 140px;
+      z-index: 1;
+    }
+
+    h1 {
       font-size: 26px;
       font-weight: bold;
-      color: #1f3a56;
-      margin-top: 10px;
+      margin: 20px 0 5px;
     }
 
-    .certificate-title {
-      font-size: 42px;
-      font-family: 'Playfair Display', serif;
-      color: #1f3a56;
-      margin: 30px 0;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-top: 2px solid #1f3a56;
-      border-bottom: 2px solid #1f3a56;
-      display: inline-block;
-      padding: 10px 20px;
-    }
-
-    .certificate-body {
-      text-align: center;
-      margin-top: 50px;
-      line-height: 1.6;
-    }
-
-    .certificate-body h2 {
+    h2 {
+      color: #0076bc;
       font-size: 24px;
-      color: #333;
-      font-weight: normal;
+      margin-bottom: 10px;
     }
 
-    .student-name {
-      font-size: 30px;
-      font-weight: bold;
-      color: #118c7e;
-      margin: 20px 0;
-      font-family: 'Playfair Display', serif;
-      text-decoration: underline;
+    h3 {
+      font-size: 36px;
+      margin: 10px 0;
     }
 
-    .certificate-footer {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 80px;
-      padding: 0 30px;
-    }
-
-    .footer-box {
-      text-align: center;
-    }
-
-    .footer-box hr {
-      border: none;
-      border-top: 2px solid #1f3a56;
-      width: 200px;
-      margin-bottom: 5px;
-    }
-
-    .footer-box p {
-      font-weight: bold;
-      color: #1f3a56;
-    }
-
-    .issue-date {
-      text-align: center;
-      margin-top: 40px;
+    p {
       font-size: 18px;
-      color: #333;
+      margin: 10px 0;
     }
 
-    /* Optional watermark style */
-    .watermark {
-      position: absolute;
-      opacity: 0.05;
-      font-size: 140px;
-      transform: rotate(-30deg);
-      top: 35%;
-      left: 20%;
-      color: #000;
-      pointer-events: none;
-      z-index: 0;
+    .highlight {
+      color: red;
+      font-weight: bold;
+    }
+
+    .signature {
+      text-align: right;
+      margin-top: 60px;
+      margin-right: 40px;
+    }
+
+    .signature img {
+      width: 150px;
+    }
+
+    .signature-name {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .line {
+      width: 200px;
+      height: 1px;
+      background-color: #000;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-
-  <div class="certificate-container">
-    <div class="watermark">PMX</div>
-
-    <div class="certificate-header">
-      <img src="{% static 'images/pmxlogo_c.png' %}" alt="Profit Max Academy Logo">
-      <div class="academy-name">Profit Max Academy</div>
-      <div class="certificate-title">Certificate of Completion</div>
+  <div class="certificate">
+    <img src="https://i.imgur.com/GjvqyzG.png" class="logo-left" alt="Times Logo" />
+    <img src="https://i.imgur.com/OfRUMxl.png" class="logo-right" alt="Profit Max Logo" />
+    <div class="content">
+      <h1>ProfitMax <br> Share Market Academy</h1>
+      <h2>Certificate of Completion <br> Share Market Program</h2>
+      <p>We are pleased to announce</p>
+      <h3>Client Name</h3>
+      <p>is hereby awarded this certificate as completion of 
+        <span class="highlight">Course Name</span></p>
+      <p><strong>is hereby awarded this certificate as completion of<br>Share Market Mentorship Program conducted</strong></p>
     </div>
-
-    <div class="certificate-body">
-      <h2>This is to certify that</h2>
-      <div class="student-name">{{ student.full_name }}</div>
-
-      <h2>has successfully completed the course</h2>
-      <div class="student-name">{{ course.title }}</div>
-
-      <h2>with dedication and excellence</h2>
-
-      <div class="issue-date">
-        Awarded on: <strong>{{ completion_date|date:"F d, Y" }}</strong>
-      </div>
-    </div>
-
-    <div class="certificate-footer">
-      <div class="footer-box">
-        <hr>
-        <p>Authorized Signatory</p>
-      </div>
-      <div class="footer-box">
-        <hr>
-        <p>Director<br>Profit Max Academy</p>
-      </div>
+    <div class="signature">
+      <img src="https://i.imgur.com/9LzdZw1.png" alt="Signature" />
+      <div class="signature-name">Mrs. Kalyani Pagar</div>
+      <div>Director</div>
     </div>
   </div>
-
 </body>
 </html>

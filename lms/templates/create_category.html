@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Category</title>
+</head>
+<body>
+    <h2>Create a New Category</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Enter category name" required>
+        <button type="submit">Add Category</button>
+    </form>
+
+    <br>
+    <a href="{% url 'view_categories' %}">View All Categories</a>
+</body>
+</html>

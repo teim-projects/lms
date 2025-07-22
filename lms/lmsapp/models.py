@@ -115,6 +115,14 @@ class CourseChapter(models.Model):
 
 
 
+from django.db import models
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
 
 
 from django.db import models
@@ -144,6 +152,8 @@ class PaidCourse(models.Model):
     testimonials = models.TextField(blank=True, null=True)
     course_name = models.CharField(max_length=255, default='python')
     course_code = models.CharField(max_length=100, unique=True, default='pending')
+
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.course_title
@@ -385,5 +395,7 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"{self.invoice_number} - {self.course_title} ({self.user.email})"
+
+
 
 

@@ -934,6 +934,10 @@ def create_paid_course(request):
 
         course_code = generate_unique_course_code()
 
+        category_id = request.POST.get('category')
+
+        category = Category.objects.get(id=category_id) if category_id else None
+
 
 
         # Save thumbnail file if provided
@@ -962,15 +966,17 @@ def create_paid_course(request):
 
             course_name=course_name,
             course_code=course_code,
+
+            category=category
             
 
             
 
         )
         return redirect('create_paid_course')
-
+    categories = Category.objects.all()
     courses = PaidCourse.objects.all()
-    return render(request, 'paid_course.html', {'courses': courses})
+    return render(request, 'paid_course.html', {'courses': courses, 'categories': categories})
 
 
 
@@ -1172,17 +1178,17 @@ def manage_subadmins(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        phone_number = request.POST.get('phone_number') or None  # Avoid empty string
+        phone_number = request.POST.get('phone_number') or None
 
         if User.objects.filter(email=email).exists():
             messages.error(request, "A SubAdmin with this email already exists.")
         else:
             try:
-                user = User.objects.create(
+                user = User.objects.create_user(
                     email=email,
-                    password=make_password(password),
+                    password=password,
                     plain_password=password,
-                    mobile=phone_number,
+                    phone_number=phone_number,
                     is_subadmin=True
                 )
                 messages.success(request, "SubAdmin created successfully!")
@@ -1193,6 +1199,7 @@ def manage_subadmins(request):
 
     subadmins = User.objects.filter(is_subadmin=True)
     return render(request, 'manage_subadmin.html', {'subadmins': subadmins})
+
 
 
 from django.shortcuts import render
@@ -2922,3 +2929,31 @@ def export_to_excel(request):
     wb.save(response)
     return response
 
+
+
+from django.shortcuts import render, redirect
+from .models import Category
+
+def create_category(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:  # Simple validation
+            Category.objects.create(name=name)
+            return redirect('view_categories')
+    return render(request, 'create_category.html')
+
+def view_categories(request):
+    categories = Category.objects.all()
+    return render(request, 'categories.html', {'categories': categories})
+
+
+from django.shortcuts import get_object_or_404
+
+def courses_by_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    courses = PaidCourse.objects.filter(category=category).order_by('-id')
+    return render(request, 'courses_by_category.html', {
+        'category': category,
+        'courses': courses
+    })
+    
