@@ -186,46 +186,67 @@
         grid-template-columns: 1fr;
       }
     }
+ 
+
   </style>
 </head>
 <body>
 
   {% include 'Admin_Base.html' %}
   
-  <div class="main-content">
+  <div class="main-content" style="min-height:100vh ;">
     <div class="container">
-      <!-- Collapsible User Profile Section -->
-      <div class="user-profile-container">
-        <div class="user-profile-header" onclick="toggleUserProfile()">
-          <h4>User Information</h4>
-          <i class="fas fa-chevron-down" id="profileToggleIcon"></i>
+ 
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header bg-success text-white rounded-top-4">
+        <h3 class="modal-title" id="userProfileModalLabel">User Information</h3>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="user-detail mb-2">
+          <strong>Name:</strong> 
+          <span>{{ user.first_name }} {{ user.last_name }}</span>
         </div>
-        <div class="user-profile-content" id="userProfileContent">
-          <div class="user-detail">
-            <strong>Name:</strong> 
-            <span>{{ user.first_name }} {{ user.last_name }}</span>
-          </div>
-          
-          <div class="user-detail">
-            <strong>Email:</strong> 
-            <span>{{ user.email }}</span>
-          </div>
-          
-          <div class="user-detail">
-            <strong>Mobile:</strong> 
-            <span>{{ user.mobile }}</span>
-          </div>
-          
-          <div class="user-detail">
-            <strong>Account Created:</strong> 
-            <span>{{ user.created_at|date:"Y-m-d H:i" }}</span>
-          </div>
+        <div class="user-detail mb-2">
+          <strong>Email:</strong> 
+          <span>{{ user.email }}</span>
+        </div>
+        <div class="user-detail mb-2">
+          <strong>Mobile:</strong> 
+          <span>{{ user.mobile }}</span>
+        </div>
+        <div class="user-detail">
+          <strong>Account Created:</strong> 
+          <span>{{ user.created_at|date:"Y-m-d H:i" }}</span>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
       
       <!-- Purchased Courses Section -->
-      <h3 class="section-title">Purchased Courses</h3>
-      
+      <div class="row ">
+        <div class="col-md-4"></div>
+        <div class="col-md-6 mt-3">
+                <h3 class="">Purchased Courses</h3>
+
+        </div>
+        <div class="col-md-2 mt-3">
+          <!-- Trigger Button -->
+<div class="user-profile-header d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-success text-white shadow"
+     data-bs-toggle="modal" data-bs-target="#userProfileModal" style="cursor:pointer; font-size: 14px;">
+  <i class="fas fa-user-circle"></i>
+  <span>User Info</span>
+</div>
+        </div>
+      </div>
+                 <hr>
+
       {% if payments %}
         <div class="courses-grid">
           {% for payment in payments %}
