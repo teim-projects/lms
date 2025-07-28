@@ -284,14 +284,27 @@
                   <span class="text-success fw-bold ms-2">₹{{ course.course_price }}</span>
                   <span class="text-danger ms-2">(You save ₹{{ course.discount_amount }})</span>
                 </div>
-              </div> {% if not has_access %} <div class="alert alert-warning d-flex justify-content-between align-items-center mt-4 p-3 rounded-3 shadow-sm">
-                <div>
-                  <strong>🔒 Paid Course:</strong>
-                  <br> Preview content is limited.
-                </div>
-                <a href="{% url 'initiate_payment' course.id %}" class="btn btn-success rounded-pill px-4 py-2"> 💳 Buy Now ₹{{ course.course_price }}
-                </a>
-              </div> {% endif %}
+              </div> {% if not has_access %}
+  <div class="alert alert-warning d-flex justify-content-between align-items-center mt-4 p-3 rounded-3 shadow-sm">
+    <div>
+      <strong>🔒 Paid Course:</strong><br>
+      Preview content is limited.
+    </div>
+
+    {% if is_logged_in %}
+      <!-- User is logged in but hasn't bought the course -->
+      <a href="{% url 'initiate_payment' course.id %}" class="btn btn-success rounded-pill px-4 py-2">
+        💳 Buy Now ₹{{ course.course_price }}
+      </a>
+    {% else %}
+      <!-- User is not logged in, redirect to login with ?next= -->
+      <a href="/" class="btn btn-primary rounded-pill px-4 py-2">
+        🔑 Login/Sign-up to Buy
+      </a>
+    {% endif %}
+  </div>
+{% endif %}
+
             </div>
           </div>
         </div>

@@ -86,6 +86,15 @@ class OTP(models.Model):
 
 
 
+from django.db import models
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(null=True, blank=True)
+    icon = models.ImageField(upload_to='category_icons/', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -93,15 +102,17 @@ class OTP(models.Model):
 # models.py
 from django.db import models
 
+
+
 class FreeCourse(models.Model):
     title = models.CharField(max_length=255)
-    
     thumbnail = models.ImageField(upload_to='thumbnails/')
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.title        
 
 
 class CourseChapter(models.Model):
@@ -116,12 +127,6 @@ class CourseChapter(models.Model):
 
 
 from django.db import models
-
-class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.name
 
 
 

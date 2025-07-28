@@ -1,0 +1,37 @@
+<h2>{{ category.name }}</h2>
+
+{% if category.icon %}
+    <img src="{{ category.icon.url }}" alt="Icon" style="width: 70px;"><br>
+{% endif %}
+
+<!-- 🔹 Free Courses Preview -->
+<h3>🎓 Free Courses</h3>
+<div style="display: flex; gap: 20px;">
+    {% for course in free_courses %}
+        <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 250px;">
+            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" width="100%">
+            <h4>{{ course.title }}</h4>
+            <p>{{ course.description|truncatewords:12 }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'free_courses_by_category' category.id %}">View More Free Courses →</a>
+
+<hr>
+
+<!-- 🔹 Paid Courses Preview -->
+<h3>💼 Paid Courses</h3>
+<div style="display: flex; gap: 20px;">
+    {% for course in paid_courses %}
+        <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 250px;">
+            <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" width="100%">
+            <h4>{{ course.course_title }}</h4>
+            <p>{{ course.description|truncatewords:12 }}</p>
+            <p><strong>₹{{ course.course_price }}</strong></p>
+            <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary">View Course</a>
+        </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'paid_courses_by_category' category.id %}">View More Paid Courses →</a>

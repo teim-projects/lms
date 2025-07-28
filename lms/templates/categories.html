@@ -1,40 +1,201 @@
-<!-- categories.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Category Cards</title>
+    <title>All Categories</title>
     <style>
-        .card {
+        .category-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+
+        .category-card {
             border: 1px solid #ccc;
             border-radius: 10px;
             padding: 15px;
-            margin: 10px;
-            display: inline-block;
-            width: 200px;
-            text-align: center;
-            background-color: #f0f0f0;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            width: 30%; /* 3 per row */
+            min-width: 250px;
+            background-color: #f9f9f9;
             cursor: pointer;
-            text-decoration: none;
-            color: black;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+            transition: background-color 0.3s;
         }
 
-        .card:hover {
-            background-color: #e0e0e0;
+        .category-card:hover {
+            background-color: #f0f0f0;
         }
+
+        .category-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .course-content {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .course-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .course-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            width: 220px;
+            background-color: #fff;
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        h2, h3, h4 {
+            margin-bottom: 10px;
+        }
+
+        .view-more {
+            display: block;
+            margin: 10px 0;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .view-more:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <script>
+        function toggleContent(categoryId) {
+            const allContents = document.querySelectorAll('.course-content');
+            allContents.forEach(el => el.style.display = 'none');
+
+            const contentDiv = document.getElementById('content-' + categoryId);
+            if (contentDiv) {
+                contentDiv.style.display = 'block';
+            }
+        }
+    </script>
+
+    <style>
+        .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.category-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.category-card h3 {
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
     </style>
 </head>
 <body>
+
+
+    {% include 'Admin_Base.html' %}
+
     <h2>All Categories</h2>
-    <div>
-        {% for category in categories %}
-            <a href="{% url 'courses_by_category' category.id %}" class="card">{{ category.name }}</a>
-        {% empty %}
-            <p>No categories found.</p>
-        {% endfor %}
-    </div>
+
+    <a href="/"><h1>login/signup</h1></a>
+
+<div class="category-grid">
+    {% for item in category_data %}
+        <div class="category-card" onclick="toggleContent({{ item.category.id }})">
+            {% if item.category.icon %}
+                <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
+            {% endif %}
+            <h3>{{ item.category.name }}</h3>
+        </div>
+    {% endfor %}
+</div>
+
+
+    <br><hr><br>
+
+    {% for item in category_data %}
+        <div id="content-{{ item.category.id }}" class="course-content">
+            <h3>{{ item.category.name }}</h3>
+            {% if item.category.description %}
+                <p>{{ item.category.description }}</p>
+            {% endif %}
+
+            <!-- 🎓 Free Courses -->
+            <h4>🎓 Free Courses</h4>
+            <div class="course-grid">
+                {% for course in item.free_courses %}
+                    <div class="course-card">
+                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+                        <h5>{{ course.title }}</h5>
+                        <p>{{ course.description|truncatewords:10 }}</p>
+                        <p></p>
+                    </div>
+                {% empty %}
+                    <p>No free courses available.</p>
+                {% endfor %}
+            </div>
+            <a class="view-more" href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
+
+            <!-- 💼 Paid Courses -->
+            <h4>💼 Paid Courses</h4>
+            <div class="course-grid">
+                {% for course in item.paid_courses %}
+                    <div class="course-card">
+                        <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}">
+                        <h5>{{ course.course_title }}</h5>
+                        <p>{{ course.description|truncatewords:10 }}</p>
+                        <strong>₹{{ course.course_price }}</strong>
+                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary">View Course</a>
+                        
+
+                    </div>
+                {% empty %}
+                    <p>No paid courses available.</p>
+                {% endfor %}
+            </div>
+            <a class="view-more" href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
+
+            <a class="view-more" href="{% url 'category_detail' item.category.id %}">🔍 View Full Category Detail</a>
+            <hr>
+        </div>
+    {% endfor %}
 
     <br>
-    <a href="{% url 'create_category' %}">Create New Category</a>
+    <a href="{% url 'create_category' %}">➕ Create New Category</a>
 </body>
 </html>

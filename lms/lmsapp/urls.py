@@ -132,9 +132,22 @@ urlpatterns = [
     path('restore-access/<int:payment_id>/', views.restore_course_access_view, name='restore_course_access'),
 
 
-    path('create/', views.create_category, name='create_category'),
-    path('categories/', views.view_categories, name='view_categories'),
+    # path('create/', views.create_category, name='create_category'),
+    # path('categories/', views.view_categories, name='view_categories'),
     path('categories/<int:category_id>/courses/', views.courses_by_category, name='courses_by_category'),
+
+
+
+    path('categories/', views.view_categories, name='view_categories'),
+    path('category/create/', views.create_category, name='create_category'),
+    path('category/<int:category_id>/', views.category_detail, name='category_detail'),
+    path('category/<int:category_id>/free/', views.free_courses_by_category, name='free_courses_by_category'),
+    path('category/<int:category_id>/paid/', views.paid_courses_by_category, name='paid_courses_by_category'),
+
+    path('free-courses/<int:course_id>/', views.free_course_detail, name='free_course_detail'),
+
+
+
 
 
 

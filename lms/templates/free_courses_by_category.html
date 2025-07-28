@@ -1,0 +1,25 @@
+<!-- templates/free_courses_by_category.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ category.name }} - Free Courses</title>
+</head>
+<body>
+    <h1>Free Courses in {{ category.name }}</h1>
+    <a href="{% url 'paid_courses_by_category' category.id %}">View Paid Courses</a>
+
+    {% if courses %}
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+            {% for course in courses %}
+                <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 250px;">
+                    <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" width="100%">
+                    <h3>{{ course.title }}</h3>
+                    <p>{{ course.description|truncatewords:15 }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No free courses found for this category.</p>
+    {% endif %}
+</body>
+</html>

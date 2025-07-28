@@ -350,6 +350,18 @@
                                 placeholder="Enter course title" required>
                         </div>
 
+                        <!-- Category Selection -->
+<div class="form-group">
+    <label for="category">Select Category</label>
+    <select class="form-control" name="category_id" required>
+        <option value="">-- Select Category --</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+
                         <!-- Course Description -->
                         <div class="form-group">
                             <label for="description">Description</label>

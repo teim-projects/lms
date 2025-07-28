@@ -805,35 +805,41 @@ def reset_password_confirm(request):
 from django.shortcuts import render, redirect
 from .models import FreeCourse, CourseChapter
 
+from .models import FreeCourse, CourseChapter, Category
+
 def create_free_course(request):
+    categories = Category.objects.all()
+
     if request.method == "POST":
         title = request.POST.get("title")
         description = request.POST.get("description")
         thumbnail = request.FILES.get("thumbnail")
-        chapter_titles = request.POST.getlist("chapter_titles[]")  # Get all chapter titles
-        youtube_links = request.POST.getlist("youtube_links[]")    # Get all YouTube links
+        category_id = request.POST.get("category_id")
+        chapter_titles = request.POST.getlist("chapter_titles[]")
+        youtube_links = request.POST.getlist("youtube_links[]")
 
         if title and description and thumbnail:
-            # Create the course first
+            category = Category.objects.filter(id=category_id).first()
             course = FreeCourse.objects.create(
                 title=title,
                 description=description,
-                thumbnail=thumbnail
+                thumbnail=thumbnail,
+                category=category
             )
 
-            # Create chapters with the submitted titles
             for i in range(len(chapter_titles)):
-                if youtube_links[i].strip():  # Only create if there's a YouTube link
+                if youtube_links[i].strip():
                     CourseChapter.objects.create(
                         course=course,
-                        title=chapter_titles[i],  # Use the submitted title
+                        title=chapter_titles[i],
                         youtube_link=youtube_links[i]
                     )
 
             return redirect("create_free_course")
 
     courses = FreeCourse.objects.prefetch_related("chapters").all()
-    return render(request, "create_free_course.html", {"courses": courses})
+    return render(request, "create_free_course.html", {"courses": courses, "categories": categories})
+
 
 def update_free_course(request, course_id):
     course = FreeCourse.objects.get(id=course_id)
@@ -861,6 +867,12 @@ def free_courses(request):
 
     return render(request, "free_course.html", {"courses": courses})
 
+
+from django.shortcuts import get_object_or_404
+
+def free_course_detail(request, course_id):
+    course = get_object_or_404(FreeCourse.objects.prefetch_related("chapters"), id=course_id)
+    return render(request, "free_course_detail.html", {"course": course})
 
 
 def paid_course(request):
@@ -1760,58 +1772,73 @@ from .models import PaidCourse, CourseReview, NewPayment, UserCourseAccess, Cour
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
 
-@login_required
-def display_paid_content(request, course_id):
-    course = get_object_or_404(PaidCourse, id=course_id)
-    payment = NewPayment.objects.filter(user=request.user, course=course, status="success").first()
-    manual_access = UserCourseAccess.objects.filter(user=request.user, course=course).exists()
+from django.contrib.auth.models import AnonymousUser
 
+def display_paid_content(request, course_id):
+    from collections import defaultdict
+    from .models import PaidCourse, CourseReview, NewPayment, UserCourseAccess, CourseProgress, CourseContent, CompletedContent
+    from django.db.models import Avg
+    from django.shortcuts import render, get_object_or_404, redirect
+
+    course = get_object_or_404(PaidCourse, id=course_id)
     contents = course.contents.all()
     grouped_contents = defaultdict(list)
     for content in contents:
         grouped_contents[content.title].append(content)
 
-    has_access = UserCourseAccess.objects.filter(user=request.user, course=course).exists()
+    is_logged_in = request.user.is_authenticated
+    has_access = False
+    progress_percentage = 0
+    completed_ids = []
 
+    if is_logged_in:
+        # Check if user has access
+        has_access = (
+            NewPayment.objects.filter(user=request.user, course=course, status="success").exists() or
+            UserCourseAccess.objects.filter(user=request.user, course=course).exists()
+        )
 
-    progress = CourseProgress.objects.filter(user=request.user, course=course).first()
-    progress_percentage = progress.progress_percentage if progress else 0
+        # Progress
+        progress = CourseProgress.objects.filter(user=request.user, course=course).first()
+        if progress:
+            progress_percentage = progress.progress_percentage
+
+        # Completed content
+        completed_ids = CompletedContent.objects.filter(user=request.user, course=course).values_list('content_id', flat=True)
+
+        # Handle POST review actions
+        if request.method == "POST":
+            if "submit_review" in request.POST:
+                review_text = request.POST.get("review", "").strip()
+                rating = int(request.POST.get("rating", 0))
+                if 1 <= rating <= 5 and review_text:
+                    CourseReview.objects.create(
+                        course=course,
+                        user=request.user,
+                        review=review_text,
+                        rating=rating
+                    )
+                return redirect('display_paid_content', course_id=course.id)
+
+            elif "update_review" in request.POST:
+                review_id = request.POST.get("review_id")
+                review_obj = get_object_or_404(CourseReview, id=review_id, user=request.user)
+                review_text = request.POST.get("review", "").strip()
+                rating = int(request.POST.get("rating", 0))
+                if 1 <= rating <= 5 and review_text:
+                    review_obj.review = review_text
+                    review_obj.rating = rating
+                    review_obj.save()
+                return redirect('display_paid_content', course_id=course.id)
+
+            elif "delete_review" in request.POST:
+                review_id = request.POST.get("review_id")
+                CourseReview.objects.filter(id=review_id, user=request.user).delete()
+                return redirect('display_paid_content', course_id=course.id)
 
     reviews = CourseReview.objects.filter(course=course).order_by('-created_at')
     title_count = CourseContent.objects.filter(course=course).values('title').distinct().count()
     average_rating = CourseReview.objects.filter(course=course).aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
-    completed_ids = CompletedContent.objects.filter(user=request.user, course=course).values_list('content_id', flat=True)
-
-
-    # ✅ Handle POST Actions
-    if request.method == "POST":
-        if "submit_review" in request.POST:
-            review_text = request.POST.get("review", "").strip()
-            rating = int(request.POST.get("rating", 0))
-            if 1 <= rating <= 5 and review_text:
-                CourseReview.objects.create(
-                    course=course,
-                    user=request.user,
-                    review=review_text,
-                    rating=rating
-                )
-            return redirect('display_paid_content', course_id=course.id)
-
-        elif "update_review" in request.POST:
-            review_id = request.POST.get("review_id")
-            review_obj = get_object_or_404(CourseReview, id=review_id, user=request.user)
-            review_text = request.POST.get("review", "").strip()
-            rating = int(request.POST.get("rating", 0))
-            if 1 <= rating <= 5 and review_text:
-                review_obj.review = review_text
-                review_obj.rating = rating
-                review_obj.save()
-            return redirect('display_paid_content', course_id=course.id)
-
-        elif "delete_review" in request.POST:
-            review_id = request.POST.get("review_id")
-            CourseReview.objects.filter(id=review_id, user=request.user).delete()
-            return redirect('display_paid_content', course_id=course.id)
 
     return render(request, 'display_paid_content.html', {
         'course': course,
@@ -1822,7 +1849,7 @@ def display_paid_content(request, course_id):
         'title_count': title_count,
         'average_rating': round(average_rating, 1),
         'completed_ids': list(completed_ids),
-
+        'is_logged_in': is_logged_in,
     })
 
 
@@ -1860,7 +1887,9 @@ def initiate_payment(request, course_id):
     productinfo = course.course_title
     firstname = user.first_name or user.username
     email = user.email
-    phone = user.mobile  # Or from user profile
+    phone = "9999999999"
+    # keep above phone filed in comment if you working on live and for local keep below uncommented
+    # phone = user.mobile  # Or from user profile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
@@ -1886,10 +1915,11 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        # "surl": request.build_absolute_uri('/payment/success/'),
-        # "furl": request.build_absolute_uri('/payment/failure/'),
-        "surl": "https://profitmaxacademy.in/payment/success/",
-        "furl": "https://profitmaxacademy.in/payment/failure/",
+        "surl": request.build_absolute_uri('/payment/success/'),
+        "furl": request.build_absolute_uri('/payment/failure/'),
+        # this below should be in comment if you want to make payment on local
+        # "surl": "https://profitmaxacademy.in/payment/success/",
+        # "furl": "https://profitmaxacademy.in/payment/failure/",
 
         "hashh": hashh
     }
@@ -2937,14 +2967,33 @@ from .models import Category
 def create_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
-        if name:  # Simple validation
-            Category.objects.create(name=name)
+        description = request.POST.get('description')
+        icon = request.FILES.get('icon')
+
+        if name:
+            Category.objects.create(name=name, description=description, icon=icon)
             return redirect('view_categories')
+
     return render(request, 'create_category.html')
+
+from django.shortcuts import render, get_object_or_404
+from .models import Category
+
 
 def view_categories(request):
     categories = Category.objects.all()
-    return render(request, 'categories.html', {'categories': categories})
+    category_data = []
+
+    for category in categories:
+        free_courses = FreeCourse.objects.filter(category=category)[:3]
+        paid_courses = PaidCourse.objects.filter(category=category)[:3]
+        category_data.append({
+            'category': category,
+            'free_courses': free_courses,
+            'paid_courses': paid_courses
+        })
+
+    return render(request, 'categories.html', {'category_data': category_data})
 
 
 from django.shortcuts import get_object_or_404
@@ -2957,3 +3006,42 @@ def courses_by_category(request, category_id):
         'courses': courses
     })
     
+
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Category, FreeCourse, PaidCourse
+
+def category_detail(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    free_courses = FreeCourse.objects.filter(category=category)[:3]
+    paid_courses = PaidCourse.objects.filter(category=category)[:3]
+    
+    return render(request, 'category_detail.html', {
+        'category': category,
+        'free_courses': free_courses,
+        'paid_courses': paid_courses
+    })
+
+
+from django.shortcuts import get_object_or_404, render
+from .models import Category, FreeCourse, PaidCourse
+
+def free_courses_by_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    courses = FreeCourse.objects.filter(category=category)
+    return render(request, 'free_courses_by_category.html', {
+        'category': category,
+        'courses': courses  # ✅ matches HTML
+    })
+
+def paid_courses_by_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    courses = PaidCourse.objects.filter(category=category)
+    return render(request, 'paid_courses_by_category.html', {
+        'category': category,
+        'courses': courses  # ✅ matches HTML
+    })

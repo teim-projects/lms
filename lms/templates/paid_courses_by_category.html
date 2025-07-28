@@ -1,0 +1,28 @@
+<!-- templates/paid_courses_by_category.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ category.name }} - Paid Courses</title>
+</head>
+<body>
+    <h1>Paid Courses in {{ category.name }}</h1>
+    <a href="{% url 'free_courses_by_category' category.id %}">View Free Courses</a>
+
+    {% if courses %}
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+            {% for course in courses %}
+                <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 250px;">
+                    <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" width="100%">
+                    <h3>{{ course.course_title }}</h3>
+                    <p>{{ course.description|truncatewords:15 }}</p>
+                    <p><strong>Instructor:</strong> {{ course.instructor_name }}</p>
+                    <p><strong>Price:</strong> ₹{{ course.course_price }}</p>
+                    <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary">View Course</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No paid courses found for this category.</p>
+    {% endif %}
+</body>
+</html>
