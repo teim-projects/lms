@@ -1887,9 +1887,9 @@ def initiate_payment(request, course_id):
     productinfo = course.course_title
     firstname = user.first_name or user.username
     email = user.email
-    phone = "9999999999"
+    # phone = "9999999999"
     # keep above phone filed in comment if you working on live and for local keep below uncommented
-    # phone = user.mobile  # Or from user profile
+    phone = user.mobile  # Or from user profile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
@@ -1915,11 +1915,11 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        "surl": request.build_absolute_uri('/payment/success/'),
-        "furl": request.build_absolute_uri('/payment/failure/'),
+        # "surl": request.build_absolute_uri('/payment/success/'),
+        # "furl": request.build_absolute_uri('/payment/failure/'),
         # this below should be in comment if you want to make payment on local
-        # "surl": "https://profitmaxacademy.in/payment/success/",
-        # "furl": "https://profitmaxacademy.in/payment/failure/",
+        "surl": "https://profitmaxacademy.in/payment/success/",
+        "furl": "https://profitmaxacademy.in/payment/failure/",
 
         "hashh": hashh
     }
