@@ -1,201 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>All Categories</title>
-    <style>
-        .category-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: flex-start;
-        }
+  <meta charset="UTF-8">
+  <title>All LMS Categories</title>
 
-        .category-card {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 15px;
-            width: 30%; /* 3 per row */
-            min-width: 250px;
-            background-color: #f9f9f9;
-            cursor: pointer;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
-            transition: background-color 0.3s;
-        }
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        .category-card:hover {
-            background-color: #f0f0f0;
-        }
+  <!-- Google Font (Optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-        .category-card img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6fa;
+    }
 
-        .course-content {
-            display: none;
-            margin-top: 15px;
-        }
+    h2.page-title {
+      text-align: center;
+      font-weight: 600;
+      font-size: 32px;
+      margin: 30px 0;
+      color: #333;
+    }
 
-        .course-grid {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+    .category-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
 
-        .course-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-            width: 220px;
-            background-color: #fff;
-        }
+    .category-card:hover {
+      transform: translateY(-6px);
+    }
 
-        .course-card img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
+    .category-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
 
-        h2, h3, h4 {
-            margin-bottom: 10px;
-        }
+    .category-card h3 {
+      margin: 0;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: 600;
+      background-color: #f8f9fa;
+    }
 
-        .view-more {
-            display: block;
-            margin: 10px 0;
-            color: #007bff;
-            text-decoration: none;
-        }
+    .top-links {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-        .view-more:hover {
-            text-decoration: underline;
-        }
-    </style>
+    .top-links a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #0d6efd;
+      font-weight: 500;
+    }
 
-    <script>
-        function toggleContent(categoryId) {
-            const allContents = document.querySelectorAll('.course-content');
-            allContents.forEach(el => el.style.display = 'none');
+    .top-links a:hover {
+      text-decoration: underline;
+    }
 
-            const contentDiv = document.getElementById('content-' + categoryId);
-            if (contentDiv) {
-                contentDiv.style.display = 'block';
-            }
-        }
-    </script>
+    .modal-title {
+      font-weight: 600;
+      text-align: center !important;
+    }
 
-    <style>
-        .category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin: 40px 0;
-}
+    .modal-body h5 {
+      margin-top: 30px;
+      font-weight: 600;
+    }
 
-.category-card {
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    background-color: #fff;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
+    .card-title {
+      font-size: 16px;
+    }
 
-.category-card:hover {
-    transform: translateY(-5px);
-}
-
-.category-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
-}
-
-.category-card h3 {
-    padding: 15px;
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0;
-}
-
-    </style>
+    .card-text {
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
 
+  {% include 'Admin_Base.html' %}
 
-    {% include 'Admin_Base.html' %}
+  <h2 class="page-title">📚 All LMS Categories</h2>
 
-    <h2>All Categories</h2>
+  <div class="top-links">
+    <a href="{% url 'create_category' %}">➕ Create New Category</a> |
+    <a href="/">🔐 Login / Signup</a>
+  </div>
 
-    <a href="/"><h1>login/signup</h1></a>
-
-<div class="category-grid">
-    {% for item in category_data %}
-        <div class="category-card" onclick="toggleContent({{ item.category.id }})">
+  <!-- Responsive Bootstrap Grid -->
+  <div class="container">
+    <div class="row gy-4">
+      {% for item in category_data %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="category-card" data-bs-toggle="modal" data-bs-target="#modal-{{ item.category.id }}">
             {% if item.category.icon %}
-                <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
+              <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
             {% endif %}
             <h3>{{ item.category.name }}</h3>
+          </div>
         </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Modal for Each Category -->
+  {% for item in category_data %}
+  <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1" aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content rounded-4">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title " id="modalLabel{{ item.category.id }}">{{ item.category.name }}</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          {% if item.category.description %}
+            <p>{{ item.category.description }}</p>
+          {% endif %}
+
+  <!-- Free Courses -->
+   <div style="border-bottom:1px solid #7ae2ff;" class="w-100">
+<h5 class="mt-4">🎓 Free Courses</h5>
+<div class="row g-4 mb-3">
+  {% for course in item.free_courses %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
+        <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.title }}" style="height: 180px; object-fit: cover;">
+        <div class="card-body">
+          <h6 class="card-title text-center fw-semibold">{{ course.title }}</h6>
+          <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
+          <center>
+                      <a href="#" class="btn btn-primary btn-sm mt-2 w-50">Start Now</a>
+
+          </center>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted">No free courses available.</p>
+  {% endfor %}
+<div class="col-md-12 col-12 col-lg-12">
+      <a class="btn btn-outline-secondary btn-sm mb-2" style="float: right;"  href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
+
+</div>
 </div>
 
+</div>
+<div>
 
-    <br><hr><br>
 
-    {% for item in category_data %}
-        <div id="content-{{ item.category.id }}" class="course-content">
-            <h3>{{ item.category.name }}</h3>
-            {% if item.category.description %}
-                <p>{{ item.category.description }}</p>
-            {% endif %}
 
-            <!-- 🎓 Free Courses -->
-            <h4>🎓 Free Courses</h4>
-            <div class="course-grid">
-                {% for course in item.free_courses %}
-                    <div class="course-card">
-                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
-                        <h5>{{ course.title }}</h5>
-                        <p>{{ course.description|truncatewords:10 }}</p>
-                        <p></p>
-                    </div>
-                {% empty %}
-                    <p>No free courses available.</p>
-                {% endfor %}
-            </div>
-            <a class="view-more" href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
+<div class="row g-4 mb-3">
+    <h5 class="mt-4">💼 Paid Courses</h5>
 
-            <!-- 💼 Paid Courses -->
-            <h4>💼 Paid Courses</h4>
-            <div class="course-grid">
-                {% for course in item.paid_courses %}
-                    <div class="course-card">
-                        <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}">
-                        <h5>{{ course.course_title }}</h5>
-                        <p>{{ course.description|truncatewords:10 }}</p>
-                        <strong>₹{{ course.course_price }}</strong>
-                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary">View Course</a>
-                        
-
-                    </div>
-                {% empty %}
-                    <p>No paid courses available.</p>
-                {% endfor %}
-            </div>
-            <a class="view-more" href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
-
-            <a class="view-more" href="{% url 'category_detail' item.category.id %}">🔍 View Full Category Detail</a>
-            <hr>
+  {% for course in item.paid_courses %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
+        <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.course_title }}" style="height: 180px; object-fit: cover;">
+        <div class="card-body">
+          <h6 class="card-title fw-semibold">{{ course.course_title }}</h6>
+          <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <span class="text-success fw-bold">₹{{ course.course_price }}</span>
+            <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">View</a>
+          </div>
         </div>
-    {% endfor %}
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted">No paid courses available.</p>
+  {% endfor %}
+</div>
+<a class="btn btn-outline-secondary btn-sm " style="float: right;" href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
+</div>
+         
+          <a class="btn btn-link" href="{% url 'category_detail' item.category.id %}">🔍 View Full Category Detail</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 
-    <br>
-    <a href="{% url 'create_category' %}">➕ Create New Category</a>
 </body>
 </html>
