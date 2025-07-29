@@ -1,37 +1,105 @@
-<h2>{{ category.name }}</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ category.name }} - Courses</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f7fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-{% if category.icon %}
-    <img src="{{ category.icon.url }}" alt="Icon" style="width: 70px;"><br>
-{% endif %}
+        .section-title {
+            text-align: center;
+            margin: 30px 0 10px;
+            color: #333;
+        }
 
-<!-- 🔹 Free Courses Preview -->
-<h3>🎓 Free Courses</h3>
-<div style="display: flex; gap: 20px;">
-    {% for course in free_courses %}
-        <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 250px;">
-            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" width="100%">
-            <h4>{{ course.title }}</h4>
-            <p>{{ course.description|truncatewords:12 }}</p>
-        </div>
-    {% endfor %}
+        .category-icon {
+            display: block;
+            margin: 0 auto 20px;
+            width: 70px;
+        }
+
+        .course-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .course-img {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .course-body {
+            padding: 15px;
+        }
+
+        .view-more-link {
+            display: block;
+            text-align: center;
+            margin: 10px auto 40px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+{% include 'Admin_Base.html' %}
+
+<div class="container mt-5">
+    <h2 class="text-center">{{ category.name }}</h2>
+    {% if category.icon %}
+        <img src="{{ category.icon.url }}" alt="Icon" class="category-icon">
+    {% endif %}
+
+    <!-- 🔹 Free Courses Preview -->
+    <h3 class="section-title">🎓 Free Courses</h3>
+    <div class="row">
+        {% for course in free_courses %}
+            <div class="col-md-4 mb-4">
+                <div class="course-card">
+                    <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="img-fluid course-img w-100">
+                    <div class="course-body">
+                        <h5>{{ course.title }}</h5>
+                        <p class="text-muted">{{ course.description|truncatewords:12 }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{% url 'free_courses_by_category' category.id %}" class="view-more-link text-primary">View More Free Courses →</a>
+
+    <hr>
+
+    <!-- 🔹 Paid Courses Preview -->
+    <h3 class="section-title">💼 Paid Courses</h3>
+    <div class="row">
+        {% for course in paid_courses %}
+            <div class="col-md-4 mb-4">
+                <div class="course-card">
+                    <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" class="img-fluid course-img w-100">
+                    <div class="course-body">
+                        <h5>{{ course.course_title }}</h5>
+                        <p class="text-muted">{{ course.description|truncatewords:12 }}</p>
+                        <p><strong>₹{{ course.course_price }}</strong></p>
+                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm mt-2">View Course</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{% url 'paid_courses_by_category' category.id %}" class="view-more-link text-primary">View More Paid Courses →</a>
 </div>
 
-<a href="{% url 'free_courses_by_category' category.id %}">View More Free Courses →</a>
-
-<hr>
-
-<!-- 🔹 Paid Courses Preview -->
-<h3>💼 Paid Courses</h3>
-<div style="display: flex; gap: 20px;">
-    {% for course in paid_courses %}
-        <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 250px;">
-            <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" width="100%">
-            <h4>{{ course.course_title }}</h4>
-            <p>{{ course.description|truncatewords:12 }}</p>
-            <p><strong>₹{{ course.course_price }}</strong></p>
-            <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary">View Course</a>
-        </div>
-    {% endfor %}
-</div>
-
-<a href="{% url 'paid_courses_by_category' category.id %}">View More Paid Courses →</a>
+</body>
+</html>

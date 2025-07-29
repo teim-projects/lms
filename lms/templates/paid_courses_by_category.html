@@ -1,28 +1,82 @@
-<!-- templates/paid_courses_by_category.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>{{ category.name }} - Paid Courses</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+ 
+        .course-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-img {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 40px 0 20px;
+            color: #333;
+        }
+
+        .btn-custom {
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Paid Courses in {{ category.name }}</h1>
-    <a href="{% url 'free_courses_by_category' category.id %}">View Free Courses</a>
+{% include 'Admin_Base.html' %}
+
+<div class="container" style="margin-top: 100px; min-height: 100vh;">
+    <h1 class="section-header">Paid Courses in {{ category.name }}</h1>
+
+    <div class="text-center mb-1">
+        <a href="{% url 'free_courses_by_category' category.id %}" class="btn btn-success btn-custom">
+            View Free Courses
+        </a>
+    </div>
 
     {% if courses %}
-        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <div class="row">
             {% for course in courses %}
-                <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 250px;">
-                    <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" width="100%">
-                    <h3>{{ course.course_title }}</h3>
-                    <p>{{ course.description|truncatewords:15 }}</p>
-                    <p><strong>Instructor:</strong> {{ course.instructor_name }}</p>
-                    <p><strong>Price:</strong> ₹{{ course.course_price }}</p>
-                    <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary">View Course</a>
+                <div class="col-md-4 mb-4">
+                    <div class="course-card">
+                        <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" class="img-fluid course-img w-100">
+                        <div class="p-3">
+                            <h5>{{ course.course_title }}</h5>
+                            <p class="text-muted mb-2">{{ course.description|truncatewords:15 }}</p>
+                            <p><strong>Instructor:</strong> {{ course.instructor_name }}</p>
+                            <p><strong>Price:</strong> ₹{{ course.course_price }}</p>
+                        </div>
+                        <div class="p-3 pt-0">
+                            <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-block">View Course</a>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <p>No paid courses found for this category.</p>
+        <div class="alert alert-warning text-center">
+            No paid courses found for this category.
+        </div>
     {% endif %}
+</div>
+    {% include 'footer.html' %}
+
 </body>
 </html>
