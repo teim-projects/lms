@@ -154,53 +154,61 @@
   <div class="content-container">
     {% with content.resource_file.url|lower as file_url %}
       {% if ".mp4" in file_url %}
-       <div class="video-wrapper" style="position:relative;">
-  <video id="videoPlayer" controls controlsList="nodownload" oncontextmenu="return false" width="100%">
-    <source src="{{ file_url }}" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+  <!-- Video block -->
+  <div class="video-wrapper" style="position:relative;">
+    <video id="videoPlayer" controls controlsList="nodownload" oncontextmenu="return false" width="100%">
+      <source src="{{ file_url }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
 
-  <!-- Watermark - Centered -->
-  <div class="watermark" style="
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    opacity:0.5;
-    background:#0003;
-    color:white;
-    padding:4px 8px;
-    border-radius:4px;
-    pointer-events:none;
-    font-weight:bold;
-  ">
- 
+    <!-- Watermark overlays -->
+    <div class="watermark watermark-top">{{ user.email }}</div>
+    <div class="watermark watermark-bottom">{{ user.email }}</div>
+    <div class="watermark watermark-left">{{ user.email }}</div>
+    <div class="watermark watermark-right">{{ user.email }}</div>
+    <div class="watermark watermark-center">{{ user.email }}</div>
+
+    <!-- Fullscreen button -->
+    <button onclick="openFullscreen()" class="fullscreen-btn">⛶</button>
   </div>
 
-  <!-- Custom Fullscreen Button -->
-<button onclick="openFullscreen()" class="fullscreen-btn">⛶</button>
+{% elif ".pdf" in file_url %}
+  <!-- PDF block -->
+  <div class="video-wrapper" style="height: 90vh; position: relative;">
+    <iframe 
+      src="{{ content.resource_file.url }}" 
+      width="100%" 
+      height="100%" 
+      style="border: none;">
+    </iframe>
+    <!-- Watermarks -->
+    <div class="watermark watermark-top">{{ user.email }}</div>
+    <div class="watermark watermark-bottom">{{ user.email }}</div>
+    <div class="watermark watermark-left">{{ user.email }}</div>
+    <div class="watermark watermark-right">{{ user.email }}</div>
+    <div class="watermark watermark-center">{{ user.email }}</div>
+  </div>
 
+{% elif ".doc" in file_url or ".docx" in file_url %}
+  <iframe 
+    src="https://docs.google.com/gview?url={{ absolute_url }}&embedded=true" 
+    style="width:100%; height:100vh; border:none;">
+  </iframe>
 
+{% elif ".txt" in file_url %}
+  <div class="video-wrapper" style="height: 90vh; overflow: auto; padding: 20px; background: #f7f7f7; font-family: monospace;">
+    {% with content.resource_file.open|safe as txt_file %}
+      {{ txt_file.read|linebreaksbr }}
+    {% endwith %}
+  </div>
 
+{% elif ".jpg" in file_url or ".jpeg" in file_url or ".png" in file_url or ".gif" in file_url %}
+  <img src="{{ file_url }}" alt="Image" style="width: 100%; height: auto; display: block; margin: auto;">
 
+{% else %}
+  <p class="text-danger text-center fs-4 mt-5">⚠ Unsupported file format</p>
+{% endif %}
 
-          <!-- Watermark overlays (dynamic user email) -->
-          <div class="watermark watermark-top">{{ user.email }}</div>
-          <div class="watermark watermark-bottom">{{ user.email }}</div>
-          <div class="watermark watermark-left">{{ user.email }}</div>
-          <div class="watermark watermark-right">{{ user.email }}</div>
-          <div class="watermark watermark-center">{{ user.email }}</div>
-        </div>
-
-      {% elif ".pdf" in file_url or ".txt" in file_url or ".doc" in file_url or ".docx" in file_url %}
-        <script>window.location.href = "{{ content.resource_file.url }}";</script>
-
-      {% elif ".jpg" in file_url or ".jpeg" in file_url or ".png" in file_url or ".gif" in file_url %}
-        <img src="{{ content.resource_file.url }}" alt="Image" style="width: 100%; height: auto; display: block; margin: auto;">
-
-      {% else %}
-        <p class="text-danger text-center fs-4 mt-5">⚠ Unsupported file format</p>
-      {% endif %}
     {% endwith %}
   </div>
 
