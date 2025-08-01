@@ -136,6 +136,75 @@
         .update-paid{
             padding: 0px 15px;
         }
+
+
+
+
+
+        .uploaded-content-header {
+    background: linear-gradient(to right, #2575fc, #6a11cb);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px 5px 0 0;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.uploaded-card {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.uploaded-card .card-body {
+    padding: 15px;
+}
+
+.uploaded-subtitle {
+    background-color: #f4f7ff;
+    border-left: 4px solid #2575fc;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.uploaded-subtitle p {
+    margin: 0;
+    padding: 3px 0;
+}
+
+.uploaded-subtitle a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.uploaded-subtitle a:hover {
+    text-decoration: underline;
+}
+
+.delete-btn-title {
+    background: linear-gradient(to right, #ff512f, #dd2476);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.delete-btn-subtitle {
+    background: linear-gradient(to right, #ff9966, #ff5e62);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
     </style>
 
 
@@ -256,6 +325,63 @@
 
         </div>
     </div>
+
+
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-md-3"></div>
+
+        <div class="col-md-6">
+            <h4 class="text-center my-4"
+                style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; ">
+                Uploaded Course Content
+            </h4>
+
+           {% for title, contents in grouped_contents.items %}
+  <div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <a class="text-decoration-none" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+        <h5 class="mb-0">{{ title }}</h5>
+      </a>
+      <form method="post" action="{% url 'delete_course_title' course.id title %}" onsubmit="return confirm('Delete the title and all its subtitles?')">
+        {% csrf_token %}
+        <button class="btn btn-danger btn-sm">Delete Title</button>
+      </form>
+    </div>
+
+    <div class="collapse" id="collapse{{ forloop.counter }}">
+      <div class="card-body">
+        {% for content in contents %}
+          <div class="mb-3 border p-2 rounded" style="font-size: 0.95rem;">
+            <p><strong>Subtitle:</strong> {{ content.subtitle }}</p>
+            <p><strong>File:</strong>
+              <a href="{{ content.resource_file.url }}" target="_blank">
+                {{ content.resource_file.name|cut:"course_resources/" }}
+              </a>
+            </p>
+            <form method="post" action="{% url 'delete_course_subtitle' content.id %}" onsubmit="return confirm('Delete this subtitle?')">
+              {% csrf_token %}
+              <button class="btn btn-warning btn-sm">Delete Subtitle</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <p class="text-center">No uploaded content found.</p>
+{% endfor %}
+
+        </div>
+
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+
+
+
     {% include 'footer.html' %}
 
     <script>

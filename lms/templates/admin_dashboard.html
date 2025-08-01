@@ -102,6 +102,10 @@
                 width: 100%;
             }
         }
+
+        span.badge.badge-danger.ml-2 {
+    background: red;
+}
     </style>
 </head>
 
@@ -121,6 +125,8 @@
                     <li><a class="dropdown-item" href="{% url 'course_report' %}?{{ request.GET.urlencode }}">Course Report</a></li>
                     <li><a class="dropdown-item" href="{% url 'canceled_invoices' %}?{{ request.GET.urlencode }}">Canceled Invoices</a></li>
                     <li><a class="dropdown-item" href="{% url 'revoked_courses_list' %}?{{ request.GET.urlencode }}">Revoked Access</a></li>
+                    <li><a class="dropdown-item" href="{% url 'active_invoice_report' %}?{{ request.GET.urlencode }}">Active Invoices</a></li>
+                        
                 </ul>
             </div>
         </div>

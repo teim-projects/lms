@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Your Certificates</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f4f7;
+            padding-top: 70px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            padding: 8px 14px;
+            text-decoration: none;
+        }
+        .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    {% include 'Student_Base.html' %}
+    <br><br><br><br><br>
+    
+    <div class="container">
+        <h2 class="text-center mb-4"><b>Your Course Certificates</b></h2>
+
+        <div class="row">
+            {% for course in completed_courses %}
+            <div class="col-md-6 mb-4">
+                <div class="card p-3">
+                    <h5><b>{{ course.course_title }}</b></h5>
+                    <p class="text-muted mb-2">{{ course.description|truncatechars:100 }}</p>
+                    <a href="{% url 'view_certificate' course.id %}" class="btn btn-success">View Certificate</a>
+
+
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">You haven't completed any courses yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+  
+</body>
+</html>

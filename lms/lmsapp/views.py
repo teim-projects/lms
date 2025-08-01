@@ -1135,6 +1135,9 @@ def delete_paid_course(request, course_id):
 
 
 # Update Paid Course
+from collections import defaultdict
+from django.utils.text import slugify
+
 def update_paid_course(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
 
@@ -1156,7 +1159,42 @@ def update_paid_course(request, course_id):
         course.save()
         return redirect('view_paid_course')
 
-    return render(request, 'update_paid_course.html', {'course': course})
+    # Normalize and group contents by cleaned title
+    grouped_contents = defaultdict(list)
+    for content in course.contents.all():
+        clean_title = content.title.strip().title()  # remove spaces & fix case
+        grouped_contents[clean_title].append(content)
+
+    return render(request, 'update_paid_course.html', {
+        'course': course,
+        'grouped_contents': dict(grouped_contents),
+    })
+
+
+from django.views.decorators.http import require_POST
+
+
+@require_POST
+def delete_course_subtitle(request, content_id):
+    content = get_object_or_404(CourseContent, id=content_id)
+    course_id = content.course.id
+    if content.resource_file and os.path.isfile(content.resource_file.path):
+        os.remove(content.resource_file.path)
+    content.delete()
+    return redirect('update_paid_course', course_id=course_id)
+
+
+@require_POST
+def delete_course_title(request, course_id, title):
+    contents = CourseContent.objects.filter(course_id=course_id, title=title)
+    for content in contents:
+        if content.resource_file and os.path.isfile(content.resource_file.path):
+            os.remove(content.resource_file.path)
+        content.delete()
+    return redirect('update_paid_course', course_id=course_id)
+
+
+
 
 
 from django.shortcuts import render, redirect
@@ -1553,10 +1591,14 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Ticket
+
 def ticket_to_admin(request):
-    """View all tickets (accessible to everyone)."""
-    tickets = Ticket.objects.all().order_by("-created_at")  # Fetch all tickets
-    return render(request, "ticket_to_admin.html", {"tickets": tickets})
+    tickets = Ticket.objects.all().order_by("-created_at")
+    open_ticket_count = Ticket.objects.filter(status='open').count()
+    return render(request, "ticket_to_admin.html", {
+        "tickets": tickets,
+        "open_ticket_count": open_ticket_count
+    })
 
 
 from django.http import JsonResponse
@@ -1887,9 +1929,9 @@ def initiate_payment(request, course_id):
     productinfo = course.course_title
     firstname = user.first_name or user.username
     email = user.email
-    # phone = "9999999999"
-    # keep above phone filed in comment if you working on live and for local keep below uncommented
-    phone = user.mobile  # Or from user profile
+    phone = "9999999999"
+    # keep above phone field in comment if you are working on live and for local keep below commented
+    # phone = user.mobile  # Or from user profile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
@@ -1915,11 +1957,11 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        # "surl": request.build_absolute_uri('/payment/success/'),
-        # "furl": request.build_absolute_uri('/payment/failure/'),
+        "surl": request.build_absolute_uri('/payment/success/'),
+        "furl": request.build_absolute_uri('/payment/failure/'),
         # this below should be in comment if you want to make payment on local
-        "surl": "https://profitmaxacademy.in/payment/success/",
-        "furl": "https://profitmaxacademy.in/payment/failure/",
+        # "surl": "https://profitmaxacademy.in/payment/success/",
+        # "furl": "https://profitmaxacademy.in/payment/failure/",
 
         "hashh": hashh
     }
@@ -1999,6 +2041,20 @@ from .models import CustomUser, PaidCourse, NewPayment, Invoice, UserCourseAcces
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def grant_course_access(request):
+    user_query = request.GET.get('user_search', '').strip()
+    course_query = request.GET.get('course_search', '').strip()
+
+    # Filter users (excluding staff/superuser)
+    users = CustomUser.objects.filter(is_staff=False, is_superuser=False)
+    if user_query:
+        users = users.filter(
+            Q(mobile__icontains=user_query) | Q(email__icontains=user_query))
+
+    # Filter courses
+    courses = PaidCourse.objects.all()
+    if course_query:
+        courses = courses.filter(course_code__icontains=course_query)
+
     if request.method == "POST":
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
@@ -2032,15 +2088,15 @@ def grant_course_access(request):
                 mobile=user.mobile,
                 email=user.email,
             )
-            # Link invoice to payment if applicable
+            # Optional link to payment if model supports it
             if hasattr(Invoice, 'payment'):
                 invoice.payment = payment
                 invoice.save()
 
-        # Grant course access
+        # Grant access
         UserCourseAccess.objects.get_or_create(user=user, course=course)
 
-        # ========== ✅ Send Email to Admin ==========
+        # Send email to admin
         full_name = f"{user.first_name} {user.last_name}".strip() or user.username
         subject_admin = f"✔️ Course Access Granted to {full_name}"
         message_admin = f"""
@@ -2058,15 +2114,9 @@ This was done through the admin grant access panel.
 Regards,  
 System Notification
 """
-        send_mail(
-            subject_admin,
-            message_admin,
-            settings.DEFAULT_FROM_EMAIL,
-            [settings.DEFAULT_FROM_EMAIL],
-            fail_silently=True,
-        )
+        send_mail(subject_admin, message_admin, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_FROM_EMAIL], fail_silently=True)
 
-        # ========== ✅ Send Congratulations Email to User ==========
+        # Send email to user
         subject_user = f"🎉 Course Access Granted for {course.course_title}"
         message_user = f"""
 Hi {full_name},
@@ -2081,23 +2131,18 @@ You can now log in to your dashboard and start learning.
 Best regards,  
 {settings.DEFAULT_FROM_EMAIL}
 """
-        send_mail(
-            subject_user,
-            message_user,
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email],
-            fail_silently=True,
-        )
+        send_mail(subject_user, message_user, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=True)
 
         return redirect('grant_course_access')
 
-    # GET request — render form
+    # GET request — return filtered users & courses
     return render(request, "grant_course_access.html", {
-        "users": CustomUser.objects.filter(is_staff=False, is_superuser=False),
-        "courses": PaidCourse.objects.all(),
-        "user_query": request.GET.get('user_search', '').strip(),
-        "course_query": request.GET.get('course_search', '').strip(),
+        "users": users,
+        "courses": courses,
+        "user_query": user_query,
+        "course_query": course_query,
     })
+
 
 # from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
@@ -2527,19 +2572,22 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from .models import CourseContent  # adjust if your model name differs
 
-@login_required
+from django.shortcuts import render
+
+from django.shortcuts import render, get_object_or_404
+from .models import CourseContent
+
 def view_file(request, content_id):
     content = get_object_or_404(CourseContent, id=content_id)
-    user = request.user
+    file_url = request.build_absolute_uri(content.resource_file.url)
 
-    return render(request, 'view_file.html', {
-        'content': content,
-        'user': user,
+    return render(request, "view_file.html", {
+        "content": content,
+        "user": request.user,
+        "absolute_url": file_url,
     })
 
 
-def certificate(request):
-    return render(request,'certificate.html')
 
 
 from django.contrib.auth.decorators import login_required
@@ -2946,6 +2994,36 @@ def export_to_excel(request):
                 e.status,
                 e.created_at.strftime("%Y-%m-%d")
             ])
+
+
+    elif report_type == 'active':
+        invoices = Invoice.objects.filter(is_canceled=False)
+        if specific_date:
+            invoices = invoices.filter(date_created__date=specific_date)
+        else:
+            if date_from:
+                invoices = invoices.filter(date_created__gte=date_from)
+            if date_to:
+                invoices = invoices.filter(date_created__lte=date_to)
+        if course_id:
+            invoices = invoices.filter(course_id=course_id)
+        invoices = invoices.select_related('user', 'course')
+
+        ws.title = "Active Invoices"
+        ws.append(['Sr. No.', 'Student Name', 'Email', 'Mobile', 'Course Title', 'Invoice Number', 'Paid Amount (₹)', 'Date'])
+
+        for idx, invoice in enumerate(invoices, start=1):
+            ws.append([
+                idx,
+                f"{invoice.user.first_name or ''} {invoice.user.last_name or ''}".strip(),
+                invoice.user.email,
+                invoice.user.mobile,
+                invoice.course.course_title if invoice.course else 'N/A',
+                invoice.invoice_number,
+                invoice.paid_amount,
+                invoice.date_created.strftime("%Y-%m-%d")
+            ])
+        
        
 
     else:
@@ -3044,4 +3122,130 @@ def paid_courses_by_category(request, category_id):
     return render(request, 'paid_courses_by_category.html', {
         'category': category,
         'courses': courses  # ✅ matches HTML
+    })
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+from .models import PaidCourse, CompletedContent, CourseContent
+
+@login_required
+def certificate_download_page(request):
+    user = request.user
+    completed_courses = []
+
+    # All paid courses purchased by user
+    user_courses = PaidCourse.objects.filter(newpayment__user=user, newpayment__status__in=["success", "manual"]).distinct()
+
+    for course in user_courses:
+        total_content = CourseContent.objects.filter(course=course).count()
+        completed_count = CompletedContent.objects.filter(user=user, course=course).count()
+
+        if total_content > 0 and completed_count == total_content:
+            completed_courses.append(course)
+
+    return render(request, 'certificate_download.html', {'completed_courses': completed_courses})
+
+
+from django.shortcuts import get_object_or_404
+
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+from .models import PaidCourse, CourseProgress
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from .models import PaidCourse, CourseProgress
+
+def view_certificate(request, course_id):
+    course = get_object_or_404(PaidCourse, id=course_id)
+    user = request.user
+
+    # Check course progress
+    progress = CourseProgress.objects.filter(user=user, course=course).first()
+    if not progress or not progress.completed:
+        return HttpResponse("You must complete the course to view the certificate.", status=403)
+
+    return render(request, 'certificate_template.html', {'user': user, 'course': course})
+
+
+
+from django.shortcuts import render
+from .models import Invoice, PaidCourse
+from django.shortcuts import render
+from .models import Invoice, PaidCourse
+from datetime import datetime
+
+from datetime import datetime
+from django.shortcuts import render
+from django.db.models import Q
+from .models import Invoice, PaidCourse
+
+from datetime import datetime
+from django.shortcuts import render
+from .models import Invoice, PaidCourse
+
+
+
+from datetime import datetime, timedelta
+from django.shortcuts import render
+from django.contrib import messages
+from .models import Invoice, PaidCourse
+
+def active_invoice_report(request):
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+
+    # Start with active invoices (not canceled)
+    invoices = Invoice.objects.filter(is_canceled=False)
+
+    # Apply specific date filter
+    if specific_date:
+        try:
+            specific_date_obj = datetime.strptime(specific_date, "%Y-%m-%d").date()
+            next_day = specific_date_obj + timedelta(days=1)
+            invoices = invoices.filter(
+                date_created__gte=specific_date_obj,
+                date_created__lt=next_day
+            )
+        except ValueError:
+            messages.error(request, "Invalid date format. Please use YYYY-MM-DD.")
+    
+    # Apply date range filters if no specific date
+    else:
+        if date_from:
+            try:
+                date_from_obj = datetime.strptime(date_from, "%Y-%m-%d").date()
+                invoices = invoices.filter(date_created__gte=date_from_obj)
+            except ValueError:
+                messages.error(request, "Invalid 'from' date format. Please use YYYY-MM-DD.")
+
+        if date_to:
+            try:
+                date_to_obj = datetime.strptime(date_to, "%Y-%m-%d").date()
+                # Include the entire end date by adding 1 day
+                next_day = date_to_obj + timedelta(days=1)
+                invoices = invoices.filter(date_created__lt=next_day)
+            except ValueError:
+                messages.error(request, "Invalid 'to' date format. Please use YYYY-MM-DD.")
+
+    # Filter by course
+    if course_id:
+        invoices = invoices.filter(course_id=course_id)
+
+    all_courses = PaidCourse.objects.all()
+
+    return render(request, 'admin_active_invoice_report.html', {
+        'invoices': invoices,
+        'all_courses': all_courses,
+        'filter_params': {
+            'date_from': date_from or '',
+            'date_to': date_to or '',
+            'specific_date': specific_date or '',
+            'course': course_id or '',
+        },
     })

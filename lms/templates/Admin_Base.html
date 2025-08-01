@@ -206,7 +206,19 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="/ticket_to_admin/">Tickets</a>
+        <a class="nav-link d-flex align-items-center justify-content-between" href="/ticket_to_admin/">
+  <span>Tickets</span>
+  {% if open_ticket_count > 0 %}
+    <span class="badge badge-danger ml-2" style="font-size: 0.8rem;">
+      ● {{ open_ticket_count }}
+    </span>
+  {% endif %}
+</a>
+
+
+
+
+
         <a class="nav-link" href="#">Certificates</a>
         <a class="nav-link" href="#">Invoices</a>
         <a class="nav-link" href="/send_notification/">Notifications</a>

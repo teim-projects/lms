@@ -88,7 +88,7 @@ urlpatterns = [
 
     path('view-file/<int:content_id>/', views.view_file, name='view_file'),
 
-    path('certificate/',views.certificate,name='certificate'),
+    
 
     path('your_course/',views.your_course,name='your_course'),
 
@@ -145,6 +145,16 @@ urlpatterns = [
     path('category/<int:category_id>/paid/', views.paid_courses_by_category, name='paid_courses_by_category'),
 
     path('free-courses/<int:course_id>/', views.free_course_detail, name='free_course_detail'),
+
+    path('my-certificates/', views.certificate_download_page, name='certificate_download_page'),
+    path('certificate/view/<int:course_id>/', views.view_certificate, name='view_certificate'),
+
+    path('delete_subtitle/<int:content_id>/', views.delete_course_subtitle, name='delete_course_subtitle'),
+    path('delete_title/<int:course_id>/<str:title>/', views.delete_course_title, name='delete_course_title'),
+
+     path('dashboard/active-invoice-report/', views.active_invoice_report, name='active_invoice_report'),
+
+
 
 
 

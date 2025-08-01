@@ -1,24 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Create Category</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 80px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+       .form-container {
+    max-width: 700px;  /* Increased from 500px */
+    background: #fff;
+    padding: 30px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group label {
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            width: 100%;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2>Create a New Category</h2>
-    
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="text" name="name" placeholder="Enter category name" required><br><br>
-        
-        <textarea name="description" placeholder="Enter category description" rows="4" cols="40"></textarea><br><br>
-        
-        <label>Upload Icon:</label>
-        <input type="file" name="icon"><br><br>
-        
-        <button type="submit">Add Category</button>
-    </form>
+    {% include 'Student_Base.html' %}
 
-    <br>
-    <a href="{% url 'view_categories' %}">View All Categories</a>
+    <div class="container" style="min-height: 100vh;">
+    <div class="form-container" style="margin-top: 150px;">
+        <h2>Create a New Category</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="name">Category Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter category name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Category Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter category description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="icon">Upload Icon</label>
+                <input type="file" class="form-control-file" id="icon" name="icon">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit">Add Category</button>
+        </form>
+
+        <a href="{% url 'view_categories' %}" class="back-link">View All Categories</a>
+    </div>
+</div>
+
+    {% include 'footer.html' %}
 </body>
 </html>

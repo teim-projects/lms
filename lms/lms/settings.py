@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'lmsapp.context_processors.user_role_context',
+                 'lmsapp.context_processors.open_ticket_count',
             ],
         },
     },

@@ -91,8 +91,8 @@
 </head>
 <body>
 
-  {% include 'Admin_Base.html' %}
-
+  {% include 'Student_Base.html' %}
+<div class="main" style="min-height: 100vh; margin-top: 100px;">
   <h2 class="page-title">📚 All LMS Categories</h2>
 
   <div class="top-links">
@@ -143,7 +143,10 @@
           <h6 class="card-title text-center fw-semibold">{{ course.title }}</h6>
           <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
           <center>
-                      <a href="#" class="btn btn-primary btn-sm mt-2 w-50">Start Now</a>
+                      <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm mt-2 w-50">
+    View 
+</a>
+
 
           </center>
         </div>
@@ -193,6 +196,7 @@
     </div>
   </div>
   {% endfor %}
-
+</div>
+{% include 'footer.html' %}
 </body>
 </html>
