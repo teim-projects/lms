@@ -32,7 +32,6 @@
       display: block;
     }
 
-    /* ========== Watermark Styles ========== */
     .watermark {
       position: absolute;
       font-weight: bold;
@@ -46,107 +45,60 @@
       border-radius: 4px;
     }
 
-    /* Horizontal top: left to right */
-    .watermark-top {
-      top: 0;
-      left: -100%;
-      animation: moveLR 15s linear infinite;
-    }
+    .watermark-top { top: 0; left: -100%; animation: moveLR 15s linear infinite; }
+    @keyframes moveLR { 0% { left: -100%; } 100% { left: 100%; } }
 
-    @keyframes moveLR {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
+    .watermark-bottom { bottom: 0; right: -100%; animation: moveRL 15s linear infinite; }
+    @keyframes moveRL { 0% { right: -100%; } 100% { right: 100%; } }
 
-    /* Horizontal bottom: right to left */
-    .watermark-bottom {
-      bottom: 0;
-      right: -100%;
-      animation: moveRL 15s linear infinite;
-    }
-
-    @keyframes moveRL {
-      0% { right: -100%; }
-      100% { right: 100%; }
-    }
-
-    /* Vertical left: top to bottom */
     .watermark-left {
-      top: -100%;
-      left: 0;
-      transform: rotate(90deg);
-      transform-origin: left top;
+      top: -100%; left: 0;
+      transform: rotate(90deg); transform-origin: left top;
       animation: moveTB 15s linear infinite;
     }
+    @keyframes moveTB { 0% { top: -100%; } 100% { top: 100%; } }
 
-    @keyframes moveTB {
-      0% { top: -100%; }
-      100% { top: 100%; }
-    }
-
-    /* Vertical right: bottom to top */
     .watermark-right {
-      bottom: -100%;
-      right: 0;
-      transform: rotate(-90deg);
-      transform-origin: right bottom;
+      bottom: -100%; right: 0;
+      transform: rotate(-90deg); transform-origin: right bottom;
       animation: moveBT 15s linear infinite;
     }
+    @keyframes moveBT { 0% { bottom: -100%; } 100% { bottom: 100%; } }
 
-    @keyframes moveBT {
-      0% { bottom: -100%; }
-      100% { bottom: 100%; }
-    }
-
-    /* Center watermark with scale + pulse animation */
     .watermark-center {
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       animation: centerMove 10s linear infinite, pulse 3s infinite;
     }
-
     @keyframes centerMove {
-      0% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.5;
-      }
-      50% {
-        transform: translate(-50%, -50%) scale(1.2);
-        opacity: 0.9;
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.5;
-      }
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
     }
-
     @keyframes pulse {
       0%, 100% { opacity: 0.5; }
       50% { opacity: 1; }
     }
 
     .fullscreen-btn {
-  position: absolute;
-  top: 8px;          /* Moves it near the 3-dot */
-  right: 50px;       /* Adjusted to be beside 3-dot, not overlap */
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
+      position: absolute;
+      top: 8px;
+      right: 50px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
 
-.fullscreen-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
+    .fullscreen-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
 
-
-    
   </style>
 </head>
 
@@ -154,112 +106,70 @@
   <div class="content-container">
     {% with content.resource_file.url|lower as file_url %}
       {% if ".mp4" in file_url %}
-  <!-- Video block -->
-  <div class="video-wrapper" style="position:relative;">
-    <video id="videoPlayer" controls controlsList="nodownload" oncontextmenu="return false" width="100%">
-      <source src="{{ file_url }}" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+        <div class="video-wrapper">
+          <video id="videoPlayer" controls controlsList="nodownload" oncontextmenu="return false" width="100%">
+            <source src="{{ content.resource_file.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
 
-    <!-- Watermark overlays -->
-    <div class="watermark watermark-top">{{ user.email }}</div>
-    <div class="watermark watermark-bottom">{{ user.email }}</div>
-    <div class="watermark watermark-left">{{ user.email }}</div>
-    <div class="watermark watermark-right">{{ user.email }}</div>
-    <div class="watermark watermark-center">{{ user.email }}</div>
+          <!-- Watermark Overlays -->
+          <div class="watermark watermark-top">{{ user.email }}</div>
+          <div class="watermark watermark-bottom">{{ user.email }}</div>
+          <div class="watermark watermark-left">{{ user.email }}</div>
+          <div class="watermark watermark-right">{{ user.email }}</div>
+          <div class="watermark watermark-center">{{ user.email }}</div>
 
-    <!-- Fullscreen button -->
-    <button onclick="openFullscreen()" class="fullscreen-btn">⛶</button>
-  </div>
+          <!-- Fullscreen Button -->
+          <button onclick="openFullscreen()" class="fullscreen-btn">⛶</button>
+        </div>
 
-{% elif ".pdf" in file_url %}
-  <!-- PDF block -->
-  <div class="video-wrapper" style="height: 90vh; position: relative;">
-    <iframe 
-      src="{{ content.resource_file.url }}" 
-      width="100%" 
-      height="100%" 
-      style="border: none;">
-    </iframe>
-    <!-- Watermarks -->
-    <div class="watermark watermark-top">{{ user.email }}</div>
-    <div class="watermark watermark-bottom">{{ user.email }}</div>
-    <div class="watermark watermark-left">{{ user.email }}</div>
-    <div class="watermark watermark-right">{{ user.email }}</div>
-    <div class="watermark watermark-center">{{ user.email }}</div>
-  </div>
+      {% elif ".pdf" in file_url %}
+        <iframe src="{{ content.resource_file.url }}" width="100%" height="100%" style="border:none;"></iframe>
 
-{% elif ".doc" in file_url or ".docx" in file_url %}
-  <iframe 
-    src="https://docs.google.com/gview?url={{ absolute_url }}&embedded=true" 
-    style="width:100%; height:100vh; border:none;">
-  </iframe>
+        <!-- Watermarks for PDF -->
+        <div class="watermark watermark-top">{{ user.email }}</div>
+        <div class="watermark watermark-bottom">{{ user.email }}</div>
+        <div class="watermark watermark-left">{{ user.email }}</div>
+        <div class="watermark watermark-right">{{ user.email }}</div>
+        <div class="watermark watermark-center">{{ user.email }}</div>
 
-{% elif ".txt" in file_url %}
-  <div class="video-wrapper" style="height: 90vh; overflow: auto; padding: 20px; background: #f7f7f7; font-family: monospace;">
-    {% with content.resource_file.open|safe as txt_file %}
-      {{ txt_file.read|linebreaksbr }}
+      {% elif ".jpg" in file_url or ".jpeg" in file_url or ".png" in file_url or ".gif" in file_url %}
+        <img src="{{ content.resource_file.url }}" alt="Image" style="width: 100%; height: auto; display: block; margin: auto;">
+
+      {% else %}
+        <p class="text-danger text-center fs-4 mt-5">⚠ Unsupported file format</p>
+      {% endif %}
     {% endwith %}
   </div>
-
-{% elif ".jpg" in file_url or ".jpeg" in file_url or ".png" in file_url or ".gif" in file_url %}
-  <img src="{{ file_url }}" alt="Image" style="width: 100%; height: auto; display: block; margin: auto;">
-
-{% else %}
-  <p class="text-danger text-center fs-4 mt-5">⚠ Unsupported file format</p>
-{% endif %}
-
-    {% endwith %}
-  </div>
-
-
 
   <script>
-  const video = document.getElementById("videoPlayer");
-  const wrapper = document.querySelector(".video-wrapper");
+    const video = document.getElementById("videoPlayer");
+    const wrapper = document.querySelector(".video-wrapper");
 
-  function openFullscreen() {
-    if (wrapper.requestFullscreen) {
-      wrapper.requestFullscreen();
-    } else if (wrapper.webkitRequestFullscreen) {
-      wrapper.webkitRequestFullscreen();
-    } else if (wrapper.msRequestFullscreen) {
-      wrapper.msRequestFullscreen();
-    }
-  }
-
-  // Detect if only <video> goes fullscreen via 3-dot or native menu
-  document.addEventListener("fullscreenchange", function () {
-    const fsElement = document.fullscreenElement;
-    if (fsElement === video) {
-      document.exitFullscreen().then(() => {
+    function openFullscreen() {
+      if (wrapper.requestFullscreen) {
         wrapper.requestFullscreen();
-      });
+      } else if (wrapper.webkitRequestFullscreen) {
+        wrapper.webkitRequestFullscreen();
+      } else if (wrapper.msRequestFullscreen) {
+        wrapper.msRequestFullscreen();
+      }
     }
-  });
 
-  // Optional: Hide native fullscreen button in Chrome/Safari
-  const style = document.createElement("style");
-  style.textContent = `
-    video::-webkit-media-controls-fullscreen-button {
-      display: none !important;
-    }
-  `;
-  document.head.appendChild(style);
-</script>
+    // Optional: prevent native fullscreen
+    document.addEventListener("fullscreenchange", () => {
+      const fsElement = document.fullscreenElement;
+      if (fsElement === video) {
+        document.exitFullscreen().then(() => {
+          wrapper.requestFullscreen();
+        });
+      }
+    });
 
-  <script>
-  function openFullscreen() {
-    var wrapper = document.querySelector('.video-wrapper');
-    if (wrapper.requestFullscreen) {
-      wrapper.requestFullscreen();
-    } else if (wrapper.webkitRequestFullscreen) { /* Safari */
-      wrapper.webkitRequestFullscreen();
-    } else if (wrapper.msRequestFullscreen) { /* IE11 */
-      wrapper.msRequestFullscreen();
-    }
-  }
-</script>
-
+    // Hide native fullscreen button
+    const style = document.createElement("style");
+    style.textContent = `video::-webkit-media-controls-fullscreen-button { display: none !important; }`;
+    document.head.appendChild(style);
+  </script>
 </body>
 </html>
