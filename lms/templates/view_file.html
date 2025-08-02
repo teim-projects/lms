@@ -32,12 +32,12 @@
       display: block;
     }
 
-    /* ========== Watermark Styles ========== */
+    /* Watermark base style */
     .watermark {
       position: absolute;
       font-weight: bold;
-      color: rgba(0, 0, 0, 0.6);
-      background-color: rgba(255, 255, 255, 0.3);
+      color: rgba(0, 0, 0, 0.6); /* transparent black */
+      background-color: rgba(255, 255, 255, 0.3); /* transparent white */
       padding: 2px 10px;
       white-space: nowrap;
       pointer-events: none;
@@ -70,7 +70,7 @@
       100% { right: 100%; }
     }
 
-    /* Vertical left: top to bottom */
+    /* Vertical left: top to bottom (rotated) */
     .watermark-left {
       top: -100%;
       left: 0;
@@ -84,7 +84,7 @@
       100% { top: 100%; }
     }
 
-    /* Vertical right: bottom to top */
+    /* Vertical right: bottom to top (rotated) */
     .watermark-right {
       bottom: -100%;
       right: 0;
@@ -98,93 +98,39 @@
       100% { bottom: 100%; }
     }
 
-    /* Center watermark with scale + pulse animation */
-    .watermark-center {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation: centerMove 10s linear infinite, pulse 3s infinite;
-    }
-
-    @keyframes centerMove {
-      0% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.5;
-      }
-      50% {
-        transform: translate(-50%, -50%) scale(1.2);
-        opacity: 0.9;
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.5;
-      }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
-
-    .fullscreen-btn {
-  position: absolute;
-  top: 8px;          /* Moves it near the 3-dot */
-  right: 50px;       /* Adjusted to be beside 3-dot, not overlap */
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+    /* Diagonal scrolling watermark in center */
+.watermark-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: moveDiagonal 10s linear infinite;
 }
 
-.fullscreen-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
+@keyframes moveDiagonal {
+  0% {
+    transform: translate(-50%, -50%) translateX(-50%) translateY(-50%) rotate(-10deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateX(50%) translateY(50%) rotate(10deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateX(-50%) translateY(-50%) rotate(-10deg);
+  }
 }
 
-
-    
   </style>
 </head>
-
-<body oncontextmenu="return false;">
+<body>
   <div class="content-container">
     {% with content.resource_file.url|lower as file_url %}
       {% if ".mp4" in file_url %}
-       <div class="video-wrapper" style="position:relative;">
-  <video id="videoPlayer" controls controlsList="nodownload" oncontextmenu="return false" width="100%">
-    <source src="{{ file_url }}" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+        <div class="video-wrapper">
+          <video controls controlsList="nodownload" disablePictureInPicture>
+            <source src="{{ content.resource_file.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
 
-  <!-- Watermark - Centered -->
-  <div class="watermark" style="
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    opacity:0.5;
-    background:#0003;
-    color:white;
-    padding:4px 8px;
-    border-radius:4px;
-    pointer-events:none;
-    font-weight:bold;
-  ">
- 
-  </div>
-
-  <!-- Custom Fullscreen Button -->
-<button onclick="openFullscreen()" class="fullscreen-btn">⛶</button>
-
-
-
-
-
-          <!-- Watermark overlays (dynamic user email) -->
+          <!-- Watermark overlays -->
           <div class="watermark watermark-top">{{ user.email }}</div>
           <div class="watermark watermark-bottom">{{ user.email }}</div>
           <div class="watermark watermark-left">{{ user.email }}</div>
@@ -204,43 +150,13 @@
     {% endwith %}
   </div>
 
-
-
   <script>
-  const video = document.getElementById("videoPlayer");
-  const wrapper = document.querySelector(".video-wrapper");
+    document.addEventListener('contextmenu',event => {
+        if (event.target.tagName === 'IMG' || event.target.tagName === 'VIDEO'){
+            event.preventDefault();
 
-  // ✅ Clean single function
-  function openFullscreen() {
-    if (wrapper.requestFullscreen) {
-      wrapper.requestFullscreen();
-    } else if (wrapper.webkitRequestFullscreen) {
-      wrapper.webkitRequestFullscreen();
-    } else if (wrapper.msRequestFullscreen) {
-      wrapper.msRequestFullscreen();
-    }
-  }
-
-  // ✅ Detect if <video> alone is fullscreen, and correct it
-  document.addEventListener("fullscreenchange", function () {
-    const fsElement = document.fullscreenElement;
-    if (fsElement === video) {
-      document.exitFullscreen().then(() => {
-        openFullscreen();  // force full wrapper fullscreen
-      });
-    }
-  });
-
-  // ✅ Hide native fullscreen button from <video> controls
-  const style = document.createElement("style");
-  style.textContent = `
-    video::-webkit-media-controls-fullscreen-button {
-      display: none !important;
-    }
-  `;
-  document.head.appendChild(style);
-</script>
-
-
+        }
+    });
+  </script>
 </body>
 </html>
