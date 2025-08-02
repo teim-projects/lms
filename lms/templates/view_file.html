@@ -118,6 +118,15 @@
   }
 }
 
+
+  video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+  }
+
+  video::--webkit-media-controls-fullscreen-button {
+    display: none !important;
+  }
+
   </style>
 </head>
 <body>
@@ -136,7 +145,9 @@
           <div class="watermark watermark-left">{{ user.email }}</div>
           <div class="watermark watermark-right">{{ user.email }}</div>
           <div class="watermark watermark-center">{{ user.email }}</div>
+          <button onclick="openFullscreen()" style="position:absolute; top:10px; right:10px; z-index:999;">⛶</button>
         </div>
+
 
       {% elif ".pdf" in file_url or ".txt" in file_url or ".doc" in file_url or ".docx" in file_url %}
         <script>window.location.href = "{{ content.resource_file.url }}";</script>
@@ -158,5 +169,40 @@
         }
     });
   </script>
+
+
+<script>
+  const video = document.querySelector("video");
+  const wrapper = document.querySelector(".video-wrapper");
+
+  // When native fullscreen is triggered, cancel and fullscreen wrapper instead
+  document.addEventListener("fullscreenchange", () => {
+    const fsElement = document.fullscreenElement;
+    if (fsElement === video) {
+      document.exitFullscreen().then(() => {
+        wrapper.requestFullscreen();
+      });
+    }
+  });
+
+  // Fullscreen handler for button
+  function openFullscreen() {
+    if (wrapper.requestFullscreen) {
+      wrapper.requestFullscreen();
+    } else if (wrapper.webkitRequestFullscreen) {
+      wrapper.webkitRequestFullscreen();
+    } else if (wrapper.msRequestFullscreen) {
+      wrapper.msRequestFullscreen();
+    }
+  }
+
+  // Disable right-click on video or image
+  document.addEventListener('contextmenu', event => {
+    if (event.target.tagName === 'IMG' || event.target.tagName === 'VIDEO') {
+      event.preventDefault();
+    }
+  });
+</script>
+
 </body>
 </html>
