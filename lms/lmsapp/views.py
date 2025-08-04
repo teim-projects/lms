@@ -1839,7 +1839,8 @@ def display_paid_content(request, course_id):
     if is_logged_in:
         # Check if user has access
         has_access = (
-            NewPayment.objects.filter(user=request.user, course=course, status="success").exists() or
+            # NewPayment.objects.filter(user=request.user, course=course, status="success").exists() or
+            # UserCourseAccess.objects.filter(user=request.user, course=course).exists()
             UserCourseAccess.objects.filter(user=request.user, course=course).exists()
         )
 
@@ -1932,9 +1933,9 @@ def initiate_payment(request, course_id):
     productinfo = course.course_title
     firstname = user.first_name or user.username
     email = user.email
-    # phone = "9999999999"
+    phone = "9999999999"
     # keep above phone field in comment if you are working on live and for local keep below commented
-    phone = user.mobile  # Or from user profile
+    # phone = user.mobile  # Or from user profile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
@@ -1960,11 +1961,11 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        # "surl": request.build_absolute_uri('/payment/success/'),
-        # "furl": request.build_absolute_uri('/payment/failure/'),
+        "surl": request.build_absolute_uri('/payment/success/'),
+        "furl": request.build_absolute_uri('/payment/failure/'),
         # this below should be in comment if you want to make payment on local
-        "surl": "https://profitmaxacademy.in/payment/success/",
-        "furl": "https://profitmaxacademy.in/payment/failure/",
+        # "surl": "https://profitmaxacademy.in/payment/success/",
+        # "furl": "https://profitmaxacademy.in/payment/failure/",
 
         "hashh": hashh
     }
