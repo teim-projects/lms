@@ -946,19 +946,22 @@ def create_paid_course(request):
 
         course_code = generate_unique_course_code()
 
+        thumbnail=request.FILES.get('thumbnail')
+
         category_id = request.POST.get('category')
+    
 
         category = Category.objects.get(id=category_id) if category_id else None
 
 
 
         # Save thumbnail file if provided
-        if thumbnail:
-            fs = FileSystemStorage()
-            filename = fs.save(thumbnail.name, thumbnail)
-            thumbnail_url = fs.url(filename)
-        else:
-            thumbnail_url = None
+        # if thumbnail:
+        #     fs = FileSystemStorage()
+        #     filename = fs.save(thumbnail.name, thumbnail)
+        #     thumbnail_url = fs.url(filename)
+        # else:
+        #     thumbnail_url = None
 
         # Save to database
         PaidCourse.objects.create(
@@ -1929,9 +1932,9 @@ def initiate_payment(request, course_id):
     productinfo = course.course_title
     firstname = user.first_name or user.username
     email = user.email
-    phone = "9999999999"
+    # phone = "9999999999"
     # keep above phone field in comment if you are working on live and for local keep below commented
-    # phone = user.mobile  # Or from user profile
+    phone = user.mobile  # Or from user profile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
@@ -1957,11 +1960,11 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        "surl": request.build_absolute_uri('/payment/success/'),
-        "furl": request.build_absolute_uri('/payment/failure/'),
+        # "surl": request.build_absolute_uri('/payment/success/'),
+        # "furl": request.build_absolute_uri('/payment/failure/'),
         # this below should be in comment if you want to make payment on local
-        # "surl": "https://profitmaxacademy.in/payment/success/",
-        # "furl": "https://profitmaxacademy.in/payment/failure/",
+        "surl": "https://profitmaxacademy.in/payment/success/",
+        "furl": "https://profitmaxacademy.in/payment/failure/",
 
         "hashh": hashh
     }
