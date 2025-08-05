@@ -99,22 +99,20 @@
     }
 
     /* Diagonal scrolling watermark in center */
+/* Horizontal center scrolling */
 .watermark-center {
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: moveDiagonal 10s linear infinite;
+  left: -100%;
+  transform: translateY(-50%);
+  animation: moveCenterLR 15s linear infinite;
 }
 
-@keyframes moveDiagonal {
+@keyframes moveCenterLR {
   0% {
-    transform: translate(-50%, -50%) translateX(-50%) translateY(-50%) rotate(-10deg);
-  }
-  50% {
-    transform: translate(-50%, -50%) translateX(50%) translateY(50%) rotate(10deg);
+    left: -100%;
   }
   100% {
-    transform: translate(-50%, -50%) translateX(-50%) translateY(-50%) rotate(-10deg);
+    left: 100%;
   }
 }
 
