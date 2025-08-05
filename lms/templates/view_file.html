@@ -24,12 +24,17 @@
       max-width: 1200px;
       border: 5px solid #ccc;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     video {
       width: 100%;
       height: auto;
+      max-height: 100vh;
       display: block;
+      object-fit: contain; /* Ensure video scales while maintaining aspect ratio */
     }
 
     /* Watermark base style */
@@ -98,35 +103,100 @@
       100% { bottom: 100%; }
     }
 
-    /* Diagonal scrolling watermark in center */
-.watermark-center {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: moveDiagonal 10s linear infinite;
-}
+    /* Horizontal center scrolling */
+    .watermark-center {
+      top: 50%;
+      left: -100%;
+      transform: translateY(-50%);
+      animation: moveCenterLR 15s linear infinite;
+    }
 
-@keyframes moveDiagonal {
-  0% {
-    transform: translate(-50%, -50%) translateX(-50%) translateY(-50%) rotate(-10deg);
-  }
-  50% {
-    transform: translate(-50%, -50%) translateX(50%) translateY(50%) rotate(10deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) translateX(-50%) translateY(-50%) rotate(-10deg);
-  }
-}
+    @keyframes moveCenterLR {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
 
+    video::-webkit-media-controls-fullscreen-button {
+      display: none !important;
+    }
 
-  video::-webkit-media-controls-fullscreen-button {
-    display: none !important;
-  }
+    video::--webkit-media-controls-fullscreen-button {
+      display: none !important;
+    }
 
-  video::--webkit-media-controls-fullscreen-button {
-    display: none !important;
-  }
+    /* Fullscreen styles */
+    .video-wrapper:fullscreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      background: #000; /* Black background for fullscreen */
+    }
 
+    .video-wrapper:-webkit-full-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+    }
+
+    .video-wrapper:-moz-full-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+    }
+
+    .video-wrapper:-ms-fullscreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+    }
+
+    .video-wrapper:fullscreen video,
+    .video-wrapper:-webkit-full-screen video,
+    .video-wrapper:-moz-full-screen video,
+    .video-wrapper:-ms-fullscreen video {
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain; /* Maintain aspect ratio in fullscreen */
+    }
+
+    /* Ensure watermarks remain visible in fullscreen */
+    .video-wrapper:fullscreen .watermark,
+    .video-wrapper:-webkit-full-screen .watermark,
+    .video-wrapper:-moz-full-screen .watermark,
+    .video-wrapper:-ms-fullscreen .watermark {
+      font-size: 1.2rem; /* Slightly larger for visibility in fullscreen */
+    }
+
+    /* Media query for mobile and tablet */
+    @media screen and (max-width: 768px) {
+      .video-wrapper {
+        width: 100%;
+        height: auto;
+      }
+
+      video {
+        width: 100%;
+        height: auto;
+        max-height: 90vh; /* Prevent overflow on smaller screens */
+      }
+
+      .watermark {
+        font-size: 0.9rem; /* Smaller font for mobile */
+      }
+    }
   </style>
 </head>
 <body>
@@ -148,7 +218,6 @@
           <button onclick="openFullscreen()" style="position:absolute; top:10px; right:10px; z-index:999;">⛶</button>
         </div>
 
-
       {% elif ".pdf" in file_url or ".txt" in file_url or ".doc" in file_url or ".docx" in file_url %}
         <script>window.location.href = "{{ content.resource_file.url }}";</script>
 
@@ -162,47 +231,36 @@
   </div>
 
   <script>
-    document.addEventListener('contextmenu',event => {
-        if (event.target.tagName === 'IMG' || event.target.tagName === 'VIDEO'){
-            event.preventDefault();
+    const video = document.querySelector("video");
+    const wrapper = document.querySelector(".video-wrapper");
 
-        }
+    // When native fullscreen is triggered, cancel and fullscreen wrapper instead
+    document.addEventListener("fullscreenchange", () => {
+      const fsElement = document.fullscreenElement;
+      if (fsElement === video) {
+        document.exitFullscreen().then(() => {
+          wrapper.requestFullscreen();
+        });
+      }
+    });
+
+    // Fullscreen handler for button
+    function openFullscreen() {
+      if (wrapper.requestFullscreen) {
+        wrapper.requestFullscreen();
+      } else if (wrapper.webkitRequestFullscreen) {
+        wrapper.webkitRequestFullscreen();
+      } else if (wrapper.msRequestFullscreen) {
+        wrapper.msRequestFullscreen();
+      }
+    }
+
+    // Disable right-click on video or image
+    document.addEventListener('contextmenu', event => {
+      if (event.target.tagName === 'IMG' || event.target.tagName === 'VIDEO') {
+        event.preventDefault();
+      }
     });
   </script>
-
-
-<script>
-  const video = document.querySelector("video");
-  const wrapper = document.querySelector(".video-wrapper");
-
-  // When native fullscreen is triggered, cancel and fullscreen wrapper instead
-  document.addEventListener("fullscreenchange", () => {
-    const fsElement = document.fullscreenElement;
-    if (fsElement === video) {
-      document.exitFullscreen().then(() => {
-        wrapper.requestFullscreen();
-      });
-    }
-  });
-
-  // Fullscreen handler for button
-  function openFullscreen() {
-    if (wrapper.requestFullscreen) {
-      wrapper.requestFullscreen();
-    } else if (wrapper.webkitRequestFullscreen) {
-      wrapper.webkitRequestFullscreen();
-    } else if (wrapper.msRequestFullscreen) {
-      wrapper.msRequestFullscreen();
-    }
-  }
-
-  // Disable right-click on video or image
-  document.addEventListener('contextmenu', event => {
-    if (event.target.tagName === 'IMG' || event.target.tagName === 'VIDEO') {
-      event.preventDefault();
-    }
-  });
-</script>
-
 </body>
 </html>
