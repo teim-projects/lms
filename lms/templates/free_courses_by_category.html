@@ -3,48 +3,174 @@
 <head>
     <title>{{ category.name }} - Free Courses</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
- 
-
-        .course-card {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        :root {
+            --primary-color: #1976d2;
+            --secondary-color: #f8f9fa;
+            --accent-color: #00C853; /* Green accent color */
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text-dark);
         }
 
-        .course-img {
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-            height: 180px;
-            object-fit: cover;
+        .container {
+            margin-top: 100px;
+            min-height: 100vh;
+            padding-bottom: 60px;
         }
 
         .section-header {
             text-align: center;
-            margin: 40px 0 20px;
-            color: #333;
+            font-weight: 600;
+            font-size: 2.2rem;
+            margin: 40px 0 30px;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .section-header:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
         }
 
         .btn-custom {
             margin-bottom: 30px;
+            border-radius: 30px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--accent-color);
+            border: none;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+            background-color: #00B34A;
+            color: white;
+        }
+
+        /* Course Card Styles */
+        .course-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            margin-bottom: 25px;
+            border: none;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .course-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .course-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-block;
+            width: auto;
+            min-width: 120px;
+            align-self: center;
+            margin-top: auto;
+            box-shadow: 0 2px 8px rgba(0, 200, 83, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: #00B34A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+       
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #bdbdbd;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h5 {
+            color: var(--text-light);
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 {% include 'Student_Base.html' %}
 
-<div class="container  " style="margin-top: 100px; min-height: 100vh;">
+<div class="container">
     <h1 class="section-header">Free Courses in {{ category.name }}</h1>
 
     <div class="text-center mb-4">
-        <a href="{% url 'paid_courses_by_category' category.id %}" class="btn btn-success btn-custom">
-            View Paid Courses
+        <a href="{% url 'paid_courses_by_category' category.id %}" class="btn btn-custom">
+            <i class="fas fa-certificate mr-2"></i>View Paid Courses
         </a>
     </div>
 
@@ -53,25 +179,29 @@
             {% for course in courses %}
                 <div class="col-md-4 mb-4">
                     <div class="course-card">
-                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="img-fluid course-img w-100">
-                        <div class="p-3">
-                            <h5 class="mb-2">{{ course.title }}</h5>
-                            <p class="text-muted">{{ course.description|truncatewords:15 }}</p>
-                            <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm mt-2 w-50">
-    View 
-</a>
+                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="course-img">
+                        <div class="course-body">
+                            <h5 class="course-title">{{ course.title }}</h5>
+                            <p class="course-description">{{ course.description|truncatewords:20 }}</p>
+                            <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye mr-2"></i> View Course
+                            </a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="alert alert-warning text-center">
-            No free courses found for this category.
+        <div class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <h5>No free courses available in this category</h5>
+            <a href="/" class="btn btn-success mt-3" style="border-radius: 30px; padding: 8px 20px;">
+                <i class="fas fa-arrow-left mr-2"></i>Browse Categories
+            </a>
         </div>
     {% endif %}
 </div>
-    {% include 'footer.html' %}
 
+{% include 'footer.html' %}
 </body>
 </html>

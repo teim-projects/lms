@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>All LMS Categories</title>
@@ -89,114 +90,121 @@
     }
   </style>
 </head>
+
 <body>
 
-  {% include 'Admin_Base.html' %}
-<div class="main" style="min-height: 100vh; margin-top: 100px;">
-  <h2 class="page-title">📚 All LMS Categories</h2>
+  {% include 'Student_Base.html' %}
+  <div class="main" style="min-height: 100vh; margin-top: 100px;">
+    <h2 class="page-title">📚 All LMS Categories</h2>
 
-  <div class="top-links">
-    <a href="{% url 'create_category' %}">➕ Create New Category</a> |
-    <a href="/">🔐 Login / Signup</a>
-  </div>
+    <div class="top-links">
+      <!-- <a href="{% url 'create_category' %}">➕ Create New Category</a> | -->
+      <a href="/">🔐 Login / Signup</a>
+    </div>
 
-  <!-- Responsive Bootstrap Grid -->
-  <div class="container">
-    <div class="row gy-4">
-      {% for item in category_data %}
+    <!-- Responsive Bootstrap Grid -->
+    <div class="container">
+      <div class="row gy-4">
+        {% for item in category_data %}
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
           <div class="category-card" data-bs-toggle="modal" data-bs-target="#modal-{{ item.category.id }}">
             {% if item.category.icon %}
-              <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
+            <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
             {% endif %}
             <h3>{{ item.category.name }}</h3>
           </div>
         </div>
-      {% endfor %}
-    </div>
-  </div>
-
-  <!-- Modal for Each Category -->
-  {% for item in category_data %}
-  <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1" aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content rounded-4">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title " id="modalLabel{{ item.category.id }}">{{ item.category.name }}</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          {% if item.category.description %}
-            <p>{{ item.category.description }}</p>
-          {% endif %}
-
-  <!-- Free Courses -->
-   <div style="border-bottom:1px solid #7ae2ff;" class="w-100">
-<h5 class="mt-4">🎓 Free Courses</h5>
-<div class="row g-4 mb-3">
-  {% for course in item.free_courses %}
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
-        <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.title }}" style="height: 180px; object-fit: cover;">
-        <div class="card-body">
-          <h6 class="card-title text-center fw-semibold">{{ course.title }}</h6>
-          <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
-          <center>
-                      <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm mt-2 w-50">
-    View 
-</a>
-
-
-          </center>
-        </div>
+        {% endfor %}
       </div>
     </div>
-  {% empty %}
-    <p class="text-muted">No free courses available.</p>
-  {% endfor %}
-<div class="col-md-12 col-12 col-lg-12">
-      <a class="btn btn-outline-secondary btn-sm mb-2" style="float: right;"  href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
 
-</div>
-</div>
+    <!-- Modal for Each Category -->
+    {% for item in category_data %}
+    <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1"
+      aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content rounded-4">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title " id="modalLabel{{ item.category.id }}">{{ item.category.name }}</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
 
-</div>
-<div>
+          <div class="modal-body " style="padding-bottom: 100px;">
+            {% if item.category.description %}
+            <p>{{ item.category.description }}</p>
+            {% endif %}
+
+            <!-- Free Courses -->
+            <div style="border-bottom:1px solid #7ae2ff;" class="w-100">
+              <h5 class="mt-4">🎓 Free Courses</h5>
+              <div class="row g-4 mb-3">
+                {% for course in item.free_courses %}
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
+                    <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.title }}"
+                      style="height: 180px; object-fit: cover;">
+                    <div class="card-body">
+                      <h6 class="card-title text-center fw-semibold">{{ course.title }}</h6>
+                      <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
+                      <center>
+                        <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm mt-2 w-50">
+                          View
+                        </a>
+
+
+                      </center>
+                    </div>
+                  </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No free courses available.</p>
+                {% endfor %}
+                <div class="col-md-12 col-12 col-lg-12">
+                  <a class="btn btn-outline-secondary btn-sm mb-2" style="float: right;"
+                    href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
+
+                </div>
+              </div>
+
+            </div>
+            <div>
 
 
 
-<div class="row g-4 mb-3">
-    <h5 class="mt-4">💼 Paid Courses</h5>
+              <div class="row g-4 mb-3">
+                <h5 class="mt-4">💼 Paid Courses</h5>
 
-  {% for course in item.paid_courses %}
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
-        <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.course_title }}" style="height: 180px; object-fit: cover;">
-        <div class="card-body">
-          <h6 class="card-title fw-semibold">{{ course.course_title }}</h6>
-          <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <span class="text-success fw-bold">₹{{ course.course_price }}</span>
-            <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">View</a>
+                {% for course in item.paid_courses %}
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
+                    <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4"
+                      alt="{{ course.course_title }}" style="height: 180px; object-fit: cover;">
+                    <div class="card-body">
+                      <h6 class="card-title fw-semibold">{{ course.course_title }}</h6>
+                      <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
+                      <div class="d-flex justify-content-between align-items-center mt-2">
+                        <span class="text-success fw-bold">₹{{ course.course_price }}</span>
+                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">View</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No paid courses available.</p>
+                {% endfor %}
+              </div>
+              <a class="btn btn-outline-secondary btn-sm mt-3 " style="float: right;"
+                href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
+            </div>
+
+            <!-- <a class="btn btn-link" href="{% url 'category_detail' item.category.id %}">🔍 View Full Category Detail</a> -->
           </div>
         </div>
       </div>
     </div>
-  {% empty %}
-    <p class="text-muted">No paid courses available.</p>
-  {% endfor %}
-</div>
-<a class="btn btn-outline-secondary btn-sm " style="float: right;" href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
-</div>
-         
-          <a class="btn btn-link" href="{% url 'category_detail' item.category.id %}">🔍 View Full Category Detail</a>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
-</div>
-{% include 'footer.html' %}
+  {% include 'footer.html' %}
 </body>
+
 </html>

@@ -807,6 +807,7 @@ from .models import FreeCourse, CourseChapter
 
 from .models import FreeCourse, CourseChapter, Category
 
+@login_required
 def create_free_course(request):
     categories = Category.objects.all()
 
@@ -840,7 +841,7 @@ def create_free_course(request):
     courses = FreeCourse.objects.prefetch_related("chapters").all()
     return render(request, "create_free_course.html", {"courses": courses, "categories": categories})
 
-
+@login_required
 def update_free_course(request, course_id):
     course = FreeCourse.objects.get(id=course_id)
 
@@ -856,7 +857,7 @@ def update_free_course(request, course_id):
 
         return redirect('create_free_course')
 
-
+@login_required
 def free_courses(request):
     courses = FreeCourse.objects.prefetch_related("chapters").all()
     
@@ -870,11 +871,12 @@ def free_courses(request):
 
 from django.shortcuts import get_object_or_404
 
+
 def free_course_detail(request, course_id):
     course = get_object_or_404(FreeCourse.objects.prefetch_related("chapters"), id=course_id)
     return render(request, "free_course_detail.html", {"course": course})
 
-
+@login_required
 def paid_course(request):
     # Render a simple dashboard with a header
     return render(request, 'paid_course.html')
@@ -886,7 +888,7 @@ from django.shortcuts import render
 from .models import PaidCourse, CourseProgress
 from django.shortcuts import render
 from .models import PaidCourse, CourseProgress
-
+@login_required
 @user_passes_test(is_admin_or_subadmin)
 def view_paid_course(request):
     courses = PaidCourse.objects.all()
@@ -926,6 +928,7 @@ from django.shortcuts import render, redirect
 from .models import PaidCourse
 from django.core.files.storage import FileSystemStorage
 
+@login_required
 @user_passes_test(is_admin_or_subadmin)
 def create_paid_course(request):
     if request.method == 'POST':
@@ -1000,7 +1003,7 @@ def create_paid_course(request):
 
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import PaidCourse, CourseContent
-
+@login_required
 @user_passes_test(is_admin_or_subadmin)
 def upload_content(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
@@ -1049,6 +1052,7 @@ from django.http import HttpResponse, JsonResponse
 from .models import FreeCourse
 
 # Delete Free Course
+@login_required
 def delete_free_course(request, course_id):
     if request.method == 'POST':
         course = get_object_or_404(FreeCourse, id=course_id)
@@ -1066,7 +1070,7 @@ from .models import FreeCourse, CourseChapter
 
     
 
-
+@login_required
 def update_free_course(request, course_id):
     course = get_object_or_404(FreeCourse, id=course_id)
 
@@ -1124,6 +1128,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.db import transaction
 from lmsapp.models import PaidCourse , CourseContent
 
+@login_required
 def delete_paid_course(request, course_id):
     if request.method == 'POST':
         course = get_object_or_404(PaidCourse, id=course_id)
@@ -1141,6 +1146,7 @@ def delete_paid_course(request, course_id):
 from collections import defaultdict
 from django.utils.text import slugify
 
+@login_required
 def update_paid_course(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
 
@@ -1423,6 +1429,7 @@ from django.contrib import messages
 from .models import Notification
 from django.core.files.storage import default_storage
 
+@login_required
 def send_notification(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -1587,7 +1594,8 @@ def ticket_list(request):
         tickets = Ticket.objects.all().order_by("-created_at")  # Admins/Sub-Admins see all
     else:
         tickets = Ticket.objects.filter(user=request.user).order_by("-created_at")  # Students see only their own
-    return render(request, "ticket_list.html", {"tickets": tickets})
+    notifications = Notification.objects.all().order_by('-created_at')     
+    return render(request, "ticket_list.html", {"tickets": tickets,'notifications':notifications})
 
 from django.shortcuts import render
 
@@ -1595,6 +1603,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Ticket
 
+@login_required
 def ticket_to_admin(request):
     tickets = Ticket.objects.all().order_by("-created_at")
     open_ticket_count = Ticket.objects.filter(status='open').count()
@@ -1615,7 +1624,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Ticket
 
 
-
+@login_required
 def close_ticket(request, ticket_id):
     """ Close the ticket and update the database. """
     ticket = get_object_or_404(Ticket, id=ticket_id)
@@ -1648,6 +1657,7 @@ from .models import CustomUser
 
 from datetime import datetime
 
+@login_required
 def user_list(request):
     query = request.GET.get('q', '')
     sort = request.GET.get('sort', '')
@@ -2337,7 +2347,7 @@ def view_content(request, course_id):
 from django.shortcuts import render
 from .models import PaidCourse
 
-
+@login_required
 def paid_course_list(request):
     courses = PaidCourse.objects.all()
     return render(request, 'course_list.html', {'courses': courses})
@@ -2346,7 +2356,7 @@ def paid_course_list(request):
 from django.shortcuts import render
 from .models import NewPayment
 
-
+@login_required
 def paid_students_list(request):
     seen_emails = set()
     unique_payments = []
@@ -2422,7 +2432,7 @@ def restore_course_access_view(request, payment_id):
 from .models import CustomUser, NewPayment, Invoice, UserCourseAccess
 
 from .models import CustomUser, NewPayment, Invoice, UserCourseAccess, RevokedAccess
-
+@login_required
 def user_detail_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     payments = NewPayment.objects.filter(user=user).select_related('course').order_by('-created_at')
@@ -2614,8 +2624,9 @@ def your_course(request):
 
     # Convert dictionary values to list
     purchased_courses = list(unique_courses.values())
+    notifications = Notification.objects.all().order_by('-created_at')
 
-    return render(request, 'your_course.html', {'courses': purchased_courses})
+    return render(request, 'your_course.html', {'courses': purchased_courses,'notifications': notifications})
 
 
 
@@ -2669,7 +2680,7 @@ def easebuzz_webhook(request):
 
 from django.shortcuts import render
 from .models import Invoice
-
+@login_required
 def canceled_invoice_view(request):
     # Get filter parameters
     date_from = request.GET.get('date_from')
@@ -2720,7 +2731,7 @@ from .models import UserCourseAccess, CustomUser, PaidCourse, RevokedAccess  # i
 #     messages.success(request, "Access to the course has been revoked.")
 #     return redirect('user_detail', user_id=user_id)
 
-
+@login_required
 def manual_access_report(request):
     # Get filter parameters
     date_from = request.GET.get('date_from')
@@ -2754,7 +2765,7 @@ def manual_access_report(request):
         'filter_params': request.GET,
     })
 
-
+@login_required
 def course_report(request):
     # Get filter parameters
     date_from = request.GET.get('date_from')
@@ -2785,6 +2796,7 @@ def course_report(request):
         'filter_params': request.GET,
     })
 
+@login_required
 def course_enrollment_detail(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
     enrollments = NewPayment.objects.filter(course=course, status__in=['manual', 'success']).select_related('user')
@@ -2794,7 +2806,7 @@ def course_enrollment_detail(request, course_id):
     })
 
     
-    
+@login_required    
 def revoked_access_list_view(request):
     if not request.user.is_superuser:
         return redirect('admin_dashboard')
@@ -3046,6 +3058,7 @@ def export_to_excel(request):
 from django.shortcuts import render, redirect
 from .models import Category
 
+@login_required
 def create_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -3054,7 +3067,7 @@ def create_category(request):
 
         if name:
             Category.objects.create(name=name, description=description, icon=icon)
-            return redirect('view_categories')
+            return redirect('admin_view_categories')
 
     return render(request, 'create_category.html')
 
@@ -3099,14 +3112,15 @@ from .models import Category, FreeCourse, PaidCourse
 
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
-    free_courses = FreeCourse.objects.filter(category=category)[:3]
-    paid_courses = PaidCourse.objects.filter(category=category)[:3]
+    free_courses = FreeCourse.objects.filter(category=category)
+    paid_courses = PaidCourse.objects.filter(category=category)
     
     return render(request, 'category_detail.html', {
         'category': category,
         'free_courses': free_courses,
         'paid_courses': paid_courses
     })
+
 
 
 from django.shortcuts import get_object_or_404, render
@@ -3163,6 +3177,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import PaidCourse, CourseProgress
 
+@login_required
 def view_certificate(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
     user = request.user
@@ -3198,6 +3213,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from .models import Invoice, PaidCourse
 
+@login_required
 def active_invoice_report(request):
     date_from = request.GET.get('date_from')
     date_to = request.GET.get('date_to')
@@ -3253,3 +3269,26 @@ def active_invoice_report(request):
             'course': course_id or '',
         },
     })
+
+
+def admin_view_categories(request):
+    categories = Category.objects.all()
+    category_data = []
+
+    for category in categories:
+        free_courses = FreeCourse.objects.filter(category=category)[:3]
+        paid_courses = PaidCourse.objects.filter(category=category)[:3]
+        category_data.append({
+            'category': category,
+            'free_courses': free_courses,
+            'paid_courses': paid_courses
+        })
+
+    return render(request, 'admin_view_categories.html', {'category_data': category_data})   
+
+
+def delete_category(request, id):
+    category = get_object_or_404(Category, id=id)
+    category.delete()
+    messages.success(request, "Category deleted successfully.")
+    return redirect('view_categories')  # or your admin category page name

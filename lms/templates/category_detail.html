@@ -26,7 +26,10 @@
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
             height: 100%;
+            margin-bottom: 20px;
         }
 
         .course-card:hover {
@@ -39,66 +42,107 @@
             border-top-right-radius: 12px;
             height: 180px;
             object-fit: cover;
+            width: 100%;
         }
 
         .course-body {
             padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .view-more-link {
-            display: block;
-            text-align: center;
-            margin: 10px auto 40px;
-            font-weight: 500;
+        .course-body h5 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            min-height: 50px;
         }
+
+        .course-body p.text-muted {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            min-height: 60px;
+        }
+
+        .course-price {
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .course-btn {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .courses-column {
+            padding: 0 15px;
+        }
+
+       .divider {
+    border-right: 3px solid #333;  /* ✅ Darker and bolder divider */
+}
+
+@media (max-width: 767px) {
+    .divider {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+}
     </style>
 </head>
 <body>
-{% include 'Student_Base.html' %}
+{% include 'Admin_Base.html' %}
 
 <div class="container mt-5">
     <h2 class="text-center">{{ category.name }}</h2>
-    {% if category.icon %}
+    <!-- {% if category.icon %}
         <img src="{{ category.icon.url }}" alt="Icon" class="category-icon">
-    {% endif %}
+    {% endif %} -->
 
-    <!-- 🔹 Free Courses Preview -->
-    <h3 class="section-title">🎓 Free Courses</h3>
     <div class="row">
-        {% for course in free_courses %}
-            <div class="col-md-4 mb-4">
-                <div class="course-card">
-                    <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="img-fluid course-img w-100">
-                    <div class="course-body">
-                        <h5>{{ course.title }}</h5>
-                        <p class="text-muted">{{ course.description|truncatewords:12 }}</p>
+        <!-- Paid Courses Column -->
+        <div class="col-md-6 courses-column divider">
+            <h3 class="section-title">💼 Paid Courses</h3>
+            <div class="row">
+                {% for course in paid_courses %}
+                    <div class="col-md-6">
+                        <div class="course-card">
+                            <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" class="course-img">
+                            <div class="course-body">
+                                <h5>{{ course.course_title }}</h5>
+                                <p class="text-muted">{{ course.description|truncatewords:12 }}</p>
+                                <p class="course-price">₹{{ course.course_price }}</p>
+                                <a href="{% url 'view_content' course.id %}" class="btn btn-primary btn-sm course-btn">View Course</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
-    <a href="{% url 'free_courses_by_category' category.id %}" class="view-more-link text-primary">View More Free Courses →</a>
+        </div>
 
-    <hr>
-
-    <!-- 🔹 Paid Courses Preview -->
-    <h3 class="section-title">💼 Paid Courses</h3>
-    <div class="row">
-        {% for course in paid_courses %}
-            <div class="col-md-4 mb-4">
-                <div class="course-card">
-                    <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" class="img-fluid course-img w-100">
-                    <div class="course-body">
-                        <h5>{{ course.course_title }}</h5>
-                        <p class="text-muted">{{ course.description|truncatewords:12 }}</p>
-                        <p><strong>₹{{ course.course_price }}</strong></p>
-                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm mt-2">View Course</a>
+        <!-- Free Courses Column -->
+        <div class="col-md-6 courses-column">
+            <h3 class="section-title">🎓 Free Courses</h3>
+            <div class="row">
+                {% for course in free_courses %}
+                    <div class="col-md-6">
+                        <div class="course-card">
+                            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="course-img">
+                            <div class="course-body">
+                                <h5>{{ course.title }}</h5>
+                                <p class="text-muted">{{ course.description|truncatewords:12 }}</p>
+                                <p class="course-price">Free</p>
+                                <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm course-btn">View Course</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     </div>
-    <a href="{% url 'paid_courses_by_category' category.id %}" class="view-more-link text-primary">View More Paid Courses →</a>
 </div>
 
 </body>

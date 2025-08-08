@@ -152,7 +152,13 @@ urlpatterns = [
     path('delete_subtitle/<int:content_id>/', views.delete_course_subtitle, name='delete_course_subtitle'),
     path('delete_title/<int:course_id>/<str:title>/', views.delete_course_title, name='delete_course_title'),
 
-     path('dashboard/active-invoice-report/', views.active_invoice_report, name='active_invoice_report'),
+    path('dashboard/active-invoice-report/', views.active_invoice_report, name='active_invoice_report'),
+
+  
+    path('manage/categories/', views.admin_view_categories, name='admin_view_categories'),
+    path('manage/delete-category/<int:id>/', views.delete_category, name='delete_category'),
+  
+
 
 
 

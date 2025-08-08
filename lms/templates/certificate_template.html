@@ -82,9 +82,9 @@
 
     .title {
       text-align: center;
-      color: #0073c0;
-      font-size: 26px;
-      margin-top: 30px;
+      color: #0095d5;
+      font-size: 38px;
+      margin-top: 40px;
       font-weight: bold;
       line-height: 1.4;
     }
@@ -110,8 +110,8 @@
 
     .bottom-statement {
       text-align: center;
-      font-size: 16px;
-      margin-top: 30px;
+      font-size: 20px;
+      margin-top: 40px;
       color: #333;
       line-height: 1.6;
     }
@@ -165,20 +165,20 @@
     <!-- Logos -->
     <div class="header-logo">
       <img src="{% static 'images/leftlogo.png' %}" class="badge" alt="Times Badge">
-    <img src="{% static 'images/picture2.png' %}" class="logo" alt="ProfitMax Logo">
+    <img src="{% static 'images/Picture2.png' %}" class="logo" alt="ProfitMax Logo">
     </div>
 
     <!-- Heading -->
-    <h1>ProfitMax</h1>
-    <h2>Share Market Academy</h2>
+    <h1 style="font-size:65px;">ProfitMax</h1>
+    <h2 style="font-size: 45px;">Share Market Academy</h2>
 
     <!-- Title -->
     <div class="title">Certificate of Completion<br>Share Market Program</div>
 
     <!-- Recipient Info -->
-    <p>We are pleased to announce</p>
-    <div class="client-name">{{ user.first_name|default:user.username }} {{ user.last_name}}</div>
-    <p>is hereby awarded this certificate as completion of <span class="course-name">{{ course.course_title }}</span></p>
+    <p style="margin-top: 30px; font-family: italic; font-weight: bold;">We are pleased to announce</p>
+    <div class="client-name" style="font-size: 45px;">{{ user.first_name|default:user.username }} {{ user.last_name}}</div>
+    <p style="font-size: 25px;">is hereby awarded this certificate as completion of <span class="course-name">{{ course.course_title }}</span></p>
 
     <!-- Final Note -->
     <div class="bottom-statement">
@@ -197,7 +197,7 @@
       <div></div>
       <div>
         <div class="signature">
-      <img src="{% static 'images/picture3.png' %}" alt="Signature">
+      <img src="{% static 'images/Picture3.png' %}" alt="Signature">
       <p>Mrs. Kalyani Pagar</p>
       <p style="text-align: center;">Director</p>
       </div>
