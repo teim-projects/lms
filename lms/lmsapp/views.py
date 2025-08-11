@@ -3291,4 +3291,4 @@ def delete_category(request, id):
     category = get_object_or_404(Category, id=id)
     category.delete()
     messages.success(request, "Category deleted successfully.")
-    return redirect('view_categories')  # or your admin category page name
+    return redirect('admin_view_categories')  # or your admin category page name

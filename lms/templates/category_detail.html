@@ -9,16 +9,48 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
-        .section-title {
+        .category-header {
             text-align: center;
-            margin: 30px 0 10px;
-            color: #333;
+            margin: 50px 0 30px; /* Increased top margin to push it down */
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .category-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-transform: capitalize;
         }
 
         .category-icon {
             display: block;
             margin: 0 auto 20px;
-            width: 70px;
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 30px 0 20px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
         }
 
         .course-card {
@@ -29,12 +61,14 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            border: none;
+            overflow: hidden;
         }
 
         .course-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
         }
 
         .course-img {
@@ -43,10 +77,15 @@
             height: 180px;
             object-fit: cover;
             width: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover .course-img {
+            transform: scale(1.03);
         }
 
         .course-body {
-            padding: 15px;
+            padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -54,53 +93,80 @@
 
         .course-body h5 {
             font-size: 1.1rem;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             min-height: 50px;
+            font-weight: 600;
+            color: #34495e;
         }
 
         .course-body p.text-muted {
             font-size: 0.9rem;
             margin-bottom: 15px;
             min-height: 60px;
+            color: #7f8c8d !important;
+            line-height: 1.5;
         }
 
         .course-price {
             font-weight: bold;
             color: #28a745;
             margin-bottom: 15px;
+            font-size: 1.1rem;
         }
 
         .course-btn {
             margin-top: auto;
             width: 100%;
+            background-color: #3498db;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .course-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
         }
 
         .courses-column {
             padding: 0 15px;
         }
 
-       .divider {
-    border-right: 3px solid #333;  /* ✅ Darker and bolder divider */
-}
+        .divider {
+            border-right: 3px solid #434343;
+        }
 
-@media (max-width: 767px) {
-    .divider {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-    }
-}
+        @media (max-width: 767px) {
+            .divider {
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+                padding-bottom: 30px;
+                margin-bottom: 30px;
+            }
+            
+            .category-header {
+                margin: 30px 0 20px;
+            }
+            
+            .category-header h2 {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>
 {% include 'Admin_Base.html' %}
 
-<div class="container mt-5">
-    <h2 class="text-center">{{ category.name }}</h2>
-    <!-- {% if category.icon %}
-        <img src="{{ category.icon.url }}" alt="Icon" class="category-icon">
-    {% endif %} -->
+<div class="container mt-4">
+    <!-- Updated category header section -->
+    <div class="category-header"><br><br>
+        <h2>{{ category.name }}</h2>
+        <!-- {% if category.icon %}
+            <img src="{{ category.icon.url }}" alt="Icon" class="category-icon">
+        {% endif %} -->
+    </div>
 
     <div class="row">
         <!-- Paid Courses Column -->
