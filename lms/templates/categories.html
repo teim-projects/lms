@@ -1,109 +1,432 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <title>All LMS Categories</title>
+  <title>ProfitMax - Trading Education Platform</title>
 
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Google Font (Optional) -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --primary-gradient: linear-gradient(to right, #017123, #1cb149);
+      --secondary-gradient: linear-gradient(to right, #2575fc, #6a11cb);
+      --dark-text: #2c3e50;
+      --light-text: #7f8c8d;
+      --highlight-color: #3498db;
+    }
+
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #f4f6fa;
+      background-color: #f8f9fa;
+      color: var(--dark-text);
+      font-size: 0.95rem; /* Slightly reduced base font size */
     }
 
-    h2.page-title {
-      text-align: center;
+    .hero-section {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+      padding: 60px 0; /* Reduced padding */
+      margin-top: 70px;
+    }
+
+    .hero-title {
+      font-weight: 700;
+      font-size: 2.2rem; /* Reduced from 2.8rem */
+      background: var(--secondary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px; /* Reduced */
+    }
+
+    .hero-subtitle {
+      font-weight: 400;
+      font-size: 1rem; /* Reduced from 1.2rem */
+      color: var(--light-text);
+      margin-bottom: 25px; /* Reduced */
+    }
+
+    .btn-primary-custom, .btn-secondary-custom {
+      border: none;
+      border-radius: 30px;
+      padding: 10px 25px; /* Slightly reduced */
       font-weight: 600;
-      font-size: 32px;
-      margin: 30px 0;
-      color: #333;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem; /* Smaller button text */
     }
 
+     
+
+.btn-primary-custom {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white !important;
+            width: 100px;
+
+
+        }
+
+        .btn-primary-custom:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: scale(1.02);
+        }
+
+       .btn-secondary-custom:hover {
+            background: linear-gradient(to right, #017123, #1cb149);
+            transform: scale(1.02);
+        }
+
+       .btn-secondary-custom {
+            background: linear-gradient(to right, #017123, #1cb149);
+            transform: scale(1.02);
+            color: white !important;
+            width: 120px;
+           
+        }
+ 
+
+    .section-title {
+      font-weight: 600;
+      font-size: 1.8rem; /* Reduced from 2.2rem */
+      margin-bottom: 40px; /* Reduced from 50px */
+      background: var(--secondary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title:after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px; /* Thinner line */
+      bottom: -8px; /* Moved closer */
+      left: 0;
+      background: var(--secondary-gradient);
+      border-radius: 2px;
+    }
+
+    /* Award Cards with Curved Borders */
+    .award-card {
+      border: none;
+      border-radius: 20px; /* More curved borders */
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Softer shadow */
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .award-card:hover {
+      transform: translateY(-5px); /* Less dramatic hover */
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .award-card .card-img-top {
+       width: 100%;
+    height: auto; /* Keep natural aspect ratio */
+    object-fit: contain; /* Show whole image without cropping */
+    background-color: #f9f9f9; /* Optional padding background */
+   
+    padding: 5px;
+      border-radius: 20px 20px 0 0; /* Match card radius */
+    }
+
+    .award-card .card-body {
+      padding: 20px; /* Reduced padding */
+    }
+
+    .award-card .card-title {
+      font-weight: 600;
+      font-size: 1.1rem; /* Slightly smaller */
+      margin-bottom: 10px;
+    }
+
+    .award-card .card-text {
+      color: var(--light-text);
+      font-size: 0.85rem; /* Smaller text */
+    }
+
+    /* Feature Cards */
+    .feature-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-card .card-header {
+      padding: 20px 0; /* Reduced padding */
+    }
+
+    .feature-card .card-header i {
+      font-size: 2.2rem; /* Reduced icon size */
+    }
+
+    .feature-card .card-body {
+      padding: 20px; /* Reduced padding */
+    }
+
+    .feature-card .card-title {
+      font-weight: 600;
+      font-size: 1.1rem; /* Slightly smaller */
+      margin-bottom: 12px;
+    }
+
+    .feature-card .card-text {
+      color: var(--light-text);
+      font-size: 0.85rem; /* Smaller text */
+    }
+
+    /* Benefit Items */
+    .benefit-item {
+      margin-bottom: 25px; /* Reduced spacing */
+    }
+
+    .benefit-icon {
+      font-size: 1.5rem; /* Smaller icons */
+      margin-right: 15px;
+      color: var(--highlight-color);
+      min-width: 35px;
+    }
+
+    .benefit-content h5 {
+      font-weight: 600;
+      font-size: 1rem; /* Smaller heading */
+      margin-bottom: 8px;
+    }
+
+    .benefit-content p {
+      color: var(--light-text);
+      font-size: 0.85rem; /* Smaller text */
+    }
+
+    /* Testimonials */
+    .testimonial-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px; /* Reduced padding */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      margin: 10px; /* Reduced margin */
+      height: 100%;
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      color: var(--light-text);
+      margin-bottom: 15px;
+      font-size: 0.9rem; /* Smaller text */
+    }
+
+    .testimonial-author {
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 0.95rem; /* Smaller text */
+    }
+
+    .testimonial-role {
+      color: var(--light-text);
+      font-size: 0.8rem; /* Smaller text */
+    }
+
+    /* Gallery Images */
+    .gallery-img {
+      border-radius: 12px; /* Slightly rounded */
+      overflow: hidden;
+      margin-bottom: 15px; /* Reduced spacing */
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .gallery-img:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .gallery-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    /* Category Cards */
     .category-card {
       border: none;
       border-radius: 15px;
       overflow: hidden;
       background: #fff;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
       transition: transform 0.3s ease;
       cursor: pointer;
+      height: 100%;
     }
 
     .category-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
     }
 
     .category-card img {
       width: 100%;
-      height: 180px;
+      height: 160px; /* Reduced height */
       object-fit: cover;
     }
 
     .category-card h3 {
       margin: 0;
-      padding: 15px;
-      font-size: 18px;
+      padding: 12px; /* Reduced padding */
+      font-size: 1rem; /* Smaller text */
       font-weight: 600;
       background-color: #f8f9fa;
     }
 
-    .top-links {
-      text-align: center;
-      margin-bottom: 30px;
+    /* Section Padding */
+    section.py-5 {
+      padding: 40px 0 !important; /* Reduced from 3rem (48px) */
     }
 
-    .top-links a {
-      margin: 0 10px;
-      text-decoration: none;
-      color: #0d6efd;
-      font-weight: 500;
+    /* CTA Section */
+    .cta-section {
+      padding: 40px 0 !important;
     }
 
-    .top-links a:hover {
-      text-decoration: underline;
+    .cta-section h2 {
+      font-size: 1.8rem; /* Reduced */
+      margin-bottom: 15px;
     }
 
-    .modal-title {
-      font-weight: 600;
-      text-align: center !important;
+    .cta-section p {
+      font-size: 1rem;
+      margin-bottom: 25px;
     }
 
-    .modal-body h5 {
-      margin-top: 30px;
-      font-weight: 600;
+    .cta-section .btn {
+      font-size: 0.9rem;
+      padding: 10px 20px;
     }
 
-    .card-title {
-      font-size: 16px;
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .benefit-icon {
+        font-size: 1.3rem;
+      }
     }
+     .weserviceimg {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            overflow: hidden;
+            border-radius: 15px;
+        }
 
-    .card-text {
-      font-size: 14px;
-      color: #555;
-    }
+        .weserviceimg:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .weserviceimg img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .weserviceimg:hover img {
+            transform: scale(1.05);
+        }
+
+        .weserviceimg .card-body {
+            background: #f9f9f9;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .weserviceimg h6 {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .weserviceimg p {
+            font-size: 14px;
+            color: #666;
+        }
+            .card-header {
+            background-color: #ffffff;
+            border-bottom: none;
+        }
+
+        
   </style>
 </head>
 
 <body>
-
   {% include 'Student_Base.html' %}
-  <div class="main" style="min-height: 100vh; margin-top: 100px;">
-    <h2 class="page-title">📚 All LMS Categories</h2>
 
-    <div class="top-links">
-      <!-- <a href="{% url 'create_category' %}">➕ Create New Category</a> | -->
-      <a href="/">🔐 Login / Signup</a>
-    </div>
-
-    <!-- Responsive Bootstrap Grid -->
+  <!-- Hero Section -->
+  <section class="hero-section">
     <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h1 class="hero-title">Master the Stock Market with ProfitMax</h1>
+          <p class="hero-subtitle">Unlock the secrets of successful trading with our comprehensive courses, expert mentorship, and powerful tools designed for traders at all levels.</p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="/signup/" class="btn btn-secondary-custom ">Signup</a>
+            <a href="/login/" class="btn btn-primary-custom">Login</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" 
+               class="img-fluid rounded-4 shadow" 
+               alt="Trading Dashboard">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <script>
+    document.getElementById("scrollBtn").addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("sectiondemo").scrollIntoView({
+        behavior: "smooth"
+      });
+    });
+  </script>
+  
+  <div class="check p-4 bg-light" id="sectiondemo"></div>
+  
+  <!-- Courses Section -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Explore Our Trading Courses</h2>
+      
       <div class="row gy-4">
         {% for item in category_data %}
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -117,93 +440,357 @@
         {% endfor %}
       </div>
     </div>
+  </section>
 
-    <!-- Modal for Each Category -->
-    {% for item in category_data %}
-    <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1"
-      aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
-      <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <div class="modal-content rounded-4">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title " id="modalLabel{{ item.category.id }}">{{ item.category.name }}</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- Awards Section -->
+
+
+  <!-- Benefits Section -->
+ 
+  <div class="container mt-3">
+       <h2 class="section-title text-center mb-5">Award Winning Trading Education</h2>
+        <div class="row">
+            <div class="col-md-3 col-12 mb-4">
+                <div class="card weserviceimg">
+                    <div class="card-header p-0">
+                        <img src="{% static 'images/award1.jpg' %}" alt="award3">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Best Trading Education 2023</h5>
+              <p class="card-text">Recognized for excellence in financial education and trader development.</p>
+                    </div>
+                </div>
+            </div>
+               <div class="col-md-3 col-12 mb-4">
+                <div class="card weserviceimg">
+                    <div class="card-header p-0">
+                        <img src="{% static 'images/award2.jpg' %}" alt="award3">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Innovation in Trading Tools</h5>
+              <p class="card-text mt-1">Awarded for our cutting-edge trading tools and analytics platform.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-12 mb-4">
+                <div class="card weserviceimg">
+                    <div class="card-header p-0">
+                        <img src="{% static 'images/award3.jpg' %}" alt="award3">
+                    </div>
+                    <div class="card-body">
+                   <h5 class="card-title">Student Success Award</h5>
+
+              <p class="card-text mt-4">Highest student satisfaction and success rates in the industry.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-12 mb-4">
+                <div class="card weserviceimg">
+                    <div class="card-header p-0">
+                        <img src="{% static 'images/mam.jpg' %}" alt="award3">
+                    </div>
+                    <div class="card-body">
+                        <h5>Smart Learning System!</h5>
+                        <p class="card-text mt-4">We're always here to help you whenever needed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Why Learn With ProfitMax?</h2>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="gallery-img">
+                <img src="{% static 'images/img3.jpg' %}" alt="Trading Education">
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="gallery-img" style="height: 48%; margin-bottom: 15px;">
+                <img src="{% static 'images/img2.jpg' %}" alt="Trading Tools">
+              </div>
+              <div class="gallery-img" style="height: 48%;">
+                <img src="{% static 'images/img1.jpg' %}" alt="Trading Community">
+              </div>
+            </div>
           </div>
-
-          <div class="modal-body " style="padding-bottom: 100px;">
-            {% if item.category.description %}
-            <p>{{ item.category.description }}</p>
-            {% endif %}
-
-            <!-- Free Courses -->
-            <div style="border-bottom:1px solid #7ae2ff;" class="w-100">
-              <h5 class="mt-4">🎓 Free Courses</h5>
-              <div class="row g-4 mb-3">
-                {% for course in item.free_courses %}
-                <div class="col-12 col-md-6 col-lg-4">
-                  <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
-                    <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.title }}"
-                      style="height: 180px; object-fit: cover;">
-                    <div class="card-body">
-                      <h6 class="card-title text-center fw-semibold">{{ course.title }}</h6>
-                      <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
-                      <center>
-                        <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm mt-2 w-50">
-                          View
-                        </a>
-
-
-                      </center>
-                    </div>
-                  </div>
-                </div>
-                {% empty %}
-                <p class="text-muted">No free courses available.</p>
-                {% endfor %}
-                <div class="col-md-12 col-12 col-lg-12">
-                  <a class="btn btn-outline-secondary btn-sm mb-2" style="float: right;"
-                    href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
-
-                </div>
-              </div>
-
+        </div>
+        <div class="col-lg-6">
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
             </div>
-            <div>
-
-
-
-              <div class="row g-4 mb-3">
-                <h5 class="mt-4">💼 Paid Courses</h5>
-
-                {% for course in item.paid_courses %}
-                <div class="col-12 col-md-6 col-lg-4">
-                  <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
-                    <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4"
-                      alt="{{ course.course_title }}" style="height: 180px; object-fit: cover;">
-                    <div class="card-body">
-                      <h6 class="card-title fw-semibold">{{ course.course_title }}</h6>
-                      <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
-                      <div class="d-flex justify-content-between align-items-center mt-2">
-                        <span class="text-success fw-bold">₹{{ course.course_price }}</span>
-                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">View</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {% empty %}
-                <p class="text-muted">No paid courses available.</p>
-                {% endfor %}
-              </div>
-              <a class="btn btn-outline-secondary btn-sm mt-3 " style="float: right;"
-                href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
+            <div class="benefit-content">
+              <h5>Learn Market Fundamentals</h5>
+              <p>Master the basics of stock market investing from scratch with our structured curriculum.</p>
             </div>
-
-            <!-- <a class="btn btn-link" href="{% url 'category_detail' item.category.id %}">🔍 View Full Category Detail</a> -->
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-content">
+              <h5>Technical Analysis Mastery</h5>
+              <p>Learn to read market charts and identify profitable trading opportunities.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-content">
+              <h5>Real Trading Simulations</h5>
+              <p>Practice with real-time trading simulations without risking your capital.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-content">
+              <h5>Risk Management Strategies</h5>
+              <p>Learn how to protect your capital while maximizing profit potential.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="benefit-content">
+              <h5>Portfolio Management</h5>
+              <p>Build and manage your own stock portfolio with expert guidance.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    {% endfor %}
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Our Unique Features</h2>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="card-header text-center py-3">
+              <i class="fas fa-chalkboard-teacher" style="color: #6a11cb;"></i>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">Professional Mentorship</h5>
+              <p class="card-text">Learn from experienced traders using our exclusive Vardan Strategy to maximize your profit potential.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="card-header text-center py-3">
+              <i class="fas fa-shield-alt" style="color: #6a11cb;"></i>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">Advanced Risk Management</h5>
+              <p class="card-text">Identify, assess, and monitor potential risks efficiently with our comprehensive system.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="card-header text-center py-3">
+              <i class="fas fa-robot" style="color: #6a11cb;"></i>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">Smart Trading Tools</h5>
+              <p class="card-text">Enhance decisions with our Bramhastra Stock Alert System for accurate market predictions.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="card-header text-center py-3">
+              <i class="fas fa-brain" style="color: #6a11cb;"></i>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">Trading Psychology</h5>
+              <p class="card-text">Master your emotions and behavior to build a successful and consistent trading mindset.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="card-header text-center py-3">
+              <i class="fas fa-chart-line" style="color: #6a11cb;"></i>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">Real-time Analytics</h5>
+              <p class="card-text">Access live market data and analytics to make informed trading decisions.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="card-header text-center py-3">
+              <i class="fas fa-users" style="color: #6a11cb;"></i>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="card-title">Trading Community</h5>
+              <p class="card-text">Join our active community of traders to share insights and strategies.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">What Our Students Say</h2>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">"ProfitMax transformed my approach to trading. The Vardan Strategy alone was worth the investment. I've doubled my portfolio in just 6 months!"</p>
+            <h6 class="testimonial-author">Rajesh Kumar</h6>
+            <p class="testimonial-role">Swing Trader</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">"The risk management course saved me from huge losses during market volatility. Now I trade with confidence knowing I'm protected."</p>
+            <h6 class="testimonial-author">Priya Sharma</h6>
+            <p class="testimonial-role">Day Trader</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">"As a complete beginner, I appreciated the step-by-step approach. The mentors are always available to answer questions. Highly recommended!"</p>
+            <h6 class="testimonial-author">Amit Patel</h6>
+            <p class="testimonial-role">Beginner Investor</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- 
+  <section class="py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">What Our Students Say</h2>
+    <div class="row">
+      {% for review in reviews %}
+      <div class="col-md-4 mb-4">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"{{ review.review }}"</p>
+          <h6 class="testimonial-author">
+            {{ review.display_name|default:review.user.username }}
+          </h6>
+          <p class="testimonial-role">
+            ★ {{ review.rating }} / 5
+          </p>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No reviews yet.</p>
+      {% endfor %}
+    </div>
   </div>
+</section> -->
+
+
+  <!-- CTA Section -->
+  <section class="py-5 bg-primary text-white cta-section">
+    <div class="container text-center">
+      <h2 class="mb-4">Ready to Transform Your Trading Journey?</h2>
+      <p class="mb-4">Join thousands of successful traders who have benefited from our proven strategies and expert guidance.</p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="#sectiondemo" class="btn btn-light btn-lg px-4 py-2" id="scrollBtn">
+          Start Learning Now
+        </a>
+        <a href="/login/" class="btn btn-outline-light btn-lg px-4 py-2">Login to Dashboard</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modals for Each Category -->
+  {% for item in category_data %}
+  <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1"
+    aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content rounded-4">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="modalLabel{{ item.category.id }}">{{ item.category.name }}</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" style="padding-bottom: 80px;">
+          {% if item.category.description %}
+          <p>{{ item.category.description }}</p>
+          {% endif %}
+
+          <!-- Free Courses -->
+          <div style="border-bottom:1px solid #7ae2ff;" class="w-100">
+            <h5 class="mt-4">🎓 Free Courses</h5>
+            <div class="row g-4 mb-3">
+              {% for course in item.free_courses %}
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
+                  <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.title }}"
+                    style="height: 160px; object-fit: cover;">
+                  <div class="card-body">
+                    <h6 class="card-title text-center fw-semibold">{{ course.title }}</h6>
+                    <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
+                    <center>
+                      <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm mt-2 w-50">
+                        View
+                      </a>
+                    </center>
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <p class="text-muted">No free courses available.</p>
+              {% endfor %}
+              <div class="col-md-12 col-12 col-lg-12">
+                <a class="btn btn-outline-secondary btn-sm mb-2" style="float: right;"
+                  href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="row g-4 mb-3">
+              <h5 class="mt-4">💼 Paid Courses</h5>
+
+              {% for course in item.paid_courses %}
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
+                  <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4"
+                    alt="{{ course.course_title }}" style="height: 160px; object-fit: cover;">
+                  <div class="card-body">
+                    <h6 class="card-title fw-semibold">{{ course.course_title }}</h6>
+                    <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                      <span class="text-success fw-bold">₹{{ course.course_price }}</span>
+                      <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">View</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <p class="text-muted">No paid courses available.</p>
+              {% endfor %}
+            </div>
+            <a class="btn btn-outline-secondary btn-sm mt-3 " style="float: right;"
+              href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
   {% include 'footer.html' %}
 </body>
 

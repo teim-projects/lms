@@ -322,6 +322,12 @@
     <div class="navbar-logo mx-auto">
       <img src="{% static 'images/pmxlogo_c.png' %}" alt="Logo" class="navbar-logo">
     </div>
+<!-- 
+    <div class="navbar-logo mx-auto">
+    <img src="{% if category and category.icon %}{{ category.icon.url }}{% else %}{% static 'images/pmxlogo_c.png' %}{% endif %}" 
+         alt="Logo" class="navbar-logo">
+</div> -->
+
  
     <div class="d-flex align-items-center">
     {% if user.is_authenticated %}

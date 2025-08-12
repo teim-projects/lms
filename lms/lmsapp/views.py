@@ -872,9 +872,16 @@ def free_courses(request):
 from django.shortcuts import get_object_or_404
 
 
+
+
 def free_course_detail(request, course_id):
-    course = get_object_or_404(FreeCourse.objects.prefetch_related("chapters"), id=course_id)
+    course = get_object_or_404(
+        FreeCourse.objects.prefetch_related("chapters"),
+        id=course_id
+    )
     return render(request, "free_course_detail.html", {"course": course})
+
+
 
 @login_required
 def paid_course(request):
@@ -3075,6 +3082,10 @@ from django.shortcuts import render, get_object_or_404
 from .models import Category
 
 
+from django.db.models import Q
+from random import sample
+from .models import CourseReview
+
 def view_categories(request):
     categories = Category.objects.all()
     category_data = []
@@ -3088,7 +3099,23 @@ def view_categories(request):
             'paid_courses': paid_courses
         })
 
-    return render(request, 'categories.html', {'category_data': category_data})
+    # ✅ Get all 4★ & 5★ reviews (both real and admin-generated if you want)
+    reviews_queryset = CourseReview.objects.filter(rating__gte=4)
+
+    # ✅ Convert to list so we can random.sample without re-querying
+    reviews_list = list(reviews_queryset)
+
+    # ✅ Randomly pick up to 3 reviews (avoids IndexError if fewer than 3)
+    if len(reviews_list) > 3:
+        reviews = sample(reviews_list, 3)
+    else:
+        reviews = reviews_list
+
+    return render(request, 'categories.html', {
+        'category_data': category_data,
+        'reviews': reviews
+    })
+
 
 
 from django.shortcuts import get_object_or_404
