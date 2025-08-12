@@ -403,4 +403,16 @@ class Invoice(models.Model):
 
 
 
+# models.py
+class Coupon(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    discount_percent = models.PositiveIntegerField(help_text="Discount percentage (e.g. 10 for 10%)")
+    min_amount = models.DecimalField(max_digits=10, decimal_places=2, help_text="Minimum cart amount to apply coupon")
+    valid_from = models.DateTimeField()
+    valid_to = models.DateTimeField()
+    active = models.BooleanField(default=True)
+    courses = models.ManyToManyField(PaidCourse, blank=True, help_text="Leave empty for all courses")
+
+    def __str__(self):
+        return f"{self.code} - {self.discount_percent}%"
 

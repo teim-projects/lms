@@ -3319,3 +3319,4 @@ def delete_category(request, id):
     category.delete()
     messages.success(request, "Category deleted successfully.")
     return redirect('admin_view_categories')  # or your admin category page name
+

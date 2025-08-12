@@ -157,6 +157,7 @@ urlpatterns = [
   
     path('manage/categories/', views.admin_view_categories, name='admin_view_categories'),
     path('manage/delete-category/<int:id>/', views.delete_category, name='delete_category'),
+    
   
 
 
