@@ -166,5 +166,27 @@
   </div>
 </div>
 
+<div style="text-align: right; margin-bottom: 15px; margin-right: 515px; margin-top: 15px;">
+  <button id="downloadBtn" style="background:#3a0ca3;color:#fff;padding:8px 14px;border:none;border-radius:5px;cursor:pointer;">
+     Download Invoice
+  </button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  document.getElementById("downloadBtn").addEventListener("click", function () {
+    const element = document.querySelector(".invoice-box");
+    const opt = {
+      margin: 0.5,
+      filename: 'Invoice_{{ invoice.invoice_number }}.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().from(element).set(opt).save();
+  });
+</script>
+
+
 </body>
 </html>
