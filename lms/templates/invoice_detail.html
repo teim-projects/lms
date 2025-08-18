@@ -117,7 +117,7 @@
           <!-- {{ invoice.user.username|upper }} : -->
         </td>
         <td style="text-align:right;">
-          <strong style="color:#c00;">INVOICE {{ invoice.invoice_number }}</strong><br>
+          <strong style="color:#c00;">INVOICE No : {{ invoice.invoice_number }}</strong><br>
           Date of Invoice: {{ invoice.date_created|date:"d-m-Y" }}<br>
           <!-- Expiry: {{ invoice.date_created|date:"d-m-Y" }} -->
         </td>
@@ -127,28 +127,62 @@
 
   <br>
 
-  <table border="1" cellspacing="0" cellpadding="5" width="100%">
-    <tr class="table-heading">
-      <td>Sr.No</td>
-      <td>Description</td>
-      <td>Course Fee</td>
-      <td>Discount</td>
-      <td>Paid Amount</td>
-    </tr>
-    <tr class="table-body">
-      <td>01</td>
-      <td><strong>{{ invoice.course_title }}</strong></td>
-      <td>{{ invoice.course_fee }}</td>
-      <td>{{ invoice.discount }}</td>
-      <td><strong style="color:#c00;">{{ invoice.paid_amount }}</strong></td>
-    </tr>
-  </table>
+<table border="1" cellspacing="0" cellpadding="8" width="100%">
+  <tr class="table-heading">
+    <td colspan="2">Course Details</td>
+  </tr>
+  <tr>
+    <td><strong>Sr. No</strong></td>
+    <td>01</td>
+  </tr>
+  <tr>
+    <td><strong>Course</strong></td>
+    <td>{{ invoice.course_title }}</td>
+  </tr>
+  <tr>
+    <td><strong>Course Fee</strong></td>
+    <td>{{ invoice.course_fee }}</td>
+  </tr>
+  <tr>
+    <td><strong>Discount</strong></td>
+    <td>{{ invoice.discount }}</td>
+  </tr>
+  <tr>
+    <td><strong>Total Course Price</strong></td>
+    <td id="totalCoursePrice"></td>
+  </tr>
+  <tr>
+    <td><strong>Paid Amount</strong></td>
+    <td><strong style="color:#c00;">{{ invoice.paid_amount }}</strong></td>
+  </tr>
+</table>
 
-  <div class="totals">
-    <p>Total: <strong>{{ invoice.paid_amount }}</strong></p>
-    <!-- <p>Tax %: <strong>0</strong></p> -->
-    <p style="color:#c00; font-weight:bold;">GRAND TOTAL: {{ invoice.paid_amount }}</p>
-  </div>
+<br>
+
+{% if invoice.coupon_code or invoice.discount_amount or invoice.discount_percent %}
+<table border="1" cellspacing="0" cellpadding="8" width="100%">
+  <tr class="table-heading">
+    <td colspan="2">Coupon / Extra Discount</td>
+  </tr>
+  <tr>
+    <td><strong>Coupon Code</strong></td>
+    <td>{{ invoice.coupon_code|default:"-" }}</td>
+  </tr>
+  <tr>
+    <td><strong>Extra Discount</strong></td>
+    <td>{{ invoice.discount_amount|default:"0" }}</td>
+  </tr>
+  <tr>
+    <td><strong>Discount %</strong></td>
+    <td>{{ invoice.discount_percent|default:"0" }}%</td>
+  </tr>
+</table>
+{% endif %}
+
+<div class="totals">
+  <p>Total: <strong>{{ invoice.paid_amount }}</strong></p>
+  <p style="color:#c00; font-weight:bold;">GRAND TOTAL: {{ invoice.paid_amount }}</p>
+</div>
 
   <div class="thank-you">
     Thank you!
@@ -184,6 +218,18 @@
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
     html2pdf().from(element).set(opt).save();
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const paidAmount = parseFloat("{{ invoice.paid_amount|default:'0' }}") || 0;
+    const extraDiscount = parseFloat("{{ invoice.discount_amount|default:'0' }}") || 0;
+
+    // Total Course Price = Paid + Extra Discount
+    const totalCoursePrice = paidAmount + extraDiscount;
+
+    document.getElementById("totalCoursePrice").textContent = totalCoursePrice.toFixed(2);
   });
 </script>
 

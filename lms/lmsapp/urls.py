@@ -157,6 +157,21 @@ urlpatterns = [
   
     path('manage/categories/', views.admin_view_categories, name='admin_view_categories'),
     path('manage/delete-category/<int:id>/', views.delete_category, name='delete_category'),
+
+    path('add-to-cart/<int:course_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/', views.view_cart, name='view_cart'),
+    path('coupons/create/', views.create_coupon, name='create_coupon'),
+    path('coupons/', views.coupon_list, name='coupon_list'),
+    path('cart/remove/<int:course_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('coupons/<int:coupon_id>/delete/', views.delete_coupon, name='delete_coupon'),
+
+    path('upload-slider/', views.upload_slider, name='upload_slider'),
+    path('delete-slider-image/<int:slider_id>/<str:image_field>/', views.delete_slider_image, name='delete_slider_image'),
+
+
+    
+    
+
     
   
 

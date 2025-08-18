@@ -293,9 +293,18 @@
 
     {% if is_logged_in %}
       <!-- User is logged in but hasn't bought the course -->
-      <a href="{% url 'initiate_payment' course.id %}" class="btn btn-success rounded-pill px-4 py-2">
-        💳 Buy Now ₹{{ course.course_price }}
-      </a>
+     
+
+       <a href="{% url 'view_cart' %}?buy_now={{ course.id }}" class="btn btn-success rounded-pill px-4 py-2">
+            💳 Buy Now ₹{{ course.course_price }}
+        </a>
+
+        <!-- {% if in_cart %}
+    <a href="{% url 'view_cart' %}" class="btn btn-outline-secondary">🛒 Added — View Cart</a>
+{% else %}
+    <a href="{% url 'add_to_cart' course.id %}" class="btn btn-outline-primary">🛒 Add to Cart</a>
+{% endif %} -->
+
     {% else %}
       <!-- User is not logged in, redirect to login with ?next= -->
       <a href="/" class="btn btn-primary rounded-pill px-4 py-2">

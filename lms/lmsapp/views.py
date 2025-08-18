@@ -1475,13 +1475,47 @@ from .models import Notification
 
 from django.shortcuts import render
 from .models import Notification
+from django.db.models import Prefetch
+from .models import Category, FreeCourse, PaidCourse, Notification
+from django.db.models import Prefetch
+from .models import Category, FreeCourse, PaidCourse, Notification
+
 
 def student_dashboard(request):
-    # Fetch all notifications ordered by newest first
-    notifications = Notification.objects.all().order_by('-created_at')
-    courses = FreeCourse.objects.prefetch_related("chapters").all()
+    # Notifications
+    notifications = Notification.objects.all()
+    notification_count = notifications.count()
 
-    return render(request, 'student_dashboard.html', {'notifications': notifications,"courses": courses})
+    # Fetch the single slider row (id=1)
+    sliders = Slider.objects.first()
+    slider_images = []
+    if sliders:
+        slider_images = [
+            sliders.image1.url if sliders.image1 else None,
+            sliders.image2.url if sliders.image2 else None,
+            sliders.image3.url if sliders.image3 else None,
+        ]
+
+    # Category data
+    categories = Category.objects.all()
+    category_data = []
+    for category in categories:
+        free_courses = FreeCourse.objects.filter(category=category)[:3]
+        paid_courses = PaidCourse.objects.filter(category=category)[:3]
+        category_data.append({
+            'category': category,
+            'free_courses': free_courses,
+            'paid_courses': paid_courses
+        })
+
+    return render(request, 'student_dashboard.html', {
+        'category_data': category_data,
+        'notifications': notifications,
+        'notification_count': notification_count,
+        'slider_images': slider_images,
+    })
+
+
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -1852,6 +1886,8 @@ def display_paid_content(request, course_id):
     has_access = False
     progress_percentage = 0
     completed_ids = []
+    cart = request.session.get('cart', [])
+    in_cart = course.id in cart
 
     if is_logged_in:
         # Check if user has access
@@ -1913,6 +1949,7 @@ def display_paid_content(request, course_id):
         'average_rating': round(average_rating, 1),
         'completed_ids': list(completed_ids),
         'is_logged_in': is_logged_in,
+        'in_cart': in_cart,  
     })
 
 
@@ -1940,34 +1977,148 @@ def generate_txnid():
 
 
 
+# @login_required
+# def initiate_payment(request, course_id):
+#     course = get_object_or_404(PaidCourse, id=course_id)
+#     user = request.user
+
+#     txnid = generate_txnid()
+#     amount = str(course.course_price)
+#     productinfo = course.course_title
+#     firstname = user.first_name or user.username
+#     email = user.email
+#     # phone = "9999999999"
+#     # keep above phone field in comment if you are working on live and for local keep below commented
+#     phone = user.mobile  # Or from user profile
+
+#     key = settings.EASEBUZZ_MERCHANT_KEY
+#     salt = settings.EASEBUZZ_SALT
+
+#     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
+#     hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
+
+
+#     # payment = NewPayment.objects.create(
+#     #     user=user,
+#     #     course=course,
+#     #     amount=amount,
+#     #     txnid=txnid,
+#     #     status="initiated"
+#     # )
+
+#     context = {
+#         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
+#         "MERCHANT_KEY": key,
+#         "txnid": txnid,
+#         "amount": amount,
+#         "productinfo": productinfo,
+#         "firstname": firstname,
+#         "email": email,
+#         "phone": phone,
+#         # "surl": request.build_absolute_uri('/payment/success/'),
+#         # "furl": request.build_absolute_uri('/payment/failure/'),
+#         # this below should be in comment if you want to make payment on local
+#         "surl": "https://profitmaxacademy.in/payment/success/",
+#         "furl": "https://profitmaxacademy.in/payment/failure/",
+
+#         "hashh": hashh
+#     }
+#     return render(request, "initiate_payment.html", context)
+
+# @login_required
+# def initiate_payment(request, course_id=None):
+#     user = request.user
+
+#     # If coming from cart page
+#     if request.method == "POST" and request.POST.get("total_amount"):
+#         course_ids = request.POST.getlist("course_ids")
+#         total_amount = request.POST.get("total_amount")
+#         # For now just pick first course for product info
+#         course = PaidCourse.objects.filter(id=course_ids[0]).first()
+#         amount = str(total_amount)
+#     else:
+#         # Old single-course buy now
+#         course = get_object_or_404(PaidCourse, id=course_id)
+#         amount = str(course.course_price)
+
+#     txnid = generate_txnid()
+#     productinfo = course.course_title if course else "Multiple Courses"
+#     firstname = user.first_name or user.username
+#     email = user.email
+
+
+#     phone = "9999999999"
+#     # keep above phone field in comment if you are working on live and for local keep below commented
+#     # phone = user.mobile
+
+#     key = settings.EASEBUZZ_MERCHANT_KEY
+#     salt = settings.EASEBUZZ_SALT
+
+#     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
+#     hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
+
+#     # Save initiated payment with total
+#     # NewPayment.objects.create(
+#     #     user=user,
+#     #     course=course,
+#     #     amount=amount,
+#     #     txnid=txnid,
+#     #     status="initiated"
+#     # )
+
+#     context = {
+#         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
+#         "MERCHANT_KEY": key,
+#         "txnid": txnid,
+#         "amount": amount,
+#         "productinfo": productinfo,
+#         "firstname": firstname,
+#         "email": email,
+#         "phone": phone,
+
+#         "surl": request.build_absolute_uri('/payment/success/'),
+#         "furl": request.build_absolute_uri('/payment/failure/'),
+#         # this below should be in comment if you want to make payment on local
+#         # "surl": "https://profitmaxacademy.in/payment/success/",
+#         # "furl": "https://profitmaxacademy.in/payment/failure/",
+        
+#         "hashh": hashh
+#     }
+#     return render(request, "initiate_payment.html", context)
+
+#o
+
 @login_required
-def initiate_payment(request, course_id):
-    course = get_object_or_404(PaidCourse, id=course_id)
+def initiate_payment(request, course_id=None):
     user = request.user
 
+    coupon_code = request.POST.get("coupon_code")
+    discount_percent = request.POST.get("discount_percent") or 0
+    discount_amount = request.POST.get("discount_amount") or 0
+
+    if request.method == "POST" and request.POST.get("total_amount"):
+        course_ids = request.POST.getlist("course_ids")
+        total_amount = request.POST.get("total_amount")
+        course = PaidCourse.objects.filter(id=course_ids[0]).first()
+        amount = str(total_amount)
+    else:
+        course = get_object_or_404(PaidCourse, id=course_id)
+        amount = str(course.course_price)
+
     txnid = generate_txnid()
-    amount = str(course.course_price)
-    productinfo = course.course_title
+    productinfo = course.course_title if course else "Multiple Courses"
     firstname = user.first_name or user.username
     email = user.email
-    # phone = "9999999999"
+    
+    phone = "9999999999"
     # keep above phone field in comment if you are working on live and for local keep below commented
-    phone = user.mobile  # Or from user profile
+    # phone = user.mobile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
 
     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
     hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
-
-
-    # payment = NewPayment.objects.create(
-    #     user=user,
-    #     course=course,
-    #     amount=amount,
-    #     txnid=txnid,
-    #     status="initiated"
-    # )
 
     context = {
         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
@@ -1978,11 +2129,22 @@ def initiate_payment(request, course_id):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-        # "surl": request.build_absolute_uri('/payment/success/'),
-        # "furl": request.build_absolute_uri('/payment/failure/'),
+
+        "surl": request.build_absolute_uri(
+            f'/payment/success/?coupon_code={coupon_code}&discount_percent={discount_percent}&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}'
+        ),
+        "furl": request.build_absolute_uri('/payment/failure/'),
+
         # this below should be in comment if you want to make payment on local
-        "surl": "https://profitmaxacademy.in/payment/success/",
-        "furl": "https://profitmaxacademy.in/payment/failure/",
+
+        # surl = (
+        # f"https://profitmaxacademy.in/payment/success/"
+        # f"?coupon_code={coupon_code}&discount_percent={discount_percent}"
+        # f"&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}"
+    # )
+        # "furl": "https://profitmaxacademy.in/payment/failure/",
+        
+
 
         "hashh": hashh
     }
@@ -1992,6 +2154,36 @@ def initiate_payment(request, course_id):
 
 
 
+# @csrf_exempt
+# def payment_success(request):
+#     txnid = request.POST.get("txnid")
+#     status = request.POST.get("status")
+#     amount = request.POST.get("amount")
+#     email = request.POST.get("email")
+#     productinfo = request.POST.get("productinfo")
+
+#     user = CustomUser.objects.filter(email=email).first()
+#     course = PaidCourse.objects.filter(course_title=productinfo).first()
+
+#     if status == "success" and user and course:
+#         # Only save successful payment
+#         NewPayment.objects.create(
+#             user=user,
+#             course=course,
+#             amount=amount,
+#             txnid=txnid,
+#             status=status,
+#             invoice_created=True,  # Always True for online
+#             created_at=timezone.now()
+#         )
+
+#         UserCourseAccess.objects.get_or_create(user=user, course=course)
+
+
+
+#         return redirect('display_paid_content', course_id=course.id)
+#     else:
+#         return render(request, 'payment_failed.html')
 
 @csrf_exempt
 def payment_success(request):
@@ -2001,25 +2193,30 @@ def payment_success(request):
     email = request.POST.get("email")
     productinfo = request.POST.get("productinfo")
 
+    # Get coupon details from URL params
+    coupon_code = request.GET.get("coupon_code")
+    discount_percent = request.GET.get("discount_percent") or 0
+    discount_amount = request.GET.get("discount_amount") or 0
+    original_amount = request.GET.get("original_amount") or amount
+
     user = CustomUser.objects.filter(email=email).first()
     course = PaidCourse.objects.filter(course_title=productinfo).first()
 
     if status == "success" and user and course:
-        # Only save successful payment
         NewPayment.objects.create(
             user=user,
             course=course,
+            original_amount=original_amount,
             amount=amount,
+            discount_amount=discount_amount,
+            coupon_code=coupon_code,
+            discount_percent=discount_percent,
             txnid=txnid,
             status=status,
-            invoice_created=True,  # Always True for online
-            created_at=timezone.now()
+            invoice_created=True
         )
 
         UserCourseAccess.objects.get_or_create(user=user, course=course)
-
-
-
         return redirect('display_paid_content', course_id=course.id)
     else:
         return render(request, 'payment_failed.html')
@@ -2495,10 +2692,19 @@ def generate_invoice_view(request, payment_id):
             payment=payment,  # Critical link
             user=payment.user,
             course=payment.course,
+
+            # Course snapshot
             course_title=payment.course.course_title,
             course_fee=payment.course.original_price,
             discount=payment.course.discount_amount,
+
+            # Payment snapshot
             paid_amount=payment.amount,
+            coupon_code=payment.coupon_code,
+            discount_percent=payment.discount_percent,
+            discount_amount=payment.discount_amount,
+
+            # User details
             first_name=payment.user.first_name,
             last_name=payment.user.last_name,
             mobile=payment.user.mobile,
@@ -2513,7 +2719,6 @@ def generate_invoice_view(request, payment_id):
     except Exception as e:
         messages.error(request, f"Error generating invoice: {str(e)}")
         return redirect('user_detail', user_id=payment.user.id)
-
 
 
 
@@ -3064,19 +3269,30 @@ def export_to_excel(request):
 
 from django.shortcuts import render, redirect
 from .models import Category
+from django.contrib import messages
+from django.db import IntegrityError
 
 @login_required
 def create_category(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
+        name = request.POST.get('name').strip()
         description = request.POST.get('description')
         icon = request.FILES.get('icon')
 
         if name:
-            Category.objects.create(name=name, description=description, icon=icon)
-            return redirect('admin_view_categories')
+            try:
+                # Check if category already exists
+                if Category.objects.filter(name__iexact=name).exists():
+                    messages.error(request, f"Category '{name}' already exists.")
+                else:
+                    Category.objects.create(name=name, description=description, icon=icon)
+                    messages.success(request, f"Category '{name}' created successfully!")
+                    return redirect('admin_view_categories')
+            except IntegrityError:
+                messages.error(request, "An error occurred while saving the category.")
 
     return render(request, 'create_category.html')
+
 
 from django.shortcuts import render, get_object_or_404
 from .models import Category
@@ -3085,10 +3301,13 @@ from .models import Category
 from django.db.models import Q
 from random import sample
 from .models import CourseReview
+from .models import Slider
+from django.core.files.storage import default_storage
 
 def view_categories(request):
     categories = Category.objects.all()
     category_data = []
+    sliders = Slider.objects.all()
 
     for category in categories:
         free_courses = FreeCourse.objects.filter(category=category)[:3]
@@ -3099,13 +3318,18 @@ def view_categories(request):
             'paid_courses': paid_courses
         })
 
-    # ✅ Get all 4★ & 5★ reviews (both real and admin-generated if you want)
+    # Flatten slider images
+    slider_images = []
+    for s in sliders:
+        if s.image1:
+            slider_images.append(s.image1.url)
+        if s.image2:
+            slider_images.append(s.image2.url)
+        if s.image3:
+            slider_images.append(s.image3.url)
+
     reviews_queryset = CourseReview.objects.filter(rating__gte=4)
-
-    # ✅ Convert to list so we can random.sample without re-querying
     reviews_list = list(reviews_queryset)
-
-    # ✅ Randomly pick up to 3 reviews (avoids IndexError if fewer than 3)
     if len(reviews_list) > 3:
         reviews = sample(reviews_list, 3)
     else:
@@ -3113,10 +3337,9 @@ def view_categories(request):
 
     return render(request, 'categories.html', {
         'category_data': category_data,
-        'reviews': reviews
+        'reviews': reviews,
+        'slider_images': slider_images,  # Pass flat list
     })
-
-
 
 from django.shortcuts import get_object_or_404
 
@@ -3320,3 +3543,214 @@ def delete_category(request, id):
     messages.success(request, "Category deleted successfully.")
     return redirect('admin_view_categories')  # or your admin category page name
 
+
+
+
+from django.utils.timezone import now
+from .models import PaidCourse, Coupon
+from decimal import Decimal
+from django.utils.dateparse import parse_datetime
+
+
+@login_required
+def add_to_cart(request, course_id):
+    # ensure stored ids are ints
+    cart = request.session.get('cart', [])
+    course_id = int(course_id)
+    if course_id not in cart:
+        cart.append(course_id)
+        request.session['cart'] = cart
+        messages.success(request, "Course added to cart.")
+    else:
+        messages.info(request, "Course already in your cart.")
+    # redirect user to cart page (you can change to display_paid_content if preferred)
+    return redirect('view_cart')
+
+
+from decimal import Decimal
+from django.shortcuts import render, redirect
+from django.utils.timezone import now
+from .models import PaidCourse, Coupon
+
+def view_cart(request):
+    buy_now_id = request.GET.get('buy_now')  # check if buy now triggered
+
+    if buy_now_id:
+        # Show only that course in the cart
+        try:
+            buy_now_course = PaidCourse.objects.get(id=buy_now_id)
+            courses = [buy_now_course]
+            cart = [buy_now_course.id]
+        except PaidCourse.DoesNotExist:
+            courses = []
+            cart = []
+    else:
+        # Normal cart behavior
+        cart = request.session.get('cart', [])
+        courses = list(PaidCourse.objects.filter(id__in=cart))
+
+    subtotal = sum(course.course_price for course in courses)
+    subtotal = Decimal(subtotal)
+
+    applicable_coupons = []
+    non_applicable_coupons = []
+
+    all_coupons = Coupon.objects.all()
+    today = now()
+
+    for coupon in all_coupons:
+        valid = (
+            coupon.active and
+            coupon.valid_from <= today <= coupon.valid_to and
+            subtotal >= coupon.min_amount and
+            (coupon.courses.count() == 0 or coupon.courses.filter(id__in=[c.id for c in courses]).exists())
+        )
+        if valid:
+            applicable_coupons.append(coupon)
+        else:
+            non_applicable_coupons.append(coupon)
+
+    discount_amount = Decimal(0)
+    applied_coupon = None
+
+    if request.method == "POST":
+        selected_coupon_id = request.POST.get("selected_coupon")
+        if selected_coupon_id:
+            try:
+                coupon = Coupon.objects.get(id=selected_coupon_id)
+                if coupon in applicable_coupons:
+                    discount_amount = subtotal * Decimal(coupon.discount_percent) / Decimal(100)
+                    applied_coupon = coupon
+                else:
+                    request.session['coupon_error'] = "Selected coupon is not valid."
+            except Coupon.DoesNotExist:
+                request.session['coupon_error'] = "Coupon not found."
+
+    total = subtotal - discount_amount
+
+    context = {
+        "courses": courses,
+        "subtotal": subtotal,
+        "total": total,
+        "discount_amount": discount_amount,
+        "applied_coupon": applied_coupon,
+        "applicable_coupons": applicable_coupons,
+        "non_applicable_coupons": non_applicable_coupons,
+        "error": request.session.pop('coupon_error', None),
+        "buy_now": bool(buy_now_id)
+    }
+    return render(request, "cart.html", context)
+
+
+@login_required
+def create_coupon(request):
+    if request.method == "POST":
+        code = (request.POST.get("code") or "").strip()
+        discount_percent = int(request.POST.get("discount_percent") or 0)
+        active = request.POST.get("active") == "on"
+        valid_from_str = request.POST.get("valid_from")
+        valid_to_str = request.POST.get("valid_to")
+        min_amount = Decimal(request.POST.get("min_amount") or "0.00")
+
+        valid_from = parse_datetime(valid_from_str) or timezone.now()
+        valid_to = parse_datetime(valid_to_str) or timezone.now()
+
+        coupon = Coupon.objects.create(
+            code=code,
+            discount_percent=discount_percent,
+            min_amount=min_amount,
+            valid_from=valid_from,
+            valid_to=valid_to,
+            active=active
+        )
+
+        # Allow attaching by course_code instead of ID
+        course_codes = (request.POST.get("course_codes") or "").strip()
+        if course_codes:
+            codes = [x.strip() for x in course_codes.split(",") if x.strip()]
+            coupon.courses.set(PaidCourse.objects.filter(course_code__in=codes))
+
+        messages.success(request, "Coupon created.")
+        return redirect('coupon_list')
+
+    return render(request, "create_coupon.html")
+
+from django.utils import timezone
+
+@login_required
+def coupon_list(request):
+    now = timezone.now()
+
+    # Update expired coupons
+    Coupon.objects.filter(valid_to__lt=now, active=True).update(active=False)
+
+    coupons = Coupon.objects.all().order_by('-id')
+    return render(request, "coupon_list.html", {"coupons": coupons})
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+
+@login_required
+def delete_coupon(request, coupon_id):
+    coupon = get_object_or_404(Coupon, id=coupon_id)
+    coupon.delete()
+    messages.success(request, f"Coupon '{coupon.code}' deleted successfully.")
+    return redirect('coupon_list')
+
+
+
+from django.shortcuts import redirect, get_object_or_404
+
+def remove_from_cart(request, course_id):
+    cart = request.session.get('cart', [])
+    if course_id in cart:
+        cart.remove(course_id)
+        request.session['cart'] = cart
+    return redirect('view_cart')
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.files.storage import default_storage
+from .models import Slider
+
+def upload_slider(request):
+    if request.method == 'POST':
+        image1 = request.FILES.get('image1')
+        image2 = request.FILES.get('image2')
+        image3 = request.FILES.get('image3')
+
+        # Always work with the latest slider row (or create if none exists)
+        slider, created = Slider.objects.get_or_create(id=1)  # you can fix one row for all slider images
+
+        if image1:
+            slider.image1 = image1
+        if image2:
+            slider.image2 = image2
+        if image3:
+            slider.image3 = image3
+
+        slider.save()
+        return redirect('upload_slider')
+
+    sliders = Slider.objects.all()
+    return render(request, 'upload_slider.html', {'sliders': sliders})
+
+
+
+def delete_slider_image(request, slider_id, image_field):
+    slider = get_object_or_404(Slider, id=slider_id)
+    image = getattr(slider, image_field)
+
+    if image:
+        # Delete from storage
+        if default_storage.exists(image.name):
+            default_storage.delete(image.name)
+
+        # Remove from model
+        setattr(slider, image_field, None)
+        slider.save()
+
+    return redirect('upload_slider')

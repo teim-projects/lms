@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Slider Images</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding-top: 7rem;
+            margin-bottom: 20%;
+        }
+        
+        .upload-card {
+            max-width: 700px;
+            margin: auto;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .upload-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .upload-card .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: none;
+        }
+        
+        /* Image Section Styles */
+        .image-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .image-section h3 {
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .image-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .image-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e63946;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            opacity: 0.9;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+{% include 'Admin_Base.html' %}
+<div class="container mt-4">
+
+    <!-- Upload Form -->
+    <div class="upload-card card mb-5">
+        <div class="card-header">
+            <h3>Upload Slider Images</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="form-label">Image 1</label>
+                    <input type="file" name="image1" class="form-control" accept="image/*">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Image 2</label>
+                    <input type="file" name="image2" class="form-control" accept="image/*">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Image 3</label>
+                    <input type="file" name="image3" class="form-control" accept="image/*">
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-5 py-2">
+                        <i class="fas fa-upload me-2"></i>Upload Images
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Image Sections -->
+    <div class="image-section">
+        <h3><i class="fas fa-image me-2"></i>Image 1</h3>
+        <div class="image-grid">
+            {% for slider in sliders %}
+                {% if slider.image1 %}
+                    <div class="image-card">
+                        <img src="{{ slider.image1.url }}" alt="Image 1">
+                        <a href="{% url 'delete_slider_image' slider.id 'image1' %}" 
+                           class="delete-btn" title="Delete Image">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <div class="empty-state">
+                    <p>No Image 1 uploaded yet</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="image-section mt-4">
+        <h3><i class="fas fa-image me-2"></i>Image 2</h3>
+        <div class="image-grid">
+            {% for slider in sliders %}
+                {% if slider.image2 %}
+                    <div class="image-card">
+                        <img src="{{ slider.image2.url }}" alt="Image 2">
+                        <a href="{% url 'delete_slider_image' slider.id 'image2' %}" 
+                           class="delete-btn" title="Delete Image">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <div class="empty-state">
+                    <p>No Image 2 uploaded yet</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="image-section mt-4">
+        <h3><i class="fas fa-image me-2"></i>Image 3</h3>
+        <div class="image-grid">
+            {% for slider in sliders %}
+                {% if slider.image3 %}
+                    <div class="image-card">
+                        <img src="{{ slider.image3.url }}" alt="Image 3">
+                        <a href="{% url 'delete_slider_image' slider.id 'image3' %}" 
+                           class="delete-btn" title="Delete Image">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <div class="empty-state">
+                    <p>No Image 3 uploaded yet</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% include 'footer.html' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>

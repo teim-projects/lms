@@ -1,171 +1,724 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profit Max Share Market Academy</title>
-  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-
+  <meta charset="UTF-8">
+  <title>Student Dashboard - ProfitMax Academy</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+     :root {
+      --primary-color: #2563eb;  /* Softer blue */
+      --secondary-color: #1e40af; /* Darker blue */
+      --accent-color: #10b981;   /* Softer green */
+      --free-color: #22c55e;     /* Green for free courses */
+      --paid-color: #f97316;     /* Orange for paid courses (more vibrant) */
+      --dark-color: #1e293b;
+      --light-color: #f8fafc;
+      --text-color: #334155;
+      --text-light: #64748b;
+      --card-bg: #ffffff;
+      --feature-card-bg: #f1f5f9;
+      --categories-bg: #f8fafc;  /* Light background for categories section */
+    }
+    
     body {
-      margin: 0;
-      padding: 0;
-  background: url("{% static 'images/background2.jpg' %}") no-repeat center center fixed;
-      background-size: cover;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #fff;
-      overflow-x: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f5f7fa;
+      color: var(--text-color);
+      line-height: 1.6;
     }
-
-    .container-custom {
-      padding-top: 100px;
-      padding-bottom: 100px;
+    
+    /* Header Section */
+    .dashboard-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-top: 5%;
+      border-radius: 0 0 12px 12px;
     }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+    
+    .dashboard-title {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
     }
-
-    .glass-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+    
+    .dashboard-subtitle {
+      font-weight: 400;
+      opacity: 0.9;
+      font-size: 1.1rem;
     }
-
-    .card-img-top-wrap {
-      height: 200px;
+    
+    /* Slider - Expanded */
+    .slider-container {
+      border-radius: 12px;
       overflow: hidden;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      margin-bottom: 3rem;
+      border: 1px solid rgba(0,0,0,0.05);
+      max-width: 1400px;  /* Increased max width */
+      margin: 0 auto 3rem;  /* Centered with margin */
+      padding: 0;  /* Remove padding to maximize width */
     }
-
-    .card-img-top {
-      width: 100%;
+    
+    .carousel-inner {
+      height: 450px;  /* Increased height */
+    }
+    
+    .carousel-control-prev, .carousel-control-next {
+      width: 40px;
+      height: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      opacity: 1;
+      margin: 0 10px;  /* Reduced margin to keep buttons inside */
+    }
+    
+    .carousel-control-prev {
+      left: 10px;  /* Position from left edge */
+    }
+    
+    .carousel-control-next {
+      right: 10px;  /* Position from right edge */
+    }
+    
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+      background-size: 60%;
+      background-color: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Categories Section with Light Background */
+    .categories-section {
+      background-color: var(--categories-bg);
+      /* padding: 3rem 0; */
+      border-radius: 12px;
+      margin: 2rem auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-top: -1%;
+    }
+    
+    /* Category Cards */
+    .category-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--card-bg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
       height: 100%;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .category-card img {
+      width: 100%;
+      height: 180px;  /* Slightly taller */
       object-fit: cover;
-      transition: transform 0.4s ease;
+      transition: transform 0.5s ease;
     }
-
-    .glass-card:hover .card-img-top {
-      transform: scale(1.1);
+    
+    .category-card:hover img {
+      transform: scale(1.03);
     }
-
-    .card-body {
+    
+    .category-card h3 {
+      margin: 0;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background-color: var(--card-bg);
+      color: var(--dark-color);
+      border-top: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .category-info-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.25rem;
+    }
+    
+    /* Section Styling */
+    .section-title {
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      color: var(--dark-color);
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 4px;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+    
+    /* Modal Styling */
+    .modal-content {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .modal-header {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      padding: 1.2rem 1.5rem;
+      border-bottom: none;
+    }
+    
+    .modal-title {
+      font-weight: 600;
+      color: white;
+    }
+    
+    /* Course Cards */
+    .course-card {
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--card-bg);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      height: 100%;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    
+    .course-card img {
+      width: 100%;
+      height: 160px;  /* Slightly taller */
+      object-fit: cover;
+    }
+    
+    .course-card .card-body {
+      padding: 1.25rem;
+    }
+    
+    .course-card .card-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      color: var(--dark-color);
+    }
+    
+    .course-card .card-text {
+      color: var(--text-light);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    
+    .price-tag {
+      font-weight: 700;
+      color: var(--accent-color);
+      font-size: 0.95rem;
+    }
+    
+    /* Buttons - Enhanced Colors */
+    .btn-view {
+      background: var(--primary-color);
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      color: white;
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+    }
+    
+    .btn-view:hover {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+      color: white;
+    }
+    
+    /* More Vibrant "View More" Buttons */
+    .btn-view-more-free {
+      background: var(--free-color);
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1.25rem;  /* Slightly wider */
+      font-weight: 600;  /* Bolder */
+      color: white;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 6px rgba(34, 197, 94, 0.3);
+    }
+    
+    .btn-view-more-free:hover {
+      background: #16a34a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(34, 197, 94, 0.4);
+      color: white;
+    }
+    
+    .btn-view-more-paid {
+      background: var(--paid-color);
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1.25rem;  /* Slightly wider */
+      font-weight: 600;  /* Bolder */
+      color: white;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 6px rgba(249, 115, 22, 0.3);
+    }
+    
+    .btn-view-more-paid:hover {
+      background: #ea580c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(249, 115, 22, 0.4);
+      color: white;
+    }
+    
+    /* Badges */
+    .course-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.95);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .free-badge {
+      color: var(--free-color);
+      border: 1px solid var(--free-color);
+    }
+    
+    .paid-badge {
+      color: var(--paid-color);
+      border: 1px solid var(--paid-color);
+    }
+    
+    /* Features Section */
+    .feature-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--feature-card-bg);
+      transition: all 0.3s ease;
+      height: 100%;
       padding: 1.5rem;
       text-align: center;
+      border: 1px solid rgba(0,0,0,0.05);
     }
-
-    .card-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: #ffffff;
-      text-shadow: 1px 1px 2px #ffffff;
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      background: white;
     }
-
-    .card-text {
-      font-size: 1rem;
-      color: #ffffff;
+    
+    .feature-icon {
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      background: rgba(37, 99, 235, 0.1);
+      width: 70px;
+      height: 70px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
-
-    @media (max-width: 767px) {
-      .card-title {
-        font-size: 1.4rem;
+    
+    .feature-card .card-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      color: var(--dark-color);
+    }
+    
+    .feature-card .card-text {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    /* Category Description Tooltip */
+    .category-description-tooltip {
+      max-width: 300px;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 1.5rem;
       }
-
-      .card-text {
-        font-size: 0.9rem;
+      
+      .dashboard-title {
+        font-size: 1.6rem;
       }
-
-      .container-custom {
-        padding-top: 60px;
-        padding-bottom: 60px;
+      
+      .category-card img {
+        height: 140px;
+      }
+      
+      .feature-card {
+        padding: 1.25rem;
+      }
+      
+      .feature-icon {
+        font-size: 1.8rem;
+        width: 60px;
+        height: 60px;
+      }
+      
+      .slider-container {
+        margin: 0 auto 2rem;
+      }
+      
+      .carousel-inner {
+        height: 300px;
       }
     }
-    /* For WebKit browsers (Chrome, Edge, Safari) */
-::-webkit-scrollbar {
-  width: 0px; /* Thin scrollbar */
-}
+    
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animated-card {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    /* Delay animations for staggered effect */
+    .category-card:nth-child(1) { animation-delay: 0.1s; }
+    .category-card:nth-child(2) { animation-delay: 0.2s; }
+    .category-card:nth-child(3) { animation-delay: 0.3s; }
+    .category-card:nth-child(4) { animation-delay: 0.4s; }
+    .category-card:nth-child(5) { animation-delay: 0.5s; }
+    .category-card:nth-child(6) { animation-delay: 0.6s; }
+    
+    /* Feature cards animation */
+    .feature-card {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    .feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .feature-card:nth-child(2) { animation-delay: 0.2s; }
+    .feature-card:nth-child(3) { animation-delay: 0.3s; }
+    .feature-card:nth-child(4) { animation-delay: 0.4s; }
+    .feature-card:nth-child(5) { animation-delay: 0.5s; }
+    .feature-card:nth-child(6) { animation-delay: 0.6s; }
 
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1); /* Track background */
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #0F40BF; /* Scrollbar thumb color */
-  border-radius: 10px;
-  border: 1px solid #fff; /* Optional border */
-}
+    
   </style>
 </head>
-
 <body>
 
-  {% include 'Student_Base.html' %}
-<div class="main" style="min-height: 100vh;">
+{% include 'Student_Base.html' %}
 
+<div class="dashboard-header">
+  <div class="container">
+    <h1 class="dashboard-title">Welcome to Your Learning Dashboard</h1>
+    <p class="dashboard-subtitle">Explore courses and enhance your trading skills</p>
+  </div>
+</div>
 
-  <div class="container container-custom mt-5">
-    <div class="row justify-content-center g-4 mt-5">
-      <!-- Paid Courses Card -->
-      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-        <a href="/paid-courses/" class="text-decoration-none">
-          <div class="glass-card">
-            <div class="card-img-top-wrap">
-              <img src="{% static 'images/paid1.jpg' %}" class="card-img-top" alt="Paid Courses">
-            </div>
-            <div class="card-body">
-              <h3 class="card-title">Paid Courses</h3>
-              <p class="card-text">
-                Unlock in-depth knowledge of the stock market with our expert-designed paid courses. Includes advanced strategies, live market analysis, and certification.
-              </p>
-            </div>
+{% if slider_images %}
+<section class="py-4">
+  <div class="container-fluid px-0">
+    <div id="sliderCarousel" class="carousel slide slider-container" data-bs-ride="carousel" data-bs-interval="3000">
+      <div class="carousel-inner">
+        {% for img in slider_images %}
+          {% if img %}
+          <div class="carousel-item {% if not forloop.parentloop and forloop.first %}active{% endif %}">
+            <img src="{{ img }}" class="d-block w-100" style="object-fit: cover; height: 450px;" alt="Slide {{ forloop.counter }}">
           </div>
-        </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#sliderCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#sliderCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+
+
+<section class="categories-section">  <!-- Added light background section -->
+  <div class="container">
+    <h2 class="section-title">Explore Course Categories</h2>
+    <div class="row gy-4">
+      {% for item in category_data %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="category-card animated-card" data-bs-toggle="modal" data-bs-target="#modal-{{ item.category.id }}">
+          {% if item.category.icon %}
+          <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
+          {% else %}
+          <img src="{% static 'images/default-category.jpg' %}" alt="Default category image">
+          {% endif %}
+          <h3>
+            {{ item.category.name }}
+            {% if item.category.description %}
+            <button class="category-info-btn" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="top" 
+                    data-bs-custom-class="category-description-tooltip"
+                    title="{{ item.category.description }}">
+              <i class="fas fa-info-circle"></i>
+            </button>
+            {% endif %}
+          </h3>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Modals for Each Category -->
+{% for item in category_data %}
+<div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1"
+  aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel{{ item.category.id }}">
+          <i class="fas fa-folder-open me-2"></i>{{ item.category.name }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <!-- Free Courses Card -->
-      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-        <a href="/free-course/" class="text-decoration-none">
-          <div class="glass-card">
-            <div class="card-img-top-wrap">
-              <img src="{% static 'images/free1.jpg' %}" class="card-img-top" alt="Free Courses">
+      <div class="modal-body">
+        {% if item.category.description %}
+        <div class="alert alert-light mb-4">
+          <i class="fas fa-info-circle me-2"></i>{{ item.category.name }}
+        </div>
+        {% endif %}
+
+        <!-- Free Courses -->
+        <div class="mb-5">
+          <h5 class="mb-4 d-flex align-items-center">
+            <span class="badge bg-success me-2">FREE</span>
+            <span>Free Courses</span>
+          </h5>
+          <div class="row g-4 mb-3">
+            {% for course in item.free_courses %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="course-card">
+                <span class="course-badge free-badge">FREE</span>
+                <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.title }}">
+                <div class="card-body">
+                  <h6 class="card-title">{{ course.title }}</h6>
+                  <p class="card-text">{{ course.description|truncatewords:12 }}</p>
+                  <div class="d-grid">
+                    <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm">
+                      <i class="fas fa-eye me-1"></i> View Course
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="card-body">
-              <h3 class="card-title">Free Courses</h3>
-              <p class="card-text">
-                Start your journey in the share market for free! Learn basics like stock types, market behavior, and trading platforms—perfect for beginners.
-              </p>
+            {% empty %}
+            <div class="col-12">
+              <div class="alert alert-info">
+                No free courses available in this category yet.
+              </div>
             </div>
+            {% endfor %}
           </div>
-        </a>
+          {% if item.free_courses %}
+          <div class="text-end">
+            <a href="{% url 'free_courses_by_category' item.category.id %}" class="btn btn-view-more-free">
+              View All Free Courses <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Paid Courses -->
+        <div class="mt-5">
+          <h5 class="mb-4 d-flex align-items-center">
+            <span class="badge bg-primary me-2">PREMIUM</span>
+            <span>Premium Courses</span>
+          </h5>
+          <div class="row g-4">
+            {% for course in item.paid_courses %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="course-card">
+                <span class="course-badge paid-badge">PREMIUM</span>
+                <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.course_title }}">
+                <div class="card-body">
+                  <h6 class="card-title">{{ course.course_title }}</h6>
+                  <p class="card-text">{{ course.description|truncatewords:12 }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="price-tag">₹{{ course.course_price }}</span>
+                    <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">
+                      <i class="fas fa-eye me-1"></i> View
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+              <div class="alert alert-info">
+                No premium courses available in this category yet.
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% if item.paid_courses %}
+          <div class="text-end mt-3">
+            <a href="{% url 'paid_courses_by_category' item.category.id %}" class="btn btn-view-more-paid">
+              View All Premium Courses <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
 </div>
-  {% include 'footer.html' %}
+{% endfor %}
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init({
-      duration: 1000,
-      once: true,
+<!-- Features Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Why Choose ProfitMax Academy?</h2>
+      <p class="text-muted">Discover what makes our trading education platform unique</p>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <h5 class="card-title">Professional Mentorship</h5>
+          <p class="card-text">Learn from experienced traders using our exclusive Vardan Strategy to maximize your profit potential.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h5 class="card-title">Risk Management</h5>
+          <p class="card-text">Identify, assess, and monitor potential risks efficiently with our comprehensive system.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-robot"></i>
+          </div>
+          <h5 class="card-title">Smart Trading Tools</h5>
+          <p class="card-text">Enhance decisions with our Bramhastra Stock Alert System for accurate market predictions.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h5 class="card-title">Trading Psychology</h5>
+          <p class="card-text">Master your emotions and behavior to build a successful and consistent trading mindset.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h5 class="card-title">Real-time Analytics</h5>
+          <p class="card-text">Access live market data and analytics to make informed trading decisions.</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h5 class="card-title">Trading Community</h5>
+          <p class="card-text">Join our active community of traders to share insights and strategies.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Initialize tooltips
+  document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl, {
+        trigger: 'hover focus'
+      });
     });
-  </script>
-</body>
+  });
+  
+  // Smooth scroll for any "scrollBtn" elements
+  document.querySelectorAll(".scrollBtn").forEach(btn => {
+    btn.addEventListener("click", function(e) {
+      e.preventDefault();
+      const target = document.getElementById(this.getAttribute("data-target"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth"
+        });
+      }
+    });
+  });
+</script>
 
+{% include 'footer.html' %}
+</body>
 </html>

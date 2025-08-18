@@ -205,6 +205,34 @@
         </div>
       </li>
 
+
+<li class="nav-item">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu3" role="button" >Category</a>
+        <div class="collapse" id="menu3" style=" padding-left: 1.5rem;">
+          <a class="nav-link" href="/category/create/">Create Category</a>
+         <a class="nav-link" href="/manage/categories/">View Category</a>
+        </div>
+      </li>
+
+
+
+
+
+
+          <li class="nav-item">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu4" role="button">Coupon</a>
+        <div class="collapse" id="menu4" style=" padding-left: 1.5rem;">
+           {% if not is_subadmin %}
+          <a class="nav-link " href="/coupons/create/">Create Coupon Code</a>
+          <a class="nav-link " href="/coupons/">View Coupon Code</a>
+
+          {% endif %}
+          
+        </div>
+      </li>
+
+
+
       <li class="nav-item">
         <a class="nav-link d-flex align-items-center justify-content-between" href="/ticket_to_admin/">
   <span>Tickets</span>
@@ -219,12 +247,12 @@
 
 
 
-        <a class="nav-link" href="#">Certificates</a>
-        <a class="nav-link" href="/category/create/">Create Category</a>
-         <a class="nav-link" href="/manage/categories/">View Category</a>
- {% if not is_subadmin %}
-          <a class="nav-link " href="#">Create Coupon Code</a>
-          {% endif %}
+        <a class="nav-link" href="/upload-slider/">Upload Sliders</a>
+        
+
+        
+
+
          
         <a class="nav-link" href="/send_notification/">Notifications</a>
         <a class="nav-link" href="/admin_user_list/">Student List</a>

@@ -289,20 +289,28 @@ class Ticket(models.Model):
 class NewPayment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # Prices
+    original_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0.00)  # before discount
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # after discount
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0.00)  # amount saved
+
+    # Payment details
     txnid = models.CharField(max_length=100, unique=True)
     status = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    
+    # Invoice & status flags
     invoice_created = models.BooleanField(default=False)
-    canceled_invoice = models.BooleanField(default=False) 
+    canceled_invoice = models.BooleanField(default=False)
+    is_revoked = models.BooleanField(default=False)
 
-    is_revoked = models.BooleanField(default=False) 
+    # Coupon details
+    coupon_code = models.CharField(max_length=50, null=True, blank=True, default=None)
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, default=0.00)
 
     def __str__(self):
         return f"{self.user.username} - {self.course.course_title} - {self.txnid}"
-
 
 # models.py
 
@@ -375,14 +383,19 @@ class Invoice(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='invoices')
     course = models.ForeignKey(PaidCourse, on_delete=models.CASCADE)
     payment = models.ForeignKey(NewPayment, on_delete=models.CASCADE, null=True, blank=True)
-    
 
     # Snapshots at time of invoice generation
     course_title = models.CharField(max_length=255)
-    course_fee = models.DecimalField(max_digits=10, decimal_places=2)
-    discount = models.DecimalField(max_digits=10, decimal_places=2)
-    paid_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    course_fee = models.DecimalField(max_digits=10, decimal_places=2)  # from Course
+    discount = models.DecimalField(max_digits=10, decimal_places=2)    # from Course
+    paid_amount = models.DecimalField(max_digits=10, decimal_places=2) # final paid (from Payment)
 
+    # NEW snapshot fields from payment (coupon-related)
+    coupon_code = models.CharField(max_length=50, null=True, blank=True, default=None)
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, default=0.00)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0.00)
+
+    # Customer details
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     mobile = models.CharField(max_length=12)
@@ -390,18 +403,25 @@ class Invoice(models.Model):
 
     date_created = models.DateTimeField(default=timezone.now)
 
-    is_canceled = models.BooleanField(default=False)  # New field to track canceled invoice
+    is_canceled = models.BooleanField(default=False)  # Track canceled invoice
 
     def save(self, *args, **kwargs):
+        # Generate invoice number if missing
         if not self.invoice_number:
             rand = random.randint(10000, 99999)
             self.invoice_number = f"PMAX_{rand}"
+
+        # If payment exists, only copy coupon-related fields
+        if self.payment:
+            self.paid_amount = self.payment.amount
+            self.coupon_code = self.payment.coupon_code
+            self.discount_percent = self.payment.discount_percent or 0
+            self.discount_amount = self.payment.discount_amount or 0
+
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.invoice_number} - {self.course_title} ({self.user.email})"
-
-
 
 # models.py
 class Coupon(models.Model):
@@ -415,4 +435,15 @@ class Coupon(models.Model):
 
     def __str__(self):
         return f"{self.code} - {self.discount_percent}%"
+
+
+
+
+class Slider(models.Model):
+    image1 = models.ImageField(upload_to='slider_images/', null=True, blank=True)
+    image2 = models.ImageField(upload_to='slider_images/', null=True, blank=True)  
+    image3 = models.ImageField(upload_to='slider_images/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Slider {self.id}"
 
