@@ -126,7 +126,8 @@
                     <li><a class="dropdown-item" href="{% url 'canceled_invoices' %}?{{ request.GET.urlencode }}">Canceled Invoices</a></li>
                     <li><a class="dropdown-item" href="{% url 'revoked_courses_list' %}?{{ request.GET.urlencode }}">Revoked Access</a></li>
                     <li><a class="dropdown-item" href="{% url 'active_invoice_report' %}?{{ request.GET.urlencode }}">Active Invoices</a></li>
-                        
+                    <li><a class="dropdown-item" href="{% url 'uncreated_invoice_report' %}?{{ request.GET.urlencode }}">Uncreated Invoice</a></li>
+
                 </ul>
             </div>
         </div>

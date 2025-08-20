@@ -3,6 +3,7 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Purchased Courses</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -18,6 +19,9 @@
         }
         .content {
             flex: 1;
+            padding-bottom: 60px; /* Add padding to prevent footer overlap */
+            position: relative;
+            margin-top: 5%;
         }
         .course-card {
             border: 1px solid #ddd;
@@ -26,9 +30,11 @@
             background: #fff;
             transition: 0.3s;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
         .course-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         .course-img {
             width: 100%;
@@ -41,18 +47,47 @@
             border-radius: 20px;
             padding: 6px 16px;
             text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
         }
         .view-btn:hover {
-            background-color: #b5bbc1;
+            background-color: #0069d9;
+            color: #fff;
+        }
+        footer {
+            flex-shrink: 0;
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content {
+                padding-top: 80px; /* More space for mobile header */
+                padding-bottom: 50px;
+            }
+            .course-img {
+                height: 160px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .content {
+                padding-top: 70px;
+            }
+            .course-card {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
     {% include 'Student_Base.html' %}
-    <div class="content pt-5" style="min-height: 100vh;">
-    <div class="container mt-5">
-        <h2 class="text-center mb-4"><b>Your Purchased Courses</b></h2>
+    <div class="content">
+        <div class="container mt-4">
+            <h2 class="text-center mb-4"><b>Your Purchased Courses</b></h2>
 
             <div class="row">
                 {% for course in courses %}
@@ -73,8 +108,10 @@
                     </div>
                 </div>
                 {% empty %}
-                <div class="col-12 text-center">
-                    <p class="text-muted">You haven't purchased any courses yet.</p>
+                <div class="col-12 text-center py-4">
+                    <div class="alert alert-info">
+                        You haven't purchased any courses yet.
+                    </div>
                 </div>
                 {% endfor %}
             </div>

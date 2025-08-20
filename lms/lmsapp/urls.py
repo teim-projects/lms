@@ -11,7 +11,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout_view, name='logout'),
     path('login/', views.login, name='login'),
-    path('', views.index, name='index'),
+    path('index/', views.index, name='index'),
     path('verify-otp/', views.verify_otp, name='verify_otp'),
     path('password-reset/', views.password_reset, name='password_reset'),
     path('reset-password-verify/', views.reset_password_verify, name='reset_password_verify'),
@@ -138,7 +138,7 @@ urlpatterns = [
 
 
 
-    path('categories/', views.view_categories, name='view_categories'),
+    path('', views.view_categories, name='view_categories'),
     path('category/create/', views.create_category, name='create_category'),
     path('category/<int:category_id>/', views.category_detail, name='category_detail'),
     path('category/<int:category_id>/free/', views.free_courses_by_category, name='free_courses_by_category'),
@@ -167,6 +167,9 @@ urlpatterns = [
 
     path('upload-slider/', views.upload_slider, name='upload_slider'),
     path('delete-slider-image/<int:slider_id>/<str:image_field>/', views.delete_slider_image, name='delete_slider_image'),
+
+    path('uncreated-invoice-report/', views.uncreated_invoice_report, name='uncreated_invoice_report'),
+
 
 
     

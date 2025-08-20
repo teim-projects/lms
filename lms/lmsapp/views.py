@@ -2277,16 +2277,20 @@ def grant_course_access(request):
         user_id = request.POST.get("user_id")
         course_id = request.POST.get("course_id")
         create_invoice = request.POST.get("create_invoice") == "on"
+        amount_paid = request.POST.get("amount_paid")
 
         user = get_object_or_404(CustomUser, id=user_id)
         course = get_object_or_404(PaidCourse, id=course_id)
+
+        final_amount = float(amount_paid) if amount_paid else course.course_price
 
         # Create payment record
         txn_id = f"MANUAL-{uuid.uuid4().hex[:8]}"
         payment = NewPayment.objects.create(
             user=user,
             course=course,
-            amount=course.course_price,
+            amount=final_amount,
+
             txnid=txn_id,
             status="manual",
             invoice_created=create_invoice
@@ -2300,7 +2304,7 @@ def grant_course_access(request):
                 course_title=course.course_title,
                 course_fee=course.original_price,
                 discount=course.discount_amount,
-                paid_amount=course.course_price,
+                paid_amount=final_amount,
                 first_name=user.first_name,
                 last_name=user.last_name,
                 mobile=user.mobile,
@@ -2685,7 +2689,7 @@ def generate_invoice_view(request, payment_id):
     invoice = Invoice.objects.filter(payment=payment).first()
     
     if invoice:
-        return render(request, 'invoice_detail.html', {'invoice': invoice})
+        return render(request, 'invoice_detail.html', {'invoice': invoice,'payment': payment})
     
     try:
         invoice = Invoice.objects.create(
@@ -2714,7 +2718,7 @@ def generate_invoice_view(request, payment_id):
         payment.invoice_created = True
         payment.save()
         
-        return render(request, 'invoice_detail.html', {'invoice': invoice})
+        return render(request, 'invoice_detail.html', {'invoice': invoice,'payment': payment})
     
     except Exception as e:
         messages.error(request, f"Error generating invoice: {str(e)}")
@@ -3222,6 +3226,44 @@ def export_to_excel(request):
                 e.status,
                 e.created_at.strftime("%Y-%m-%d")
             ])
+    
+
+    elif report_type == 'uncreated':
+        payments = NewPayment.objects.filter(invoice_created=False).select_related('user', 'course')
+
+        if specific_date:
+            payments = payments.filter(created_at__date=specific_date)
+        else:
+            if date_from:
+                payments = payments.filter(created_at__gte=date_from)
+            if date_to:
+                payments = payments.filter(created_at__lte=date_to)
+
+        if course_id:
+            payments = payments.filter(course_id=course_id)
+
+        ws.title = "Uncreated Invoice Report"
+        ws.append([
+            'Sr. No.', 'Student Name', 'Email', 'Mobile',
+            'Course', 'Transaction ID', 'Status', 'Paid Amount (₹)', 'Date'
+        ])
+
+        for idx, p in enumerate(payments, start=1):
+            ws.append([
+                idx,
+                f"{p.user.first_name or ''} {p.user.last_name or ''}".strip(),
+                p.user.email,
+                p.user.mobile,
+                p.course.course_title if p.course else 'N/A',
+                p.txnid,
+                p.status,
+                p.amount,
+                p.created_at.strftime("%Y-%m-%d")
+            ])
+
+
+
+            
 
 
     elif report_type == 'active':
@@ -3278,20 +3320,26 @@ def create_category(request):
         name = request.POST.get('name').strip()
         description = request.POST.get('description')
         icon = request.FILES.get('icon')
+        navbar_logo = request.FILES.get('navbar_logo')  # new field
 
         if name:
             try:
-                # Check if category already exists
                 if Category.objects.filter(name__iexact=name).exists():
                     messages.error(request, f"Category '{name}' already exists.")
                 else:
-                    Category.objects.create(name=name, description=description, icon=icon)
+                    Category.objects.create(
+                        name=name,
+                        description=description,
+                        icon=icon,
+                        navbar_logo=navbar_logo
+                    )
                     messages.success(request, f"Category '{name}' created successfully!")
                     return redirect('admin_view_categories')
             except IntegrityError:
                 messages.error(request, "An error occurred while saving the category.")
 
     return render(request, 'create_category.html')
+
 
 
 from django.shortcuts import render, get_object_or_404
@@ -3754,3 +3802,61 @@ def delete_slider_image(request, slider_id, image_field):
         slider.save()
 
     return redirect('upload_slider')
+
+
+@login_required
+def uncreated_invoice_report(request):
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    specific_date = request.GET.get('specific_date')
+    course_id = request.GET.get('course')
+
+    # Base queryset → Payments without invoice
+    payments = NewPayment.objects.filter(invoice_created=False)
+
+    # Apply specific date filter
+    if specific_date:
+        try:
+            specific_date_obj = datetime.strptime(specific_date, "%Y-%m-%d").date()
+            next_day = specific_date_obj + timedelta(days=1)
+            payments = payments.filter(
+                created_at__gte=specific_date_obj,
+                created_at__lt=next_day
+            )
+        except ValueError:
+            messages.error(request, "Invalid date format. Please use YYYY-MM-DD.")
+
+    else:
+        # Apply date_from filter
+        if date_from:
+            try:
+                date_from_obj = datetime.strptime(date_from, "%Y-%m-%d").date()
+                payments = payments.filter(created_at__gte=date_from_obj)
+            except ValueError:
+                messages.error(request, "Invalid 'from' date format. Please use YYYY-MM-DD.")
+
+        # Apply date_to filter
+        if date_to:
+            try:
+                date_to_obj = datetime.strptime(date_to, "%Y-%m-%d").date()
+                next_day = date_to_obj + timedelta(days=1)
+                payments = payments.filter(created_at__lt=next_day)
+            except ValueError:
+                messages.error(request, "Invalid 'to' date format. Please use YYYY-MM-DD.")
+
+    # Filter by course
+    if course_id:
+        payments = payments.filter(course_id=course_id)
+
+    all_courses = PaidCourse.objects.all()
+
+    return render(request, 'admin_uncreated_invoice_report.html', {
+        'payments': payments,
+        'all_courses': all_courses,
+        'filter_params': {
+            'date_from': date_from or '',
+            'date_to': date_to or '',
+            'specific_date': specific_date or '',
+            'course': course_id or '',
+        },
+    })

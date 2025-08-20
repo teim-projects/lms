@@ -92,6 +92,12 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(null=True, blank=True)
     icon = models.ImageField(upload_to='category_icons/', null=True, blank=True)
+    navbar_logo = models.ImageField(
+        upload_to='category_navbar/',
+        null=True,
+        blank=True,
+        default='default/navbar_default.png'   # place a default image inside your MEDIA folder
+    )
 
     def __str__(self):
         return self.name

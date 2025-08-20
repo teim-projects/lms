@@ -319,9 +319,17 @@
       <i class="fas fa-bars toggle-btn text-dark me-3" onclick="toggleSidebar()"></i>
     </div>
 
-    <div class="navbar-logo mx-auto">
-      <img src="{% static 'images/pmxlogo_c.png' %}" alt="Logo" class="navbar-logo">
-    </div>
+   <div class="navbar-logo mx-auto">
+    <img src="
+        {% if category and category.navbar_logo %}
+            {{ category.navbar_logo.url }}
+        {% else %}
+            {% static 'images/pmxlogo_c.png' %}
+        {% endif %}
+    " 
+    alt="Logo" class="navbar-logo">
+</div>
+
 <!-- 
     <div class="navbar-logo mx-auto">
     <img src="{% if category and category.icon %}{{ category.icon.url }}{% else %}{% static 'images/pmxlogo_c.png' %}{% endif %}" 
@@ -373,7 +381,7 @@
     <span class="close-btn" onclick="toggleSidebar()">&times;</span>
     <ul class="nav flex-column px-3">
       <li class="nav-item">
-        <a href="/student_dashboard/" class="nav-link">Dashboard </a>
+        <a href="/student_dashboard/" class="nav-link">Dashboard  </a>
       </li>
 
       <li class="nav-item">

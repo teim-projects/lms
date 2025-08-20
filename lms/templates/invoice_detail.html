@@ -115,6 +115,14 @@
           {{ invoice.first_name }} {{ invoice.last_name }}<br>
           {{ invoice.email }} / {{ invoice.mobile }}<br>
           <!-- {{ invoice.user.username|upper }} : -->
+             <strong>Payment Type:</strong> 
+                  <span>
+                    {% if payment.status == 'manual' %}
+                      <span class="badge bg-info">Offline Payment</span>
+                    {% else %}
+                      <span class="badge bg-success">Online Payment</span>
+                    {% endif %}
+                  </span>
         </td>
         <td style="text-align:right;">
           <strong style="color:#c00;">INVOICE No : {{ invoice.invoice_number }}</strong><br>
@@ -151,6 +159,13 @@
     <td><strong>Total Course Price</strong></td>
     <td id="totalCoursePrice"></td>
   </tr>
+
+  {% if payment.status == "manual" %}
+<tr>
+  <td><strong>Extra Discount</strong></td>
+  <td id="extraDiscount"></td>
+</tr>
+{% endif %}
   <tr>
     <td><strong>Paid Amount</strong></td>
     <td><strong style="color:#c00;">{{ invoice.paid_amount }}</strong></td>
@@ -170,7 +185,13 @@
   </tr>
   <tr>
     <td><strong>Extra Discount</strong></td>
-    <td>{{ invoice.discount_amount|default:"0" }}</td>
+      <td>
+    {% if payment.status == "manual" %}
+      <span id="extraDiscount"></span>
+    {% else %}
+      {{ invoice.discount_amount|default:"0" }}
+    {% endif %}
+  </td>
   </tr>
   <tr>
     <td><strong>Discount %</strong></td>
@@ -223,15 +244,34 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const paidAmount = parseFloat("{{ invoice.paid_amount|default:'0' }}") || 0;
-    const extraDiscount = parseFloat("{{ invoice.discount_amount|default:'0' }}") || 0;
+    const courseFee = parseFloat("{{ invoice.course_fee|default:'0' }}") || 0;
+    const discount = parseFloat("{{ invoice.discount|default:'0' }}") || 0;
 
-    // Total Course Price = Paid + Extra Discount
-    const totalCoursePrice = paidAmount + extraDiscount;
+    // Total Course Price = Course Fee - Discount
+    const totalCoursePrice = courseFee - discount;
 
     document.getElementById("totalCoursePrice").textContent = totalCoursePrice.toFixed(2);
   });
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const courseFee = parseFloat("{{ invoice.course_fee|default:'0' }}") || 0;
+    const discount = parseFloat("{{ invoice.discount|default:'0' }}") || 0;
+    const paidAmount = parseFloat("{{ invoice.paid_amount|default:'0' }}") || 0;
+
+    // Total Course Price = Course Fee - Discount
+    const totalCoursePrice = courseFee - discount;
+    document.getElementById("totalCoursePrice").textContent = totalCoursePrice.toFixed(2);
+
+    // Extra Discount (only if offline payment)
+    {% if payment.status == "manual" %}
+      const extraDiscount = totalCoursePrice - paidAmount;
+      document.getElementById("extraDiscount").textContent = extraDiscount.toFixed(2);
+    {% endif %}
+  });
+</script>
+
 
 
 </body>
