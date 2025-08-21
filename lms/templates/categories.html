@@ -36,7 +36,7 @@
     .hero-section {
       background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
       padding: 60px 0; /* Reduced padding */
-      margin-top: 70px;
+      /* margin-top: 70px; */
     }
 
     .hero-title {
@@ -336,7 +336,19 @@
       .benefit-icon {
         font-size: 1.3rem;
       }
+
+      .carousel {
+        margin-top: 90px ;
+      }
+      
     }
+
+     @media (min-width: 768px) {
+        .carousel {
+        margin-top: 80px ;
+      }
+     }
+
      .weserviceimg {
             transition: transform 0.3s, box-shadow 0.3s;
             border: none;
@@ -383,6 +395,13 @@
             border-bottom: none;
         }
 
+       /* div#sliderCarousel {
+            margin-top: 60px;
+        } */
+        
+        .benefit-item{
+          display: flex;
+        }
         
   </style>
 </head>
@@ -390,33 +409,11 @@
 <body>
   {% include 'Student_Base.html' %}
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 mb-5 mb-lg-0">
-          <h1 class="hero-title">Master the Stock Market with ProfitMax</h1>
-          <p class="hero-subtitle">Unlock the secrets of successful trading with our comprehensive courses, expert mentorship, and powerful tools designed for traders at all levels.</p>
-          <div class="d-flex flex-wrap gap-3">
-            <a href="/signup/" class="btn btn-secondary-custom ">Signup</a>
-            <a href="/login/" class="btn btn-primary-custom">Login</a>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" 
-               class="img-fluid rounded-4 shadow" 
-               alt="Trading Dashboard">
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-<!-- Add this right after your hero section -->
-<section class="py-4">
-  <div class="container">
+  <!-- Add this right after your hero section -->
+<section class="py-">
+  <div class="mobilslider">
     <div id="sliderCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner rounded-3" style="height: 400px; overflow: hidden;">
+      <div class="carousel-inner  slider_images" >
 
         {% for img in slider_images %}
           <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -435,6 +432,30 @@
     </div>
   </div>
 </section>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h1 class="hero-title">Master the Stock Market with ProfitMax</h1>
+          <p class="hero-subtitle">Unlock the secrets of successful trading with our comprehensive courses, expert mentorship, and powerful tools designed for traders at all levels.</p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="/signup/" class="btn btn-secondary-custom ">Signup</a>
+            <a href="/login/" class="btn btn-primary-custom">Login</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" 
+               class="img-fluid rounded-4 " 
+               alt="Trading Dashboard">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
 
   
 
@@ -474,7 +495,7 @@
                         <img src="{% static 'images/award1.jpg' %}" alt="award3">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Best Trading Education 2023</h5>
+                        <h6 class="card-title">Best Trading Education 2023</h6>
               <p class="card-text">Recognized for excellence in financial education and trader development.</p>
                     </div>
                 </div>
@@ -485,7 +506,7 @@
                         <img src="{% static 'images/award2.jpg' %}" alt="award3">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Innovation in Trading Tools</h5>
+                        <h6 class="card-title">Innovation in Trading Tools</h6>
               <p class="card-text mt-1">Awarded for our cutting-edge trading tools and analytics platform.</p>
                     </div>
                 </div>
@@ -497,7 +518,7 @@
                         <img src="{% static 'images/award3.jpg' %}" alt="award3">
                     </div>
                     <div class="card-body">
-                   <h5 class="card-title">Student Success Award</h5>
+                   <h6 class="card-title">Student Success Award</h6>
 
               <p class="card-text mt-4">Highest student satisfaction and success rates in the industry.</p>
                     </div>
@@ -510,7 +531,7 @@
                         <img src="{% static 'images/mam.jpg' %}" alt="award3">
                     </div>
                     <div class="card-body">
-                        <h5>Smart Learning System!</h5>
+                        <h6>Smart Learning <br>System!</h6>
                         <p class="card-text mt-4">We're always here to help you whenever needed.</p>
                     </div>
                 </div>
