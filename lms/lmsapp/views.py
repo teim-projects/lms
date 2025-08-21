@@ -879,7 +879,8 @@ def free_course_detail(request, course_id):
         FreeCourse.objects.prefetch_related("chapters"),
         id=course_id
     )
-    return render(request, "free_course_detail.html", {"course": course})
+    category = course.category
+    return render(request, "free_course_detail.html", {"course": course,"category": category })
 
 
 
@@ -1888,6 +1889,9 @@ def display_paid_content(request, course_id):
     completed_ids = []
     cart = request.session.get('cart', [])
     in_cart = course.id in cart
+    category = course.category
+    
+
 
     if is_logged_in:
         # Check if user has access
@@ -1950,6 +1954,7 @@ def display_paid_content(request, course_id):
         'completed_ids': list(completed_ids),
         'is_logged_in': is_logged_in,
         'in_cart': in_cart,  
+        "category": category 
     })
 
 
