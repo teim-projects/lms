@@ -482,7 +482,7 @@
           {% if forloop.counter == 3 %}
             <div class="col-12">
               <div class="alert alert-secondary">
-                🔒 Modules locked — <strong>Please <a href="{% url 'initiate_payment' course.id %}" class="text-success">buy the course</a> to unlock remaining content.</strong>
+                🔒 Modules locked — <strong>Please <a href="{% url 'view_cart' %}?buy_now={{ course.id }}" class="text-success">buy the course</a> to unlock remaining content.</strong>
               </div>
             </div>
           {% endif %}

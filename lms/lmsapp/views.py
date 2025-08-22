@@ -966,13 +966,7 @@ def create_paid_course(request):
 
 
 
-        # Save thumbnail file if provided
-        # if thumbnail:
-        #     fs = FileSystemStorage()
-        #     filename = fs.save(thumbnail.name, thumbnail)
-        #     thumbnail_url = fs.url(filename)
-        # else:
-        #     thumbnail_url = None
+       
 
         # Save to database
         PaidCourse.objects.create(

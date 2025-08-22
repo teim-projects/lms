@@ -416,7 +416,7 @@
       <div class="carousel-inner  slider_images" >
 
         {% for img in slider_images %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="carousel-item {% if forloop.first %}active{% endif %}" >
             <img src="{{ img }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide {{ forloop.counter }}">
           </div>
         {% endfor %}

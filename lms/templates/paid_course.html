@@ -240,36 +240,36 @@
 
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="course_title">Course Title</label>
-                                <input type="text" class="form-control" id="course_title" name="course_title">
+                                <input type="text" class="form-control" id="course_title" name="course_title"  required>
                             </div>
 
                             <div class="col-12 col-md-6 mb-3">
-                                <label for="course_name">Course Name</label> <!-- ✅ Added field -->
+                                <label for="course_name">Course Name</label> 
                                 <input type="text" class="form-control" id="course_name" name="course_name"
                                     placeholder="e.g. python, java, etc.">
-                            </div>
+                            </div> 
 
 
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="duration">Duration(in Hours )</label>
-                                <input type="text" class="form-control" id="duration" name="duration">
+                                <input type="text" class="form-control" id="duration" name="duration"  required>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="description">Description</label>
-                            <input type="text" class="form-control" id="description" name="description">
+                            <input type="text" class="form-control" id="description" name="description"  required>
                         </div>
 
 
                         <div class="mb-3">
                             <label for="about">About</label>
-                            <textarea class="form-control" id="about" name="about" rows="3"></textarea>
+                            <textarea class="form-control" id="about" name="about" rows="3"  required></textarea>
                         </div>
 
                         <div class="mb-3">
                             <label for="benefits">Benefits</label>
-                            <textarea class="form-control" id="benefits" name="benefits" rows="3"></textarea>
+                            <textarea class="form-control" id="benefits" name="benefits" rows="3"  required></textarea>
                         </div>
 
 
@@ -279,11 +279,11 @@
                         <div class="row">
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="instructor_name">Instructor Name</label>
-                                <input type="text" class="form-control" id="instructor_name" name="instructor_name">
+                                <input type="text" class="form-control" id="instructor_name" name="instructor_name"  required>
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="course_level">Course Level</label>
-                                <select id="course_level" class="form-control" name="course_level">
+                                <select id="course_level" class="form-control" name="course_level"  required>
                                     <option value="Beginner">Beginner</option>
                                     <option value="Intermediate">Intermediate</option>
                                     <option value="Advanced">Advanced</option>
@@ -294,17 +294,17 @@
                         <div class="row">
     <div class="col-12 col-md-4 mb-3">
         <label for="original_price">Original Price</label>
-        <input type="number" class="form-control" id="original_price" name="original_price" placeholder="e.g. 1000">
+        <input type="number" class="form-control" id="original_price" name="original_price" placeholder="e.g. 1000"  required>
     </div>
 
     <div class="col-12 col-md-4 mb-3">
         <label for="course_price">Discounted Price</label>
-        <input type="number" class="form-control" id="course_price" name="course_price" placeholder="e.g. 799">
+        <input type="number" class="form-control" id="course_price" name="course_price" placeholder="e.g. 799"  required>
     </div>
 
     <div class="col-12 col-md-4 mb-3">
         <label for="discount_amount">You Save (₹)</label>
-        <input type="text" class="form-control" id="discount_amount" name="discount_amount" readonly>
+        <input type="text" class="form-control" id="discount_amount" name="discount_amount" readonly >
     </div>
 </div>
 
@@ -313,7 +313,7 @@
                             
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="thumbnail">Thumbnail</label>
-                                <input type="file" class="form-control-file" id="thumbnail" name="thumbnail">
+                                <input type="file" class="form-control-file" id="thumbnail" name="thumbnail"  required>
                             </div>
                         </div>
 
