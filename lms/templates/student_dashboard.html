@@ -461,7 +461,7 @@
 </div>
 
 {% if slider_images %}
-<section class="py-4">
+<!-- <section class="py-4">
   <div class="container-fluid px-0">
     <div id="sliderCarousel" class="carousel slide slider-container" data-bs-ride="carousel" data-bs-interval="3000">
       <div class="carousel-inner">
@@ -480,6 +480,29 @@
       <button class="carousel-control-next" type="button" data-bs-target="#sliderCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section> -->
+
+<section class="py-">
+  <div class="mobilslider">
+    <div id="sliderCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner  slider_images" >
+
+        {% for img in slider_images %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ img }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide {{ forloop.counter }}">
+          </div>
+        {% endfor %}
+
+      </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#sliderCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#sliderCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
       </button>
     </div>
   </div>
