@@ -2109,9 +2109,9 @@ def initiate_payment(request, course_id=None):
     firstname = user.first_name or user.username
     email = user.email
     
-    phone = "9999999999"
+    # phone = "9999999999"
     # keep above phone field in comment if you are working on live and for local keep below commented
-    # phone = user.mobile
+    phone = user.mobile
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
@@ -2129,19 +2129,19 @@ def initiate_payment(request, course_id=None):
         "email": email,
         "phone": phone,
 
-        "surl": request.build_absolute_uri(
-            f'/payment/success/?coupon_code={coupon_code}&discount_percent={discount_percent}&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}'
-        ),
-        "furl": request.build_absolute_uri('/payment/failure/'),
+        # "surl": request.build_absolute_uri(
+        #     f'/payment/success/?coupon_code={coupon_code}&discount_percent={discount_percent}&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}'
+        # ),
+        # "furl": request.build_absolute_uri('/payment/failure/'),
 
         # this below should be in comment if you want to make payment on local
 
-        # surl = (
-        # f"https://profitmaxacademy.in/payment/success/"
-        # f"?coupon_code={coupon_code}&discount_percent={discount_percent}"
-        # f"&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}"
-    # )
-        # "furl": "https://profitmaxacademy.in/payment/failure/",
+        'surl' :(
+        f"https://profitmaxacademy.in/payment/success/"
+        f"?coupon_code={coupon_code}&discount_percent={discount_percent}"
+        f"&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}"
+    ),
+        "furl": "https://profitmaxacademy.in/payment/failure/",
         
 
 
