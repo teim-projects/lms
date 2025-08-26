@@ -455,6 +455,81 @@
     margin-top: 80px !important;
 }
   
+
+
+
+
+.custom-slider {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 90vh !important;             /* default desktop height */
+  overflow: hidden;
+  margin-top: 55px;
+}
+
+.custom-slider-inner {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+}
+
+.custom-slide {
+  min-width: 100%;
+  height: 90vh !important;             /* default desktop height */
+  display: none;
+}
+
+.custom-slide.active {
+  display: block;
+}
+
+.custom-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.custom-prev,
+.custom-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.custom-prev { left: 10px; }
+.custom-next { right: 10px; }
+
+/* ✅ Mobile view (max-width 768px = tablets & phones) */
+@media (max-width: 768px) {
+  .custom-slider {
+    height: 200px; 
+        margin-top:10vh !important;
+     /* reduce height */
+  }
+  .custom-slide {
+    height: 200px;
+  }
+  .custom-image {
+    height: 200px;
+  }
+
+  .custom-prev, .custom-next {
+     
+    top: 17%;
+ 
+}
+.categories-section{
+  margin-top: -440px !important;
+}
+}
+
+
+
   </style>
 </head>
 <body>
@@ -470,49 +545,24 @@
 </div> -->
 
 {% if slider_images %}
-<!-- <section class="py-4">
-  <div class="container-fluid px-0">
-    <div id="sliderCarousel" class="carousel slide slider-container" data-bs-ride="carousel" data-bs-interval="3000">
-      <div class="carousel-inner">
-        {% for img in slider_images %}
-          {% if img %}
-          <div class="carousel-item {% if not forloop.parentloop and forloop.first %}active{% endif %}">
-            <img src="{{ img }}" class="d-block w-100" style="object-fit: cover; height: 450px;" alt="Slide {{ forloop.counter }}">
-          </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#sliderCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#sliderCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-  </div>
-</section> -->
 
-<section class="banner">
+
+<section class="py-4">
   <div class="mobilslider">
-    <div id="sliderCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner  slider_images" >
+    <div id="mySlider" class="custom-slider" style="height: 600px; overflow: hidden;">
+      <div class="custom-slider-inner">
 
         {% for img in slider_images %}
-          <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img src="{{ img }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide {{ forloop.counter }}">
+          <div class="custom-slide {% if forloop.first %}active{% endif %}">
+            <img src="{{ img }}" class="custom-image" alt="Slide {{ forloop.counter }}">
           </div>
         {% endfor %}
 
       </div>
 
-      <button class="carousel-control-prev" type="button" data-bs-target="#sliderCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#sliderCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
+      <!-- Controls -->
+      <button class="custom-prev" type="button">&#10094;</button>
+      <button class="custom-next" type="button">&#10095;</button>
     </div>
   </div>
 </section>
@@ -754,6 +804,39 @@
       }
     });
   });
+</script>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let slides = document.querySelectorAll(".custom-slide");
+  let currentIndex = 0;
+
+  function showSlide(index) {
+    slides.forEach(slide => slide.classList.remove("active"));
+    slides[index].classList.add("active");
+  }
+
+  document.querySelector(".custom-next").addEventListener("click", function () {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+  });
+
+  document.querySelector(".custom-prev").addEventListener("click", function () {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(currentIndex);
+  });
+
+  // Auto-slide every 3s
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+  }, 3000);
+
+  // Show the first slide initially
+  showSlide(currentIndex);
+});
 </script>
 
 {% include 'footer.html' %}
