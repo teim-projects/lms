@@ -2979,6 +2979,7 @@ def manual_access_report(request):
         'all_courses': all_courses,
         'filter_params': request.GET,
     })
+    
 
 @login_required
 def course_report(request):
