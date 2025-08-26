@@ -55,7 +55,7 @@
     /* Slider - Expanded */
     .slider-container {
       border-radius: 12px;
-      overflow: hidden;
+      /* overflow: hidden; */
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
       margin-bottom: 3rem;
       border: 1px solid rgba(0,0,0,0.05);
@@ -102,7 +102,7 @@
     /* Categories Section with Light Background */
     .categories-section {
       background-color: var(--categories-bg);
-      /* padding: 3rem 0; */
+      padding: 3rem 0;
       border-radius: 12px;
       margin: 2rem auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -411,7 +411,7 @@
       }
       
       .carousel-inner {
-        height: 300px;
+        height: 185px;
       }
     }
     
@@ -445,6 +445,10 @@
     .feature-card:nth-child(5) { animation-delay: 0.5s; }
     .feature-card:nth-child(6) { animation-delay: 0.6s; }
 
+    .banner {
+    /* height: 460px; */
+    margin-top: 80px !important;
+}
   
   </style>
 </head>
@@ -452,13 +456,13 @@
 
 {% include 'Student_Base.html' %}
 
-<div class="dashboard-header">
+<!-- <div class="dashboard-header">
   <div class="container">
     <h1 class="dashboard-title">Welcome to Your Learning Dashboard - {{ request.user.first_name }} {{ request.user.last_name }}</h1>
     <p class="dashboard-subtitle">Explore courses and enhance your trading skills </p>
     
   </div>
-</div>
+</div> -->
 
 {% if slider_images %}
 <!-- <section class="py-4">
@@ -485,7 +489,7 @@
   </div>
 </section> -->
 
-<section class="py-">
+<section class="banner">
   <div class="mobilslider">
     <div id="sliderCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner  slider_images" >

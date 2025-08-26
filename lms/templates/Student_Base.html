@@ -245,7 +245,35 @@
     .Btn svg {
       width: 20px;
       fill: #fff;
+    }   
+
+    /* header user css  */
+    .user{
+          padding-right: 10px;
+          background: linear-gradient(to right, #2575fc, #6a11cb);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
     }
+    .username{
+      font-size: 17px;
+    }
+    @media (max-width: 768px) {
+        .user{
+          display: none;
+        }
+    }
+
+    /* sidebar user iconame css */
+       .usersiderbar{
+          position: absolute;
+          top: 20px;
+          left: 10px;
+          font-size: 26px;
+          background: linear-gradient(to right, #2575fc, #6a11cb);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          
+       } 
   </style>
 
 
@@ -337,8 +365,9 @@
 </div> -->
 
  
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center ">
     {% if user.is_authenticated %}
+     <h4 class="user"><i class="fa-solid fa-user user-icon"></i> <span class="username">{{ request.user.first_name }} {{ request.user.last_name }}</span></h4>
       <a href="{% url 'raise_ticket' %}" class="btn btn-outline-success me-3">Help</a>  {% endif %}
       <div class="bell-icon fs-5" style="cursor:pointer;" onclick="toggleSidebar2()">🔔</div>
 
@@ -378,6 +407,7 @@
 
   <!-- Sidebar Menu -->
   <div class="sidebar" id="sidebar">
+     <h4 class="usersiderbar"><i class="fa-solid fa-user user-icon"></i> <span class="username">{{ request.user.first_name }} {{ request.user.last_name }}</span></h4>
     <span class="close-btn" onclick="toggleSidebar()">&times;</span>
     <ul class="nav flex-column px-3">
       <li class="nav-item">
