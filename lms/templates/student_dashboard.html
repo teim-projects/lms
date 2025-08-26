@@ -64,8 +64,8 @@
       padding: 0;  /* Remove padding to maximize width */
     }
     
-    .carousel-inner {
-      height: 450px;  /* Increased height */
+    /* .carousel-inner {
+      height: 450px; 
     }
     
     .carousel-control-prev, .carousel-control-next {
@@ -76,18 +76,18 @@
       background: rgba(0,0,0,0.5);
       border-radius: 50%;
       opacity: 1;
-      margin: 0 10px;  /* Reduced margin to keep buttons inside */
+      margin: 0 10px;  
     }
     
     .carousel-control-prev {
-      left: 10px;  /* Position from left edge */
+      left: 10px;  
     }
     
     .carousel-control-next {
-      right: 10px;  /* Position from right edge */
-    }
+      right: 10px; 
+    } */
     
-    .carousel-control-prev-icon, .carousel-control-next-icon {
+    /* .carousel-control-prev-icon, .carousel-control-next-icon {
       background-size: 60%;
       background-color: rgba(255,255,255,0.5);
       border-radius: 50%;
@@ -96,7 +96,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    }
+    } */
     
     
     /* Categories Section with Light Background */
@@ -133,11 +133,11 @@
       object-fit: cover;
       transition: transform 0.5s ease;
     }
-    .carousel-control-next-icon, .carousel-control-prev-icon {
+    /* .carousel-control-next-icon, .carousel-control-prev-icon {
    
     position: absolute;
     top: 241px;
-}
+} */
     .category-card:hover img {
       transform: scale(1.03);
     }
@@ -413,6 +413,11 @@
       .carousel-inner {
         height: 185px;
       }
+      .carousel-control-next, .carousel-control-prev {
+    /* position: absolute; */
+    /* top: 0; */
+    bottom: 35px !important;
+}
     }
     
     /* Animation */
