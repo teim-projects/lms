@@ -2087,6 +2087,11 @@ def generate_txnid():
 
 #o
 
+from urllib.parse import urlencode   # <-- add this
+import hashlib
+import json
+
+
 @login_required
 def initiate_payment(request, course_id=None):
     user = request.user
