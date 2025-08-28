@@ -2099,13 +2099,17 @@ def initiate_payment(request, course_id=None):
         course_ids = request.POST.getlist("course_ids")
         total_amount = request.POST.get("total_amount")
         course = PaidCourse.objects.filter(id=course_ids[0]).first()
-        amount = str(total_amount)
+        # amount = str(total_amount)
+        amount = "{:.2f}".format(float(total_amount))
     else:
         course = get_object_or_404(PaidCourse, id=course_id)
-        amount = str(course.course_price)
+        # amount = str(course.course_price)
+        amount = "{:.2f}".format(float(course.course_price))
+
 
     txnid = generate_txnid()
-    productinfo = course.course_title if course else "Multiple Courses"
+    # productinfo = course.course_title if course else "Multiple Courses"
+    productinfo = json.dumps({"name": course.course_title if course else "Multiple Courses"})
     firstname = user.first_name or user.username
     email = user.email
     
@@ -2116,8 +2120,19 @@ def initiate_payment(request, course_id=None):
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
 
+    # hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
+    # hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
     hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
+
+
+    query_params = urlencode({
+        "coupon_code": coupon_code,
+        "discount_percent": discount_percent,
+        "discount_amount": discount_amount,
+        "original_amount": course.course_price if course else amount,
+    })
+    surl = f"https://profitmaxacademy.in/payment/success/?{query_params}"
 
     context = {
         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
@@ -2136,11 +2151,13 @@ def initiate_payment(request, course_id=None):
 
         # this below should be in comment if you want to make payment on local
 
-        'surl' :(
-        f"https://profitmaxacademy.in/payment/success/"
-        f"?coupon_code={coupon_code}&discount_percent={discount_percent}"
-        f"&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}"
-    ),
+    #     'surl' :(
+    #     f"https://profitmaxacademy.in/payment/success/"
+    #     f"?coupon_code={coupon_code}&discount_percent={discount_percent}"
+    #     f"&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}"
+    # ),
+
+        "surl": surl,
         "furl": "https://profitmaxacademy.in/payment/failure/",
         
 
