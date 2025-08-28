@@ -2087,6 +2087,72 @@ def generate_txnid():
 
 #o
 
+# @login_required
+# def initiate_payment(request, course_id=None):
+#     user = request.user
+
+#     coupon_code = request.POST.get("coupon_code")
+#     discount_percent = request.POST.get("discount_percent") or 0
+#     discount_amount = request.POST.get("discount_amount") or 0
+
+#     if request.method == "POST" and request.POST.get("total_amount"):
+#         course_ids = request.POST.getlist("course_ids")
+#         total_amount = request.POST.get("total_amount")
+#         course = PaidCourse.objects.filter(id=course_ids[0]).first()
+#         amount = str(total_amount)
+#     else:
+#         course = get_object_or_404(PaidCourse, id=course_id)
+#         amount = str(course.course_price)
+
+#     txnid = generate_txnid()
+#     productinfo = course.course_title if course else "Multiple Courses"
+#     firstname = user.first_name or user.username
+#     email = user.email
+    
+#     # phone = "9999999999"
+#     # keep above phone field in comment if you are working on live and for local keep below commented
+#     phone = user.mobile
+
+#     key = settings.EASEBUZZ_MERCHANT_KEY
+#     salt = settings.EASEBUZZ_SALT
+
+#     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
+#     hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
+
+#     context = {
+#         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
+#         "MERCHANT_KEY": key,
+#         "txnid": txnid,
+#         "amount": amount,
+#         "productinfo": productinfo,
+#         "firstname": firstname,
+#         "email": email,
+#         "phone": phone,
+
+#         # "surl": request.build_absolute_uri(
+#         #     f'/payment/success/?coupon_code={coupon_code}&discount_percent={discount_percent}&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}'
+#         # ),
+#         # "furl": request.build_absolute_uri('/payment/failure/'),
+
+#         # this below should be in comment if you want to make payment on local
+
+#         'surl' :(
+#         f"https://profitmaxacademy.in/payment/success/"
+#         f"?coupon_code={coupon_code}&discount_percent={discount_percent}"
+#         f"&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}"
+#     ),
+#         "furl": "https://profitmaxacademy.in/payment/failure/",
+        
+
+
+#         "hashh": hashh
+#     }
+#     return render(request, "initiate_payment.html", context)
+
+# new
+
+from urllib.parse import urlencode   # <-- add this
+import hashlib
 @login_required
 def initiate_payment(request, course_id=None):
     user = request.user
@@ -2099,25 +2165,43 @@ def initiate_payment(request, course_id=None):
         course_ids = request.POST.getlist("course_ids")
         total_amount = request.POST.get("total_amount")
         course = PaidCourse.objects.filter(id=course_ids[0]).first()
-        amount = str(total_amount)
+        amount = "{:.2f}".format(float(total_amount))
     else:
         course = get_object_or_404(PaidCourse, id=course_id)
-        amount = str(course.course_price)
+        amount = "{:.2f}".format(float(course.course_price))
 
     txnid = generate_txnid()
-    productinfo = course.course_title if course else "Multiple Courses"
+    productinfo = course.course_title if course else "Multiple Courses"   # ✅ FIXED
     firstname = user.first_name or user.username
     email = user.email
-    
-    # phone = "9999999999"
-    # keep above phone field in comment if you are working on live and for local keep below commented
-    phone = user.mobile
+    phone = user.mobile or "9999999999"   # ✅ fallback for sandbox
 
     key = settings.EASEBUZZ_MERCHANT_KEY
     salt = settings.EASEBUZZ_SALT
 
+    # ✅ Ensure hash string matches exactly what’s sent
     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
-    hashh = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
+    hashh = hashlib.sha512(hash_string.encode("utf-8")).hexdigest().lower()
+
+    # ✅ success/failure URL handling
+    if settings.DEBUG or settings.EASEBUZZ_USE_SANDBOX:
+        query_params = urlencode({
+            "coupon_code": coupon_code,
+            "discount_percent": discount_percent,
+            "discount_amount": discount_amount,
+            "original_amount": course.course_price if course else amount,
+            })
+        surl = request.build_absolute_uri(f'/payment/success/?{query_params}')
+        furl = request.build_absolute_uri('/payment/failure/')
+    else:
+        query_params = urlencode({
+            "coupon_code": coupon_code,
+            "discount_percent": discount_percent,
+            "discount_amount": discount_amount,
+            "original_amount": course.course_price if course else amount,
+        })
+        surl = f"https://profitmaxacademy.in/payment/success/?{query_params}"
+        furl = "https://profitmaxacademy.in/payment/failure/"
 
     context = {
         "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
@@ -2128,27 +2212,11 @@ def initiate_payment(request, course_id=None):
         "firstname": firstname,
         "email": email,
         "phone": phone,
-
-        # "surl": request.build_absolute_uri(
-        #     f'/payment/success/?coupon_code={coupon_code}&discount_percent={discount_percent}&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}'
-        # ),
-        # "furl": request.build_absolute_uri('/payment/failure/'),
-
-        # this below should be in comment if you want to make payment on local
-
-        'surl' :(
-        f"https://profitmaxacademy.in/payment/success/"
-        f"?coupon_code={coupon_code}&discount_percent={discount_percent}"
-        f"&discount_amount={discount_amount}&original_amount={course.course_price if course else amount}"
-    ),
-        "furl": "https://profitmaxacademy.in/payment/failure/",
-        
-
-
-        "hashh": hashh
+        "surl": surl,
+        "furl": furl,
+        "hashh": hashh,
     }
     return render(request, "initiate_payment.html", context)
-
 
 
 
