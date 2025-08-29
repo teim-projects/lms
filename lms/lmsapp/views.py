@@ -2191,7 +2191,7 @@ def initiate_payment(request, course_id=None):
         })
 
     # ✅ success/failure URL handling
-    if settings.DEBUG or settings.EASEBUZZ_USE_SANDBOX:
+    if settings.EASEBUZZ_USE_SANDBOX:
        
         surl = request.build_absolute_uri(f'/payment/success/?{query_params}')
         furl = request.build_absolute_uri('/payment/failure/')
