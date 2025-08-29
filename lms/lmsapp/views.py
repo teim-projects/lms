@@ -2183,23 +2183,20 @@ def initiate_payment(request, course_id=None):
     hash_string = f"{key}|{txnid}|{amount}|{productinfo}|{firstname}|{email}|||||||||||{salt}"
     hashh = hashlib.sha512(hash_string.encode("utf-8")).hexdigest().lower()
 
+    query_params = urlencode({
+        "coupon_code": coupon_code,
+        "discount_percent": discount_percent,
+        "discount_amount": discount_amount,
+        "original_amount": course.course_price if course else amount,
+        })
+
     # ✅ success/failure URL handling
     if settings.DEBUG or settings.EASEBUZZ_USE_SANDBOX:
-        query_params = urlencode({
-            "coupon_code": coupon_code,
-            "discount_percent": discount_percent,
-            "discount_amount": discount_amount,
-            "original_amount": course.course_price if course else amount,
-            })
+       
         surl = request.build_absolute_uri(f'/payment/success/?{query_params}')
         furl = request.build_absolute_uri('/payment/failure/')
     else:
-        query_params = urlencode({
-            "coupon_code": coupon_code,
-            "discount_percent": discount_percent,
-            "discount_amount": discount_amount,
-            "original_amount": course.course_price if course else amount,
-        })
+        
         surl = f"https://profitmaxacademy.in/payment/success/?{query_params}"
         furl = "https://profitmaxacademy.in/payment/failure/"
 
