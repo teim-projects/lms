@@ -2195,13 +2195,15 @@ def initiate_payment(request, course_id=None):
        
         surl = request.build_absolute_uri(f'/payment/success/?{query_params}')
         furl = request.build_absolute_uri('/payment/failure/')
+        payment_url = "https://testpay.easebuzz.in/pay/secure"
     else:
         
         surl = f"https://profitmaxacademy.in/payment/success/?{query_params}"
         furl = "https://profitmaxacademy.in/payment/failure/"
+        payment_url = "https://pay.easebuzz.in/pay/secure"
 
     context = {
-        "payment_url": "https://testpay.easebuzz.in/pay/secure" if settings.EASEBUZZ_USE_SANDBOX else "https://pay.easebuzz.in/pay/secure",
+        "payment_url":  payment_url,
         "MERCHANT_KEY": key,
         "txnid": txnid,
         "amount": amount,
