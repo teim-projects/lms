@@ -714,7 +714,7 @@ def logout_view(request):
     auth_logout(request)
     request.session.flush()  # Remove all session data
 
-    return redirect('login')  # Redirect to login page
+    return redirect('/')  # Redirect to login page
 
 
 
