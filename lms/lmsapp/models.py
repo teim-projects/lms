@@ -181,6 +181,7 @@ class CourseContent(models.Model):
     subtitle = models.CharField(max_length=255, blank=True, null=True)
     resource_file = models.FileField(upload_to='course_resources/')
     completed = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
 
     
 

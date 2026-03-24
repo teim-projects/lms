@@ -344,6 +344,19 @@
       <a class="text-decoration-none" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
         <h5 class="mb-0">{{ title }}</h5>
       </a>
+<form method="post"
+          action="{% url 'update_title_order' course.id title %}"
+          class="d-flex align-items-center">
+        {% csrf_token %}
+
+        <input type="number" name="order"
+               value="{{ contents.0.order }}"
+               class="form-control form-control-sm mr-2"
+               style="width: 80px;" required>
+
+        <button class="btn btn-sm btn-primary">Set</button>
+    </form>
+
       <form method="post" action="{% url 'delete_course_title' course.id title %}" onsubmit="return confirm('Delete the title and all its subtitles?')">
         {% csrf_token %}
         <button class="btn btn-danger btn-sm">Delete Title</button>

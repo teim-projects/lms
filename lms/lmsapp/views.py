@@ -1024,19 +1024,34 @@ def upload_content(request, course_id):
 
         subtitle_counts = request.POST.getlist('subtitle_count[]')  # Hidden input from JS
         subtitle_counts = [int(x) for x in subtitle_counts]
-
+        
         sub_idx = 0
+        
+        from django.db.models import Max
+        
+        last_order = CourseContent.objects.filter(course=course).aggregate(
+            max_order=Max('order')
+        )['max_order'] or 0
+        
+        order_counter = last_order + 1   # continue from last
+        
         for title, count in zip(titles, subtitle_counts):
+        
             for _ in range(count):
                 if sub_idx >= len(subtitles) or sub_idx >= len(resource_files):
                     break
+        
                 CourseContent.objects.create(
                     course=course,
                     title=title,
                     subtitle=subtitles[sub_idx],
-                    resource_file=resource_files[sub_idx]
+                    resource_file=resource_files[sub_idx],
+                    order=order_counter   # 👈 SAME ORDER for all subtitles of this title
                 )
+        
                 sub_idx += 1
+        
+            order_counter += 1   # 👈 INCREMENT ONLY AFTER ONE TITLE 
 
         return redirect('view_paid_course')
 
@@ -1172,7 +1187,7 @@ def update_paid_course(request, course_id):
 
     # Normalize and group contents by cleaned title
     grouped_contents = defaultdict(list)
-    for content in course.contents.all():
+    for content in course.contents.all().order_by('order'):
         clean_title = content.title.strip().title()  # remove spaces & fix case
         grouped_contents[clean_title].append(content)
 
@@ -1205,6 +1220,14 @@ def delete_course_title(request, course_id, title):
     return redirect('update_paid_course', course_id=course_id)
 
 
+
+@require_POST
+def update_title_order(request, course_id, title):
+    order = int(request.POST.get('order', 0))
+
+    CourseContent.objects.filter(course_id=course_id, title=title).update(order=order)
+
+    return redirect('update_paid_course', course_id=course_id)
 
 
 
@@ -1872,7 +1895,7 @@ def display_paid_content(request, course_id):
     from django.shortcuts import render, get_object_or_404, redirect
 
     course = get_object_or_404(PaidCourse, id=course_id)
-    contents = course.contents.all()
+    contents = course.contents.all().order_by('order', 'id')
     grouped_contents = defaultdict(list)
     for content in contents:
         grouped_contents[content.title].append(content)

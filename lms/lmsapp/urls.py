@@ -169,6 +169,7 @@ urlpatterns = [
     path('delete-slider-image/<int:slider_id>/<str:image_field>/', views.delete_slider_image, name='delete_slider_image'),
 
     path('uncreated-invoice-report/', views.uncreated_invoice_report, name='uncreated_invoice_report'),
+    path('update-title-order/<int:course_id>/<str:title>/', views.update_title_order, name='update_title_order'),
 
 
 
