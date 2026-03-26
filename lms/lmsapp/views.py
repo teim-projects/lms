@@ -1230,6 +1230,27 @@ def update_title_order(request, course_id, title):
     return redirect('update_paid_course', course_id=course_id)
 
 
+@require_POST
+def edit_course_title(request, course_id, title):
+    new_title = request.POST.get('new_title')
+
+    CourseContent.objects.filter(
+        course_id=course_id,
+        title=title
+    ).update(title=new_title)
+
+    return redirect('update_paid_course', course_id=course_id)
+
+
+@require_POST
+def edit_course_subtitle(request, content_id):
+    content = get_object_or_404(CourseContent, id=content_id)
+
+    content.subtitle = request.POST.get('new_subtitle')
+    content.save()
+
+    return redirect('update_paid_course', course_id=content.course.id)
+
 
 from django.shortcuts import render, redirect
 # from .models import SubAdmin
@@ -2622,7 +2643,7 @@ def view_content(request, course_id):
         )
         return redirect('view_content', course_id=course.id)
 
-    contents = CourseContent.objects.filter(course=course).order_by('title')
+    contents = CourseContent.objects.filter(course=course).order_by('order', 'id')
     grouped_contents = {}
     for content in contents:
         grouped_contents.setdefault(content.title, []).append(content)

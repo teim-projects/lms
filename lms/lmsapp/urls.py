@@ -171,6 +171,10 @@ urlpatterns = [
     path('uncreated-invoice-report/', views.uncreated_invoice_report, name='uncreated_invoice_report'),
     path('update-title-order/<int:course_id>/<str:title>/', views.update_title_order, name='update_title_order'),
 
+    path('edit-course-title/<int:course_id>/<str:title>/',views.edit_course_title, name='edit_course_title'),
+
+    path('edit-course-subtitle/<int:content_id>/',views.edit_course_subtitle,name='edit_course_subtitle'),
+
 
 
     

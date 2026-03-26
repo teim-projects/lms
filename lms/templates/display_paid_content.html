@@ -414,7 +414,7 @@
   <div id="modules-section" class="p-4 bg-white rounded  w-100 boss">
     <h4 class="text-primary mb-4">📚 Modules</h4>
     <div class="row" id="modules-wrapper">
-      {% for title, contents in grouped_contents.items %}
+      <!-- {% for title, contents in grouped_contents.items %}
         {% if has_access or forloop.counter <= 1 %}
           <div class="col-12 mb-3 module-box {% if forloop.counter > 3 %}d-none extra-module{% endif %}">
             <div class="d-flex align-items-start border rounded p-3 bg-light">
@@ -439,17 +439,7 @@
                 {% for content in contents %}
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-2">
-                      <!-- {% if ".mp4" in content.resource_file.url %}
-                        <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline ">
-                          <span class="text-danger fs-5 ">▶</span> {{ content.subtitle }}
-                        </a>
-                        <span class="badge bg-danger ms-2 ">Video</span>
-                      {% else %}
-                        <a href="{{ content.resource_file.url }}" target="_blank" class="fw-semibold text-dark hover-underline">
-                          <span class="text-primary fs-5 ">📄</span> {{ content.subtitle }}
-                        </a>
-                        <span class="badge bg-primary ms-2 ">PDF</span>
-                      {% endif %} -->
+                     
 
 
                       <a href="{% url 'view_file' content.id %}" target="_blank" class="fw-semibold text-dark hover-underline">
@@ -487,7 +477,81 @@
             </div>
           {% endif %}
         {% endif %}
+      {% endfor %} -->
+
+
+
+      {% for title, contents in grouped_contents.items %}
+
+<div class="col-12 mb-3 module-box {% if forloop.counter > 3 %}d-none extra-module{% endif %}">
+  
+  <div class="d-flex align-items-start border rounded p-3 bg-light">
+    <div class="flex-grow-1">
+
+      {% if has_access or forloop.counter == 1 %}
+        <!-- CLICKABLE TITLE -->
+        <a class="text-dark text-decoration-none fw-bold fs-6 d-block module-toggle"
+           data-bs-toggle="collapse"
+           href="#collapseModule{{ forloop.counter }}">
+          {{ title }}
+        </a>
+      {% else %}
+        <!-- LOCKED TITLE -->
+        <span class="text-muted fw-bold">
+          🔒 {{ title }}
+        </span>
+      {% endif %}
+
+      <div class="text-muted small">
+        • Module {{ forloop.counter }} • {{ contents|length }} Lectures
+      </div>
+
+    </div>
+
+    {% if has_access or forloop.counter == 1 %}
+      <div>
+        <a class="btn btn-sm" data-bs-toggle="collapse" href="#collapseModule{{ forloop.counter }}">
+          <span class="fs-4">▾</span>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- ✅ SUBTITLES ONLY FOR FREE FIRST OR PAID USERS -->
+  {% if has_access or forloop.counter == 1 %}
+  <div class="collapse mt-2 mb-2" id="collapseModule{{ forloop.counter }}">
+    <ul class="list-group mt-2">
+      {% for content in contents %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+          <div>
+            <a href="{% url 'view_file' content.id %}" target="_blank" class="fw-semibold text-dark">
+              {% if ".mp4" in content.resource_file.url %}
+                ▶ {{ content.subtitle }}
+              {% else %}
+                📄 {{ content.subtitle }}
+              {% endif %}
+            </a>
+          </div>
+
+        </li>
       {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- 🔥 SHOW MESSAGE ONLY ONCE -->
+{% if not has_access and forloop.counter == 2 %}
+<div class="col-12">
+  <div class="alert alert-warning mt-2">
+    🔒 Unlock all modules by purchasing the course
+  </div>
+</div>
+{% endif %}
+
+{% endfor %}
     </div>
 
     {% if grouped_contents|length > 3 %}
