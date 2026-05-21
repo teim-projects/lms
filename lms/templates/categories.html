@@ -30,77 +30,73 @@
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
       color: var(--dark-text);
-      font-size: 0.95rem; /* Slightly reduced base font size */
+      font-size: 0.95rem;
     }
 
     .hero-section {
       background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-      padding: 60px 0; /* Reduced padding */
-      /* margin-top: 70px; */
+      padding: 60px 0;
     }
 
     .hero-title {
       font-weight: 700;
-      font-size: 2.2rem; /* Reduced from 2.8rem */
+      font-size: 2.2rem;
       background: var(--secondary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 15px; /* Reduced */
+      background-clip: text;
+      margin-bottom: 15px;
     }
 
     .hero-subtitle {
       font-weight: 400;
-      font-size: 1rem; /* Reduced from 1.2rem */
+      font-size: 1rem;
       color: var(--light-text);
-      margin-bottom: 25px; /* Reduced */
+      margin-bottom: 25px;
     }
 
     .btn-primary-custom, .btn-secondary-custom {
       border: none;
       border-radius: 30px;
-      padding: 10px 25px; /* Slightly reduced */
+      padding: 10px 25px;
       font-weight: 600;
       letter-spacing: 0.5px;
       transition: all 0.3s ease;
-      font-size: 0.9rem; /* Smaller button text */
+      font-size: 0.9rem;
+      color: white;
+      min-width: 100px;
+      text-align: center;
     }
 
-     
+    .btn-primary-custom {
+      background: var(--secondary-gradient);
+    }
 
-.btn-primary-custom {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            color: white !important;
-            width: 100px;
+    .btn-primary-custom:hover {
+      background: linear-gradient(to right, #1a5fd9, #5a0fb0);
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
+    }
 
+    .btn-secondary-custom {
+      background: var(--primary-gradient);
+    }
 
-        }
-
-        .btn-primary-custom:hover {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1.02);
-        }
-
-       .btn-secondary-custom:hover {
-            background: linear-gradient(to right, #017123, #1cb149);
-            transform: scale(1.02);
-        }
-
-       .btn-secondary-custom {
-            background: linear-gradient(to right, #017123, #1cb149);
-            transform: scale(1.02);
-            color: white !important;
-            width: 120px;
-           
-        }
+    .btn-secondary-custom:hover {
+      background: linear-gradient(to right, #015a1c, #159638);
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(1, 113, 35, 0.3);
+    }
  
 
     .section-title {
       font-weight: 600;
-      font-size: 1.8rem; /* Reduced from 2.2rem */
-      margin-bottom: 40px; /* Reduced from 50px */
+      font-size: 1.8rem;
+      margin-bottom: 40px;
       background: var(--secondary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
       position: relative;
       display: inline-block;
     }
@@ -109,8 +105,8 @@
       content: '';
       position: absolute;
       width: 50%;
-      height: 3px; /* Thinner line */
-      bottom: -8px; /* Moved closer */
+      height: 3px;
+      bottom: -8px;
       left: 0;
       background: var(--secondary-gradient);
       border-radius: 2px;
@@ -119,42 +115,41 @@
     /* Award Cards with Curved Borders */
     .award-card {
       border: none;
-      border-radius: 20px; /* More curved borders */
+      border-radius: 20px;
       overflow: hidden;
       background: #fff;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Softer shadow */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
       transition: all 0.3s ease;
       height: 100%;
     }
 
     .award-card:hover {
-      transform: translateY(-5px); /* Less dramatic hover */
+      transform: translateY(-5px);
       box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
     }
 
     .award-card .card-img-top {
-       width: 100%;
-    height: auto; /* Keep natural aspect ratio */
-    object-fit: contain; /* Show whole image without cropping */
-    background-color: #f9f9f9; /* Optional padding background */
-   
-    padding: 5px;
-      border-radius: 20px 20px 0 0; /* Match card radius */
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      background-color: #f9f9f9;
+      padding: 5px;
+      border-radius: 20px 20px 0 0;
     }
 
     .award-card .card-body {
-      padding: 20px; /* Reduced padding */
+      padding: 20px;
     }
 
     .award-card .card-title {
       font-weight: 600;
-      font-size: 1.1rem; /* Slightly smaller */
+      font-size: 1.1rem;
       margin-bottom: 10px;
     }
 
     .award-card .card-text {
       color: var(--light-text);
-      font-size: 0.85rem; /* Smaller text */
+      font-size: 0.85rem;
     }
 
     /* Feature Cards */
@@ -174,58 +169,64 @@
     }
 
     .feature-card .card-header {
-      padding: 20px 0; /* Reduced padding */
+      padding: 20px 0;
+      background-color: #ffffff;
+      border-bottom: none;
     }
 
     .feature-card .card-header i {
-      font-size: 2.2rem; /* Reduced icon size */
+      font-size: 2.2rem;
     }
 
     .feature-card .card-body {
-      padding: 20px; /* Reduced padding */
+      padding: 20px;
     }
 
     .feature-card .card-title {
       font-weight: 600;
-      font-size: 1.1rem; /* Slightly smaller */
+      font-size: 1.1rem;
       margin-bottom: 12px;
     }
 
     .feature-card .card-text {
       color: var(--light-text);
-      font-size: 0.85rem; /* Smaller text */
+      font-size: 0.85rem;
     }
 
     /* Benefit Items */
     .benefit-item {
-      margin-bottom: 25px; /* Reduced spacing */
+      margin-bottom: 25px;
+      display: flex;
+      align-items: flex-start;
     }
 
     .benefit-icon {
-      font-size: 1.5rem; /* Smaller icons */
+      font-size: 1.5rem;
       margin-right: 15px;
       color: var(--highlight-color);
       min-width: 35px;
+      flex-shrink: 0;
     }
 
     .benefit-content h5 {
       font-weight: 600;
-      font-size: 1rem; /* Smaller heading */
+      font-size: 1rem;
       margin-bottom: 8px;
     }
 
     .benefit-content p {
       color: var(--light-text);
-      font-size: 0.85rem; /* Smaller text */
+      font-size: 0.85rem;
+      margin-bottom: 0;
     }
 
     /* Testimonials */
     .testimonial-card {
       background: #fff;
       border-radius: 15px;
-      padding: 25px; /* Reduced padding */
+      padding: 25px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      margin: 10px; /* Reduced margin */
+      margin: 10px;
       height: 100%;
     }
 
@@ -233,25 +234,25 @@
       font-style: italic;
       color: var(--light-text);
       margin-bottom: 15px;
-      font-size: 0.9rem; /* Smaller text */
+      font-size: 0.9rem;
     }
 
     .testimonial-author {
       font-weight: 600;
       margin-bottom: 5px;
-      font-size: 0.95rem; /* Smaller text */
+      font-size: 0.95rem;
     }
 
     .testimonial-role {
       color: var(--light-text);
-      font-size: 0.8rem; /* Smaller text */
+      font-size: 0.8rem;
     }
 
     /* Gallery Images */
     .gallery-img {
-      border-radius: 12px; /* Slightly rounded */
+      border-radius: 12px;
       overflow: hidden;
-      margin-bottom: 15px; /* Reduced spacing */
+      margin-bottom: 15px;
       transition: all 0.3s ease;
       height: 100%;
     }
@@ -268,6 +269,10 @@
       transition: transform 0.5s ease;
     }
 
+    .gallery-img:hover img {
+      transform: scale(1.05);
+    }
+
     /* Category Cards */
     .category-card {
       border: none;
@@ -275,41 +280,42 @@
       overflow: hidden;
       background: #fff;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       height: 100%;
     }
 
     .category-card:hover {
       transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     }
 
     .category-card img {
       width: 100%;
-      height: 160px; /* Reduced height */
+      height: 160px;
       object-fit: cover;
     }
 
     .category-card h3 {
       margin: 0;
-      padding: 12px; /* Reduced padding */
-      font-size: 1rem; /* Smaller text */
+      padding: 12px;
+      font-size: 1rem;
       font-weight: 600;
       background-color: #f8f9fa;
     }
 
     /* Section Padding */
     section.py-5 {
-      padding: 40px 0 !important; /* Reduced from 3rem (48px) */
+      padding: 40px 0;
     }
 
     /* CTA Section */
     .cta-section {
-      padding: 40px 0 !important;
+      padding: 40px 0;
     }
 
     .cta-section h2 {
-      font-size: 1.8rem; /* Reduced */
+      font-size: 1.8rem;
       margin-bottom: 15px;
     }
 
@@ -349,181 +355,573 @@
       }
      }
 
-     .weserviceimg {
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
-            overflow: hidden;
-            border-radius: 15px;
-        }
+    /* Service Cards */
+    .weserviceimg {
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: none;
+      overflow: hidden;
+      border-radius: 15px;
+    }
 
-        .weserviceimg:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
+    .weserviceimg:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 
-        .weserviceimg img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.3s;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-        }
+    .weserviceimg img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
 
-        .weserviceimg:hover img {
-            transform: scale(1.05);
-        }
+    .weserviceimg:hover img {
+      transform: scale(1.05);
+    }
 
-        .weserviceimg .card-body {
-            background: #f9f9f9;
-            text-align: center;
-            padding: 20px;
-        }
+    .weserviceimg .card-body {
+      background: #f9f9f9;
+      text-align: center;
+      padding: 20px;
+    }
 
-        .weserviceimg h6 {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
+    .weserviceimg h6 {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
 
-        .weserviceimg p {
-            font-size: 14px;
-            color: #666;
-        }
-            .card-header {
-            background-color: #ffffff;
-            border-bottom: none;
-        }
+    .weserviceimg p {
+      font-size: 14px;
+      color: #666;
+    }
+    /* Custom Slider */
+    .custom-slider {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: 500px;
+      overflow: hidden;
+      margin-top: 70px;
+    }
 
-       /* div#sliderCarousel {
-            margin-top: 60px;
-        } */
-        
-        .benefit-item{
-          display: flex;
-        }
-       .custom-slider {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  height: 90vh !important;             /* default desktop height */
-  overflow: hidden;
-  margin-top: 55px;
-}
+    .custom-slider-inner {
+      display: flex;
+      transition: transform 0.6s ease-in-out;
+    }
 
-.custom-slider-inner {
-  display: flex;
-  transition: transform 0.6s ease-in-out;
-}
+    .custom-slide {
+      min-width: 100%;
+      height: 500px;
+      display: none;
+    }
 
-.custom-slide {
-  min-width: 100%;
-  height: 90vh !important;             /* default desktop height */
-  display: none;
-}
+    .custom-slide.active {
+      display: block;
+    }
 
-.custom-slide.active {
-  display: block;
-}
+    .custom-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-.custom-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    .custom-prev,
+    .custom-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 18px;
+      transition: background 0.3s ease;
+      z-index: 10;
+    }
 
-.custom-prev,
-.custom-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  color: white;
-  border: none;
-  padding: 12px;
-  cursor: pointer;
-}
+    .custom-prev:hover,
+    .custom-next:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
 
-.custom-prev { left: 10px; }
-.custom-next { right: 10px; }
+    .custom-prev {
+      left: 10px;
+    }
 
-/* ✅ Mobile view (max-width 768px = tablets & phones) */
-@media (max-width: 768px) {
-  .custom-slider {
-    height: 200px; 
-        margin-top:10vh !important;
-     /* reduce height */
-  }
-  .custom-slide {
-    height: 200px;
-  }
-  .custom-image {
-    height: 200px;
-  }
+    .custom-next {
+      right: 10px;
+    }
 
-  .custom-prev, .custom-next {
-     
-    top: 17%;
- 
-}
-.hero-section{
-  margin-top: 0 !important;
-}
-}
+    /* Course Modal Styles */
+    .course-modal-tabs {
+      background: #f8f9fa;
+      border-bottom: none;
+      padding: 12px 16px 0;
+      gap: 8px;
+    }
 
+    .course-modal-tabs .nav-item {
+      flex: 1;
+    }
+
+    .course-modal-tabs .nav-link {
+      width: 100%;
+      border: none;
+      border-radius: 12px 12px 0 0;
+      color: #6c757d;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 12px 10px;
+      background: #e9ecef;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .course-modal-tabs .nav-link:hover {
+      background: #dee2e6;
+      color: #495057;
+    }
+
+    .course-modal-tabs .nav-link.active {
+      background: #fff;
+      color: #2575fc;
+      box-shadow: 0 -3px 0 0 #2575fc inset;
+    }
+
+    .course-modal-tabs .paid-tab.active {
+      background: #fff;
+      color: #c47f00;
+      box-shadow: 0 -3px 0 0 #f7971e inset;
+    }
+
+    .course-modal-tabs .paid-tab:not(.active) {
+      background: linear-gradient(135deg, #fff8e7, #ffe9a0);
+      color: #a06000;
+    }
+
+    .paid-tab-pulse {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #f7971e;
+      border-radius: 50%;
+      margin-left: 5px;
+      vertical-align: middle;
+      animation: pulse-dot 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+    }
+
+    .paid-tab.active .paid-tab-pulse,
+    .paid-tab-pulse.hidden {
+      display: none;
+    }
+
+    .modal-tab-content-area {
+      background: #fff;
+      padding: 24px;
+      min-height: 500px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar-thumb {
+      background: #c5c5c5;
+      border-radius: 10px;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* Course Grid Container */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 0;
+    }
+
+    /* Vertical Course Card */
+    .course-card-vertical {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+      position: relative;
+      border: 1px solid #e9ecef;
+    }
+
+    .course-card-vertical:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+    }
+
+    .course-card-vertical .course-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      background: #f8f9fa;
+    }
+
+    .course-card-vertical .course-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .course-card-vertical:hover .course-thumb {
+      transform: scale(1.05);
+    }
+
+    /* Premium Badge */
+    .premium-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, #f7971e, #ffd200);
+      color: #5a3a00;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(247, 151, 30, 0.4);
+      z-index: 5;
+    }
+
+    /* Free Badge */
+    .free-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+      z-index: 5;
+    }
+
+    .course-card-vertical .course-content {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .course-card-vertical .course-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      line-height: 1.4;
+      min-height: 48px;
+      line-clamp: 2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .course-card-vertical .course-desc {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-bottom: 14px;
+      line-height: 1.6;
+      flex: 1;
+      line-clamp: 3;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .course-card-vertical .course-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #e9ecef;
+      margin-top: auto;
+    }
+
+    .course-card-vertical .course-price {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #017123;
+    }
+
+    .course-card-vertical .course-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      color: white;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .course-card-vertical .course-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
+      color: white;
+    }
+
+    .course-card-vertical .course-action i {
+      transition: transform 0.3s ease;
+    }
+
+    .course-card-vertical:hover .course-action i {
+      transform: translateX(3px);
+    }
+
+    .course-preview-trigger {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .course-preview-trigger:focus-visible {
+      outline: 2px solid #2575fc;
+      outline-offset: 4px;
+      border-radius: 16px;
+    }
+
+    .course-preview-modal .modal-body {
+      padding: 24px;
+    }
+
+    .course-preview-modal .preview-image {
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .course-preview-modal .preview-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .course-preview-modal .preview-meta .badge {
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight: 600;
+    }
+
+    .course-preview-modal .preview-description {
+      color: #6c757d;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    .course-preview-modal .modal-footer {
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-sticky-footer {
+      background: #f8f9fa;
+      border-top: 1px solid #e9ecef;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-sticky-footer .btn {
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 6px 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #adb5bd;
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .empty-state p {
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+
+      .hero-section {
+        padding: 40px 0;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .benefit-icon {
+        font-size: 1.3rem;
+      }
+
+      .custom-slider {
+        height: 250px;
+        margin-top: 70px;
+      }
+
+      .custom-slide {
+        height: 250px;
+      }
+
+      .custom-image {
+        height: 250px;
+      }
+
+      .custom-prev,
+      .custom-next {
+        top: 50%;
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .courses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 15px;
+      }
+
+      .course-card-vertical .course-image-wrapper {
+        height: 140px;
+      }
+
+      .course-card-vertical .course-title {
+        font-size: 0.95rem;
+        min-height: 38px;
+      }
+
+      .course-card-vertical .course-desc {
+        font-size: 0.8rem;
+      }
+
+      .course-card-vertical .course-price {
+        font-size: 1.2rem;
+      }
+
+      .course-card-vertical .course-action {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      .modal-tab-content-area {
+        max-height: 55vh;
+        padding: 16px;
+      }
+
+      .btn-primary-custom,
+      .btn-secondary-custom {
+        min-width: 90px;
+        padding: 8px 20px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .custom-slider {
+        margin-top: 70px;
+      }
+    }
+
+    /* Focus states for accessibility */
+    .btn-primary-custom:focus,
+    .btn-secondary-custom:focus,
+    .category-card:focus,
+    .custom-prev:focus,
+    .custom-next:focus {
+      outline: 2px solid #2575fc;
+      outline-offset: 2px;
+    }
+
+    /* Print styles */
+    @media print {
+      .custom-slider,
+      .custom-prev,
+      .custom-next {
+        display: none;
+      }
+    }
   </style>
 </head>
 
 <body>
   {% include 'Student_Base.html' %}
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  let slides = document.querySelectorAll(".custom-slide");
-  let currentIndex = 0;
-
-  function showSlide(index) {
-    slides.forEach(slide => slide.classList.remove("active"));
-    slides[index].classList.add("active");
-  }
-
-  document.querySelector(".custom-next").addEventListener("click", function () {
-    currentIndex = (currentIndex + 1) % slides.length;
-    showSlide(currentIndex);
-  });
-
-  document.querySelector(".custom-prev").addEventListener("click", function () {
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    showSlide(currentIndex);
-  });
-
-  // Auto-slide every 3s
-  setInterval(() => {
-    currentIndex = (currentIndex + 1) % slides.length;
-    showSlide(currentIndex);
-  }, 3000);
-
-  // Show the first slide initially
-  showSlide(currentIndex);
-});
-</script>
 
   <!-- Add this right after your hero section -->
 <section class="py-4">
   <div class="mobilslider">
-    <div id="mySlider" class="custom-slider" style="height: 600px; overflow: hidden;">
+    <div id="mySlider" class="custom-slider">
       <div class="custom-slider-inner">
 
         {% for img in slider_images %}
           <div class="custom-slide {% if forloop.first %}active{% endif %}">
-            <img src="{{ img }}" class="custom-image" alt="Slide {{ forloop.counter }}">
+            <img src="{{ img }}" class="custom-image" alt="Slide {{ forloop.counter }} - Trading Education">
           </div>
         {% endfor %}
 
       </div>
 
       <!-- Controls -->
-      <button class="custom-prev" type="button">&#10094;</button>
-      <button class="custom-next" type="button">&#10095;</button>
+      <button class="custom-prev" type="button" aria-label="Previous slide">&#10094;</button>
+      <button class="custom-next" type="button" aria-label="Next slide">&#10095;</button>
     </div>
   </div>
 </section>
@@ -542,8 +940,8 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="col-lg-6">
           <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" 
-               class="img-fluid rounded-4 " 
-               alt="Trading Dashboard">
+               class="img-fluid rounded-4" 
+               alt="Trading Dashboard - ProfitMax Platform">
         </div>
       </div>
     </div>
@@ -577,65 +975,62 @@ document.addEventListener("DOMContentLoaded", function () {
   </section>
 
   <!-- Awards Section -->
+  <div class="container mt-3">
+    <h2 class="section-title mb-5">Award Winning Trading Education</h2>
+    <div class="row">
+      
+      <div class="col-md-3 col-12 mb-4 d-flex">
+        <div class="card weserviceimg flex-fill h-100">
+          <div class="card-header p-0">
+            <img src="{% static 'images/award1.jpg' %}" alt="Best Trading Education Award 2023" class="img-fluid w-100">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title">Best Trading Education 2023</h6>
+            <p class="card-text mt-1 flex-grow-1">Recognized for excellence in financial education and trader development.</p>
+          </div>
+        </div>
+      </div>
 
+      <div class="col-md-3 col-12 mb-4 d-flex">
+        <div class="card weserviceimg flex-fill h-100">
+          <div class="card-header p-0">
+            <img src="{% static 'images/award2.jpg' %}" alt="Innovation in Trading Tools Award" class="img-fluid w-100">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title">Innovation in Trading Tools</h6>
+            <p class="card-text mt-1 flex-grow-1">Awarded for our cutting-edge trading tools and analytics platform.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-12 mb-4 d-flex">
+        <div class="card weserviceimg flex-fill h-100">
+          <div class="card-header p-0">
+            <img src="{% static 'images/award3.jpg' %}" alt="Student Success Award" class="img-fluid w-100">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title">Student Success Award</h6>
+            <p class="card-text mt-1 flex-grow-1">Highest student satisfaction and success rates in the industry.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-12 mb-4 d-flex">
+        <div class="card weserviceimg flex-fill h-100">
+          <div class="card-header p-0">
+            <img src="{% static 'images/mam.jpg' %}" alt="Smart Learning System" class="img-fluid w-100">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h6>Smart Learning System!</h6>
+            <p class="card-text mt-1 flex-grow-1">We're always here to help you whenever needed.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Benefits Section -->
- 
- <div class="container mt-3">
-  <h2 class="section-title mb-5">Award Winning Trading Education</h2>
-  <div class="row">
-    
-    <div class="col-md-3 col-12 mb-4 d-flex">
-      <div class="card weserviceimg flex-fill h-100">
-        <div class="card-header p-0">
-          <img src="{% static 'images/award1.jpg' %}" alt="award1" class="img-fluid w-100">
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h6 class="card-title">Best Trading Education 2023</h6>
-          <p class="card-text mt-1 flex-grow-1">Recognized for excellence in financial education and trader development.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3 col-12 mb-4 d-flex">
-      <div class="card weserviceimg flex-fill h-100">
-        <div class="card-header p-0">
-          <img src="{% static 'images/award2.jpg' %}" alt="award2" class="img-fluid w-100">
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h6 class="card-title">Innovation in Trading Tools</h6>
-          <p class="card-text mt-1 flex-grow-1">Awarded for our cutting-edge trading tools and analytics platform.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3 col-12 mb-4 d-flex">
-      <div class="card weserviceimg flex-fill h-100">
-        <div class="card-header p-0">
-          <img src="{% static 'images/award3.jpg' %}" alt="award3" class="img-fluid w-100">
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h6 class="card-title">Student Success Award</h6>
-          <p class="card-text mt-1 flex-grow-1">Highest student satisfaction and success rates in the industry.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3 col-12 mb-4 d-flex">
-      <div class="card weserviceimg flex-fill h-100">
-        <div class="card-header p-0">
-          <img src="{% static 'images/mam.jpg' %}" alt="mam" class="img-fluid w-100">
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h6>Smart Learning System!</h6>
-          <p class="card-text mt-1 flex-grow-1">We're always here to help you whenever needed.</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
   <section class="py-5 bg-light">
     <div class="container">
       <h2 class="section-title mb-5">Why Learn With ProfitMax?</h2>
@@ -644,15 +1039,15 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="row">
             <div class="col-md-6 mb-4">
               <div class="gallery-img">
-                <img src="{% static 'images/img3.jpg' %}" alt="Trading Education">
+                <img src="{% static 'images/img3.jpg' %}" alt="Professional Trading Education">
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <div class="gallery-img" style="height: 48%; margin-bottom: 15px;">
-                <img src="{% static 'images/img2.jpg' %}" alt="Trading Tools">
+                <img src="{% static 'images/img2.jpg' %}" alt="Advanced Trading Tools">
               </div>
               <div class="gallery-img" style="height: 48%;">
-                <img src="{% static 'images/img1.jpg' %}" alt="Trading Community">
+                <img src="{% static 'images/img1.jpg' %}" alt="Active Trading Community">
               </div>
             </div>
           </div>
@@ -812,29 +1207,6 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </div>
   </section>
-<!-- 
-  <section class="py-5">
-  <div class="container">
-    <h2 class="section-title text-center mb-5">What Our Students Say</h2>
-    <div class="row">
-      {% for review in reviews %}
-      <div class="col-md-4 mb-4">
-        <div class="testimonial-card">
-          <p class="testimonial-text">"{{ review.review }}"</p>
-          <h6 class="testimonial-author">
-            {{ review.display_name|default:review.user.username }}
-          </h6>
-          <p class="testimonial-role">
-            ★ {{ review.rating }} / 5
-          </p>
-        </div>
-      </div>
-      {% empty %}
-      <p class="text-center">No reviews yet.</p>
-      {% endfor %}
-    </div>
-  </div>
-</section> -->
 
 
   <!-- CTA Section -->
@@ -855,92 +1227,293 @@ document.addEventListener("DOMContentLoaded", function () {
   {% for item in category_data %}
   <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1"
     aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content rounded-4">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="modalLabel{{ item.category.id }}">{{ item.category.name }}</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content rounded-4 overflow-hidden border-0 shadow-lg">
 
-        <div class="modal-body" style="padding-bottom: 80px;">
-          {% if item.category.description %}
-          <p>{{ item.category.name }}</p>
-          {% endif %}
-
-          <!-- Free Courses -->
-          <div style="border-bottom:1px solid #7ae2ff;" class="w-100">
-            <h5 class="mt-4">🎓 Free Courses</h5>
-            <div class="row g-4 mb-3">
-              {% for course in item.free_courses %}
-              <div class="col-12 col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
-                  <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4" alt="{{ course.title }}"
-                    style="height: 160px; object-fit: cover;">
-                  <div class="card-body">
-                    <h6 class="card-title text-center fw-semibold">{{ course.title }}</h6>
-                    <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
-                    <center>
-                      <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm mt-2 w-50">
-                        View
-                      </a>
-                    </center>
-                  </div>
-                </div>
-              </div>
-              {% empty %}
-              <p class="text-muted">No free courses available.</p>
-              {% endfor %}
-              <div class="col-md-12 col-12 col-lg-12">
-                <a class="btn btn-success btn-sm mb-2" style="float: right;"
-                  href="{% url 'free_courses_by_category' item.category.id %}">View More Free Courses →</a>
-              </div>
+        <!-- ── Modal Header ── -->
+        <div class="modal-header border-0 text-white py-3 px-4"
+          style="background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);">
+          <div class="d-flex align-items-center gap-3">
+            {% if item.category.icon %}
+            <img src="{{ item.category.icon.url }}" alt=""
+              style="width:38px;height:38px;object-fit:cover;border-radius:8px;border:2px solid rgba(255,255,255,0.4);">
+            {% else %}
+            <div style="width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <i class="fas fa-layer-group" style="color:#fff;font-size:1rem;"></i>
+            </div>
+            {% endif %}
+            <div>
+              <h5 class="modal-title mb-0 fw-bold" id="modalLabel{{ item.category.id }}">
+                {{ item.category.name }}
+              </h5>
+              <small style="opacity:0.8;font-size:0.75rem;">
+                {{ item.free_courses|length }} free &nbsp;·&nbsp; {{ item.paid_courses|length }} paid
+              </small>
             </div>
           </div>
-          <div>
-            <div class="row g-4 mb-3">
-              <h5 class="mt-4">💼 Paid Courses</h5>
+          <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-              {% for course in item.paid_courses %}
-              <div class="col-12 col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow">
-                  <img src="{{ course.thumbnail.url }}" class="card-img-top rounded-top-4"
-                    alt="{{ course.course_title }}" style="height: 160px; object-fit: cover;">
-                  <div class="card-body">
-                    <h6 class="card-title fw-semibold">{{ course.course_title }}</h6>
-                    <p class="card-text text-muted">{{ course.description|truncatewords:12 }}</p>
-                    <div class="d-flex justify-content-between align-items-center mt-2">
-                      <span class="text-success fw-bold">₹{{ course.course_price }}</span>
-                      <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">View</a>
+        <!-- ── Tab Strip ── -->
+        <ul class="nav nav-tabs nav-fill course-modal-tabs" id="courseTabs-{{ item.category.id }}" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link paid-tab active" id="paid-tab-{{ item.category.id }}"
+              data-bs-toggle="tab" data-bs-target="#paid-panel-{{ item.category.id }}"
+              type="button" role="tab">
+              💼 Paid
+              <span class="badge ms-1" style="background:linear-gradient(to right,#f7971e,#ffd200);color:#5a3a00;font-size:0.7rem;">
+                {{ item.paid_courses|length }}
+              </span>
+              <span class="paid-tab-pulse"></span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="free-tab-{{ item.category.id }}"
+              data-bs-toggle="tab" data-bs-target="#free-panel-{{ item.category.id }}"
+              type="button" role="tab">
+              🎓 Free
+              <span class="badge bg-primary ms-1" style="font-size:0.7rem;">{{ item.free_courses|length }}</span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- ── Tab Content ── -->
+        <div class="tab-content" id="courseTabContent-{{ item.category.id }}">
+
+          <!-- PAID PANEL -->
+          <div class="tab-pane fade show active" id="paid-panel-{{ item.category.id }}" role="tabpanel">
+            <div class="modal-tab-content-area">
+              <div class="courses-grid">
+                {% for course in item.paid_courses %}
+                <button type="button" class="course-preview-trigger text-decoration-none" data-bs-toggle="modal" data-bs-target="#paid-course-modal-{{ item.category.id }}-{{ course.id }}">
+                  <div class="course-card-vertical">
+                    <div class="course-image-wrapper">
+                      <img src="{{ course.thumbnail.url }}" class="course-thumb" alt="{{ course.course_title }}">
+                      <span class="premium-badge"><i class="fas fa-crown me-1"></i>PREMIUM</span>
+                    </div>
+                    <div class="course-content">
+                      <div class="course-title">{{ course.course_title }}</div>
+                      <div class="course-desc">{{ course.description|truncatewords:15 }}</div>
+                      <div class="course-footer">
+                        <span class="course-price">₹{{ course.course_price }}</span>
+                        <span class="course-action">
+                          View <i class="fas fa-arrow-right"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                <div class="modal fade course-preview-modal" id="paid-course-modal-{{ item.category.id }}-{{ course.id }}" tabindex="-1" aria-labelledby="paidCourseLabel-{{ item.category.id }}-{{ course.id }}" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content rounded-4 overflow-hidden border-0 shadow-lg">
+                      <div class="modal-header border-0" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);">
+                        <div>
+                          <h5 class="modal-title mb-0 fw-bold" id="paidCourseLabel-{{ item.category.id }}-{{ course.id }}" style="color:#5a3a00;">{{ course.course_title }}</h5>
+                          <small style="opacity:0.8; font-size:0.75rem; color:#5a3a00;">Premium course preview</small>
+                        </div>
+                        <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <img src="{{ course.thumbnail.url }}" class="preview-image mb-3" alt="{{ course.course_title }}">
+                        <div class="preview-meta">
+                          <span class="badge bg-warning text-dark"><i class="fas fa-crown me-1"></i>PREMIUM</span>
+                          <span class="badge bg-light text-dark border"><i class="fas fa-user-tie me-1"></i>{{ course.instructor_name }}</span>
+                          <span class="badge bg-light text-dark border"><i class="fas fa-clock me-1"></i>{{ course.duration }}</span>
+                          <span class="badge bg-light text-dark border"><i class="fas fa-signal me-1"></i>{{ course.course_level }}</span>
+                          {% if item.category %}
+                          <span class="badge bg-light text-dark border"><i class="fas fa-layer-group me-1"></i>{{ item.category.name }}</span>
+                          {% endif %}
+                        </div>
+                        <p class="preview-description">{{ course.description }}</p>
+                        <div class="mt-3 fw-bold" style="font-size:1.1rem; color:#017123;">₹{{ course.course_price }}</div>
+                      </div>
+                      <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-warning px-4 text-dark fw-bold">
+                          Open Course <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
+                {% empty %}
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                  <i class="fas fa-briefcase"></i>
+                  <p>No paid courses in this category yet.</p>
+                </div>
+                {% endfor %}
               </div>
-              {% empty %}
-              <p class="text-muted">No paid courses available.</p>
-              {% endfor %}
             </div>
-            <a class="btn btn-success btn-sm mt-3 " style="float: right;"
-              href="{% url 'paid_courses_by_category' item.category.id %}">View More Paid Courses →</a>
+            <!-- Sticky footer -->
+            <div class="modal-sticky-footer">
+              <span class="text-muted" style="font-size:0.8rem;">
+                {{ item.paid_courses|length }} premium course{{ item.paid_courses|length|pluralize }} available
+              </span>
+              <a href="{% url 'paid_courses_by_category' item.category.id %}"
+                class="btn btn-sm text-dark fw-bold"
+                style="background:linear-gradient(to right,#f7971e,#ffd200);border-radius:20px;padding:8px 20px;">
+                View All Premium Courses <i class="fas fa-arrow-right ms-1"></i>
+              </a>
+            </div>
           </div>
-        </div>
+
+          <!-- FREE PANEL -->
+          <div class="tab-pane fade" id="free-panel-{{ item.category.id }}" role="tabpanel">
+            <div class="modal-tab-content-area">
+              <div class="courses-grid">
+                {% for course in item.free_courses %}
+                <button type="button" class="course-preview-trigger text-decoration-none" data-bs-toggle="modal" data-bs-target="#free-course-modal-{{ item.category.id }}-{{ course.id }}">
+                  <div class="course-card-vertical">
+                    <div class="course-image-wrapper">
+                      <img src="{{ course.thumbnail.url }}" class="course-thumb" alt="{{ course.title }}">
+                      <span class="free-badge"><i class="fas fa-unlock-alt me-1"></i>FREE</span>
+                    </div>
+                    <div class="course-content">
+                      <div class="course-title">{{ course.title }}</div>
+                      <div class="course-desc">{{ course.description|truncatewords:15 }}</div>
+                      <div class="course-footer">
+                        <span class="text-success fw-bold" style="font-size: 0.9rem;">
+                          <i class="fas fa-check-circle me-1"></i>Free Access
+                        </span>
+                        <span class="course-action">
+                          View <i class="fas fa-arrow-right"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                <div class="modal fade course-preview-modal" id="free-course-modal-{{ item.category.id }}-{{ course.id }}" tabindex="-1" aria-labelledby="freeCourseLabel-{{ item.category.id }}-{{ course.id }}" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content rounded-4 overflow-hidden border-0 shadow-lg">
+                      <div class="modal-header border-0 text-white" style="background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);">
+                        <div>
+                          <h5 class="modal-title mb-0 fw-bold" id="freeCourseLabel-{{ item.category.id }}-{{ course.id }}">{{ course.title }}</h5>
+                          <small style="opacity:0.8; font-size:0.75rem;">Free course preview</small>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <img src="{{ course.thumbnail.url }}" class="preview-image mb-3" alt="{{ course.title }}">
+                        <div class="preview-meta">
+                          <span class="badge bg-success"><i class="fas fa-unlock-alt me-1"></i>FREE ACCESS</span>
+                          {% if item.category %}
+                          <span class="badge bg-light text-dark border"><i class="fas fa-layer-group me-1"></i>{{ item.category.name }}</span>
+                          {% endif %}
+                        </div>
+                        <p class="preview-description">{{ course.description }}</p>
+                      </div>
+                      <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <a href="{% url 'free_course_detail' course.id %}" class="btn btn-success px-4">
+                          Open Course <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% empty %}
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                  <i class="fas fa-graduation-cap"></i>
+                  <p>No free courses in this category yet.</p>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <!-- Sticky footer -->
+            <div class="modal-sticky-footer">
+              <span class="text-muted" style="font-size:0.8rem;">
+                {{ item.free_courses|length }} course{{ item.free_courses|length|pluralize }} available
+              </span>
+              <a href="{% url 'free_courses_by_category' item.category.id %}"
+                class="btn btn-outline-primary">
+                View All Free Courses <i class="fas fa-arrow-right ms-1"></i>
+              </a>
+            </div>
+          </div>
+
+        </div><!-- /tab-content -->
       </div>
     </div>
   </div>
   {% endfor %}
 
 
+  {% include 'footer.html' %}
+
+  <!-- JavaScript -->
   <script>
-    document.getElementById("scrollBtn").addEventListener("click", function(e) {
-      e.preventDefault();
-      document.getElementById("sectiondemo").scrollIntoView({
-        behavior: "smooth"
+    // Slider functionality
+    document.addEventListener("DOMContentLoaded", function () {
+      const slides = document.querySelectorAll(".custom-slide");
+      let currentIndex = 0;
+
+      function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove("active"));
+        if (slides[index]) {
+          slides[index].classList.add("active");
+        }
+      }
+
+      const nextBtn = document.querySelector(".custom-next");
+      const prevBtn = document.querySelector(".custom-prev");
+
+      if (nextBtn) {
+        nextBtn.addEventListener("click", function () {
+          currentIndex = (currentIndex + 1) % slides.length;
+          showSlide(currentIndex);
+        });
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener("click", function () {
+          currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+          showSlide(currentIndex);
+        });
+      }
+
+      // Auto-slide every 5 seconds
+      if (slides.length > 0) {
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % slides.length;
+          showSlide(currentIndex);
+        }, 5000);
+
+        // Show the first slide initially
+        showSlide(currentIndex);
+      }
+    });
+
+    // Smooth scroll to demo section
+    document.addEventListener("DOMContentLoaded", function() {
+      const scrollBtn = document.getElementById("scrollBtn");
+      if (scrollBtn) {
+        scrollBtn.addEventListener("click", function(e) {
+          e.preventDefault();
+          const target = document.getElementById("sectiondemo");
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }
+        });
+      }
+    });
+
+    // Hide pulse dot on paid tab once user clicks it
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll(".paid-tab").forEach(function(tab) {
+        tab.addEventListener("click", function() {
+          const pulse = this.querySelector(".paid-tab-pulse");
+          if (pulse) {
+            pulse.classList.add("hidden");
+          }
+        });
       });
     });
   </script>
-  
-
-
-  {% include 'footer.html' %}
 </body>
 
 </html>

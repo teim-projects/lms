@@ -324,8 +324,18 @@
     }
     
     .free-badge {
-      color: var(--free-color);
-      border: 1px solid var(--free-color);
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+      z-index: 5;
     }
     
     .paid-badge {
@@ -454,6 +464,349 @@
     /* height: 460px; */
     margin-top: 80px !important;
 }
+
+    /* Course Modal Styles */
+    .course-modal-tabs {
+      background: #f8f9fa;
+      border-bottom: none;
+      padding: 12px 16px 0;
+      gap: 8px;
+    }
+
+    .course-modal-tabs .nav-item {
+      flex: 1;
+    }
+
+    .course-modal-tabs .nav-link {
+      width: 100%;
+      border: none;
+      border-radius: 12px 12px 0 0;
+      color: #6c757d;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 12px 10px;
+      background: #e9ecef;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .course-modal-tabs .nav-link:hover {
+      background: #dee2e6;
+      color: #495057;
+    }
+
+    .course-modal-tabs .nav-link.active {
+      background: #fff;
+      color: #2575fc;
+      box-shadow: 0 -3px 0 0 #2575fc inset;
+    }
+
+    .course-modal-tabs .paid-tab.active {
+      background: #fff;
+      color: #c47f00;
+      box-shadow: 0 -3px 0 0 #f7971e inset;
+    }
+
+    .course-modal-tabs .paid-tab:not(.active) {
+      background: linear-gradient(135deg, #fff8e7, #ffe9a0);
+      color: #a06000;
+    }
+
+    .paid-tab-pulse {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #f7971e;
+      border-radius: 50%;
+      margin-left: 5px;
+      vertical-align: middle;
+      animation: pulse-dot 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+    }
+
+    .paid-tab.active .paid-tab-pulse,
+    .paid-tab-pulse.hidden {
+      display: none;
+    }
+
+    .modal-tab-content-area {
+      background: #fff;
+      padding: 24px 24px 80px 24px;
+      min-height: 500px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar-thumb {
+      background: #c5c5c5;
+      border-radius: 10px;
+    }
+
+    .modal-tab-content-area::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* Course Grid Container */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 0;
+    }
+
+    /* Vertical Course Card */
+    .course-card-vertical {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+      position: relative;
+      border: 1px solid #e9ecef;
+    }
+
+    .course-card-vertical:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+    }
+
+    .course-card-vertical .course-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      background: #f8f9fa;
+    }
+
+    .course-card-vertical .course-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .course-card-vertical:hover .course-thumb {
+      transform: scale(1.05);
+    }
+
+    /* Premium Badge */
+    .premium-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(135deg, #f7971e, #ffd200);
+      color: #5a3a00;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(247, 151, 30, 0.4);
+      z-index: 5;
+    }
+
+    /* Free Badge */
+    .free-badge-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+      z-index: 5;
+    }
+
+    .course-card-vertical .course-content {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .course-card-vertical .course-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      line-height: 1.4;
+      min-height: 48px;
+      line-clamp: 2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .course-card-vertical .course-desc {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-bottom: 14px;
+      line-height: 1.6;
+      flex: 1;
+      line-clamp: 3;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .course-card-vertical .course-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #e9ecef;
+      margin-top: auto;
+    }
+
+    .course-card-vertical .course-price {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #017123;
+    }
+
+    .course-card-vertical .course-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      color: white;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .course-card-vertical .course-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
+      color: white;
+    }
+
+    .course-card-vertical .course-action i {
+      transition: transform 0.3s ease;
+    }
+
+    .course-card-vertical:hover .course-action i {
+      transform: translateX(3px);
+    }
+
+    .course-preview-trigger {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .course-preview-trigger:focus-visible {
+      outline: 2px solid #2575fc;
+      outline-offset: 4px;
+      border-radius: 16px;
+    }
+
+    .course-preview-modal .modal-body {
+      padding: 24px;
+    }
+
+    .course-preview-modal .preview-image {
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .course-preview-modal .preview-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .course-preview-modal .preview-meta .badge {
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight: 600;
+    }
+
+    .course-preview-modal .preview-description {
+      color: #6c757d;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    .course-preview-modal .modal-footer {
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-sticky-footer {
+      background: #f8f9fa;
+      border-top: 1px solid #e9ecef;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    .modal-sticky-footer .btn {
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 6px 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #adb5bd;
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .empty-state p {
+      font-size: 0.85rem;
+      margin: 0;
+    }
   
 
 
@@ -606,106 +959,223 @@
 {% for item in category_data %}
 <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1"
   aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel{{ item.category.id }}">
-          <i class="fas fa-folder-open me-2"></i>{{ item.category.name }}
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content rounded-4 overflow-hidden border-0 shadow-lg">
 
-      <div class="modal-body">
-        {% if item.category.description %}
-        <div class="alert alert-light mb-4">
-          <i class="fas fa-info-circle me-2"></i>{{ item.category.name }}
-        </div>
-        {% endif %}
-
-        <!-- Free Courses -->
-        <div class="mb-5">
-          <h5 class="mb-4 d-flex align-items-center">
-            <span class="badge bg-success me-2">FREE</span>
-            <span>Free Courses</span>
-          </h5>
-          <div class="row g-4 mb-3">
-            {% for course in item.free_courses %}
-            <div class="col-12 col-md-6 col-lg-4">
-              <div class="course-card">
-                <span class="course-badge free-badge">FREE</span>
-                <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.title }}">
-                <div class="card-body">
-                  <h6 class="card-title">{{ course.title }}</h6>
-                  <p class="card-text">{{ course.description|truncatewords:12 }}</p>
-                  <div class="d-grid">
-                    <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm">
-                      <i class="fas fa-eye me-1"></i> View Course
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-              <div class="alert alert-info">
-                No free courses available in this category yet.
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-          {% if item.free_courses %}
-          <div class="text-end">
-            <a href="{% url 'free_courses_by_category' item.category.id %}" class="btn btn-view-more-free">
-              View All Free Courses <i class="fas fa-arrow-right ms-1"></i>
-            </a>
+      <!-- ── Modal Header ── -->
+      <div class="modal-header border-0 text-white py-3 px-4"
+        style="background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);">
+        <div class="d-flex align-items-center gap-3">
+          {% if item.category.icon %}
+          <img src="{{ item.category.icon.url }}" alt=""
+            style="width:38px;height:38px;object-fit:cover;border-radius:8px;border:2px solid rgba(255,255,255,0.4);">
+          {% else %}
+          <div style="width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-layer-group" style="color:#fff;font-size:1rem;"></i>
           </div>
           {% endif %}
+          <div>
+            <h5 class="modal-title mb-0 fw-bold" id="modalLabel{{ item.category.id }}">
+              {{ item.category.name }}
+            </h5>
+            <small style="opacity:0.8;font-size:0.75rem;">
+              {{ item.free_courses|length }} free &nbsp;·&nbsp; {{ item.paid_courses|length }} paid
+            </small>
+          </div>
         </div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-        <!-- Paid Courses -->
-        <div class="mt-5">
-          <h5 class="mb-4 d-flex align-items-center">
-            <span class="badge bg-primary me-2">PREMIUM</span>
-            <span>Premium Courses</span>
-          </h5>
-          <div class="row g-4">
-            {% for course in item.paid_courses %}
-            <div class="col-12 col-md-6 col-lg-4">
-              <div class="course-card">
-                <span class="course-badge paid-badge">PREMIUM</span>
-                <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.course_title }}">
-                <div class="card-body">
-                  <h6 class="card-title">{{ course.course_title }}</h6>
-                  <p class="card-text">{{ course.description|truncatewords:12 }}</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <span class="price-tag">₹{{ course.course_price }}</span>
-                    <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">
-                      <i class="fas fa-eye me-1"></i> View
-                    </a>
+      <!-- ── Tab Strip ── -->
+      <ul class="nav nav-tabs nav-fill course-modal-tabs" id="courseTabs-{{ item.category.id }}" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link paid-tab active" id="paid-tab-{{ item.category.id }}"
+            data-bs-toggle="tab" data-bs-target="#paid-panel-{{ item.category.id }}"
+            type="button" role="tab">
+            💼 Paid
+            <span class="badge ms-1" style="background:linear-gradient(to right,#f7971e,#ffd200);color:#5a3a00;font-size:0.7rem;">
+              {{ item.paid_courses|length }}
+            </span>
+            <span class="paid-tab-pulse"></span>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="free-tab-{{ item.category.id }}"
+            data-bs-toggle="tab" data-bs-target="#free-panel-{{ item.category.id }}"
+            type="button" role="tab">
+            🎓 Free
+            <span class="badge bg-primary ms-1" style="font-size:0.7rem;">{{ item.free_courses|length }}</span>
+          </button>
+        </li>
+      </ul>
+
+      <!-- ── Tab Content ── -->
+      <div class="tab-content" id="courseTabContent-{{ item.category.id }}">
+
+        <!-- PAID PANEL -->
+        <div class="tab-pane fade show active" id="paid-panel-{{ item.category.id }}" role="tabpanel">
+          <div class="modal-tab-content-area">
+            <div class="courses-grid">
+              {% for course in item.paid_courses %}
+              <button type="button" class="course-preview-trigger text-decoration-none" data-bs-toggle="modal" data-bs-target="#paid-course-modal-dashboard-{{ item.category.id }}-{{ course.id }}">
+                <div class="course-card-vertical">
+                  <div class="course-image-wrapper">
+                    <img src="{{ course.thumbnail.url }}" class="course-thumb" alt="{{ course.course_title }}">
+                    <span class="premium-badge"><i class="fas fa-crown me-1"></i>PREMIUM</span>
+                  </div>
+                  <div class="course-content">
+                    <div class="course-title">{{ course.course_title }}</div>
+                    <div class="course-desc">{{ course.description|truncatewords:15 }}</div>
+                    <div class="course-footer">
+                      <span class="course-price">₹{{ course.course_price }}</span>
+                      <span class="course-action">
+                        View <i class="fas fa-arrow-right"></i>
+                      </span>
+                    </div>
                   </div>
                 </div>
+              </button>
+              {% empty %}
+              <div class="empty-state" style="grid-column: 1 / -1;">
+                <i class="fas fa-briefcase"></i>
+                <p>No paid courses in this category yet.</p>
               </div>
+              {% endfor %}
             </div>
-            {% empty %}
-            <div class="col-12">
-              <div class="alert alert-info">
-                No premium courses available in this category yet.
-              </div>
-            </div>
-            {% endfor %}
           </div>
-          {% if item.paid_courses %}
-          <div class="text-end mt-3">
-            <a href="{% url 'paid_courses_by_category' item.category.id %}" class="btn btn-view-more-paid">
+          <!-- Sticky footer -->
+          <div class="modal-sticky-footer">
+            <span class="text-muted" style="font-size:0.8rem;">
+              {{ item.paid_courses|length }} premium course{{ item.paid_courses|length|pluralize }} available
+            </span>
+            <a href="{% url 'paid_courses_by_category' item.category.id %}"
+              class="btn btn-sm text-dark fw-bold"
+              style="background:linear-gradient(to right,#f7971e,#ffd200);border-radius:20px;padding:8px 20px;">
               View All Premium Courses <i class="fas fa-arrow-right ms-1"></i>
             </a>
           </div>
-          {% endif %}
+        </div>
+
+        <!-- FREE PANEL -->
+        <div class="tab-pane fade" id="free-panel-{{ item.category.id }}" role="tabpanel">
+          <div class="modal-tab-content-area">
+            <div class="courses-grid">
+              {% for course in item.free_courses %}
+              <button type="button" class="course-preview-trigger text-decoration-none" data-bs-toggle="modal" data-bs-target="#free-course-modal-dashboard-{{ item.category.id }}-{{ course.id }}">
+                <div class="course-card-vertical">
+                  <div class="course-image-wrapper">
+                    <img src="{{ course.thumbnail.url }}" class="course-thumb" alt="{{ course.title }}">
+                    <span class="free-badge"><i class="fas fa-unlock-alt me-1"></i>FREE</span>
+                  </div>
+                  <div class="course-content">
+                    <div class="course-title">{{ course.title }}</div>
+                    <div class="course-desc">{{ course.description|truncatewords:15 }}</div>
+                    <div class="course-footer">
+                      <span class="text-success fw-bold" style="font-size: 0.9rem;">
+                        <i class="fas fa-check-circle me-1"></i>Free Access
+                      </span>
+                      <span class="course-action">
+                        View <i class="fas fa-arrow-right"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </button>
+              {% empty %}
+              <div class="empty-state" style="grid-column: 1 / -1;">
+                <i class="fas fa-graduation-cap"></i>
+                <p>No free courses in this category yet.</p>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          <!-- Sticky footer -->
+          <div class="modal-sticky-footer">
+            <span class="text-muted" style="font-size:0.8rem;">
+              {{ item.free_courses|length }} course{{ item.free_courses|length|pluralize }} available
+            </span>
+            <a href="{% url 'free_courses_by_category' item.category.id %}"
+              class="btn btn-outline-primary">
+              View All Free Courses <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+
+      </div><!-- /tab-content -->
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<!-- Course Preview Modals (moved outside category modal) -->
+{% for item in category_data %}
+  {% for course in item.free_courses %}
+  <div class="modal fade course-preview-modal" id="free-course-modal-dashboard-{{ item.category.id }}-{{ course.id }}" tabindex="-1" aria-labelledby="freeCourseLabel-dash-{{ item.category.id }}-{{ course.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 overflow-hidden border-0 shadow-lg">
+        <div class="modal-header border-0 text-white" style="background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);">
+          <div>
+            <h5 class="modal-title mb-0 fw-bold" id="freeCourseLabel-dash-{{ item.category.id }}-{{ course.id }}">{{ course.title }}</h5>
+            <small style="opacity:0.8; font-size:0.75rem;">Free course preview</small>
+          </div>
+          <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img src="{{ course.thumbnail.url }}" class="preview-image mb-3" alt="{{ course.title }}">
+          <div class="preview-meta">
+            <span class="badge bg-success"><i class="fas fa-unlock-alt me-1"></i>FREE ACCESS</span>
+            {% if item.category %}
+            <span class="badge bg-light text-dark border"><i class="fas fa-layer-group me-1"></i>{{ item.category.name }}</span>
+            {% endif %}
+          </div>
+          <p class="preview-description">{{ course.description }}</p>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+          <a href="{% url 'free_course_detail' course.id %}" class="btn btn-success px-4">
+            Open Course <i class="fas fa-arrow-right ms-1"></i>
+          </a>
         </div>
       </div>
     </div>
   </div>
-</div>
+  {% endfor %}
+  
+  {% for course in item.paid_courses %}
+  <div class="modal fade course-preview-modal" id="paid-course-modal-dashboard-{{ item.category.id }}-{{ course.id }}" tabindex="-1" aria-labelledby="paidCourseLabel-dash-{{ item.category.id }}-{{ course.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 overflow-hidden border-0 shadow-lg">
+        <div class="modal-header border-0" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);">
+          <div>
+            <h5 class="modal-title mb-0 fw-bold" id="paidCourseLabel-dash-{{ item.category.id }}-{{ course.id }}" style="color:#5a3a00;">{{ course.course_title }}</h5>
+            <small style="opacity:0.8; font-size:0.75rem; color:#5a3a00;">Premium course preview</small>
+          </div>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img src="{{ course.thumbnail.url }}" class="preview-image mb-3" alt="{{ course.course_title }}">
+          <div class="preview-meta">
+            <span class="badge bg-warning text-dark"><i class="fas fa-crown me-1"></i>PREMIUM</span>
+            <span class="badge bg-light text-dark border"><i class="fas fa-user-tie me-1"></i>{{ course.instructor_name }}</span>
+            <span class="badge bg-light text-dark border"><i class="fas fa-clock me-1"></i>{{ course.duration }}</span>
+            <span class="badge bg-light text-dark border"><i class="fas fa-signal me-1"></i>{{ course.course_level }}</span>
+            {% if item.category %}
+            <span class="badge bg-light text-dark border"><i class="fas fa-layer-group me-1"></i>{{ item.category.name }}</span>
+            {% endif %}
+          </div>
+          <p class="preview-description">{{ course.description }}</p>
+          <div class="mt-3 fw-bold" style="font-size:1.1rem; color:#017123;">₹{{ course.course_price }}</div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+          <a href="{% url 'display_paid_content' course.id %}" class="btn btn-warning px-4 text-dark fw-bold">
+            Open Course <i class="fas fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 {% endfor %}
 
 <!-- Features Section -->

@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'lms',
         'USER':'root',
         'PASSWORD':'',
-        'HOST':'localhost',
+        'HOST':'127.0.0.1',
         'PORT':3306,
     }
 }
@@ -147,9 +147,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'lmstechmax@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = 'yolq euzn bukp rurb'  # Your Gmail password or app password
-DEFAULT_FROM_EMAIL = 'lmstechmax@gmail.com'
+EMAIL_HOST_USER = 'connectteim@gmail.com'  # Your Gmail address
+EMAIL_HOST_PASSWORD = 'nffo vmuz dkyp smqr'  # Your Gmail password or app password
+DEFAULT_FROM_EMAIL = 'connectteim@gmail.com'
 
 
 
