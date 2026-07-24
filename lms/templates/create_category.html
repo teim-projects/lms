@@ -2,38 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Category</title>
+    <title>{% if category %}Edit Category{% else %}Create Category{% endif %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         body {
             background-color: #f8f9fa;
             padding-top: 80px;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
-       .form-container {
-    max-width: 700px;  /* Increased from 500px */
-    background: #fff;
-    padding: 30px;
-    margin: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-radius: 8px;
-}
-
+        .form-container {
+            max-width: 700px;
+            background: #fff;
+            padding: 35px;
+            margin: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 15px;
+        }
 
         .form-container h2 {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             color: #333;
+            font-weight: 600;
+        }
+
+        .form-container h2 i {
+            {% if category %}color: #0d6efd;{% else %}color: #28a745;{% endif %}
         }
 
         .form-group label {
             font-weight: 500;
+            color: #495057;
+        }
+
+        .form-group label .text-danger {
+            color: #dc3545;
         }
 
         .btn-submit {
             width: 100%;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 8px;
         }
 
         .back-link {
@@ -42,51 +56,270 @@
             margin-top: 20px;
             color: #007bff;
             text-decoration: none;
+            font-weight: 500;
         }
 
         .back-link:hover {
             text-decoration: underline;
+            color: #0056b3;
+        }
+
+        .form-control, .form-control-file {
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: {% if category %}#0d6efd{% else %}#28a745{% endif %};
+            box-shadow: 0 0 0 0.2rem rgba({% if category %}13, 110, 253{% else %}40, 167, 69{% endif %}, 0.25);
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .current-image {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed #dee2e6;
+        }
+
+        .current-image img {
+            max-width: 150px;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .current-image .image-label {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 8px;
+        }
+
+        .icon-preview {
+            margin-top: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .icon-preview img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .alert-custom {
+            border-radius: 10px;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #495057;
+        }
+
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .current-image img {
+                max-width: 100px;
+                max-height: 100px;
+            }
         }
     </style>
 </head>
 <body>
     {% include 'Admin_Base.html' %}
 
-    <div class="container" style="min-height: 100vh;">
-    <div class="form-container" style="margin-top: 150px;">
-        <h2>Create a New Category</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="name">Category Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter category name" required>
+    <!-- Messages Display -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-custom" role="alert">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-
-            <div class="form-group">
-                <label for="description">Category Description</label>
-                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter category description"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="icon">Upload Icon</label>
-                <input type="file" class="form-control-file" id="icon" name="icon">
-            </div>
-
-            <div class="form-group">
-    <label for="navbar_logo">Upload Navbar Logo</label>
-    <input type="file" class="form-control-file" id="navbar_logo" name="navbar_logo">
-</div>
-
-
-            <button type="submit" class="btn btn-primary btn-submit">Add Category</button>
-        </form>
-
-        <a href="{% url 'admin_view_categories' %}" class="back-link">View All Categories</a>
+        {% endfor %}
     </div>
-</div>
+    {% endif %}
 
+    <div class="container" style="min-height: 100vh;">
+        <div class="form-container" style="margin-top: 150px;">
+            <h2>
+                {% if category %}
+                    <i class="fas fa-edit"></i> Edit Category
+                {% else %}
+                    <i class="fas fa-plus-circle"></i> Create New Category
+                {% endif %}
+            </h2>
+            
+            {% if category %}
+            <div class="text-center mb-3">
+                <span class="category-badge">
+                    <i class="fas fa-folder"></i> Editing: {{ category.name }}
+                </span>
+            </div>
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" id="categoryForm">
+                {% csrf_token %}
+                
+                {% if category %}
+                    <input type="hidden" name="edit_id" value="{{ category.id }}">
+                {% endif %}
+                
+                <div class="form-group">
+                    <label for="name">Category Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" 
+                           placeholder="Enter category name" 
+                           value="{% if category %}{{ category.name }}{% endif %}" 
+                           required {% if category %}autofocus{% endif %}>
+                    <small class="help-text">Example: Programming, Design, Marketing, etc.</small>
+                </div>
 
+                <div class="form-group">
+                    <label for="description">Category Description</label>
+                    <textarea class="form-control" id="description" name="description" 
+                              rows="4" placeholder="Enter category description">{% if category %}{{ category.description }}{% endif %}</textarea>
+                    <small class="help-text">Brief description about this category (optional).</small>
+                </div>
+
+                {% if category and category.icon %}
+                <div class="form-group">
+                    <label>Current Icon</label>
+                    <div class="current-image">
+                        <img src="{{ category.icon.url }}" alt="Current icon">
+                        <div class="image-label">
+                            <i class="fas fa-image"></i> Current icon
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="icon">
+                        {% if category %}Upload New Icon (leave empty to keep current){% else %}Upload Icon{% endif %}
+                    </label>
+                    <input type="file" class="form-control-file" id="icon" name="icon" 
+                           accept="image/*" onchange="previewIcon(this)">
+                    <small class="help-text">Recommended: PNG, JPG or JPEG format, max 2MB.</small>
+                    <div class="icon-preview" id="iconPreview">
+                        <img id="iconPreviewImg" src="#" alt="Icon preview">
+                        <p class="text-muted mt-2"><small>Preview</small></p>
+                    </div>
+                </div>
+
+                {% if category and category.navbar_logo %}
+                <div class="form-group">
+                    <label>Current Navbar Logo</label>
+                    <div class="current-image">
+                        <img src="{{ category.navbar_logo.url }}" alt="Current navbar logo">
+                        <div class="image-label">
+                            <i class="fas fa-image"></i> Current navbar logo
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="navbar_logo">
+                        {% if category %}Upload New Navbar Logo (leave empty to keep current){% else %}Upload Navbar Logo{% endif %}
+                    </label>
+                    <input type="file" class="form-control-file" id="navbar_logo" name="navbar_logo"
+                           accept="image/*" onchange="previewNavbarLogo(this)">
+                    <small class="help-text">Logo for navbar display (optional).</small>
+                    <div class="icon-preview" id="navbarLogoPreview">
+                        <img id="navbarLogoPreviewImg" src="#" alt="Navbar logo preview">
+                        <p class="text-muted mt-2"><small>Preview</small></p>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn {% if category %}btn-primary{% else %}btn-success{% endif %} btn-submit">
+                    <i class="fas fa-save"></i> 
+                    {% if category %}Update Category{% else %}Create Category{% endif %}
+                </button>
+            </form>
+
+            <a href="{% url 'admin_view_categories' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to All Categories
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Preview icon
+        function previewIcon(input) {
+            const preview = document.getElementById('iconPreview');
+            const previewImg = document.getElementById('iconPreviewImg');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // Preview navbar logo
+        function previewNavbarLogo(input) {
+            const preview = document.getElementById('navbarLogoPreview');
+            const previewImg = document.getElementById('navbarLogoPreviewImg');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // Auto-close alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const closeButton = alert.querySelector('.close');
+                    if (closeButton) {
+                        closeButton.click();
+                    }
+                });
+            }, 5000);
+        });
+
+        // Form validation
+        document.getElementById('categoryForm').addEventListener('submit', function(e) {
+            const name = document.getElementById('name').value.trim();
+            if (!name) {
+                e.preventDefault();
+                alert('Please enter a category name.');
+                document.getElementById('name').focus();
+            }
+        });
+    </script>
 
     {% include 'footer.html' %}
 </body>

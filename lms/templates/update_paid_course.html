@@ -248,6 +248,20 @@
                                 <label for="thumbnail" class="form-label">Thumbnail</label>
                                 <input type="file" class="form-control p-1" id="thumbnail" name="thumbnail">
                             </div>
+
+                            <!-- CATEGORY SELECTION - ADDED -->
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select class="form-control" id="category" name="category" required>
+                                    <option value="">-- Select Category --</option>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat.id }}" {% if course.category and cat.id == course.category.id %}selected{% endif %}>
+                                            {{ cat.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="course_title" class="form-label">Course Title</label>
                                 <input type="text" class="form-control" id="course_title" name="course_title"
@@ -271,47 +285,47 @@
                             <div class="mb-3">
                                 <label for="course_level" class="form-label">Course Level</label>
                                 <select class="form-control" id="course_level" name="course_level">
-    {% for level, label in course.COURSE_LEVELS %}
-        <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
-            {{ label }}
-        </option>
-    {% endfor %}
-</select>
+                                    {% for level, label in course.COURSE_LEVELS %}
+                                        <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             
                         </div>
 
 
-<div class="update-paid">
+                        <div class="update-paid">
                             <div class="mb-3">
-    <label for="about" class="form-label">About</label>
-    <textarea class="form-control" id="about" name="about">{{ course.about }}</textarea>
-</div>
+                                <label for="about" class="form-label">About</label>
+                                <textarea class="form-control" id="about" name="about">{{ course.about }}</textarea>
+                            </div>
 
-<div class="mb-3">
-    <label for="benefits" class="form-label">Benefits</label>
-    <textarea class="form-control" id="benefits" name="benefits">{{ course.benefits }}</textarea>
-</div>
+                            <div class="mb-3">
+                                <label for="benefits" class="form-label">Benefits</label>
+                                <textarea class="form-control" id="benefits" name="benefits">{{ course.benefits }}</textarea>
+                            </div>
 
-<div class="mb-3">
-    <label for="original_price" class="form-label">Original Price</label>
-    <input type="number" step="0.01" class="form-control" id="original_price"
-           name="original_price" value="{{ course.original_price }}">
-</div>
+                            <div class="mb-3">
+                                <label for="original_price" class="form-label">Original Price</label>
+                                <input type="number" step="0.01" class="form-control" id="original_price"
+                                       name="original_price" value="{{ course.original_price }}">
+                            </div>
 
-<div class="mb-1">
+                            <div class="mb-1">
                                 <label for="course_price" class="form-label">Course Price</label>
                                 <input type="number" step="0.01" class="form-control" id="course_price"
                                     name="course_price" value="{{ course.course_price }}">
                             </div>
 
-<div class="mb-3">
-    <label for="discount_amount" class="form-label">Discount Amount</label>
-    <input type="number" step="0.01" class="form-control" id="discount_amount"
-           name="discount_amount" value="{{ course.discount_amount }}" readonly>
-</div>
+                            <div class="mb-3">
+                                <label for="discount_amount" class="form-label">Discount Amount</label>
+                                <input type="number" step="0.01" class="form-control" id="discount_amount"
+                                       name="discount_amount" value="{{ course.discount_amount }}" readonly>
+                            </div>
 
-</div>
+                        </div>
 
                         <div class="  mb-2 card-footer bg-white ">
                             <button type="submit" class="btn   buttonn">Update Course</button>
@@ -328,96 +342,96 @@
 
 
 
-<div class="container mb-5">
-    <div class="row">
-        <div class="col-md-3"></div>
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-3"></div>
 
-        <div class="col-md-6">
-            <h4 class="text-center my-4"
-                style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; ">
-                Uploaded Course Content
-            </h4>
+            <div class="col-md-6">
+                <h4 class="text-center my-4"
+                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; ">
+                    Uploaded Course Content
+                </h4>
 
-           {% for title, contents in grouped_contents.items %}
-  <div class="card mb-3">
-    <div class="card-header d-flex justify-content-between align-items-center">
-     <div class="d-flex align-items-center">
+               {% for title, contents in grouped_contents.items %}
+          <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+             <div class="d-flex align-items-center">
 
-    <!-- TITLE EDIT FORM -->
-    <form method="post" action="{% url 'edit_course_title' course.id title %}" class="d-flex align-items-center mr-2">
-        {% csrf_token %}
+            <!-- TITLE EDIT FORM -->
+            <form method="post" action="{% url 'edit_course_title' course.id title %}" class="d-flex align-items-center mr-2">
+                {% csrf_token %}
 
-        <input type="text" name="new_title"
-               value="{{ title }}"
-               class="form-control form-control-sm mr-2"
-               style="width: 200px;" required>
+                <input type="text" name="new_title"
+                       value="{{ title }}"
+                       class="form-control form-control-sm mr-2"
+                       style="width: 200px;" required>
 
-        <button class="btn btn-sm btn-success">Update</button>
-    </form>
-
-    <!-- COLLAPSE BUTTON -->
-    <a class="text-decoration-none"
-       data-bs-toggle="collapse"
-       href="#collapse{{ forloop.counter }}">
-        <span class="btn btn-sm btn-info">View</span>
-    </a>
-
-</div>
-<form method="post"
-          action="{% url 'update_title_order' course.id title %}"
-          class="d-flex align-items-center">
-        {% csrf_token %}
-
-        <input type="number" name="order"
-               value="{{ contents.0.order }}"
-               class="form-control form-control-sm mr-2"
-               style="width: 80px;" required>
-
-        <button class="btn btn-sm btn-primary">Set</button>
-    </form>
-
-      <form method="post" action="{% url 'delete_course_title' course.id title %}" onsubmit="return confirm('Delete the title and all its subtitles?')">
-        {% csrf_token %}
-        <button class="btn btn-danger btn-sm">Delete Title</button>
-      </form>
-    </div>
-
-    <div class="collapse" id="collapse{{ forloop.counter }}">
-      <div class="card-body">
-        {% for content in contents %}
-          <div class="mb-3 border p-2 rounded" style="font-size: 0.95rem;">
-            <form method="post" action="{% url 'edit_course_subtitle' content.id %}">
-    {% csrf_token %}
-
-    <input type="text" name="new_subtitle"
-           value="{{ content.subtitle }}"
-           class="form-control form-control-sm mb-2" required>
-
-    <button class="btn btn-sm btn-success">Update Subtitle</button>
-</form>
-            <p><strong>File:</strong>
-              <a href="{{ content.resource_file.url }}" target="_blank">
-                {{ content.resource_file.name|cut:"course_resources/" }}
-              </a>
-            </p>
-            <form method="post" action="{% url 'delete_course_subtitle' content.id %}" onsubmit="return confirm('Delete this subtitle?')">
-              {% csrf_token %}
-              <button class="btn btn-warning btn-sm">Delete Subtitle</button>
+                <button class="btn btn-sm btn-success">Update</button>
             </form>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-{% empty %}
-  <p class="text-center">No uploaded content found.</p>
-{% endfor %}
+
+            <!-- COLLAPSE BUTTON -->
+            <a class="text-decoration-none"
+               data-bs-toggle="collapse"
+               href="#collapse{{ forloop.counter }}">
+                <span class="btn btn-sm btn-info">View</span>
+            </a>
 
         </div>
+        <form method="post"
+                  action="{% url 'update_title_order' course.id title %}"
+                  class="d-flex align-items-center">
+                {% csrf_token %}
 
-        <div class="col-md-3"></div>
+                <input type="number" name="order"
+                       value="{{ contents.0.order }}"
+                       class="form-control form-control-sm mr-2"
+                       style="width: 80px;" required>
+
+                <button class="btn btn-sm btn-primary">Set</button>
+            </form>
+
+              <form method="post" action="{% url 'delete_course_title' course.id title %}" onsubmit="return confirm('Delete the title and all its subtitles?')">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-sm">Delete Title</button>
+              </form>
+            </div>
+
+            <div class="collapse" id="collapse{{ forloop.counter }}">
+              <div class="card-body">
+                {% for content in contents %}
+                  <div class="mb-3 border p-2 rounded" style="font-size: 0.95rem;">
+                    <form method="post" action="{% url 'edit_course_subtitle' content.id %}">
+                {% csrf_token %}
+
+                <input type="text" name="new_subtitle"
+                       value="{{ content.subtitle }}"
+                       class="form-control form-control-sm mb-2" required>
+
+                <button class="btn btn-sm btn-success">Update Subtitle</button>
+            </form>
+                    <p><strong>File:</strong>
+                      <a href="{{ content.resource_file.url }}" target="_blank">
+                        {{ content.resource_file.name|cut:"course_resources/" }}
+                      </a>
+                    </p>
+                    <form method="post" action="{% url 'delete_course_subtitle' content.id %}" onsubmit="return confirm('Delete this subtitle?')">
+                      {% csrf_token %}
+                      <button class="btn btn-warning btn-sm">Delete Subtitle</button>
+                    </form>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-center">No uploaded content found.</p>
+        {% endfor %}
+
+            </div>
+
+            <div class="col-md-3"></div>
+        </div>
     </div>
-</div>
 
 
 

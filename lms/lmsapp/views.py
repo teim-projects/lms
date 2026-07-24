@@ -932,10 +932,6 @@ def generate_unique_course_code():
 
 
 
-from django.shortcuts import render, redirect
-from .models import PaidCourse
-from django.core.files.storage import FileSystemStorage
-
 @login_required
 @user_passes_test(is_admin_or_subadmin)
 def create_paid_course(request):
@@ -943,62 +939,50 @@ def create_paid_course(request):
         course_title = request.POST.get('course_title')
         duration = request.POST.get('duration')
         description = request.POST.get('description')
-        about = request.POST.get('about')  # ✅ new
-        benefits = request.POST.get('benefits')  # ✅ new
+        about = request.POST.get('about')
+        benefits = request.POST.get('benefits')
         instructor_name = request.POST.get('instructor_name')
         course_level = request.POST.get('course_level')
-        original_price = float(request.POST.get('original_price'))
-        course_price = float(request.POST.get('course_price'))
+        original_price = float(request.POST.get('original_price', 0))
+        course_price = float(request.POST.get('course_price', 0))
         discount_amount = original_price - course_price
-        
         thumbnail = request.FILES.get('thumbnail')
-
         course_name = request.POST.get('course_name')
+        category_id = request.POST.get('category')
 
+        # Generate course code
         course_code = generate_unique_course_code()
 
-        thumbnail=request.FILES.get('thumbnail')
-
-        category_id = request.POST.get('category')
-    
-
-        category = Category.objects.get(id=category_id) if category_id else None
-
-
-
-       
+        # Get category
+        category = None
+        if category_id:
+            try:
+                category = Category.objects.get(id=category_id)
+            except Category.DoesNotExist:
+                messages.warning(request, "Selected category does not exist.")
 
         # Save to database
         PaidCourse.objects.create(
             course_title=course_title,
             duration=duration,
             description=description,
-            about=about,  
-            benefits=benefits,  
+            about=about,
+            benefits=benefits,
             instructor_name=instructor_name,
             course_level=course_level,
             course_price=course_price,
             original_price=original_price,
             discount_amount=discount_amount,
-
-            
             thumbnail=thumbnail,
-
             course_name=course_name,
             course_code=course_code,
-
             category=category
-            
-
-            
-
         )
+        messages.success(request, f"Course '{course_title}' created successfully!")
         return redirect('create_paid_course')
+    
     categories = Category.objects.all()
-    courses = PaidCourse.objects.all()
-    return render(request, 'paid_course.html', {'courses': courses, 'categories': categories})
-
-
+    return render(request, 'paid_course.html', {'categories': categories})
 
 
 
@@ -1163,11 +1147,22 @@ def delete_paid_course(request, course_id):
 from collections import defaultdict
 from django.utils.text import slugify
 
+from collections import defaultdict
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import PaidCourse, Category
+
 @login_required
 def update_paid_course(request, course_id):
     course = get_object_or_404(PaidCourse, id=course_id)
+    categories = Category.objects.all()  # Get all categories for dropdown
 
     if request.method == 'POST':
+        # Get category from POST
+        category_id = request.POST.get('category')
+        
+        # Update basic fields
         course.course_title = request.POST.get('course_title', course.course_title)
         course.duration = request.POST.get('duration', course.duration)
         course.description = request.POST.get('description', course.description)
@@ -1179,23 +1174,35 @@ def update_paid_course(request, course_id):
         course.course_price = float(request.POST.get('course_price', course.course_price))
         course.discount_amount = course.original_price - course.course_price
 
+        # Update category if selected
+        if category_id:
+            try:
+                category = Category.objects.get(id=category_id)
+                course.category = category
+            except Category.DoesNotExist:
+                messages.warning(request, "Selected category does not exist.")
+        else:
+            course.category = None  # Or keep existing if you prefer
+
+        # Update thumbnail if new file uploaded
         if 'thumbnail' in request.FILES:
             course.thumbnail = request.FILES['thumbnail']
 
         course.save()
+        messages.success(request, f"Course '{course.course_title}' updated successfully!")
         return redirect('view_paid_course')
 
     # Normalize and group contents by cleaned title
     grouped_contents = defaultdict(list)
     for content in course.contents.all().order_by('order'):
-        clean_title = content.title.strip().title()  # remove spaces & fix case
+        clean_title = content.title.strip().title()
         grouped_contents[clean_title].append(content)
 
     return render(request, 'update_paid_course.html', {
         'course': course,
+        'categories': categories,  # Pass categories to template
         'grouped_contents': dict(grouped_contents),
     })
-
 
 from django.views.decorators.http import require_POST
 
@@ -3419,37 +3426,86 @@ def export_to_excel(request):
     return response
 
 
-
-from django.shortcuts import render, redirect
-from .models import Category
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from .models import Category, FreeCourse, PaidCourse
 
 @login_required
 def create_category(request):
+    # Check if we're editing an existing category
+    edit_id = request.GET.get('edit_id')
+    category = None
+    
+    if edit_id:
+        category = get_object_or_404(Category, id=edit_id)
+    
     if request.method == 'POST':
-        name = request.POST.get('name').strip()
-        description = request.POST.get('description')
-        icon = request.FILES.get('icon')
-        navbar_logo = request.FILES.get('navbar_logo')  # new field
+        # Check if this is an edit operation
+        edit_id = request.POST.get('edit_id')
+        
+        if edit_id:
+            # EDIT MODE - Update existing category
+            category = get_object_or_404(Category, id=edit_id)
+            name = request.POST.get('name').strip()
+            description = request.POST.get('description')
+            icon = request.FILES.get('icon')
+            navbar_logo = request.FILES.get('navbar_logo')
+            
+            if name:
+                try:
+                    # Check if another category with the same name exists
+                    if Category.objects.filter(name__iexact=name).exclude(id=edit_id).exists():
+                        messages.error(request, f"Category '{name}' already exists.")
+                    else:
+                        # Update fields
+                        category.name = name
+                        category.description = description
+                        
+                        # Only update images if new ones are uploaded
+                        if icon:
+                            category.icon = icon
+                        if navbar_logo:
+                            category.navbar_logo = navbar_logo
+                        
+                        category.save()
+                        messages.success(request, f"Category '{name}' updated successfully!")
+                        return redirect('admin_view_categories')
+                except IntegrityError:
+                    messages.error(request, "An error occurred while updating the category.")
+            else:
+                messages.error(request, "Category name is required.")
+        else:
+            # CREATE MODE - Create new category
+            name = request.POST.get('name').strip()
+            description = request.POST.get('description')
+            icon = request.FILES.get('icon')
+            navbar_logo = request.FILES.get('navbar_logo')
 
-        if name:
-            try:
-                if Category.objects.filter(name__iexact=name).exists():
-                    messages.error(request, f"Category '{name}' already exists.")
-                else:
-                    Category.objects.create(
-                        name=name,
-                        description=description,
-                        icon=icon,
-                        navbar_logo=navbar_logo
-                    )
-                    messages.success(request, f"Category '{name}' created successfully!")
-                    return redirect('admin_view_categories')
-            except IntegrityError:
-                messages.error(request, "An error occurred while saving the category.")
-
-    return render(request, 'create_category.html')
+            if name:
+                try:
+                    if Category.objects.filter(name__iexact=name).exists():
+                        messages.error(request, f"Category '{name}' already exists.")
+                    else:
+                        Category.objects.create(
+                            name=name,
+                            description=description,
+                            icon=icon,
+                            navbar_logo=navbar_logo
+                        )
+                        messages.success(request, f"Category '{name}' created successfully!")
+                        return redirect('admin_view_categories')
+                except IntegrityError:
+                    messages.error(request, "An error occurred while saving the category.")
+            else:
+                messages.error(request, "Category name is required.")
+    
+    # For GET request, pass the category object if editing
+    context = {
+        'category': category
+    }
+    return render(request, 'create_category.html', context)
 
 
 
@@ -3680,6 +3736,7 @@ def active_invoice_report(request):
     })
 
 
+@login_required
 def admin_view_categories(request):
     categories = Category.objects.all()
     category_data = []
@@ -3693,16 +3750,15 @@ def admin_view_categories(request):
             'paid_courses': paid_courses
         })
 
-    return render(request, 'admin_view_categories.html', {'category_data': category_data})   
+    return render(request, 'admin_view_categories.html', {'category_data': category_data})
 
-
+@login_required
 def delete_category(request, id):
     category = get_object_or_404(Category, id=id)
+    category_name = category.name
     category.delete()
-    messages.success(request, "Category deleted successfully.")
-    return redirect('admin_view_categories')  # or your admin category page name
-
-
+    messages.success(request, f"Category '{category_name}' deleted successfully.")
+    return redirect('admin_view_categories')
 
 
 from django.utils.timezone import now
