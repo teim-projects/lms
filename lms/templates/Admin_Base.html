@@ -5,70 +5,188 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profit Max Share Market Academy   </title>
-<link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+  <title>Profit Max Share Market Academy</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
   <!-- Bootstrap & Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Custom Styles -->
   <style>
-    body {
-            font-family: Verdana, sans-serif;
-     background: #f4f6fb;
-      margin: 0;
-      padding: 0;
-    }
-@media (max-width: 768px) {
-    .sidebar {
-        overflow-y: auto;
-    }
-}
-    .navbar {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: fixed;
-      top: 0%;
-      width: 100%;
-      z-index: 800;
+    html {
+      height: 100%;
     }
 
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 0;
+      color: #334155;
+      min-height: 100vh !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        overflow-y: auto;
+      }
+    }
+
+    .navbar {
+      box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 800;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid #e2e8f0;
+      padding: 12px 24px !important;
+    }
+
+    /* Light Pastel Sidebar */
     .sidebar {
       position: fixed;
       top: 0;
-      left: -270px;
-      width: 270px;
+      left: -290px;
+      width: 290px;
       height: 100vh;
-      background-color: #343a40;
-      color: #ffffff;
-      transition: all 0.3s ease-in-out;
-      z-index: 999;
-      padding-top: 70px;
-      height: 100vh;
+      background-color: #ffffff;
+      color: #0f172a;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1050;
+      padding-top: 75px;
+      border-right: 1.5px solid #e2e8f0;
+      box-shadow: 10px 0 35px -10px rgba(99, 102, 241, 0.12);
+      overflow-y: auto;
     }
 
     .sidebar.show {
       left: 0;
     }
 
-    .sidebar .nav-link {
-      color: #ffffff;
-      font-size: 15px;
+    .navbar-user-card {
+      background: #e0e7ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-  .sidebar .nav-link:hover {
-    color: #fff;
- box-shadow: 0px 0px 10px rgb(255, 255, 255);    
- border-radius: 5px;
-  }
+    .navbar-user-avatar {
+      width: 36px;
+      height: 36px;
+      background: #4f46e5;
+      color: #ffffff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .navbar-user-info {
+      overflow: hidden;
+      line-height: 1.2;
+    }
+
+    .navbar-user-name {
+      font-weight: 800;
+      font-size: 0.875rem;
+      color: #0f172a;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .navbar-user-role {
+      font-size: 0.7rem;
+      color: #4f46e5;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .sidebar .nav-link {
+      color: #334155;
+      font-size: 0.925rem;
+      font-weight: 600;
+      padding: 11px 16px;
+      border-radius: 14px;
+      transition: all 0.25s ease;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar .nav-link-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar .nav-link i.link-icon {
+      color: #4f46e5;
+      font-size: 1.05rem;
+      width: 22px;
+      text-align: center;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar .nav-link:hover {
+      color: #4f46e5;
+      background-color: #e0e7ff;
+      box-shadow: 0 4px 14px -3px rgba(99, 102, 241, 0.18);
+    }
+
+    .sidebar .nav-link:hover i.link-icon {
+      transform: scale(1.15);
+    }
 
     .sidebar .dropdown-toggle::after {
-      float: right;
-      margin-top: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar .dropdown-toggle[aria-expanded="true"]::after {
+      transform: rotate(180deg);
+    }
+
+    .sidebar-submenu {
+      background-color: #f8fafc;
+      border-radius: 14px;
+      padding: 6px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .sidebar-submenu .nav-link {
+      font-size: 0.875rem;
+      padding: 9px 14px 9px 38px;
+      color: #475569;
+    }
+
+    .sidebar-submenu .nav-link:hover {
+      color: #0284c7;
+      background-color: #e0f2fe;
     }
 
     .toggle-btn {
-      font-size: 24px;
+      font-size: 22px;
       cursor: pointer;
+      color: #475569;
+      transition: color 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+      color: #4f46e5;
     }
 
     .logo {
@@ -77,72 +195,82 @@
 
     .close-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 26px;
+      top: 18px;
+      right: 18px;
+      font-size: 24px;
       cursor: pointer;
+      color: #64748b;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+      transform: rotate(90deg);
     }
 
     .Btnlog {
       display: flex;
       align-items: center;
-      background-color: #dc3545;
-      color: #fff;
-      padding: 10px 20px;
+      justify-content: center;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      padding: 12px 20px;
       border: none;
-      margin-top: 30px;
-      border-radius: 30px;
-      transition: 0.3s;
+      margin-top: 24px;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      transition: all 0.3s ease;
+      width: 100%;
+      font-weight: 700;
+      box-shadow: 0 8px 18px -4px rgba(239, 68, 68, 0.35);
+      cursor: pointer;
     }
 
     .Btnlog:hover {
-      background-color: #c82333;
-    }
-
-    .Btnlog .text {
-      margin-left: 10px;
-      font-weight: 500;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 12px 22px -4px rgba(239, 68, 68, 0.48);
+      transform: translateY(-2px);
+      color: #ffffff;
     }
 
     .Btnlog svg {
-      width: 20px;
-      fill: #fff;
+      width: 18px;
+      fill: #ffffff;
+      margin-right: 10px;
     }
 
-    .nav-item .nav-link.pl-4 {
-      padding-left: 2.5rem !important;
+    .main {
+      min-height: 100vh;
     }
-    .main{
-        min-height: 100vh;
+
+    /* Responsive Navbar Logo */
+    @media (max-width: 767.98px) {
+      .navbar-logo {
+        position: static !important;
+        margin: 0 !important;
+        transform: none !important;
+      }
     }
-    /* Hide logo center alignment on mobile */
-@media (max-width: 767.98px) {
-  .navbar-logo {
-    position: static !important;
-    margin: 0 !important;
-    transform: none !important;
-  }
- 
-}
 
-/* Center logo on desktop */
-@media (min-width: 768px) {
-  .navbar-logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-   .navbar{
-          padding:25px !important;
+    @media (min-width: 768px) {
+      .navbar-logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
 
-  }
-}   h4 {
-            text-decoration: none;
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
+      .navbar {
+        padding: 20px 30px !important;
+      }
+    }
   </style>
 
   <!-- Scripts -->
@@ -152,7 +280,6 @@
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       const toggleBtn = document.querySelector('.toggle-btn');
-
       sidebar.classList.toggle('show');
       toggleBtn.style.display = sidebar.classList.contains('show') ? 'none' : 'block';
     }
@@ -160,127 +287,167 @@
 </head>
 
 <body>
-<nav class="navbar navbar-light bg-light px-4 py-2 justify-content-between" style="z-index: 1000 !important;">
-  <!-- Left: Toggle Button -->
-  <div class="d-flex align-items-center">
-    <i class="fas fa-bars toggle-btn text-dark me-3 d-md-block d-lg-block d-xl-block" onclick="toggleSidebar()"></i>
-  </div>
+  <nav class="navbar navbar-light px-4 py-2 justify-content-between" style="z-index: 1000 !important;">
+    <!-- Left: Toggle Button -->
+    <div class="d-flex align-items-center">
+      <i class="fas fa-bars toggle-btn text-dark me-3 cursor-pointer" onclick="toggleSidebar()" style="font-size: 1.25rem;"></i>
+    </div>
 
-  <!-- Center: Logo (Only centered in desktop using custom class) -->
-  <div class="navbar-logo mx-auto">
-    <img src="{% static 'images/pmxlogo_c.png' %}" alt="Logo" height="70">
-  </div>
-</nav>
+    <!-- Center: Logo -->
+    <div class="navbar-logo mx-auto">
+      <img src="{% static 'images/pmxlogo_c.png' %}" alt="Logo" height="65">
+    </div>
 
+    <!-- Right: User Profile Card -->
+    <div class="d-flex align-items-center">
+      <div class="navbar-user-card">
+        <div class="navbar-user-avatar">
+          <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <div class="navbar-user-info">
+          <div class="navbar-user-name">{{ request.user.username|default:"Admin Portal" }}</div>
+          <div class="navbar-user-role">{% if is_subadmin %}SubAdmin Panel{% else %}System Admin{% endif %}</div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar" style="z-index: 1000;">
+  <!-- Light Pastel Sidebar -->
+  <div class="sidebar" id="sidebar" style="z-index: 1050;">
     <span class="close-btn" onclick="toggleSidebar()">&times;</span>
     <ul class="nav flex-column px-3">
+
+      <!-- Dashboard Link -->
       <li class="nav-item">
-        <a href="/admin_dashboard/" class="nav-link"> Dashboard <span class="ml-4">{{ request.user }}</span></a>
+        <a href="/admin_dashboard/" class="nav-link">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-gauge link-icon"></i>
+            <span>Dashboard</span>
+          </span>
+        </a>
       </li>
 
+      <!-- Course Management Dropdown -->
       <li class="nav-item">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu1" role="button">Course Management</a>
-        <div class="collapse" id="menu1">
-          <a class="nav-link pl-4" href="/create-paid-course/">Create Paid Course</a>
-          <a class="nav-link pl-4" href="/create-free-course/">Create Free Course</a>
-          <a class="nav-link pl-4" href="/view_paid_course/">View Paid Course</a>
-          <a class="nav-link pl-4" href="/course-list/"> Paid Course code</a>
-          <a class="nav-link pl-4" href="/paid-students/"> students purchased courses</a>
-          
+        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu1" role="button">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-graduation-cap link-icon"></i>
+            <span>Course Management</span>
+          </span>
+        </a>
+        <div class="collapse sidebar-submenu" id="menu1">
+          <a class="nav-link" href="/create-paid-course/"><i class="fa-solid fa-plus me-2 text-primary"></i> Create Paid Course</a>
+          <a class="nav-link" href="/create-free-course/"><i class="fa-solid fa-plus me-2 text-success"></i> Create Free Course</a>
+          <a class="nav-link" href="/view_paid_course/"><i class="fa-solid fa-eye me-2 text-info"></i> View Paid Courses</a>
+          <a class="nav-link" href="/course-list/"><i class="fa-solid fa-barcode me-2 text-warning"></i> Paid Course Codes</a>
+          <a class="nav-link" href="/paid-students/"><i class="fa-solid fa-users-viewfinder me-2 text-purple"></i> Purchased Students</a>
         </div>
       </li>
 
+      <!-- Enrollment Management Dropdown -->
       <li class="nav-item">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu2" role="button">Enrollment Management</a>
-        <div class="collapse" id="menu2">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu2" role="button">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-user-check link-icon"></i>
+            <span>Enrollment Access</span>
+          </span>
+        </a>
+        <div class="collapse sidebar-submenu" id="menu2">
           {% if not is_subadmin %}
-  <a class="nav-link pl-4" href="/grant-access/">Give Access</a>
-{% endif %}
-
-
-          <a class="nav-link pl-4" href="/enrollment_tracking/">Enrollment Tracking</a>
-        </div>
-      </li>
-
-
-<li class="nav-item">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu3" role="button" >Category</a>
-        <div class="collapse" id="menu3" style=" padding-left: 1.5rem;">
-          <a class="nav-link" href="/category/create/">Create Category</a>
-         <a class="nav-link" href="/manage/categories/">View Category</a>
-        </div>
-      </li>
-
-
-
-
-
-
-          <li class="nav-item">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu4" role="button">Coupon</a>
-        <div class="collapse" id="menu4" style=" padding-left: 1.5rem;">
-           {% if not is_subadmin %}
-          <a class="nav-link " href="/coupons/create/">Create Coupon Code</a>
-          <a class="nav-link " href="/coupons/">View Coupon Code</a>
-
+          <a class="nav-link" href="/grant-access/"><i class="fa-solid fa-key me-2 text-primary"></i> Grant Access</a>
           {% endif %}
-          
+          <a class="nav-link" href="/enrollment_tracking/"><i class="fa-solid fa-chart-line me-2 text-success"></i> Tracking Analytics</a>
         </div>
       </li>
 
-
-
+      <!-- Category Dropdown -->
       <li class="nav-item">
-        <a class="nav-link d-flex align-items-center justify-content-between" href="/ticket_to_admin/">
-  <span>Tickets</span>
-  {% if open_ticket_count > 0 %}
-    <span class="badge badge-danger ml-2" style="font-size: 0.8rem;">
-      ● {{ open_ticket_count }}
-    </span>
-  {% endif %}
-</a>
+        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu3" role="button">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-layer-group link-icon"></i>
+            <span>Categories</span>
+          </span>
+        </a>
+        <div class="collapse sidebar-submenu" id="menu3">
+          <a class="nav-link" href="/category/create/"><i class="fa-solid fa-folder-plus me-2 text-primary"></i> Create Category</a>
+          <a class="nav-link" href="/manage/categories/"><i class="fa-solid fa-list-check me-2 text-info"></i> View Categories</a>
+        </div>
+      </li>
 
+      <!-- Coupon Dropdown -->
+      <li class="nav-item">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu4" role="button">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-ticket link-icon"></i>
+            <span>Coupons</span>
+          </span>
+        </a>
+        <div class="collapse sidebar-submenu" id="menu4">
+          {% if not is_subadmin %}
+          <a class="nav-link" href="/coupons/create/"><i class="fa-solid fa-ticket-simple me-2 text-primary"></i> Create Coupon</a>
+          <a class="nav-link" href="/coupons/"><i class="fa-solid fa-tags me-2 text-info"></i> View Coupons</a>
+          {% endif %}
+        </div>
+      </li>
 
+      <!-- Navigation Direct Links -->
+      <li class="nav-item">
+        <a class="nav-link" href="/ticket_to_admin/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-headset link-icon"></i>
+            <span>Tickets</span>
+          </span>
+          {% if open_ticket_count > 0 %}
+          <span class="badge bg-danger rounded-pill px-2 py-1">● {{ open_ticket_count }}</span>
+          {% endif %}
+        </a>
 
+        <a class="nav-link" href="/upload-slider/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-sliders link-icon"></i>
+            <span>Upload Sliders</span>
+          </span>
+        </a>
 
+        <a class="nav-link" href="/send_notification/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-bell link-icon"></i>
+            <span>Notifications</span>
+          </span>
+        </a>
 
-        <a class="nav-link" href="/upload-slider/">Upload Sliders</a>
-        
+        <a class="nav-link" href="/admin_user_list/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-users link-icon"></i>
+            <span>Student List</span>
+          </span>
+        </a>
 
-        
-
-
-         
-        <a class="nav-link" href="/send_notification/">Notifications</a>
-        <a class="nav-link" href="/admin_user_list/">Student List</a>
         {% if not is_subadmin %}
-        <a class="nav-link " href="/manage_subadmins/">Create SubAdmin</a>
-        
-        {% endif %}
-
-        {% if not is_subadmin %}
-        <a class="nav-link " href="/change-password/">Change Password</a>
-
+        <a class="nav-link" href="/manage_subadmins/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-user-shield link-icon"></i>
+            <span>Create SubAdmin</span>
+          </span>
+        </a>
+        <a class="nav-link" href="/change-password/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-lock link-icon"></i>
+            <span>Change Password</span>
+          </span>
+        </a>
         {% endif %}
       </li>
 
+      <!-- Logout Action Button -->
       <li class="nav-item">
-        
-          <button class="Btn Btnlog" onclick="location.href='{% url "logout" %}'">
-
+        <button class="Btnlog" onclick="location.href='{% url "logout" %}'">
           <svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
-          <div class="text">Logout</div>
+          <span>Logout</span>
         </button>
       </li>
     </ul>
   </div>
-
-
-
- 
 </body>
 
 </html>

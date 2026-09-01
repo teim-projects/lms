@@ -176,7 +176,13 @@
                 {% for course in paid_courses %}
                     <div class="col-md-6">
                         <div class="course-card">
-                            <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" class="course-img">
+                            {% if course.thumbnail %}
+                                <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}" class="course-img">
+                            {% else %}
+                                <div class="course-img bg-light d-flex align-items-center justify-content-center text-primary fs-3">
+                                    <i class="fa-solid fa-gem"></i>
+                                </div>
+                            {% endif %}
                             <div class="course-body">
                                 <h5>{{ course.course_title }}</h5>
                                 <p class="text-muted">{{ course.description|truncatewords:12 }}</p>
@@ -196,7 +202,13 @@
                 {% for course in free_courses %}
                     <div class="col-md-6">
                         <div class="course-card">
-                            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="course-img">
+                            {% if course.thumbnail %}
+                                <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="course-img">
+                            {% else %}
+                                <div class="course-img bg-light d-flex align-items-center justify-content-center text-success fs-3">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                            {% endif %}
                             <div class="course-body">
                                 <h5>{{ course.title }}</h5>
                                 <p class="text-muted">{{ course.description|truncatewords:12 }}</p>

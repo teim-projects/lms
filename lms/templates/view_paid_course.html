@@ -323,26 +323,7 @@
             font-family: inherit;
         }
 
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            height: 100%;
-            width: 250px;
-            background-color: #343a40;
-            transition: left 0.3s ease-in-out;
-            z-index: 1050;
-        }
 
-        .sidebar.show {
-            left: 0;
-        }
-
-        .sidebar .nav-link,
-        .sidebar .dropdown-item {
-            color: white !important;
-        }
 
         .close-btn {
             position: absolute;
@@ -576,9 +557,11 @@
                 let progress = totalContents > 0 ? (completedContents.length / totalContents) * 100 : 0;
                 let progressBar = document.querySelector(".progress-bar");
 
-                progressBar.style.width = progress + "%";
-                progressBar.innerText = Math.round(progress) + "% Completed";
-                progressBar.setAttribute("aria-valuenow", Math.round(progress));
+                if (progressBar) {
+                    progressBar.style.width = progress + "%";
+                    progressBar.innerText = Math.round(progress) + "% Completed";
+                    progressBar.setAttribute("aria-valuenow", Math.round(progress));
+                }
             }
 
             function markAsCompleted(button, contentId) {
@@ -605,46 +588,6 @@
 
             updateProgress();
         });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let completedContents = JSON.parse(localStorage.getItem("completedContents")) || [];
-
-            function updateProgress() {
-                let totalContents = document.querySelectorAll(".mark-complete").length + completedContents.length;
-                let progress = totalContents > 0 ? (completedContents.length / totalContents) * 100 : 0;
-                let progressBar = document.querySelector(".progress-bar");
-
-                progressBar.style.width = progress + "%";
-                progressBar.innerText = Math.round(progress) + "% Completed";
-                progressBar.setAttribute("aria-valuenow", Math.round(progress));
-            }
-
-            function markAsCompleted(button, contentId) {
-                if (!completedContents.includes(contentId)) {
-                    completedContents.push(contentId);
-                    localStorage.setItem("completedContents", JSON.stringify(completedContents));
-                }
-                button.outerHTML = '<span class="badge badge-success">Completed</span>';
-                updateProgress();
-            }
-
-            document.querySelectorAll(".mark-complete").forEach(button => {
-                let contentId = button.getAttribute("data-content-id");
-
-                // Check if already completed
-                if (completedContents.includes(contentId)) {
-                    button.outerHTML = '<span class="badge badge-success">Completed</span>';
-                } else {
-                    button.addEventListener("click", function () {
-                        markAsCompleted(button, contentId);
-                    });
-                }
-            });
-
-            updateProgress();
-        });
-
     </script>
 
 </body>

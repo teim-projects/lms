@@ -8,41 +8,35 @@
   <title>Profit Max Share Market Academy </title>
   <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
-
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #fdfdfd;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8fafc;
       margin: 0;
       padding: 0;
     }
 
     .teim-navbar-wrapper {
-      /* padding: 18px 20px; */
-      background-color: #ffffff;
-      border-bottom: 2px solid #e0e0e0;
-      position: relative;
-      z-index: 10;
-    }
-
-
-    .teim-navbar-brand img {
-      transition: transform 0.3s ease, filter 0.3s ease;
-      height: 70px;
-    }
-
-    .teim-navbar-brand img:hover {
-      transform: scale(1.1);
-      filter: brightness(1.2);
-    }
-
-
-    .teim-navbar-wrapper {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e2e8f0;
       position: fixed;
       top: 0%;
       width: 100%;
-      z-index: 100%;
+      z-index: 1000;
+      box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+      padding: 10px 0;
+    }
 
+    .teim-navbar-brand img {
+      transition: transform 0.3s ease, filter 0.3s ease;
+      height: 65px;
+    }
+
+    .teim-navbar-brand img:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
     }
 
     .container-fluid.teim-container {
@@ -56,16 +50,11 @@
 <body>
 
   <nav class="navbar teim-navbar-wrapper shadow-sm">
-    <div class="container-fluid  teim-container">
-
-
+    <div class="container-fluid teim-container">
       <!-- Center: ProfitMax Logo -->
       <a class="teim-navbar-brand teim-logo-center" href="https://profitmaxacademy.com/">
         <img src="{% static 'images/pmxlogo_c.png' %}" alt="ProfitMax Logo">
       </a>
-
-
-
     </div>
   </nav>
 

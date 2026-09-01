@@ -3,390 +3,397 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy </title>
-    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registered Users - ProfitMax</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap 4 CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            margin: 0;
-            overflow-x: hidden;
-            position: relative;
-            font-family: Verdana, sans-serif;
-        }
-       /* .logo {
-            margin-left: 40px;
-        } */
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      min-height: 100vh;
+      color: #334155;
+      overflow-x: hidden;
+    }
 
-        a:hover {
-            /* background-color: rgb(94, 94, 93); */
-            /* font-size: 18px; */
-            /* border: 1px solid; */
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            /* padding: 5px; */
-        }
+    .users-wrapper-container {
+      width: 95%;
+      max-width: 1650px;
+      margin: 95px auto 40px auto;
+      padding: 0 15px;
+    }
 
-        .paid-btn {
-            width: 100%;
-        }
+    /* KPI Summary Cards */
+    .kpi-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
 
-        .paid-form {
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            border-radius: 10px;
-        }
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.15);
+      border-color: #6366f1;
+    }
 
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: 25px;
-        }
+    .kpi-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
 
+    .kpi-icon-indigo {
+      background: #e0e7ff;
+      color: #4f46e5;
+      border: 1.5px solid #c7d2fe;
+    }
 
-        .mypro {
-            text-decoration: none;
-            color: rgb(17, 14, 14);
-            margin-right: 10px;
+    .kpi-icon-mint {
+      background: #dcfce7;
+      color: #166534;
+      border: 1.5px solid #bbf7d0;
+    }
 
-        }
+    .kpi-icon-rose {
+      background: #fee2e2;
+      color: #ef4444;
+      border: 1.5px solid #fca5a5;
+    }
 
-        .mypro:hover {
-            text-decoration: none;
-            color: rgb(9, 37, 96);
-            box-shadow: none;
+    .kpi-value {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
 
-        }
+    .kpi-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #64748b;
+      margin: 0;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
+    /* Main Table Card */
+    .users-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.12);
+    }
 
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
+    .users-card-header {
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+      border-bottom: 1.5px solid #e2e8f0;
+      border-top: 4px solid #4f46e5;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
 
-        .user-table {
-            width: 80%;
-            margin: auto;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
+    .users-header-badge {
+      width: 48px;
+      height: 48px;
+      background: #ffffff;
+      color: #4f46e5;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+      border: 1.5px solid #c7d2fe;
+      margin-right: 14px;
+    }
 
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
+    .users-card-header h2 {
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 1.75rem;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
 
-        th {
-            background: #6a11cb;
-            color: white;
-        }
+    .users-subtitle {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 2px;
+      margin-bottom: 0;
+    }
 
-        tr:hover {
-            background: #f1f1f1;
-        }
+    .btn-export {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff !important;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 18px -4px rgba(16, 185, 129, 0.35);
+      transition: all 0.3s ease;
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+    }
 
-        .verified {
-            color: green;
-            font-weight: bold;
-        }
+    .btn-export:hover {
+      background: linear-gradient(135deg, #047857 0%, #059669 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px -4px rgba(16, 185, 129, 0.48);
+    }
 
-        .not-verified {
-            color: red;
-            font-weight: bold;
-        }
+    .btn-filter-toggle {
+      background: #ffffff;
+      color: #4f46e5;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 12px;
+      padding: 9px 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.25s ease;
+    }
 
-        .container {
-            padding: 20px;
-        }
+    .btn-filter-toggle:hover {
+      background: #e0e7ff;
+      border-color: #6366f1;
+      color: #4338ca;
+    }
 
+    /* Filter Box */
+    .filter-panel {
+      background: #f8fafc;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding: 1.5rem 2rem;
+    }
 
+    .form-control, select.form-control {
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 12px;
+      font-size: 0.9rem !important;
+      font-weight: 500 !important;
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      height: 44px !important;
+    }
 
-        /* .logo {
-            margin-left: 40px;
-        } */
+    /* Table Styling */
+    .table-custom {
+      width: 100%;
+      margin-bottom: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
 
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
-      
-  .table thead th {
-    vertical-align: middle;
-    font-weight: 600;
-  }
+    .table-custom thead th {
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+      border-top: none;
+      color: #475569;
+      font-size: 0.825rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1.1rem 1.25rem;
+      vertical-align: middle;
+    }
 
-  .table tbody tr:hover {
-    background-color: #f1f9ff;
-    transition: background-color 0.2s ease;
-  }
+    .table-custom tbody td {
+      padding: 1.15rem 1.25rem;
+      vertical-align: middle;
+      border-top: 1px solid #f1f5f9;
+      color: #334155;
+      font-size: 0.925rem;
+    }
 
-  .table-responsive {
-    border-radius: 10px;
-    overflow: hidden;
-  }
- .main {
-  animation: fadeIn 1s ease-in-out forwards;
-  opacity: 0; /* start hidden, then fade in */
-}
+    .table-custom tbody tr:hover td {
+      background-color: #f8fafc;
+    }
 
-/* Fade in and slide up the container inside main */
-.main > .container {
-  animation: slideUp 0.8s ease-out forwards;
-  opacity: 0;
-  transform: translateY(30px);
-}
+    .badge-verified {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+    }
 
-/* Animate table rows on hover */
-.table-hover tbody tr:hover {
-  background-color: #f1faff !important;
-  transition: background-color 0.3s ease-in-out;
-}
+    .badge-unverified {
+      background: #fee2e2;
+      color: #ef4444;
+      border: 1px solid #fca5a5;
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+    }
 
-/* Keyframes */
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-
-
-/* Proper spacing and responsive layout for filters and buttons */
-form .row.gx-3 {
-  row-gap: 1rem;
-  column-gap: 1rem;
-}
-
-/* Make sure selects and inputs stretch full width */
-form .form-select,
-form .form-control {
-  width: 100%;
-}
-
-/* Space below the filter form and above the table */
-form {
-  margin-bottom: 30px;
-}
-
-/* Ensure buttons have consistent spacing and alignment */
-form .btn {
-  width: 100%;
-}
-
-/* Group search and export in a new row properly */
-form .row.mb-4.align-items-center {
-  margin-top: 10px;
-  gap: 1rem;
-}
-
-/* Make export & search area wrap on small screens */
-@media (max-width: 768px) {
-  form .row.mb-4.align-items-center {
-    flex-direction: column;
-  }
-
-  form .col-md-6,
-  form .col-md-3 {
-    width: 100%;
-  }
-}
-
-
-    </style>
-
-
-
+    .user-email-text {
+      font-weight: 800;
+      color: #0f172a;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- JavaScript -->
-    <script>
-        function toggleSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.toggle-btn');
+  {% include 'Admin_Base.html' %}
 
-            sidebar.classList.toggle('show');
-
-            // Toggle button icon
-            if (sidebar.classList.contains('show')) {
-                toggleBtn.style.display = 'none';
-            } else {
-                toggleBtn.style.display = 'inline-block';
-            }
-        }
-    </script>
-
-
-
-
-
-
-
-
-
-
-
-    {% include 'Admin_Base.html' %}
-    
-
-
-<div class="main" style="min-height: 100vh;">
-  <div class="container py-5 bg-light" style="margin-top: 120px;">
-    <h4 class="text-center mb-5 "> Registered Users</h4>
-
- <!-- Filter Toggle Button -->
-<button type="button" class="btn btn-primary mb-3" onclick="toggleFilter()">🔍 Filter</button>
-
-<!-- Filter Section -->
-<div id="filter-section" style="display: none;">
-  <form method="get">
-    <input type="hidden" name="q" value="{{ query }}">
-    <div class="row mb-4 gx-3 gy-3 align-items-end">
-      
-      <!-- Sort Dropdown -->
-      <div class="col-lg-3 col-md-6">
-        <label class="form-label">🔽 Sort By:</label>
-        <select name="sort" class="form-select" onchange="this.form.submit()">
-          <option value="">Select</option>
-          <option value="first_name_asc" {% if sort == 'first_name_asc' %}selected{% endif %}>First Name (A–Z)</option>
-          <option value="first_name_desc" {% if sort == 'first_name_desc' %}selected{% endif %}>First Name (Z–A)</option>
-          <option value="last_name_asc" {% if sort == 'last_name_asc' %}selected{% endif %}>Last Name (A–Z)</option>
-          <option value="last_name_desc" {% if sort == 'last_name_desc' %}selected{% endif %}>Last Name (Z–A)</option>
-          <option value="created_newest" {% if sort == 'created_newest' %}selected{% endif %}>Created Date (Newest)</option>
-          <option value="created_oldest" {% if sort == 'created_oldest' %}selected{% endif %}>Created Date (Oldest)</option>
-        </select>
-      </div>
-
-      <!-- Status Filter -->
-      <div class="col-lg-3 col-md-6">
-        <label class="form-label">🧾 Status:</label>
-        <select name="status" class="form-select" onchange="this.form.submit()">
-          <option value="">All Users</option>
-          <option value="verified" {% if request.GET.status == 'verified' %}selected{% endif %}>Verified</option>
-          <option value="not_verified" {% if request.GET.status == 'not_verified' %}selected{% endif %}>Not Verified</option>
-        </select>
-      </div>
-
-      <!-- Date Filter -->
-      <div class="col-lg-3 col-md-6">
-        <label class="form-label">📅 Created Date:</label>
-        <input type="date" name="created_at" class="form-control" value="{{ request.GET.created_at }}">
-      </div>
-
-      <div class="col-lg-3 col-md-6">
-        <button type="submit" class="btn btn-success w-100 mt-2">📅 Apply Filter</button>
-      </div>
-
-    </div>
-
-    <!-- Search + Export Section -->
-    <div class="row mb-4 align-items-center">
-      <!-- Search Input -->
-      <div class="col-md-6 col-lg-6">
-        <input type="text" name="q" class="form-control" placeholder="Search by email or mobile" value="{{ query }}">
-      </div>
-
-      <!-- Search Button -->
-      <div class="col-md-3 col-lg-3 mt-2 mt-md-0">
-        <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
-      </div>
-
-      <!-- Export Button -->
-      <div class="col-md-3 col-lg-3 mt-2 mt-md-0">
-        <a href="{% url 'export_users' %}" class="btn btn-success w-100">📥 Export</a>
-      </div>
-    </div>
-  </form>
-</div>
-<script>
-  function toggleFilter() {
-    const filterSection = document.getElementById('filter-section');
-    filterSection.style.display = (filterSection.style.display === 'none' || filterSection.style.display === '') 
-      ? 'block' 
-      : 'none';
-  }
-</script>
-
-
-<!-- Search and Export - Structured Row -->
-
-
-
-
-    <!-- Users Table -->
-    {% if users %}
-<div class="table-responsive shadow rounded">
-  <table class="table table-hover table-striped align-middle bg-white mb-0 rounded overflow-hidden">
-    <thead class="table-primary text-center">
-      <tr>
-        <th scope="col">Sr. No.</th>
-        <th scope="col">Email</th>
-        <th scope="col">First Name</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">Mobile</th>
-        <th scope="col">Status</th>
-        <th scope="col">Created at</th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      {% for user in users %}
-      <tr>
-        <td>{{ users.start_index|add:forloop.counter0 }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.first_name|default:"N/A" }}</td>
-        <td>{{ user.last_name|default:"N/A" }}</td>
-        <td>{{ user.mobile|default:"N/A" }}</td>
-        <td>
-          {% if user.is_verified %}
-          <span class="badge text-success p-1">✔ Verified</span>
-          {% else %}
-          <span class="badge text-danger p-1">❌ Not Verified</span>
-          {% endif %}
-        </td>
-        <td>{{ user.created_at|date:"Y-m-d" }}</td>
-      </tr>
+  <div class="users-wrapper-container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-lg border-0 shadow-sm mb-4">
+          <i class="fas fa-info-circle mr-2"></i> {{ message }}
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
       {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-
-    {% else %}
-    <p class="text-center mt-5 text-muted">No users available.</p>
     {% endif %}
+
+    <!-- Main Card Container -->
+    <div class="users-card">
+      <div class="users-card-header">
+        <div class="d-flex align-items-center">
+          <div class="users-header-badge">
+            <i class="fa-solid fa-users-gear"></i>
+          </div>
+          <div>
+            <h2>Registered Users</h2>
+            <p class="users-subtitle">Manage student accounts, account verification states, and search registered users.</p>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-filter-toggle mr-2" onclick="toggleFilter()">
+            <i class="fa-solid fa-filter mr-1.5"></i> Filter Options
+          </button>
+          <a href="{% url 'export_users' %}" class="btn btn-export">
+            <i class="fa-solid fa-file-csv mr-2"></i> Export Data
+          </a>
+        </div>
+      </div>
+
+      <!-- Collapsible Filter Panel -->
+      <div id="filter-section" class="filter-panel" style="display: none;">
+        <form method="get">
+          <input type="hidden" name="q" value="{{ query }}">
+          <div class="row align-items-end">
+            <!-- Search Field -->
+            <div class="col-lg-4 col-md-6 mb-3">
+              <label class="font-weight-bold text-dark small mb-1">Search Student Account</label>
+              <input type="text" name="q" class="form-control" placeholder="Search by email or mobile number..." value="{{ query }}">
+            </div>
+
+            <!-- Sort Dropdown -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <label class="font-weight-bold text-dark small mb-1">Sort Order</label>
+              <select name="sort" class="form-control" onchange="this.form.submit()">
+                <option value="">-- Choose Order --</option>
+                <option value="first_name_asc" {% if sort == 'first_name_asc' %}selected{% endif %}>First Name (A–Z)</option>
+                <option value="first_name_desc" {% if sort == 'first_name_desc' %}selected{% endif %}>First Name (Z–A)</option>
+                <option value="last_name_asc" {% if sort == 'last_name_asc' %}selected{% endif %}>Last Name (A–Z)</option>
+                <option value="last_name_desc" {% if sort == 'last_name_desc' %}selected{% endif %}>Last Name (Z–A)</option>
+                <option value="created_newest" {% if sort == 'created_newest' %}selected{% endif %}>Created Date (Newest)</option>
+                <option value="created_oldest" {% if sort == 'created_oldest' %}selected{% endif %}>Created Date (Oldest)</option>
+              </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <label class="font-weight-bold text-dark small mb-1">Account Status</label>
+              <select name="status" class="form-control" onchange="this.form.submit()">
+                <option value="">All Accounts</option>
+                <option value="verified" {% if request.GET.status == 'verified' %}selected{% endif %}>Verified</option>
+                <option value="not_verified" {% if request.GET.status == 'not_verified' %}selected{% endif %}>Not Verified</option>
+              </select>
+            </div>
+
+            <!-- Apply Button -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <button type="submit" class="btn btn-primary w-100 font-weight-bold" style="height: 44px; border-radius: 12px;">
+                <i class="fa-solid fa-check mr-1.5"></i> Apply
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Users Table -->
+      {% if users %}
+      <div class="table-responsive">
+        <table class="table table-custom">
+          <thead>
+            <tr>
+              <th>Sr. No.</th>
+              <th>Email Address</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Mobile</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Registered Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td class="font-weight-bold text-muted">{{ users.start_index|add:forloop.counter0 }}</td>
+              <td class="user-email-text">{{ user.email }}</td>
+              <td>{{ user.first_name|default:"--" }}</td>
+              <td>{{ user.last_name|default:"--" }}</td>
+              <td class="font-weight-semibold text-dark">{{ user.mobile|default:"--" }}</td>
+              <td class="text-center">
+                {% if user.is_verified %}
+                  <span class="badge-verified">
+                    <i class="fa-solid fa-circle-check mr-1.5"></i> Verified
+                  </span>
+                {% else %}
+                  <span class="badge-unverified">
+                    <i class="fa-solid fa-circle-xmark mr-1.5"></i> Not Verified
+                  </span>
+                {% endif %}
+              </td>
+              <td class="text-center small text-muted font-weight-semibold">{{ user.created_at|date:"Y-m-d" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="text-center py-5 text-muted">
+        <i class="fa-solid fa-users-slash fa-3x text-primary mb-3 d-block"></i>
+        <h5 class="font-weight-bold text-dark mb-1">No Registered Users Found</h5>
+        <p class="small text-muted mb-0">Try clearing filters or search queries.</p>
+      </div>
+      {% endif %}
+    </div>
 
     <!-- Pagination -->
     {% if users.has_other_pages %}
@@ -394,32 +401,33 @@ form .row.mb-4.align-items-center {
       <nav>
         <ul class="pagination">
           {% if users.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page={{ users.previous_page_number }}">«</a></li>
+          <li class="page-item"><a class="page-link rounded-circle mx-1" href="?page={{ users.previous_page_number }}">«</a></li>
           {% endif %}
           {% for num in users.paginator.page_range %}
-            {% if num <= 3 %}
+            {% if num <= 5 %}
             <li class="page-item {% if users.number == num %}active{% endif %}">
-              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              <a class="page-link rounded-circle mx-1 font-weight-bold" href="?page={{ num }}">{{ num }}</a>
             </li>
             {% endif %}
           {% endfor %}
-          {% if users.paginator.num_pages > 4 %}
-          <li class="page-item disabled"><span class="page-link">...</span></li>
-          <li class="page-item {% if users.number == users.paginator.num_pages %}active{% endif %}">
-            <a class="page-link" href="?page={{ users.paginator.num_pages }}">{{ users.paginator.num_pages }}</a>
-          </li>
-          {% endif %}
           {% if users.has_next %}
-          <li class="page-item"><a class="page-link" href="?page={{ users.next_page_number }}">»</a></li>
+          <li class="page-item"><a class="page-link rounded-circle mx-1" href="?page={{ users.next_page_number }}">»</a></li>
           {% endif %}
         </ul>
       </nav>
     </div>
     {% endif %}
   </div>
-</div>
-    {% include 'footer.html' %}
 
+  <script>
+    function toggleFilter() {
+      const filterSection = document.getElementById('filter-section');
+      filterSection.style.display = (filterSection.style.display === 'none' || filterSection.style.display === '') 
+        ? 'block' 
+        : 'none';
+    }
+  </script>
+
+  {% include 'footer.html' %}
 </body>
-
 </html>

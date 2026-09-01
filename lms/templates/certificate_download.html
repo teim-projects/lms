@@ -1,57 +1,200 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Your Certificates</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f0f4f7;
-            padding-top: 70px;
-        }
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-        }
-        .download-btn {
-            background-color: #28a745;
-            color: white;
-            border-radius: 5px;
-            padding: 8px 14px;
-            text-decoration: none;
-        }
-        .download-btn:hover {
-            background-color: #218838;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Certificates - ProfitMax Share Market Academy</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      color: #334155;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Wide Fluid Container */
+    .container-wide {
+      width: 94%;
+      max-width: 1640px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 100px;
+      padding-bottom: 70px;
+      flex: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e0e7ff;
+      color: #4f46e5;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 8px 22px;
+      border-radius: 50px;
+      margin-bottom: 1.25rem;
+      border: 1px solid #c7d2fe;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Cards */
+    .cert-pastel-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px -10px rgba(99, 102, 241, 0.08);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cert-pastel-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.22);
+      border-color: #6366f1;
+    }
+
+    .btn-pill {
+      border-radius: 50px !important;
+      padding: 12px 28px !important;
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-pastel-hero {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff !important;
+      border: none;
+      box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.35);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-pastel-hero:hover {
+      background: linear-gradient(135deg, #047857 0%, #059669 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(16, 185, 129, 0.48);
+      color: #ffffff !important;
+      text-decoration: none;
+    }
+
+    .why-icon-badge {
+      width: 80px;
+      height: 80px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 1.25rem auto;
+    }
+
+    .badge-pastel-emerald { background: #d1fae5; color: #059669; }
+  </style>
 </head>
+
 <body>
-    {% include 'Student_Base.html' %}
-    <br><br><br><br><br>
-    
-    <div class="container">
-        <h2 class="text-center mb-4"><b>Your Course Certificates</b></h2>
 
-        <div class="row">
-            {% for course in completed_courses %}
-            <div class="col-md-6 mb-4">
-                <div class="card p-3">
-                    <h5><b>{{ course.course_title }}</b></h5>
-                    <p class="text-muted mb-2">{{ course.description|truncatechars:100 }}</p>
-                    <a href="{% url 'view_certificate' course.id %}" class="btn btn-success">View Certificate</a>
+  {% include 'Student_Base.html' %}
 
+  <div class="container-wide">
 
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="text-muted">You haven't completed any courses yet.</p>
-            </div>
-            {% endfor %}
-        </div>
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+      <div class="hero-badge">
+        <i class="fa-solid fa-award me-2"></i> Achievements
+      </div>
+      <h1 class="section-title mb-3">
+        Your Course <span class="section-title-gradient">Certificates</span>
+      </h1>
+      <p class="text-muted fs-5 mx-auto" style="max-width: 680px;">
+        View and download official completion certificates for your completed courses.
+      </p>
     </div>
 
-  
+    <!-- Certificates Grid -->
+    {% if completed_courses %}
+    <div class="row g-4 mb-5">
+      {% for course in completed_courses %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="cert-pastel-card p-4 text-center">
+          <div class="why-icon-badge badge-pastel-emerald mb-3">
+            <i class="fa-solid fa-certificate"></i>
+          </div>
+          <h3 class="fw-bold fs-5 text-dark mb-2">{{ course.course_title }}</h3>
+          <p class="text-muted small mb-4 flex-grow-1">
+            {{ course.description|default:"Official Certificate of Completion awarded upon 100% course module completion."|truncatewords:12 }}
+          </p>
+
+          <a href="{% url 'view_certificate' course.id %}" class="btn btn-pastel-hero btn-pill mt-auto">
+            <i class="fa-solid fa-award me-2"></i> View Certificate
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+
+    <!-- Empty State -->
+    <div class="text-center py-5">
+      <div class="cert-pastel-card p-5 mx-auto text-center" style="max-width: 580px; background: #ffffff;">
+        <div class="why-icon-badge badge-pastel-emerald mb-3">
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <h3 class="fw-bold text-dark mb-2 fs-4">No Certificates Earned Yet</h3>
+        <p class="text-muted mb-4 fs-6">
+          Complete 100% of your enrolled course contents and lessons to generate your official completion certificate!
+        </p>
+        <div class="d-flex justify-content-center">
+          <a href="{% url 'your_course' %}" class="btn btn-pastel-hero btn-pill px-4">
+            <i class="fa-solid fa-play-circle me-2"></i> Continue Active Courses
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+  </div>
+
+  {% include 'footer.html' %}
+
 </body>
+
 </html>

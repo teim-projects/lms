@@ -5,310 +5,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy </title>
+    <title>Create Free Course - ProfitMax Academy</title>
     <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
-
+    
+    <!-- Bootstrap 4 CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         body {
-            margin: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+            min-height: 100vh;
+            color: #334155;
             overflow-x: hidden;
-            font-family: Verdana, sans-serif;
         }
 
-
-
-        /* .logo {
-            margin-left: 40px;
-        } */
-
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
+        .form-wrapper-container {
+            max-width: 760px;
+            margin: 100px auto 50px auto;
+            padding: 0 15px;
         }
 
-        /* free form css */
-        .free-form {
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            border-radius: 10px;
+        .form-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.12);
         }
 
-        /* card box CSS  */
-
-        .card-box {
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-        }
-
-        .row {
+        .form-card-header {
+            background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+            border-bottom: 1.5px solid #e2e8f0;
+            border-top: 4px solid #4f46e5;
+            padding: 1.5rem 2rem;
             display: flex;
-            flex-wrap: wrap;
-            margin-right: 5px;
-            margin-left: 0px;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .paid-btn {
-            /* width: 100%; */
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }
-
-        .submitbtn:hover {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1);
-            box-shadow: 0 10px 10px rgba(106, 17, 203, 0.5);
-        }
-
-        .card-button {
-            /* width: 90%; */
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #fff;
-            padding: 5px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            /* font-weight: bold; */
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }
-
-        .delet-btn {
-            background: linear-gradient(to right, #cb1111, #fc5025);
-            color: #fff;
-            padding: 5px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }
-
-        .update-btn {
-            background: linear-gradient(to right, #059144, #1a520e);
-            color: #fff;
-            padding: 5px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }
-
-
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-
-        .container {
-            padding-bottom: 10px;
-        }
-
-        .delete-button {
-            background: linear-gradient(45deg, #ff416c, #ff4b2b);
-            /* Pink to Orange gradient */
-            color: white;
-            border: none;
-            font-size: 1.1rem;
-            padding: 5px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
+        .form-header-badge {
+            width: 44px;
+            height: 44px;
+            background: #ffffff;
+            color: #4f46e5;
+            border-radius: 12px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+            border: 1.5px solid #c7d2fe;
+            margin-right: 14px;
         }
 
-        .delete-button:hover {
-            background: linear-gradient(45deg, #ff4b2b, #ff416c);
-            /* Reverse gradient on hover */
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 75, 43, 0.6);
+        .form-card-header h2 {
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 1.6rem;
+            letter-spacing: -0.02em;
+            margin: 0;
         }
 
-        .update-btn {
-            background: linear-gradient(to right, #059144, #1a520e);
-            color: #fff;
-            padding: 5px 20px;
-            border: none;
-            border-radius: 25px;
+        .form-subtitle {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-top: 2px;
+            margin-bottom: 0;
+        }
+
+        .form-card-body {
+            padding: 1.75rem 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #1e293b;
+        }
+
+        .input-group-text {
+            background-color: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-right: none;
+            border-radius: 12px 0 0 12px !important;
+            color: #4f46e5;
             font-size: 1rem;
+            width: 42px;
+            height: 44px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-group .form-control, .input-group select.form-control {
+            border-radius: 0 12px 12px 0 !important;
+        }
+
+        .form-control, select.form-control, textarea.form-control {
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 12px;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            transition: all 0.25s ease !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) inset;
+        }
+
+        input.form-control, select.form-control {
+            height: 44px !important;
+        }
+
+        .form-control:focus {
+            outline: none !important;
+            border-color: #6366f1 !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+        }
+
+        /* Custom File Upload Dropzone */
+        .file-dropzone-box {
+            background: #f8fafc;
+            border: 2px dashed #c7d2fe;
+            border-radius: 18px;
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            transition: all 0.25s ease;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }
-
-        .delet-btn {
-            background: linear-gradient(to right, #cb1111, #fc5025);
-            color: #fff;
-            padding: 5px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }
-
-        .chbtn {
-            margin-top: 1rem !important;
-            width: 100%;
-            text-align: left !important;
-
-        }
-
-        .chbtn {
-            margin-top: 1rem !important;
-            width: 100%;
-            text-align: left !important;
-
-        }
-
-        .chapter-heading {
-            background: linear-gradient(90deg, #181818, #000000);
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            font-weight: 500;
-        }
-
-        .chbtn {
-            display: inline-block;
-            padding: 8px 12px;
-            color: #0d6efd;
-            /* Primary blue */
-            font-weight: 500;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: all 0.3s ease;
             position: relative;
-            background-color: #eaf4ff;
-            box-shadow: 0px 0px 2px rgb(75, 74, 74);
-
         }
 
-        .chbtn::before {
-            content: "▶ ";
-            color: #0d6efd;
-            margin-right: 5px;
+        .file-dropzone-box:hover {
+            background: #e0e7ff;
+            border-color: #6366f1;
         }
 
-        .chbtn:hover {
-            background-color: #eaf4ff;
-            color: #0a58ca;
-            text-decoration: none;
+        .file-dropzone-icon {
+            font-size: 32px;
+            color: #4f46e5;
+            margin-bottom: 8px;
         }
 
-        .chbtn:hover::before {
-            color: #0a58ca;
-            text-decoration: none;
+        .file-dropzone-text {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
         }
 
-        .frecardd {
-            box-shadow: 0px 0px 5px rgba(198, 192, 192, 0.763);
-
+        .file-dropzone-sub {
+            font-size: 0.825rem;
+            color: #64748b;
         }
 
-        .frecardd:hover {
-            box-shadow: 0px 0px 10px #000000;
-        }
-
-        .chapter-title {
-            display: inline-block;
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            vertical-align: middle;
-        }
-
-        .chapter-title.expanded {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: unset;
-        }
-
-        .read-more-btn {
-            border: none;
-            background: none;
-            font-size: 0.85rem;
+        .file-dropzone-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
             cursor: pointer;
-            padding: 0;
         }
 
-        .truncated-title {
-            display: inline-block;
-            max-width: 85%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            vertical-align: middle;
+        /* Lesson Card Container */
+        .lesson-card {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.25s ease;
         }
 
-        .truncated-title.expanded {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: unset;
+        .lesson-card:hover {
+            border-color: #c7d2fe;
         }
 
-        .read-more-btn {
-            background: none;
+        .btn-action-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             border: none;
-            font-size: 0.85rem;
-            cursor: pointer;
-            padding: 0;
-            color: #0F40BF;
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+            font-weight: 800;
+            border-radius: 16px;
+            height: 54px;
+            color: #ffffff;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+            margin-top: 1.25rem;
+            letter-spacing: 0.02em;
         }
 
-
-
-        /* read more button of title and description  */
-
-        .truncated-title {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: inline-block;
-            max-width: 85%;
-            vertical-align: middle;
+        .btn-action-primary:hover {
+            background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+            box-shadow: 0 14px 28px -5px rgba(79, 70, 229, 0.55);
+            transform: translateY(-2px);
+            color: #ffffff;
         }
 
-        .truncated-title.expanded {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: unset;
-        }
-
-        .line-clamp {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            /* Number of lines to show */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .line-clamp.expanded {
-            -webkit-line-clamp: unset;
+        .card-box {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
         }
     </style>
 </head>
@@ -316,354 +229,195 @@
 <body>
     {% include 'Admin_Base.html' %}
 
-    <div class="main">
-        <!-- free course form -->
+    <div class="form-wrapper-container">
+        <!-- Main Create Form Card -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <div class="d-flex align-items-center">
+                    <div class="form-header-badge">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h2>Create Free Course</h2>
+                        <p class="form-subtitle">Add free video series, lessons, and YouTube chapter links for students.</p>
+                    </div>
+                </div>
+                <a href="/admin_dashboard/" class="btn btn-outline-primary btn-sm rounded-pill font-weight-bold px-3">
+                    <i class="fa-solid fa-house mr-1"></i> Dashboard
+                </a>
+            </div>
 
-        <!-- free course form -->
-        <div class="container" style="margin-top: 100px;">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-6 m-3 p-3 free-form">
-                    <!-- Back and home buttons start -->
-                    <span onclick="window.location.href='/admin_dashboard/'"
-                        style="float: left; cursor: pointer; color:rgb(75, 162, 255); font-size:20px;" class="mb-4"><i
-                            class="fas fa-house-chimney"></i></span>
-                    <span onclick="goBackAndRefresh()" style="float: right; cursor: pointer; color:red; font-size:20px;"
-                        class="mb-4">X</span>
-                    <script>
-                        function goBackAndRefresh() {
-                            window.history.back();
-                            setTimeout(function () {
-                                location.reload();
-                            }, 100); // slight delay to allow back navigation
-                        }
-                    </script>
-                    <!-- Back and home buttons End -->
+            <div class="form-card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-                    <h2 class="text-center">Create Free Course</h2>
-                    <form class="p-3" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-                        <!-- Course Title -->
-                        <div class="form-group">
-                            <label for="course_title">Course Title</label>
-                            <input type="text" class="form-control" id="course_title" name="title"
-                                placeholder="Enter course title" required>
-                        </div>
-
-                        <!-- Category Selection -->
-<div class="form-group">
-    <label for="category">Select Category</label>
-    <select class="form-control" name="category_id" required>
-        <option value="">-- Select Category --</option>
-        {% for cat in categories %}
-            <option value="{{ cat.id }}">{{ cat.name }}</option>
-        {% endfor %}
-    </select>
-</div>
-
-
-                        <!-- Course Description -->
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="4"
-                                placeholder="Enter course description" required></textarea>
-                        </div>
-
-                        <!-- Thumbnail -->
-                        <div class="form-group">
-                            <label for="thumbnail">Thumbnail</label>
-                            <input type="file" class="form-control-file" id="thumbnail" name="thumbnail"
-                                accept="image/*" required>
-                        </div>
-
-                        <!-- YouTube Video Links with Chapter Titles -->
-                        <div class="form-group">
-                            <label>Lessons (Chapters with YouTube Links)</label>
-                            <div id="youtube-links-container">
-                                <div class="chapter-input-group mb-2">
-                                    <div class="d-flex flex-wrap gap-2 align-items-center">
-                                        <input type="text" class="form-control" name="chapter_titles[]"
-                                            placeholder="Chapter title" required>
-                                        <input type="url" class="form-control" name="youtube_links[]"
-                                            placeholder="YouTube link" required>
-                                        <button type="button" class="btn btn-danger btn-sm remove-chapter-btn"
-                                            onclick="removeChapterField(this)">Remove</button>
-                                    </div>
-                                </div>
+                    <!-- Row 1: Title & Category -->
+                    <div class="row">
+                        <div class="col-md-7 form-group">
+                            <label for="course_title">Course Title <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-pen-nib"></i></span>
+                                <input type="text" class="form-control" id="course_title" name="title"
+                                    placeholder="e.g. Basics of Stock Market Trading" required>
                             </div>
-                            <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="addChapterField()">
-                                + Add Another Lesson
+                        </div>
+
+                        <div class="col-md-5 form-group">
+                            <label for="category">Select Category <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-layer-group"></i></span>
+                                <select class="form-control" id="category" name="category_id" required>
+                                    <option value="">-- Choose Category --</option>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Description -->
+                    <div class="form-group">
+                        <label for="description">Course Overview Description <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="description" name="description" rows="4"
+                            placeholder="Detailed overview of topics and strategies covered in this free course..." required></textarea>
+                    </div>
+
+                    <!-- Row 3: Custom File Upload Dropzone -->
+                    <div class="form-group">
+                        <label>Course Thumbnail Banner <span class="text-danger">*</span></label>
+                        <div class="file-dropzone-box">
+                            <i class="fa-solid fa-cloud-arrow-up file-dropzone-icon"></i>
+                            <div class="file-dropzone-text" id="dropzoneFileName">Click to Browse or Drag Image File Here</div>
+                            <div class="file-dropzone-sub">Supports PNG, JPG, or JPEG format (Recommended: 1200 x 675 px)</div>
+                            <input type="file" class="file-dropzone-input" id="thumbnail" name="thumbnail" accept="image/*" required onchange="updateFileName(this)">
+                        </div>
+                    </div>
+
+                    <!-- Row 4: YouTube Lessons & Chapters -->
+                    <div class="form-group mt-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <label class="mb-0 font-weight-bold text-dark" style="font-size: 1rem;">
+                                <i class="fa-solid fa-circle-play text-primary mr-2"></i> Lessons & YouTube Video Links
+                            </label>
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill font-weight-bold px-3" onclick="addChapterField()">
+                                <i class="fa-solid fa-plus mr-1"></i> Add Another Lesson
                             </button>
                         </div>
 
-                        <button type="submit" class="paid-btn w-100 submitbtn">Submit</button>
-                    </form>
-                </div>
+                        <div id="youtube-links-container">
+                            <div class="lesson-card">
+                                <div class="row align-items-center">
+                                    <div class="col-md-5 mb-2 mb-md-0">
+                                        <label class="small text-muted mb-1">Lesson Title</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa-solid fa-heading"></i></span>
+                                            <input type="text" class="form-control" name="chapter_titles[]"
+                                                placeholder="e.g. Lesson 1: Market Introduction" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2 mb-md-0">
+                                        <label class="small text-muted mb-1">YouTube URL</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa-brands fa-youtube text-danger"></i></span>
+                                            <input type="url" class="form-control" name="youtube_links[]"
+                                                placeholder="https://www.youtube.com/watch?v=..." required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 text-right">
+                                        <label class="d-none d-md-block small text-transparent mb-1">&nbsp;</label>
+                                        <button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-2"
+                                            onclick="removeChapterField(this)" title="Remove Lesson">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Action Button -->
+                    <button type="submit" class="btn btn-action-primary">
+                        <i class="fa-solid fa-paper-plane mr-2"></i> Publish Free Course Now
+                    </button>
+                </form>
             </div>
         </div>
 
-        <script>
-            // Add a new chapter field
-            function addChapterField() {
-                const container = document.getElementById('youtube-links-container');
-                const newChapter = document.createElement('div');
-                newChapter.className = 'chapter-input-group mb-2';
-                newChapter.innerHTML = `
-        <div class="d-flex flex-wrap gap-2 align-items-center">
-            <input type="text" class="form-control" name="chapter_titles[]" 
-                placeholder="Chapter title" required>
-            <input type="url" class="form-control" name="youtube_links[]" 
-                placeholder="YouTube link" required>
-            <button type="button" class="btn btn-danger btn-sm remove-chapter-btn" 
-                onclick="removeChapterField(this)">Remove</button>
-        </div>
-    `;
-                container.appendChild(newChapter);
-            }
-
-            // Remove a chapter field
-            function removeChapterField(button) {
-                const chapterGroup = button.closest('.chapter-input-group');
-                if (chapterGroup && document.querySelectorAll('.chapter-input-group').length > 1) {
-                    chapterGroup.remove();
-                } else {
-                    alert("You need at least one lesson.");
-                }
-            }
-        </script>
-
-        <script>
-            function addYoutubeField() {
-                let container = document.getElementById("youtube-links-container");
-                let input = document.createElement("input");
-                input.type = "url";
-                input.name = "youtube_links[]";
-                input.className = "form-control mb-2";
-                input.placeholder = "Enter another YouTube link";
-                container.appendChild(input);
-            }
-        </script>
-        <!-- Course Card Content -->
-        <div class="container my-4">
-            <div class="text-center mb-4">
-                <h2>Available Courses</h2>
-            </div>
-
-            {% if courses %}
+        <!-- Available Courses Grid Section -->
+        {% if courses %}
+        <div class="mt-5 mb-4">
+            <h3 class="font-weight-bold text-dark mb-4"><i class="fa-solid fa-list-check text-primary mr-2"></i> Available Free Courses</h3>
             <div class="row">
                 {% for course in courses %}
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 card-box">
+                    <div class="card h-100 card-box bg-white overflow-hidden">
                         {% if course.thumbnail %}
-                        <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail"
-                            style="width: 100%; height: 200px; object-fit: inherit;">
-                        {% else %}
-                        <p>No thumbnail available</p>
+                        <img class="card-img-top" src="{{ course.thumbnail.url }}" alt="{{ course.title }} Thumbnail" style="height: 180px; object-fit: cover;">
                         {% endif %}
-
-                        <div class="card-body">
-                            <!-- <h5 class="card-title fw-semibold text-center" style="color:#0F40BF">{{ course.title }}</h5> -->
-                            <h5 class="card-title fw-semibold text-center" style="color:#0F40BF;">
-                                <span class="truncated-title" id="title-{{ course.id }}">{{ course.title }}</span>
-                                {% if course.title|length > 50 %}
-                                <button class="read-more-btn" id="title-btn-{{ course.id }}"
-                                    onclick="toggleTitle('{{ course.id }}')">Read More</button>
-                                {% endif %}
-                            </h5>
-
-
-
-
-
-
-
-
-                            <div class="text-center">
-                                <button class="btn btn-primary btn-sm toggle-details-btn"
-                                    data-course-id="{{ course.id }}">
-                                    Course Details
-                                </button>
-                            </div>
-
-                            <!-- Hidden details section -->
-                            <div class="course-details mt-3 d-none" id="details-{{ course.id }}">
-                                <!-- <p class="card-text clamp-text">{{ course.description }}</p> -->
-
-
-
-
-                                <p class="card-text description-text line-clamp" id="desc-{{ course.id }}">
-                                    {{ course.description }}
-                                </p>
-                                {% if course.description|length > 250 %}
-                                <div class="text-center">
-                                    <button class="read-more-btn" id="desc-btn-{{ course.id }}"
-                                        onclick="toggleDescription('{{ course.id }}')">Read More</button>
-                                </div>
-                                {% endif %}
-
-
-
-
-
-
-
-                                <h5 class="chapter-heading mt-3 text-center">Lessons</h5>
-                                <ul class="list-unstyled" id="chapter-list-{{ course.id }}">
-                                    {% for chapter in course.chapters.all %}
-                                    <li
-                                        class="mb-1 {% if forloop.counter > 3 %}d-none extra-chapter-{{ course.id }}{% endif %}">
-                                        <a href="{{ chapter.youtube_link }}" target="_blank" class="chbtn chapter-title"
-                                            id="chapter-title-{{ chapter.id }}">
-                                            {{ chapter.title }}
-                                        </a>
-                                        {% if chapter.title|length > 50 %}
-                                        <button type="button" class="read-more-btn text-primary small ms-1"
-                                            onclick="toggleChapterText({{ chapter.id }})">Read More</button>
-                                        {% endif %}
-                                    </li>
-                                    {% empty %}
-                                    <li class="text-muted text-center text-info">No Lessons available</li>
-                                    {% endfor %}
-                                </ul>
-
-                                {% if course.chapters.count > 3 %}
-                                <div class="text-center mt-2">
-                                    <button class="btn btn-outline-primary btn-sm explore-btn"
-                                        data-course-id="{{ course.id }}">
-                                        Explore More
-                                    </button>
-                                </div>
-                                {% endif %}
-
-                                <!-- Delete and Update Buttons -->
-                                <div class="buttonsv d-flex justify-content-center align-items-center gap-2 mt-3">
-                                    {% if not is_subadmin %}
-                                    <form method="post" action="{% url 'delete_free_course' course.id %}"
-                                        onsubmit="return confirm('Are you sure you want to delete this course?');">
-                                        {% csrf_token %}
-                                        <button type="submit" class="delet-btn"><i
-                                                class="fa-solid fa-trash"></i></button>
-                                    </form>
-                                    {% endif %}
-
-                                    <a href="{% url 'update_free_course' course.id %}">
-                                        <button class="update-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="card-body p-3">
+                            <h5 class="card-title font-weight-bold text-dark mb-2">{{ course.title }}</h5>
+                            <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
+                            <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm rounded-pill font-weight-bold px-3 w-100">
+                                View Lessons <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-
-            {% else %}
-            <p>No courses available</p>
-            {% endif %}
         </div>
-
-
-
-
+        {% endif %}
     </div>
 
-
-
-    <!-- script for read more button of title and description -->
-
+    <!-- Dynamic JavaScript -->
     <script>
-        function toggleTitle(courseId) {
-            const titleSpan = document.getElementById(`title-${courseId}`);
-            const toggleBtn = document.getElementById(`title-btn-${courseId}`);
-            titleSpan.classList.toggle('expanded');
+        function updateFileName(input) {
+            const fileName = input.files[0] ? input.files[0].name : "Click to Browse or Drag Image File Here";
+            document.getElementById('dropzoneFileName').innerText = "Selected: " + fileName;
+        }
 
-            // Toggle button text
-            if (titleSpan.classList.contains('expanded')) {
-                toggleBtn.textContent = 'Read Less';
+        function addChapterField() {
+            const container = document.getElementById('youtube-links-container');
+            const newChapter = document.createElement('div');
+            newChapter.className = 'lesson-card';
+            newChapter.innerHTML = `
+                <div class="row align-items-center">
+                    <div class="col-md-5 mb-2 mb-md-0">
+                        <label class="small text-muted mb-1">Lesson Title</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-heading"></i></span>
+                            <input type="text" class="form-control" name="chapter_titles[]" placeholder="Lesson title" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2 mb-md-0">
+                        <label class="small text-muted mb-1">YouTube URL</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-brands fa-youtube text-danger"></i></span>
+                            <input type="url" class="form-control" name="youtube_links[]" placeholder="https://www.youtube.com/watch?v=..." required>
+                        </div>
+                    </div>
+                    <div class="col-md-1 text-right">
+                        <label class="d-none d-md-block small text-transparent mb-1">&nbsp;</label>
+                        <button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-2" onclick="removeChapterField(this)" title="Remove Lesson">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newChapter);
+        }
+
+        function removeChapterField(button) {
+            const chapterGroup = button.closest('.lesson-card');
+            if (chapterGroup && document.querySelectorAll('.lesson-card').length > 1) {
+                chapterGroup.remove();
             } else {
-                toggleBtn.textContent = 'Read More';
+                alert("You need at least one lesson.");
             }
         }
-
-        function toggleDescription(courseId) {
-            const descPara = document.getElementById(`desc-${courseId}`);
-            const toggleBtn = document.getElementById(`desc-btn-${courseId}`);
-            descPara.classList.toggle('expanded');
-            descPara.classList.toggle('line-clamp');
-
-            // Toggle button text
-            if (descPara.classList.contains('expanded')) {
-                toggleBtn.textContent = 'Read Less';
-            } else {
-                toggleBtn.textContent = 'Read More';
-            }
-        }
-
     </script>
-
-
-    <script>
-        $(document).ready(function () {
-            // Toggle course details
-            $('.toggle-details-btn').click(function () {
-                const courseId = $(this).data('course-id');
-                $('#details-' + courseId).toggleClass('d-none');
-
-                // Change button text
-                if ($('#details-' + courseId).hasClass('d-none')) {
-                    $(this).text('Course Details');
-                } else {
-                    $(this).text('Hide Details');
-                }
-            });
-
-            // Toggle explore more/less
-            $('.explore-btn').click(function () {
-                const courseId = $(this).data('course-id');
-                const $extraChapters = $('.extra-chapter-' + courseId);
-                const $btn = $(this);
-
-                $extraChapters.toggleClass('d-none');
-
-                if ($extraChapters.hasClass('d-none')) {
-                    $btn.text('Explore More');
-                } else {
-                    $btn.text('Explore Less');
-                }
-            });
-        });
-    </script>
-
-    <script>
-        function toggleChapterText(chapterId) {
-            const titleEl = document.getElementById(`chapter-title-${chapterId}`);
-            const btn = titleEl.nextElementSibling;
-
-            titleEl.classList.toggle("expanded");
-            btn.textContent = titleEl.classList.contains("expanded") ? "Read Less" : "Read More";
-        }
-
-        function toggleExplore(courseId) {
-            const extraChapters = document.querySelectorAll(`.extra-${courseId}`);
-            const btn = document.querySelector(`button.explore-btn[onclick*="${courseId}"]`);
-
-            const isCurrentlyExpanded = !extraChapters[0].classList.contains("d-none");
-
-            extraChapters.forEach(chap => {
-                chap.classList.toggle("d-none", isCurrentlyExpanded);
-            });
-
-            btn.textContent = isCurrentlyExpanded ? "Explore More" : "Show Less";
-        }
-    </script>
-
-
-
-
-
 
     {% include 'footer.html' %}
 </body>
-
 </html>

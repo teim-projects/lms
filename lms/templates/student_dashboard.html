@@ -1,844 +1,1106 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Student Dashboard - ProfitMax Academy</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - ProfitMax Share Market Academy</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-     :root {
-      --primary-color: #2563eb;  /* Softer blue */
-      --secondary-color: #1e40af; /* Darker blue */
-      --accent-color: #10b981;   /* Softer green */
-      --free-color: #22c55e;     /* Green for free courses */
-      --paid-color: #f97316;     /* Orange for paid courses (more vibrant) */
-      --dark-color: #1e293b;
-      --light-color: #f8fafc;
-      --text-color: #334155;
-      --text-light: #64748b;
-      --card-bg: #ffffff;
-      --feature-card-bg: #f1f5f9;
-      --categories-bg: #f8fafc;  /* Light background for categories section */
-    }
-    
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #f5f7fa;
-      color: var(--text-color);
-      line-height: 1.6;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      color: #334155;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
-    
-    /* Header Section */
-    .dashboard-header {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 2rem 0;
-       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-top: 5%;
-      border-radius: 0 0 12px 12px;
+
+    /* Wide Fluid Container */
+    .container-wide {
+      width: 94%;
+      max-width: 1640px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    
-    .dashboard-title {
+
+    /* Top Hero & Slider Wrapper */
+    .top-hero-wrapper {
+      background: transparent;
+    }
+
+    /* Top Image Slider Container */
+    .slider-section {
+      padding-top: 95px;
+      padding-bottom: 25px;
+    }
+
+    .custom-slider {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      overflow: hidden;
+      border-radius: 28px;
+      box-shadow: 0 25px 50px -15px rgba(99, 102, 241, 0.18);
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+    }
+
+    .custom-slider-inner {
+      display: flex;
+      height: 100%;
+    }
+
+    .custom-slide {
+      min-width: 100%;
+      height: 100%;
+      display: none;
+      position: relative;
+    }
+
+    .custom-slide.active {
+      display: block;
+    }
+
+    .custom-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .custom-slide-caption {
+      position: absolute;
+      bottom: 24px;
+      left: 30px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 10px 22px;
+      border-radius: 50px;
+      color: #0f172a;
       font-weight: 700;
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.5px;
+      font-size: 0.95rem;
+      border: 1px solid #c7d2fe;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      display: inline-flex;
+      align-items: center;
+      z-index: 5;
     }
-    
-    .dashboard-subtitle {
-      font-weight: 400;
-      opacity: 0.9;
-      font-size: 1.1rem;
-    }
-    
-    /* Slider - Expanded */
-    .slider-container {
-      border-radius: 12px;
-      /* overflow: hidden; */
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      margin-bottom: 3rem;
-      border: 1px solid rgba(0,0,0,0.05);
-      max-width: 1400px;  /* Increased max width */
-      margin: 0 auto 3rem;  /* Centered with margin */
-      padding: 0;  /* Remove padding to maximize width */
-    }
-    
-    /* .carousel-inner {
-      height: 450px; 
-    }
-    
-    .carousel-control-prev, .carousel-control-next {
-      width: 40px;
-      height: 40px;
+
+    .custom-prev,
+    .custom-next {
+      position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(0,0,0,0.5);
+      background: #ffffff;
+      color: #4f46e5;
+      border: 1.5px solid #c7d2fe;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      opacity: 1;
-      margin: 0 10px;  
-    }
-    
-    .carousel-control-prev {
-      left: 10px;  
-    }
-    
-    .carousel-control-next {
-      right: 10px; 
-    } */
-    
-    /* .carousel-control-prev-icon, .carousel-control-next-icon {
-      background-size: 60%;
-      background-color: rgba(255,255,255,0.5);
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
-    } */
-    
-    
-    /* Categories Section with Light Background */
-    .categories-section {
-      background-color: var(--categories-bg);
-      padding: 3rem 0;
-      border-radius: 12px;
-      margin: 2rem auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-top: -1%;
-    }
-    
-    /* Category Cards */
-    .category-card {
-      border: none;
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--card-bg);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       cursor: pointer;
-      height: 100%;
-      border: 1px solid rgba(0,0,0,0.05);
+      z-index: 10;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+      font-size: 1.1rem;
     }
-    
-    .category-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+    .custom-prev:hover,
+    .custom-next:hover {
+      background: #4f46e5;
+      color: #ffffff;
+      border-color: #4f46e5;
+      transform: translateY(-50%) scale(1.12);
+      box-shadow: 0 12px 25px rgba(99, 102, 241, 0.35);
     }
-    
-    .category-card img {
-      width: 100%;
-      height: 180px;  /* Slightly taller */
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    /* .carousel-control-next-icon, .carousel-control-prev-icon {
-   
-    position: absolute;
-    top: 241px;
-} */
-    .category-card:hover img {
-      transform: scale(1.03);
-    }
-    
-    .category-card h3 {
-      margin: 0;
-      padding: 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      background-color: var(--card-bg);
-      color: var(--dark-color);
-      border-top: 1px solid rgba(0,0,0,0.05);
+
+    .custom-prev { left: 24px; }
+    .custom-next { right: 24px; }
+
+    .custom-slider-dots {
+      position: absolute;
+      bottom: 24px;
+      right: 30px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      gap: 8px;
+      z-index: 10;
     }
-    
-    .category-info-btn {
-      background: none;
-      border: none;
-      color: var(--primary-color);
+
+    .slider-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0, 0, 0, 0.15);
       cursor: pointer;
-      font-size: 1rem;
-      padding: 0.25rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-    
-    /* Section Styling */
-    .section-title {
-      font-weight: 700;
-      font-size: 1.8rem;
-      margin-bottom: 2.5rem;
-      position: relative;
-      color: var(--dark-color);
-      text-align: center;
-      letter-spacing: -0.5px;
-    }
-    
-    .section-title:after {
-      content: '';
-      position: absolute;
-      width: 60px;
-      height: 4px;
-      bottom: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      border-radius: 2px;
-    }
-    
-    /* Modal Styling */
-    .modal-content {
-      border: none;
+
+    .slider-dot.active {
+      background: #4f46e5;
+      width: 28px;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border-color: #4f46e5;
     }
-    
-    .modal-header {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      padding: 1.2rem 1.5rem;
-      border-bottom: none;
+
+    /* Hero Section */
+    .hero-section {
+      background: transparent;
+      padding: 30px 0 60px 0;
     }
-    
-    .modal-title {
-      font-weight: 600;
-      color: white;
-    }
-    
-    /* Course Cards */
-    .course-card {
-      border: none;
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--card-bg);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      height: 100%;
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-    
-    .course-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-    
-    .course-card img {
-      width: 100%;
-      height: 160px;  /* Slightly taller */
-      object-fit: cover;
-    }
-    
-    .course-card .card-body {
-      padding: 1.25rem;
-    }
-    
-    .course-card .card-title {
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.75rem;
-      color: var(--dark-color);
-    }
-    
-    .course-card .card-text {
-      color: var(--text-light);
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-    
-    .price-tag {
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e0e7ff;
+      color: #4f46e5;
+      font-size: 0.9rem;
       font-weight: 700;
-      color: var(--accent-color);
-      font-size: 0.95rem;
+      padding: 8px 22px;
+      border-radius: 50px;
+      margin-bottom: 1.25rem;
+      border: 1px solid #c7d2fe;
     }
-    
-    /* Buttons - Enhanced Colors */
-    .btn-view {
-      background: var(--primary-color);
+
+    .hero-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-title-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: #475569;
+      line-height: 1.65;
+    }
+
+    .btn-pill {
+      border-radius: 50px !important;
+      padding: 14px 34px !important;
+      font-size: 1rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-pastel-hero {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #ffffff !important;
       border: none;
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      font-weight: 500;
-      color: white;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
       transition: all 0.3s ease;
-      font-size: 0.85rem;
-    }
-    
-    .btn-view:hover {
-      background: var(--secondary-color);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
-      color: white;
-    }
-    
-    /* More Vibrant "View More" Buttons */
-    .btn-view-more-free {
-      background: var(--free-color);
-      border: none;
-      border-radius: 6px;
-      padding: 0.5rem 1.25rem;  /* Slightly wider */
-      font-weight: 600;  /* Bolder */
-      color: white;
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
-      box-shadow: 0 2px 6px rgba(34, 197, 94, 0.3);
-    }
-    
-    .btn-view-more-free:hover {
-      background: #16a34a;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(34, 197, 94, 0.4);
-      color: white;
-    }
-    
-    .btn-view-more-paid {
-      background: var(--paid-color);
-      border: none;
-      border-radius: 6px;
-      padding: 0.5rem 1.25rem;  /* Slightly wider */
-      font-weight: 600;  /* Bolder */
-      color: white;
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
-      box-shadow: 0 2px 6px rgba(249, 115, 22, 0.3);
-    }
-    
-    .btn-view-more-paid:hover {
-      background: #ea580c;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(249, 115, 22, 0.4);
-      color: white;
-    }
-    
-    /* Badges */
-    .course-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(255,255,255,0.95);
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .free-badge {
-      color: var(--free-color);
-      border: 1px solid var(--free-color);
-    }
-    
-    .paid-badge {
-      color: var(--paid-color);
-      border: 1px solid var(--paid-color);
-    }
-    
-    /* Features Section */
-    .feature-card {
-      border: none;
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--feature-card-bg);
-      transition: all 0.3s ease;
-      height: 100%;
-      padding: 1.5rem;
-      text-align: center;
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      background: white;
-    }
-    
-    .feature-icon {
-      font-size: 2.2rem;
-      color: var(--primary-color);
-      margin-bottom: 1rem;
-      background: rgba(37, 99, 235, 0.1);
-      width: 70px;
-      height: 70px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
     }
-    
-    .feature-card .card-title {
-      font-weight: 600;
-      font-size: 1.1rem;
+
+    .btn-pastel-hero:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px -5px rgba(99, 102, 241, 0.5);
+      color: #ffffff !important;
+      text-decoration: none;
+    }
+
+    .btn-pastel-outline {
+      background: #ffffff !important;
+      color: #4f46e5 !important;
+      border: 1.5px solid #c7d2fe !important;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.08);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-pastel-outline:hover {
+      background: #e0e7ff !important;
+      border-color: #818cf8 !important;
+      color: #4338ca !important;
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+
+    /* Student Stats Grid in Hero */
+    .stat-pastel-box {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .stat-pastel-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px -8px rgba(99, 102, 241, 0.2);
+      border-color: #6366f1;
+    }
+
+    .stat-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
       margin-bottom: 0.75rem;
-      color: var(--dark-color);
     }
-    
-    .feature-card .card-text {
-      color: var(--text-light);
-      font-size: 0.9rem;
+
+    .stat-val-text {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1;
+      margin-bottom: 4px;
     }
-    
-    /* Category Description Tooltip */
-    .category-description-tooltip {
-      max-width: 300px;
+
+    .stat-lbl-text {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .section-title {
-        font-size: 1.5rem;
-      }
-      
-      .dashboard-title {
-        font-size: 1.6rem;
-      }
-      
-      .category-card img {
-        height: 140px;
-      }
-      
-      .feature-card {
-        padding: 1.25rem;
-      }
-      
-      .feature-icon {
-        font-size: 1.8rem;
-        width: 60px;
-        height: 60px;
-      }
-      
-      .slider-container {
-        margin: 0 auto 2rem;
-      }
-      
-      .carousel-inner {
-        height: 185px;
-      }
-      .carousel-control-next, .carousel-control-prev {
-    /* position: absolute; */
-    /* top: 0; */
-    bottom: 35px !important;
-}
+
+    /* Section Header */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
     }
-    
-    /* Animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
     }
-    
-    .animated-card {
-      animation: fadeIn 0.6s ease forwards;
+
+    .section-title-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    
-    /* Delay animations for staggered effect */
-    .category-card:nth-child(1) { animation-delay: 0.1s; }
-    .category-card:nth-child(2) { animation-delay: 0.2s; }
-    .category-card:nth-child(3) { animation-delay: 0.3s; }
-    .category-card:nth-child(4) { animation-delay: 0.4s; }
-    .category-card:nth-child(5) { animation-delay: 0.5s; }
-    .category-card:nth-child(6) { animation-delay: 0.6s; }
-    
-    /* Feature cards animation */
-    .feature-card {
-      animation: fadeIn 0.6s ease forwards;
+
+    /* Category Horizontal Carousel Slider */
+    .category-carousel-wrapper {
+      position: relative;
+      padding: 0 70px;
     }
-    
-    .feature-card:nth-child(1) { animation-delay: 0.1s; }
-    .feature-card:nth-child(2) { animation-delay: 0.2s; }
-    .feature-card:nth-child(3) { animation-delay: 0.3s; }
-    .feature-card:nth-child(4) { animation-delay: 0.4s; }
-    .feature-card:nth-child(5) { animation-delay: 0.5s; }
-    .feature-card:nth-child(6) { animation-delay: 0.6s; }
 
-    .banner {
-    /* height: 460px; */
-    margin-top: 80px !important;
-}
-  
+    .category-carousel-track-wrapper {
+      overflow: hidden;
+      width: 100%;
+      padding: 25px 0;
+    }
 
+    .category-carousel-track {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      scroll-behavior: smooth;
+    }
 
+    .category-slide-item {
+      flex: 0 0 calc(33.333% - 16px);
+      max-width: calc(33.333% - 16px);
+      min-width: 260px;
+    }
 
+    .category-floating-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      color: #4f46e5;
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: 5px 14px;
+      border-radius: 50px;
+      border: 1px solid #c7d2fe;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      z-index: 5;
+    }
 
-.custom-slider {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  height: 90vh !important;             /* default desktop height */
-  overflow: hidden;
-  margin-top: 55px;
-}
+    .category-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
 
-.custom-slider-inner {
-  display: flex;
-  transition: transform 0.6s ease-in-out;
-}
+    .category-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.25);
+      border-color: #6366f1;
+    }
 
-.custom-slide {
-  min-width: 100%;
-  height: 90vh !important;             /* default desktop height */
-  display: none;
-}
+    .category-img-wrapper {
+      height: 215px;
+      width: 100%;
+      background: #f8fafc;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
+    }
 
-.custom-slide.active {
-  display: block;
-}
+    .category-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
 
-.custom-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    .category-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.25) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 2;
+    }
 
-.custom-prev,
-.custom-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  color: white;
-  border: none;
-  padding: 12px;
-  cursor: pointer;
-}
+    .category-card:hover .category-img-wrapper img {
+      transform: scale(1.08);
+    }
 
-.custom-prev { left: 10px; }
-.custom-next { right: 10px; }
+    .category-placeholder-icon {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: #6366f1;
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    }
 
-/* ✅ Mobile view (max-width 768px = tablets & phones) */
-@media (max-width: 768px) {
-  .custom-slider {
-    height: 200px; 
-        margin-top:10vh !important;
-     /* reduce height */
-  }
-  .custom-slide {
-    height: 200px;
-  }
-  .custom-image {
-    height: 200px;
-  }
+    .category-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.3;
+    }
 
-  .custom-prev, .custom-next {
-     
-    top: 17%;
- 
-}
-.categories-section{
-  margin-top: -440px !important;
-}
-}
+    .btn-card-action {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.925rem;
+      padding: 11px 18px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      width: 100%;
+      border: none;
+      box-shadow: 0 6px 16px -3px rgba(99, 102, 241, 0.35);
+    }
 
+    .category-card:hover .btn-card-action {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      box-shadow: 0 10px 22px -4px rgba(99, 102, 241, 0.48);
+      transform: translateY(-2px);
+    }
 
+    .category-carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ffffff;
+      color: #6366f1;
+      border: 1.5px solid #e0e7ff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.12);
+      font-size: 1.1rem;
+    }
 
+    .category-carousel-btn:hover {
+      background: #e0e7ff;
+      color: #4f46e5;
+      border-color: #c7d2fe;
+      transform: translateY(-50%) scale(1.12);
+      box-shadow: 0 10px 24px rgba(99, 102, 241, 0.22);
+    }
+
+    .category-prev { left: 5px; }
+    .category-next { right: 5px; }
+
+    @media (max-width: 991px) {
+      .custom-slider {
+        height: 300px;
+      }
+      .hero-title {
+        font-size: 2.1rem;
+      }
+      .category-slide-item {
+        flex: 0 0 calc(50% - 12px);
+        max-width: calc(50% - 12px);
+      }
+      .category-carousel-wrapper {
+        padding: 0 45px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .slider-section {
+        padding-top: 75px;
+      }
+      .custom-slider {
+        height: 220px;
+        border-radius: 20px;
+      }
+      .category-slide-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+      .category-carousel-wrapper {
+        padding: 0 5px;
+      }
+    }
+
+    /* Pastel Cards */
+    .pastel-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.05);
+      transition: all 0.35s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pastel-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.18);
+      border-color: #c7d2fe;
+    }
+
+    /* Features Icons */
+    .why-icon-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 1.25rem auto;
+      transition: transform 0.3s ease;
+    }
+
+    .pastel-card:hover .why-icon-badge {
+      transform: scale(1.12) rotate(4deg);
+    }
+
+    .badge-pastel-indigo { background: #e0e7ff; color: #4f46e5; }
+    .badge-pastel-sky { background: #e0f2fe; color: #0284c7; }
+    .badge-pastel-mint { background: #d1fae5; color: #059669; }
+    .badge-pastel-purple { background: #f3e8ff; color: #9333ea; }
+    .badge-pastel-rose { background: #fce7f3; color: #db2777; }
+    .badge-pastel-amber { background: #fef3c7; color: #d97706; }
+
+    /* Category Modal Styling */
+    .modal-content {
+      border: none;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header-gradient {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #ffffff;
+      padding: 1.5rem 2rem;
+      border-bottom: none;
+    }
+
+    .course-card-modal {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 22px;
+      overflow: hidden;
+      transition: all 0.35s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course-card-modal:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.2);
+      border-color: #6366f1;
+    }
+
+    .course-card-thumbnail {
+      height: 200px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .price-tag-badge {
+      background: #d1fae5;
+      color: #059669;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
+
 <body>
 
-{% include 'Student_Base.html' %}
+  {% include 'Student_Base.html' %}
 
-<!-- <div class="dashboard-header">
-  <div class="container">
-    <h1 class="dashboard-title">Welcome to Your Learning Dashboard - {{ request.user.first_name }} {{ request.user.last_name }}</h1>
-    <p class="dashboard-subtitle">Explore courses and enhance your trading skills </p>
-    
-  </div>
-</div> -->
-
-{% if slider_images %}
-
-
-<section class="py-4">
-  <div class="mobilslider">
-    <div id="mySlider" class="custom-slider" style="height: 600px; overflow: hidden;">
-      <div class="custom-slider-inner">
-
-        {% for img in slider_images %}
-          <div class="custom-slide {% if forloop.first %}active{% endif %}">
-            <img src="{{ img }}" class="custom-image" alt="Slide {{ forloop.counter }}">
+  <div class="top-hero-wrapper">
+    <!-- Top Image Slider Section -->
+    {% if slider_images %}
+    <section class="slider-section">
+      <div class="container-wide">
+        <div id="mySlider" class="custom-slider">
+          <div class="custom-slider-inner">
+            {% for img in slider_images %}
+              <div class="custom-slide {% if forloop.first %}active{% endif %}">
+                <img src="{{ img }}" class="custom-image" alt="Slide {{ forloop.counter }}">
+                <div class="custom-slide-caption">
+                  <i class="fa-solid fa-sparkles text-primary me-2"></i> ProfitMax Share Market Academy
+                </div>
+              </div>
+            {% endfor %}
           </div>
+          <button class="custom-prev" type="button" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="custom-next" type="button" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+          <div class="custom-slider-dots" id="sliderDots"></div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Student Hero Welcome & Quick Stats Section -->
+    <section class="hero-section">
+      <div class="container-wide">
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="hero-badge">
+              <i class="fa-solid fa-graduation-cap me-2"></i> Student Dashboard
+            </div>
+            <h1 class="hero-title mb-3">
+              Welcome back, <span class="hero-title-gradient">{{ request.user.first_name|default:request.user.username }}</span> 👋
+            </h1>
+            <p class="hero-subtitle mb-4">
+              Track your learning journey, explore market categories, and master proven trading strategies.
+            </p>
+            <div class="d-flex flex-wrap gap-3 hero-buttons">
+              <a href="{% url 'your_course' %}" class="btn btn-pastel-hero btn-pill">
+                <i class="fa-solid fa-play-circle me-2"></i> My Enrolled Courses
+              </a>
+              <a href="#catSection" class="btn btn-pastel-outline btn-pill">
+                <i class="fa-solid fa-compass me-2"></i> Browse Categories
+              </a>
+            </div>
+          </div>
+
+          <!-- Student Stats Grid -->
+          <div class="col-lg-6">
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="stat-pastel-box">
+                  <div class="stat-icon-wrapper bg-primary-subtle text-primary">
+                    <i class="fa-solid fa-book-open"></i>
+                  </div>
+                  <div class="stat-val-text">{{ enrolled_count }}</div>
+                  <div class="stat-lbl-text">Enrolled Courses</div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="stat-pastel-box">
+                  <div class="stat-icon-wrapper bg-success-subtle text-success">
+                    <i class="fa-solid fa-award"></i>
+                  </div>
+                  <div class="stat-val-text">{{ completed_count }}</div>
+                  <div class="stat-lbl-text">Certificates</div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="stat-pastel-box">
+                  <div class="stat-icon-wrapper bg-info-subtle text-info">
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                  <div class="stat-val-text">{{ open_tickets_count }}</div>
+                  <div class="stat-lbl-text">Open Tickets</div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="stat-pastel-box">
+                  <div class="stat-icon-wrapper bg-danger-subtle text-danger">
+                    <i class="fa-solid fa-bell"></i>
+                  </div>
+                  <div class="stat-val-text">{{ notification_count }}</div>
+                  <div class="stat-lbl-text">Notifications</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Active / Enrolled Courses Quick Access -->
+  {% if enrolled_courses %}
+  <section class="py-4">
+    <div class="container-wide">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+          <div class="hero-badge mb-2">
+            <i class="fa-solid fa-circle-play me-2"></i> Active Learning
+          </div>
+          <h2 class="section-title text-start mb-0">
+            Continue <span class="section-title-gradient">Your Courses</span>
+          </h2>
+        </div>
+        <a href="{% url 'your_course' %}" class="btn btn-pastel-outline btn-pill px-4">
+          View All ({{ enrolled_count }}) <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
+      </div>
+
+      <div class="row g-4">
+        {% for course in enrolled_courses %}
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="pastel-card">
+            <div class="category-img-wrapper">
+              {% if course.thumbnail %}
+              <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}">
+              {% else %}
+              <div class="category-placeholder-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              {% endif %}
+              <div class="category-floating-badge">
+                <i class="fa-solid fa-play me-1"></i> Active
+              </div>
+            </div>
+            <div class="p-3 d-flex flex-column flex-grow-1">
+              <h4 class="fw-bold fs-6 text-dark mb-2 text-truncate">{{ course.course_title }}</h4>
+              <p class="text-muted small flex-grow-1 mb-3">{{ course.description|truncatewords:10 }}</p>
+              <a href="{% url 'display_paid_content' course.id %}" class="btn btn-card-action">
+                <span>Resume Course</span> <i class="fa-solid fa-play ms-2"></i>
+              </a>
+            </div>
+          </div>
+        </div>
         {% endfor %}
-
       </div>
-
-      <!-- Controls -->
-      <button class="custom-prev" type="button">&#10094;</button>
-      <button class="custom-next" type="button">&#10095;</button>
     </div>
-  </div>
-</section>
-{% endif %}
+  </section>
+  {% endif %}
 
-
-
-
-<section class="categories-section">  <!-- Added light background section -->
-  <div class="container">
-    <h2 class="section-title">Explore Course Categories</h2>
-    <div class="row gy-4">
-      {% for item in category_data %}
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="category-card animated-card" data-bs-toggle="modal" data-bs-target="#modal-{{ item.category.id }}">
-          {% if item.category.icon %}
-          <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
-          {% else %}
-          <img src="{% static 'images/default-category.jpg' %}" alt="Default category image">
-          {% endif %}
-          <h3>
-            {{ item.category.name }}
-            {% if item.category.description %}
-            <button class="category-info-btn" 
-                    data-bs-toggle="tooltip" 
-                    data-bs-placement="top" 
-                    data-bs-custom-class="category-description-tooltip"
-                    title="{{ item.category.description }}">
-              <i class="fas fa-info-circle"></i>
-            </button>
-            {% endif %}
-          </h3>
+  <!-- Categories Horizontal Carousel Slider Section (from categories.html) -->
+  <section class="py-5" id="catSection">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="hero-badge mb-3">
+          <i class="fa-solid fa-layer-group me-2"></i> Course Categories
         </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<!-- Modals for Each Category -->
-{% for item in category_data %}
-<div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1"
-  aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel{{ item.category.id }}">
-          <i class="fas fa-folder-open me-2"></i>{{ item.category.name }}
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h2 class="section-title">
+          Explore Our <span class="section-title-gradient">Trading Categories</span>
+        </h2>
+        <p class="text-muted fs-5">Scroll left and right to discover our trading categories and courses.</p>
       </div>
 
-      <div class="modal-body">
-        {% if item.category.description %}
-        <div class="alert alert-light mb-4">
-          <i class="fas fa-info-circle me-2"></i>{{ item.category.name }}
-        </div>
-        {% endif %}
+      <div class="category-carousel-wrapper">
+        <button class="category-carousel-btn category-prev" id="catPrevBtn" type="button" aria-label="Previous Category">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
 
-        <!-- Free Courses -->
-        <div class="mb-5">
-          <h5 class="mb-4 d-flex align-items-center">
-            <span class="badge bg-success me-2">FREE</span>
-            <span>Free Courses</span>
-          </h5>
-          <div class="row g-4 mb-3">
-            {% for course in item.free_courses %}
-            <div class="col-12 col-md-6 col-lg-4">
-              <div class="course-card">
-                <span class="course-badge free-badge">FREE</span>
-                <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.title }}">
-                <div class="card-body">
-                  <h6 class="card-title">{{ course.title }}</h6>
-                  <p class="card-text">{{ course.description|truncatewords:12 }}</p>
-                  <div class="d-grid">
-                    <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm">
-                      <i class="fas fa-eye me-1"></i> View Course
-                    </a>
+        <div class="category-carousel-track-wrapper">
+          <div class="category-carousel-track" id="catTrack">
+            {% for item in category_data %}
+            <div class="category-slide-item">
+              <div class="category-card h-100" data-bs-toggle="modal" data-bs-target="#modal-{{ item.category.id }}">
+                <div class="category-img-wrapper position-relative">
+                  {% if item.category.icon %}
+                  <img src="{{ item.category.icon.url }}" alt="{{ item.category.name }}">
+                  {% else %}
+                  <div class="category-placeholder-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                  </div>
+                  {% endif %}
+                  <div class="category-img-overlay"></div>
+                  <div class="category-floating-badge">
+                    <i class="fa-solid fa-layer-group me-1"></i> {{ item.total_courses_count }} Courses
+                  </div>
+                </div>
+                <div class="category-card-body p-3 text-center d-flex flex-column justify-content-between flex-grow-1">
+                  <div class="mb-3">
+                    <h3 class="category-title mb-2">{{ item.category.name }}</h3>
+                    <p class="text-muted small mb-0">
+                      <i class="fa-solid fa-circle-check text-success me-1"></i> View Available Courses
+                    </p>
+                  </div>
+                  <div class="mt-auto">
+                    <div class="btn-card-action">
+                      <span>Explore</span> <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             {% empty %}
-            <div class="col-12">
-              <div class="alert alert-info">
-                No free courses available in this category yet.
-              </div>
+            <div class="w-100 text-center py-5">
+              <p class="text-muted fs-5">No course categories found at this time.</p>
             </div>
             {% endfor %}
           </div>
-          {% if item.free_courses %}
-          <div class="text-end">
-            <a href="{% url 'free_courses_by_category' item.category.id %}" class="btn btn-view-more-free">
-              View All Free Courses <i class="fas fa-arrow-right ms-1"></i>
-            </a>
-          </div>
-          {% endif %}
         </div>
 
-        <!-- Paid Courses -->
-        <div class="mt-5">
-          <h5 class="mb-4 d-flex align-items-center">
-            <span class="badge bg-primary me-2">PREMIUM</span>
-            <span>Premium Courses</span>
+        <button class="category-carousel-btn category-next" id="catNextBtn" type="button" aria-label="Next Category">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Unique Platform Features Section (from categories.html) -->
+  <section class="py-5">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="hero-badge mb-3">
+          <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Academy Features
+        </div>
+        <h2 class="section-title">
+          Why Choose <span class="section-title-gradient">ProfitMax Academy?</span>
+        </h2>
+        <p class="text-muted fs-5">Tools and mentorship built to elevate your trading performance.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="pastel-card p-4">
+            <div class="why-icon-badge badge-pastel-indigo">
+              <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Professional Mentorship</h5>
+            <p class="text-muted text-center mb-0">Learn from experienced traders using our exclusive Vardan Strategy for optimal profit potential.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="pastel-card p-4">
+            <div class="why-icon-badge badge-pastel-sky">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Advanced Risk Control</h5>
+            <p class="text-muted text-center mb-0">Assess and monitor market risk efficiently with our real-time risk mitigation algorithms.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="pastel-card p-4">
+            <div class="why-icon-badge badge-pastel-mint">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Smart Alert Systems</h5>
+            <p class="text-muted text-center mb-0">Enhance decisions with our Bramhastra Stock Alert System for accurate stock movement alerts.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="pastel-card p-4">
+            <div class="why-icon-badge badge-pastel-purple">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Trading Psychology</h5>
+            <p class="text-muted text-center mb-0">Master emotions and discipline in volatile markets to maintain a consistent mindset.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="pastel-card p-4">
+            <div class="why-icon-badge badge-pastel-rose">
+              <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Real-time Analytics</h5>
+            <p class="text-muted text-center mb-0">Access live market charts, trends, and data insights to make informed trading choices.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="pastel-card p-4">
+            <div class="why-icon-badge badge-pastel-amber">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Trader Community</h5>
+            <p class="text-muted text-center mb-0">Join an active network of passionate traders to exchange ideas and market insights.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Modals (from categories.html) -->
+  {% for item in category_data %}
+  <div class="modal fade" id="modal-{{ item.category.id }}" tabindex="-1" aria-labelledby="modalLabel{{ item.category.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header modal-header-gradient align-items-center">
+          <h5 class="modal-title fw-bold fs-5" id="modalLabel{{ item.category.id }}">
+            <i class="fa-solid fa-layer-group me-2"></i> {{ item.category.name }}
           </h5>
-          <div class="row g-4">
-            {% for course in item.paid_courses %}
-            <div class="col-12 col-md-6 col-lg-4">
-              <div class="course-card">
-                <span class="course-badge paid-badge">PREMIUM</span>
-                <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.course_title }}">
-                <div class="card-body">
-                  <h6 class="card-title">{{ course.course_title }}</h6>
-                  <p class="card-text">{{ course.description|truncatewords:12 }}</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <span class="price-tag">₹{{ course.course_price }}</span>
-                    <a href="{% url 'display_paid_content' course.id %}" class="btn btn-primary btn-sm">
-                      <i class="fas fa-eye me-1"></i> View
-                    </a>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body p-4 bg-light">
+          <!-- Category Nav Tabs -->
+          <ul class="nav nav-pills nav-justified mb-4 p-1.5 bg-white border rounded-pill shadow-sm" id="categoryTab-{{ item.category.id }}" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active fw-bold rounded-pill py-2.5 d-flex align-items-center justify-content-center gap-2" 
+                      id="free-tab-{{ item.category.id }}" 
+                      data-bs-toggle="pill" 
+                      data-bs-target="#free-pane-{{ item.category.id }}" 
+                      type="button" role="tab" aria-controls="free-pane-{{ item.category.id }}" aria-selected="true">
+                <i class="fa-solid fa-graduation-cap text-primary"></i>
+                <span>Free Courses</span>
+                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 small">
+                  {{ item.free_courses|length }}
+                </span>
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link fw-bold rounded-pill py-2.5 d-flex align-items-center justify-content-center gap-2" 
+                      id="paid-tab-{{ item.category.id }}" 
+                      data-bs-toggle="pill" 
+                      data-bs-target="#paid-pane-{{ item.category.id }}" 
+                      type="button" role="tab" aria-controls="paid-pane-{{ item.category.id }}" aria-selected="false">
+                <i class="fa-solid fa-gem text-success"></i>
+                <span>Premium Courses</span>
+                <span class="badge bg-success text-white rounded-pill px-2.5 py-1 small">
+                  {{ item.paid_courses|length }}
+                </span>
+              </button>
+            </li>
+          </ul>
+
+          <!-- Tab Contents -->
+          <div class="tab-content" id="categoryTabContent-{{ item.category.id }}">
+            <!-- Free Courses Pane -->
+            <div class="tab-pane fade show active" id="free-pane-{{ item.category.id }}" role="tabpanel" aria-labelledby="free-tab-{{ item.category.id }}">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold text-dark mb-0">
+                  <span class="badge bg-primary me-2">🎓</span> Free Courses in {{ item.category.name }}
+                </h6>
+                {% if item.free_courses %}
+                <a href="{% url 'free_courses_by_category' item.category.id %}" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold">
+                  View Full Page <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+                {% endif %}
+              </div>
+
+              <div class="row g-4">
+                {% for course in item.free_courses %}
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="course-card-modal">
+                    {% if course.thumbnail %}
+                      <img src="{{ course.thumbnail.url }}" class="course-card-thumbnail" alt="{{ course.title }}">
+                    {% else %}
+                      <div class="course-card-thumbnail bg-light d-flex align-items-center justify-content-center text-primary fs-3" style="height: 160px;">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                      </div>
+                    {% endif %}
+                    <div class="p-3 d-flex flex-column flex-grow-1">
+                      <h6 class="fw-bold text-dark fs-5 text-truncate mb-2">{{ course.title }}</h6>
+                      <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px;">{{ course.description|truncatewords:12 }}</p>
+                      <div class="text-center pt-2 border-top mt-auto">
+                        <a href="{% url 'free_course_detail' course.id %}" class="btn btn-pastel-hero btn-sm rounded-pill w-100 font-weight-bold">
+                          Start Learning <i class="fa-solid fa-play ms-1"></i>
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                {% empty %}
+                <div class="col-12 text-center py-4">
+                  <p class="text-muted italic mb-0"><i class="fa-solid fa-info-circle me-1"></i> No free courses available in this category currently.</p>
+                </div>
+                {% endfor %}
               </div>
             </div>
-            {% empty %}
-            <div class="col-12">
-              <div class="alert alert-info">
-                No premium courses available in this category yet.
+
+            <!-- Paid Courses Pane -->
+            <div class="tab-pane fade" id="paid-pane-{{ item.category.id }}" role="tabpanel" aria-labelledby="paid-tab-{{ item.category.id }}">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold text-dark mb-0">
+                  <span class="badge bg-success me-2">💼</span> Premium Paid Courses in {{ item.category.name }}
+                </h6>
+                {% if item.paid_courses %}
+                <a href="{% url 'paid_courses_by_category' item.category.id %}" class="btn btn-outline-success btn-sm rounded-pill px-3 font-weight-bold">
+                  View Full Page <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+                {% endif %}
+              </div>
+
+              <div class="row g-4">
+                {% for course in item.paid_courses %}
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="course-card-modal">
+                    {% if course.thumbnail %}
+                      <img src="{{ course.thumbnail.url }}" class="course-card-thumbnail" alt="{{ course.course_title }}">
+                    {% else %}
+                      <div class="course-card-thumbnail bg-light d-flex align-items-center justify-content-center text-success fs-3" style="height: 160px;">
+                        <i class="fa-solid fa-gem"></i>
+                      </div>
+                    {% endif %}
+                    <div class="p-3 d-flex flex-column flex-grow-1">
+                      <h6 class="fw-bold text-dark fs-5 text-truncate mb-2">{{ course.course_title }}</h6>
+                      <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px;">{{ course.description|truncatewords:12 }}</p>
+                      <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto">
+                        <span class="price-tag-badge">₹{{ course.course_price }}</span>
+                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-success btn-sm rounded-pill px-3 font-weight-bold">
+                          View Course
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-4">
+                  <p class="text-muted italic mb-0"><i class="fa-solid fa-info-circle me-1"></i> No premium courses available in this category currently.</p>
+                </div>
+                {% endfor %}
               </div>
             </div>
-            {% endfor %}
           </div>
-          {% if item.paid_courses %}
-          <div class="text-end mt-3">
-            <a href="{% url 'paid_courses_by_category' item.category.id %}" class="btn btn-view-more-paid">
-              View All Premium Courses <i class="fas fa-arrow-right ms-1"></i>
-            </a>
-          </div>
-          {% endif %}
         </div>
       </div>
     </div>
   </div>
-</div>
-{% endfor %}
+  {% endfor %}
 
-<!-- Features Section -->
-<section class="py-5 bg-light">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="section-title">Why Choose ProfitMax Academy?</h2>
-      <p class="text-muted">Discover what makes our trading education platform unique</p>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-chalkboard-teacher"></i>
-          </div>
-          <h5 class="card-title">Professional Mentorship</h5>
-          <p class="card-text">Learn from experienced traders using our exclusive Vardan Strategy to maximize your profit potential.</p>
-        </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <h5 class="card-title">Risk Management</h5>
-          <p class="card-text">Identify, assess, and monitor potential risks efficiently with our comprehensive system.</p>
-        </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-robot"></i>
-          </div>
-          <h5 class="card-title">Smart Trading Tools</h5>
-          <p class="card-text">Enhance decisions with our Bramhastra Stock Alert System for accurate market predictions.</p>
-        </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-brain"></i>
-          </div>
-          <h5 class="card-title">Trading Psychology</h5>
-          <p class="card-text">Master your emotions and behavior to build a successful and consistent trading mindset.</p>
-        </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <h5 class="card-title">Real-time Analytics</h5>
-          <p class="card-text">Access live market data and analytics to make informed trading decisions.</p>
-        </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <h5 class="card-title">Trading Community</h5>
-          <p class="card-text">Join our active community of traders to share insights and strategies.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- JavaScript Sliders Logic (from categories.html) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Top Image Slider Logic with Dots
+      const slides = document.querySelectorAll(".custom-slide");
+      const dotsContainer = document.getElementById("sliderDots");
+      let currentIndex = 0;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Initialize tooltips
-  document.addEventListener('DOMContentLoaded', function() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl, {
-        trigger: 'hover focus'
-      });
-    });
-  });
-  
-  // Smooth scroll for any "scrollBtn" elements
-  document.querySelectorAll(".scrollBtn").forEach(btn => {
-    btn.addEventListener("click", function(e) {
-      e.preventDefault();
-      const target = document.getElementById(this.getAttribute("data-target"));
-      if (target) {
-        target.scrollIntoView({
-          behavior: "smooth"
+      if (slides.length > 0 && dotsContainer) {
+        dotsContainer.innerHTML = "";
+        slides.forEach((_, i) => {
+          const dot = document.createElement("div");
+          dot.classList.add("slider-dot");
+          if (i === 0) dot.classList.add("active");
+          dot.addEventListener("click", () => showSlide(i));
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      function showSlide(index) {
+        currentIndex = index;
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("active", i === index);
+        });
+        const dots = document.querySelectorAll(".slider-dot");
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("active", i === index);
+        });
+      }
+
+      const nextBtn = document.querySelector(".custom-next");
+      const prevBtn = document.querySelector(".custom-prev");
+
+      if (nextBtn && prevBtn && slides.length > 0) {
+        nextBtn.addEventListener("click", function () {
+          currentIndex = (currentIndex + 1) % slides.length;
+          showSlide(currentIndex);
+        });
+
+        prevBtn.addEventListener("click", function () {
+          currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+          showSlide(currentIndex);
+        });
+
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % slides.length;
+          showSlide(currentIndex);
+        }, 4500);
+
+        showSlide(currentIndex);
+      }
+
+      // Category Carousel Slider Logic
+      const track = document.getElementById("catTrack");
+      const nextBtnCat = document.getElementById("catNextBtn");
+      const prevBtnCat = document.getElementById("catPrevBtn");
+
+      if (track && nextBtnCat && prevBtnCat) {
+        let currentScroll = 0;
+
+        function getCardWidth() {
+          const item = track.querySelector(".category-slide-item");
+          return item ? item.offsetWidth + 24 : 300;
+        }
+
+        nextBtnCat.addEventListener("click", function () {
+          const maxScroll = track.scrollWidth - track.clientWidth;
+          currentScroll = Math.min(currentScroll + getCardWidth(), Math.max(maxScroll, 0));
+          track.style.transform = `translateX(-${currentScroll}px)`;
+        });
+
+        prevBtnCat.addEventListener("click", function () {
+          currentScroll = Math.max(currentScroll - getCardWidth(), 0);
+          track.style.transform = `translateX(-${currentScroll}px)`;
         });
       }
     });
-  });
-</script>
+  </script>
 
+  {% include 'footer.html' %}
 
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  let slides = document.querySelectorAll(".custom-slide");
-  let currentIndex = 0;
-
-  function showSlide(index) {
-    slides.forEach(slide => slide.classList.remove("active"));
-    slides[index].classList.add("active");
-  }
-
-  document.querySelector(".custom-next").addEventListener("click", function () {
-    currentIndex = (currentIndex + 1) % slides.length;
-    showSlide(currentIndex);
-  });
-
-  document.querySelector(".custom-prev").addEventListener("click", function () {
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    showSlide(currentIndex);
-  });
-
-  // Auto-slide every 3s
-  setInterval(() => {
-    currentIndex = (currentIndex + 1) % slides.length;
-    showSlide(currentIndex);
-  }, 3000);
-
-  // Show the first slide initially
-  showSlide(currentIndex);
-});
-</script>
-
-{% include 'footer.html' %}
 </body>
+
 </html>

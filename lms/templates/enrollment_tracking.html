@@ -1,172 +1,339 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
-        <style>
-  .animated {
-    animation-duration: 1s;
-    animation-fill-mode: both;
-  }
 
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translate3d(0, -30px, 0);
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Course Progress Report - ProfitMax</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+
+  <!-- Bootstrap 5 & Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      min-height: 100vh;
+      color: #334155;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  .fadeInDown {
-    animation-name: fadeInDown;
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 30px, 0);
+    .main-container {
+      width: 95%;
+      max-width: 1650px;
+      margin: 95px auto 40px auto;
+      padding: 0 15px;
+      flex: 1;
     }
 
-    to {
-      opacity: 1;
-      transform: none;
+    /* Header Banner Card */
+    .header-banner-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.12);
+      border-top: 4px solid #4f46e5;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     }
-  }
 
-  .fadeInUp {
-    animation-name: fadeInUp;
-  }
-  .card {
-    min-height: 150px;
-  }
+    .header-badge-icon {
+      width: 48px;
+      height: 48px;
+      background: #ffffff;
+      color: #4f46e5;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+      border: 1.5px solid #c7d2fe;
+      margin-right: 14px;
+    }
 
-        span.badge.badge-danger.ml-2 {
-    background: red;
-}
-</style>
+    /* Search & Filter Card */
+    .filter-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 1.75rem 2rem;
+      box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.1);
+      margin-bottom: 2rem;
+    }
 
-    </head>
-    <body>
-    {% include 'Admin_Base.html' %}
+    /* Standard Height for perfect horizontal alignment */
+    .form-control-aligned, .form-select-aligned, .btn-aligned {
+      height: 48px !important;
+      font-size: 0.95rem !important;
+      display: flex;
+      align-items: center;
+    }
 
-<!-- MAIN WRAPPER -->
-<div class="main" style="min-height: 100vh; background: #f4f6fb;">
+    .btn-action-purple {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff !important;
+      border: none;
+      border-radius: 12px;
+      padding: 0 24px;
+      font-weight: 700;
+      box-shadow: 0 8px 18px -4px rgba(79, 70, 229, 0.4);
+      transition: all 0.3s ease;
+      justify-content: center;
+    }
 
-  <div class="container py-5 mt-5">
+    .btn-action-purple:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px -4px rgba(79, 70, 229, 0.55);
+    }
 
-    <div class="text-center mb-5">
-      <h4 class="font-weight-bold   animated fadeInDown">📈 Student Course Progress Report</h4>
-    </div>
+    /* Result Cards */
+    .result-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
 
-    <!-- Course Selection Form -->
-   <form method="POST" class="bg-white p-4 rounded shadow-sm animated fadeIn">
-  {% csrf_token %}
-  <div class="row">
-    <div class="col-md-6">
-  <!-- 🔍 Search by Course Code -->
-  <div class="form-group mt-4">
-    <label for="search_code"><strong>Search by Course Code:</strong></label>
-    <div class="input-group">
-      <input type="text" name="search_code" class="form-control" placeholder="Enter course code"
-             value="{{ search_code }}">
-      <div class="input-group-append">
-        <button type="submit" name="action" value="search" class="btn btn-outline-primary">Search</button>
+    .result-card-header {
+      padding: 1.25rem 1.5rem;
+      font-weight: 800;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-success { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: #ffffff; }
+    .header-warning { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); color: #ffffff; }
+    .header-info { background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); color: #ffffff; }
+
+    .student-item {
+      padding: 14px 18px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.2s ease;
+    }
+
+    .student-item:hover {
+      background: #f8fafc;
+    }
+
+    .student-item:last-child {
+      border-bottom: none;
+    }
+
+    .code-badge {
+      background: #4f46e5;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      border-radius: 50px;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+    }
+  </style>
+</head>
+
+<body>
+  {% include 'Admin_Base.html' %}
+
+  <div class="main-container">
+    <!-- Header Banner Card -->
+    <div class="header-banner-card mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="d-flex align-items-center">
+        <div class="header-badge-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div>
+          <h2 class="fw-extrabold text-dark m-0 fs-3">Student Course Progress Report</h2>
+          <p class="text-muted small m-0">Track course completion rates, ongoing student progress, and total enrollments.</p>
+        </div>
+      </div>
+
+      <div>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-light border rounded-3 fw-bold px-3 py-2">
+          <i class="fas fa-arrow-left me-1.5 text-indigo"></i> Back to Dashboard
+        </a>
       </div>
     </div>
-    <small class="text-muted">Search a course by code. Matching courses will be shown in the dropdown.</small>
-  </div>
-  </div>
-    <div class="col-md-6">
-<div class="row">
-  <div class="col-md-8">
-  <!-- 🔽 Course Dropdown -->
-  <div class="form-group mt-4">
-    <label for="course_id"><strong>Select Course:</strong></label>
-    <select name="course_id" class="form-control" >
-      <option value="">-- Select --</option>
-      {% for course in courses %}
-        <option value="{{ course.id }}" {% if selected_course and course.id == selected_course.id %}selected{% endif %}>
-          {{ course.course_title }} ({{ course.course_code }})
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-  </div>
-  <div class="col-md-4">
-  <!-- 🔘 View Progress -->
 
-  <button type="submit" name="action" value="view" class="btn btn-primary btn-block mt-5">View Progress</button>
-  </div>
-</div>
+    <!-- Perfectly Aligned Search & Filter Card -->
+    <div class="filter-card">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3 align-items-start">
+          <!-- Search by Course Code Column -->
+          <div class="col-12 col-lg-5">
+            <label for="search_code" class="form-label fw-bold text-dark mb-2 d-flex align-items-center">
+              <i class="fas fa-search text-primary me-2"></i> Search by Course Code
+            </label>
+            <div class="input-group">
+              <input type="text" name="search_code" class="form-control form-control-aligned rounded-start-3" placeholder="e.g. PY101, OPT201" value="{{ search_code }}">
+              <button type="submit" name="action" value="search" class="btn btn-outline-primary btn-aligned px-3 fw-bold">
+                <i class="fas fa-search me-1"></i> Search Code
+              </button>
+            </div>
+          </div>
 
-  </div>
-  </div>
-</form>
+          <!-- Select Course Dropdown Column -->
+          <div class="col-12 col-lg-5">
+            <label for="course_id" class="form-label fw-bold text-dark mb-2 d-flex align-items-center">
+              <i class="fas fa-list text-primary me-2"></i> Select Course
+            </label>
+            <select name="course_id" class="form-select form-select-aligned rounded-3">
+              <option value="">-- Choose Course --</option>
+              {% for course in courses %}
+                <option value="{{ course.id }}" {% if selected_course and course.id == selected_course.id %}selected{% endif %}>
+                  {{ course.course_title }} ({{ course.course_code }})
+                </option>
+              {% endfor %}
+            </select>
+          </div>
 
+          <!-- Action Button Column -->
+          <div class="col-12 col-lg-2">
+            <label class="form-label fw-bold text-transparent mb-2 d-none d-lg-block">Action</label>
+            <button type="submit" name="action" value="view" class="btn btn-action-purple btn-aligned w-100">
+              <i class="fas fa-chart-bar me-1.5"></i> View Progress
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-2">
+          <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Enter a course code to filter matching courses in dropdown menu.</small>
+        </div>
+      </form>
+    </div>
 
     <!-- Results Section -->
     {% if selected_course %}
-    <div class="mt-5 animated fadeInUp">
-      <h5 class="text-dark mb-4">📚 Course: <span class="text-info">{{ selected_course.course_title }}</span></h5>
+    <div class="mb-4">
+      <!-- Course Title Summary Header -->
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <h4 class="fw-extrabold text-dark m-0 d-flex align-items-center gap-2">
+          <i class="fas fa-graduation-cap text-primary fs-3 me-1"></i> Report for: <span class="text-primary">{{ selected_course.course_title }}</span>
+          <span class="code-badge ms-2">Course Code: {{ selected_course.course_code }}</span>
+        </h4>
 
-      <div class="row">
+        <div class="text-muted fw-bold small">
+          Total Subscribers: <span class="text-dark fw-extrabold fs-6">{{ total_students }}</span>
+        </div>
+      </div>
 
-        <!-- Completed Students -->
-        <div class="col-md-4 mb-4">
-          <div class="card shadow-sm border-success">
-            <div class="card-header bg-success text-white text-center font-weight-bold">
-              ✅ Completed Students (100%)
+      <div class="row g-4">
+        <!-- 1. Completed Students (100%) -->
+        <div class="col-12 col-lg-4">
+          <div class="result-card">
+            <div class="result-card-header header-success">
+              <span><i class="fas fa-check-circle me-2"></i> Completed Students (100%)</span>
+              <span class="badge bg-white text-success rounded-pill px-3 py-1 fs-7 fw-bold">{{ completed_students|length }}</span>
             </div>
-            <ul class="list-group list-group-flush">
-              {% for student in completed_students %}
-                <li class="list-group-item text-center mt-2">{{ student.get_full_name }} <small class="text-muted">({{ student.username }})</small></li>
-              {% empty %}
-                <li class="list-group-item text-muted text-center mt-2">No students have completed this course yet.</li>
-              {% endfor %}
-            </ul>
+            <div class="card-body p-0 flex-grow-1">
+              <ul class="list-group list-group-flush">
+                {% for student in completed_students %}
+                  <li class="student-item">
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-user-check text-success fs-5 me-3"></i>
+                      <div>
+                        {% if student.first_name %}
+                          <div class="fw-bold text-dark">{{ student.first_name }} {{ student.last_name }}</div>
+                          <small class="text-muted">{{ student.email }}</small>
+                        {% else %}
+                          <div class="fw-bold text-dark">{{ student.email }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-bold fs-8">100% Done</span>
+                  </li>
+                {% empty %}
+                  <div class="text-center text-muted py-5 my-auto">
+                    <i class="fas fa-inbox fs-2 mb-2 d-block opacity-50 text-success"></i>
+                    No students have completed this course yet.
+                  </div>
+                {% endfor %}
+              </ul>
+            </div>
           </div>
         </div>
 
-        <!-- Ongoing Students -->
-        <div class="col-md-4 mb-4">
-          <div class="card shadow-sm border-warning">
-            <div class="card-header bg-warning text-white text-center font-weight-bold">
-              🚧 Ongoing Students
+        <!-- 2. Ongoing Students -->
+        <div class="col-12 col-lg-4">
+          <div class="result-card">
+            <div class="result-card-header header-warning">
+              <span><i class="fas fa-spinner me-2"></i> In-Progress Students</span>
+              <span class="badge bg-white text-warning rounded-pill px-3 py-1 fs-7 fw-bold">{{ ongoing_students|length }}</span>
             </div>
-            <ul class="list-group list-group-flush">
-              {% for student in ongoing_students %}
-                <li class="list-group-item text-center mt-2">{{ student.get_full_name }} <small class="text-muted">({{ student.username }})</small></li>
-              {% empty %}
-                <li class="list-group-item text-muted text-center mt-2">All students have completed the course.</li>
-              {% endfor %}
-            </ul>
+            <div class="card-body p-0 flex-grow-1">
+              <ul class="list-group list-group-flush">
+                {% for student in ongoing_students %}
+                  <li class="student-item">
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-user-clock text-warning fs-5 me-3"></i>
+                      <div>
+                        {% if student.first_name %}
+                          <div class="fw-bold text-dark">{{ student.first_name }} {{ student.last_name }}</div>
+                          <small class="text-muted">{{ student.email }}</small>
+                        {% else %}
+                          <div class="fw-bold text-dark">{{ student.email }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-2.5 py-1 fw-bold fs-8">In Progress</span>
+                  </li>
+                {% empty %}
+                  <div class="text-center text-muted py-5 my-auto">
+                    <i class="fas fa-check-double fs-2 mb-2 d-block opacity-50 text-warning"></i>
+                    All enrolled students have completed this course!
+                  </div>
+                {% endfor %}
+              </ul>
+            </div>
           </div>
         </div>
 
-        <!-- Total Enrolled -->
-        <div class="col-md-4 mb-4">
-          <div class="card shadow-sm border-info text-center">
-            <div class="card-header bg-info text-white font-weight-bold">
-              📊 Total Enrolled Students
+        <!-- 3. Total Enrolled Students Summary Card -->
+        <div class="col-12 col-lg-4">
+          <div class="result-card">
+            <div class="result-card-header header-info">
+              <span><i class="fas fa-users me-2"></i> Total Enrolled Students</span>
+              <span class="badge bg-white text-info rounded-pill px-3 py-1 fs-7 fw-bold">{{ total_students }}</span>
             </div>
-            <div class="card-body">
-              <h1 class="display-4">{{ total_students }}</h1>
+            <div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-5">
+              <div class="display-3 fw-extrabold text-info mb-1">{{ total_students }}</div>
+              <p class="text-muted fw-bold mb-3">Total Active Course Subscriptions</p>
+              
+              <div class="w-100 px-4">
+                <div class="d-flex justify-content-between small fw-bold mb-1 text-muted">
+                  <span>Completed: {{ completed_students|length }}</span>
+                  <span>Ongoing: {{ ongoing_students|length }}</span>
+                </div>
+                <div class="progress rounded-pill" style="height: 10px; background: #e2e8f0;">
+                  <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
     {% endif %}
   </div>
-</div>
-        {% include 'footer.html' %}
 
-    </body>
+  {% include 'footer.html' %}
+</body>
 </html>

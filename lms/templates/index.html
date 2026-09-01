@@ -1,487 +1,552 @@
-{%load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit Max Share Market Academy</title>
+    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+
+    <!-- Bootstrap 4 CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Font Awesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- jQuery & Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy </title>
-    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
     <style>
-        /* General body styling */
         body {
-            font-family: Verdana (sans-serif);
-            background-color: #FAFAFA;
-            margin: 0;
-            padding: 0;
-            /*background: linear-gradient(to right, #ff2ff8, #39e5ff);*/
-
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
         }
 
+        /* Wide Fluid Container for Monitors */
+        .container-wide {
+            width: 94%;
+            max-width: 1640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
+        /* Hero Section Styling */
+        .hero-section {
+            background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+            padding: 120px 0 70px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
 
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #e0e7ff;
+            color: #4f46e5;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 8px 22px;
+            border-radius: 50px;
+            margin-bottom: 1.25rem;
+            border: 1px solid #c7d2fe;
+        }
 
+        .hero-title {
+            font-size: 2.9rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+        }
 
+        .hero-title-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
+        .hero-description {
+            font-size: 1.15rem;
+            color: #475569;
+            line-height: 1.65;
+        }
 
+        .btn-pill {
+            border-radius: 50px !important;
+            padding: 14px 34px !important;
+            font-size: 1rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.01em;
+        }
 
+        .btn-pastel-hero {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #ffffff !important;
+            border: none;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /*Navbar Css End */
+        .btn-pastel-hero:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px -5px rgba(99, 102, 241, 0.5);
+            color: #ffffff !important;
+            text-decoration: none;
+        }
 
+        .btn-pastel-outline {
+            background: #ffffff !important;
+            color: #4f46e5 !important;
+            border: 1.5px solid #c7d2fe !important;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.08);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .btn-pastel-outline:hover {
+            background: #e0e7ff !important;
+            border-color: #818cf8 !important;
+            color: #4338ca !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
 
+        .hero-img-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 14px;
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.2), 0 0 0 1.5px rgba(226, 232, 240, 0.8);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
 
+        .hero-img-wrapper:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 30px 60px -15px rgba(99, 102, 241, 0.28);
+        }
 
+        .hero-img-wrapper img {
+            border-radius: 18px;
+            width: 100%;
+            height: auto;
+        }
 
+        /* Section Headings */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
 
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
 
+        .section-title-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        .info {
+        .section-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* Pastel Feature Cards */
+        .pastel-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.05);
+            transition: all 0.35s ease;
+            height: 100%;
+        }
+
+        .pastel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.18);
+            border-color: #c7d2fe;
+        }
+
+        .pastel-card-img-top {
+            height: 240px;
+            object-fit: cover;
+            width: 100%;
+            transition: transform 0.4s ease;
+        }
+
+        .pastel-card:hover .pastel-card-img-top {
+            transform: scale(1.05);
+        }
+
+        .pastel-card-body {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .pastel-card-title {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pastel-card-text {
+            color: #64748b;
+            font-size: 0.925rem;
+            margin-bottom: 0;
+        }
+
+        /* Services Section Styling */
+        .services-section {
+            background-color: #ffffff;
+            padding: 80px 0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .service-feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+        }
+
+        .service-icon-badge {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            background: #d1fae5;
+            color: #059669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            margin-right: 14px;
+            margin-top: 2px;
+        }
+
+        .service-feature-text {
+            font-size: 1.025rem;
+            color: #334155;
             font-weight: 500;
         }
 
-
-
-        /*Footer Css End*/
-        /* Button styling */
-        button {
-            background: linear-gradient(to right, #017123, #044e13);
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-            width: 100%;
-            display: inline-block;
+        .gallery-img-wrapper {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            height: 100%;
         }
 
-        .signbut {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-
-
-        }
-
-        .signbut:hover {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1.02);
-        }
-
-        button:hover {
-            background: linear-gradient(to right, #017123, #1cb149);
-            transform: scale(1.02);
-        }
-
-        .imglaptop {
-            margin-left: 10px;
-            border-radius: 10px;
-            cursor: pointer;
+        .gallery-img-wrapper img {
             width: 100%;
             height: 100%;
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
-        }
-
-        .imglaptop:hover {
-            transform: scale(1.05);
-            /* Gently enlarges the image */
-        }
-
-        .Our-Mission {
-
-            text-align: center;
-            text-decoration: none;
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 30px;
-            font-weight: 400;
-        }
-
-        .info p {
-            font-weight: 330;
-            font-size: 20px;
-        }
-
-        .card-header {
-            background-color: #ffffff;
-            border-bottom: none;
-        }
-
-        i {
-            font-weight: bold;
-            font-size: 25px;
-        }
-
-        li {
-            list-style-type: none;
-            text-decoration: none;
-            text-align: left;
-            margin-bottom: 30px;
-
-
-        }
-
-        li span {
-            color: #9b8f7d;
-        }
-
-        .card-body h6 {
-            font-weight: 600;
-        }
-
-
-
-
-        .Our-Mission {
-            margin-top: 30px;
-        }
-
-        @media screen and (max-width: 480px) {
-            .last {
-                margin-top: 500px;
-                border: 1px solid green;
-                padding: 5px;
-            }
-
-            .imgcun {
-                display: none;
-            }
-
-            .teimlms {
-                display: none;
-            }
-
-        }
-
-        label {
-            text-align: left;
-        }
-
-        .subcan {
-            display: inline-block;
-            width: 30%;
-            margin-left: 70px;
-
-        }
-
-        .myform {
-            border: 1px solid rgb(192, 166, 166);
-            padding: 20px;
-            border-radius: 2%;
-        }
-
-        .imgcuninner {
-            border-radius: 2%;
-            box-shadow: 0px 0px 5px blue;
-        }
-
-        .weserviceimg {
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
-            overflow: hidden;
-            border-radius: 15px;
-        }
-
-        .weserviceimg:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .weserviceimg img {
-            width: 100%;
-            height: 200px;
             object-fit: cover;
-            transition: transform 0.3s;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
+            transition: transform 0.4s ease;
         }
 
-        .weserviceimg:hover img {
+        .gallery-img-wrapper:hover img {
             transform: scale(1.05);
         }
 
-        .weserviceimg .card-body {
-            background: #f9f9f9;
-            text-align: center;
-            padding: 20px;
+        /* Why Learning Session Section */
+        .why-section {
+            padding: 80px 0;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
         }
 
-        .weserviceimg h6 {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
+        .why-icon-badge {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 1.25rem auto;
+            transition: transform 0.3s ease;
         }
 
-        .weserviceimg p {
-            font-size: 14px;
-            color: #666;
+        .pastel-card:hover .why-icon-badge {
+            transform: scale(1.12) rotate(5deg);
+        }
+
+        /* Pastel Badge Color Variations */
+        .badge-pastel-indigo { background: #e0e7ff; color: #4f46e5; }
+        .badge-pastel-sky { background: #e0f2fe; color: #0284c7; }
+        .badge-pastel-mint { background: #d1fae5; color: #059669; }
+        .badge-pastel-purple { background: #f3e8ff; color: #9333ea; }
+        .badge-pastel-rose { background: #fce7f3; color: #db2777; }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 100px 0 50px 0;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 2.1rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .container-wide {
+                width: 100%;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-
-
     {% include 'base_without_sidebar.html' %}
 
-
-    <!-- main Content start -->
-
-    <div class="container  ">
-        <div class="row step2  " style="margin-top: 60px;">
-            <div class="col-md-6 info col-12 mt-5 ">
-                <h3 class="Our-Mission text-left pb-1">ProfitMax Learning Management System</h3>
-                <p style="text-align: left;">
-                  <b>Unlock the Secrets of the Share Market</b> 
-                    Discription Login now to explore the fundamentals of the share market and dive into real-life,
-                    exciting stock stories that make learning fun and practical! Perfect for traders – Start learning
-                    and start trading smarter today.!
-                </p>
-
-
-                <div class="row mt-5">
-
-                    <div class="col-md-6 col-6">
-                        <a href="login/"> <button>Login</button>
-                        </a>
+    <!-- Hero Section Start -->
+    <section class="hero-section">
+        <div class="container-wide">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="hero-badge">
+                        <i class="fa-solid fa-sparkles mr-2"></i> ProfitMax LMS Platform
                     </div>
-                    <div class="col-md-16 col-6">
-                        <a href="signup/">
-                            <button class="signbut">Sign Up</button>
+                    <h1 class="hero-title mb-3">
+                        Unlock the Secrets of the <span class="hero-title-gradient">Share Market</span>
+                    </h1>
+                    <p class="hero-description mb-4">
+                        Discover stock market fundamentals and real-life stock stories that make learning engaging and practical. Perfect for traders – start learning and trading smarter today!
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 hero-buttons">
+                        <a href="login/" class="btn btn-pastel-hero btn-pill mr-3 mb-2">
+                            <i class="fa-solid fa-right-to-bracket mr-2"></i> Login to LMS
+                        </a>
+                        <a href="signup/" class="btn btn-pastel-outline btn-pill mb-2">
+                            <i class="fa-solid fa-user-plus mr-2"></i> Create Free Account
                         </a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 infopc col-12 mt-5 ">
-                <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png"
-                    class="imglaptop" alt="Dashboard Image">
-            </div>
-        </div>
-
-
-
-
-
-        <div class="row ">
-            <div class="col-md-12 col-12 text-center p-5 mt-5  ">
-                <h3 class="col-md-12 col-12 text-center  Our-Mission ">Award Winning Share Market Classes Pune</h3>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-md-4 col-12 mb-4">
-                <div class="card weserviceimg">
-                    <div class="card-header p-0">
-                        <img src="{% static 'images/award1.jpg' %}" alt="award3">
-                    </div>
-                    <div class="card-body">
-                        <h6>Smart Learning System!</h6>
-                        <p>Some information about our amazing LMS platform.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-12 mb-4">
-                <div class="card weserviceimg">
-                    <div class="card-header p-0">
-                        <img src="{% static 'images/award2.jpg' %}" alt="award3">
-                    </div>
-                    <div class="card-body">
-                        <h6>Smart Learning System!</h6>
-                        <p>Learn faster and smarter with our best tools!</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-12 mb-4">
-                <div class="card weserviceimg">
-                    <div class="card-header p-0">
-                        <img src="{% static 'images/award3.jpg' %}" alt="award3">
-                    </div>
-                    <div class="card-body">
-                        <h6>Smart Learning System!</h6>
-                        <p>We're always here to help you whenever needed.</p>
+                <div class="col-lg-6">
+                    <div class="hero-img-wrapper">
+                        <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" alt="ProfitMax LMS Dashboard Preview">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container  text-center">
+    </section>
 
-        <div class="row ">
-            <div class="col-md-12 col-12 text-center p-5 Our-Mission "> Services We Offer </div>
+    <!-- Award Winning Section Start -->
+    <section class="py-5">
+        <div class="container-wide">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Award-Winning <span class="section-title-gradient">Share Market Classes</span> Pune
+                </h2>
+                <p class="section-subtitle">Recognized for delivering excellence in stock market education and trader empowerment.</p>
+            </div>
 
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-12  mb-5">
-                <div class="row" style="height: 400px;">
-                    <div class="col-md-6  col-12 mb-5" style="height: 100%; width:100%;">
-                        <img src="{% static 'images/img3.jpg' %} " height="100%" width="100%" class="weserviceimg">
-
-                    </div>
-                    <div class="col-md-6  col-12" style="height: 100%; width:100%;">
-                        <div style="height: 45%; width:100%;"> <img src="{% static 'images/img2.jpg' %} " height="100%"
-                                width="100%" class="weserviceimg">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="pastel-card">
+                        <div class="overflow-hidden">
+                            <img src="{% static 'images/award1.jpg' %}" alt="Smart Learning System" class="pastel-card-img-top">
                         </div>
-                        <div style="margin-top: 40px; height: 45%; width:100%;"> <img
-                                src=" {% static 'images/img1.jpg' %}" height="100%" width="100%" class="weserviceimg">
+                        <div class="pastel-card-body">
+                            <h5 class="pastel-card-title">Smart Learning System</h5>
+                            <p class="pastel-card-text">Explore our comprehensive, interactive LMS platform designed for fast learning.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="pastel-card">
+                        <div class="overflow-hidden">
+                            <img src="{% static 'images/award2.jpg' %}" alt="Advanced Trading Tools" class="pastel-card-img-top">
+                        </div>
+                        <div class="pastel-card-body">
+                            <h5 class="pastel-card-title">Advanced Trading Tools</h5>
+                            <p class="pastel-card-text">Master market analysis faster and smarter with cutting-edge stock tools.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="pastel-card">
+                        <div class="overflow-hidden">
+                            <img src="{% static 'images/award3.jpg' %}" alt="Dedicated Mentorship Support" class="pastel-card-img-top">
+                        </div>
+                        <div class="pastel-card-body">
+                            <h5 class="pastel-card-title">Dedicated Mentorship</h5>
+                            <p class="pastel-card-text">Receive ongoing guidance and support from experienced market professionals.</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6  col-12 mb-5 col-12 text-info last ">
-                <ul>
-                    <li>
-                        <i class="fa-solid fa-check mt-4"></i>
-                        <span>&nbsp; &nbsp;Learn the basics of stock market investing from scratch.</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-check"></i>
-                        <span>&nbsp; &nbsp;Master technical analysis and reading market charts.</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-check"></i>
-                        <span>&nbsp; &nbsp;Get hands-on training with real-time trading simulations.</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-check"></i>
-                        <span>&nbsp; &nbsp;Understand risk management and smart investment strategies.</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-check"></i>
-                        <span>&nbsp; &nbsp;Learn how to build and manage your own stock portfolio.</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-check"></i>
-                        <span>&nbsp; &nbsp;Access expert mentorship and lifetime learning resources.</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-check"></i>
-                        <span>&nbsp; &nbsp;Become a confident and independent stock market trader.</span>
-                    </li>
-                </ul>
+        </div>
+    </section>
 
+    <!-- Services We Offer Section Start -->
+    <section class="services-section">
+        <div class="container-wide">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Services <span class="section-title-gradient">We Offer</span>
+                </h2>
+                <p class="section-subtitle">Structured modules to transform beginners into confident stock market traders.</p>
             </div>
 
-
-        </div>
-        <div class="row ">
-            <div class="col-md-12 col-12 text-center p-5 Our-Mission "> Why Learning Secsion </div>
-
-        </div>
-        <div class="row">
-            <!-- Trade with Professional Trader -->
-            <div class="col-md-4 col-12">
-                <div class="card mb-5 weserviceimg">
-                    <div class="card-header text-center">
-                        <i class="fa-solid fa-chalkboard-user fa-2x"></i> <!-- Mentorship icon -->
-                    </div>
-                    <div class="card-body">
-                        <h6 class="text-center">Trade with Professional Trader</h6>
-                        <p>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Get guided by experienced mentors
-                            &nbsp; using our exclusive Vardan Strategy
-                            &nbsp; to maximize your profit potential and
-                            improve your trading psychology."
-                        </p>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="row no-gutters">
+                        <div class="col-6 pr-2 mb-3">
+                            <div class="gallery-img-wrapper" style="height: 380px;">
+                                <img src="{% static 'images/img3.jpg' %}" alt="Service Detail Image 1">
+                            </div>
+                        </div>
+                        <div class="col-6 pl-2">
+                            <div class="gallery-img-wrapper mb-3" style="height: 182px;">
+                                <img src="{% static 'images/img2.jpg' %}" alt="Service Detail Image 2">
+                            </div>
+                            <div class="gallery-img-wrapper" style="height: 182px;">
+                                <img src="{% static 'images/img1.jpg' %}" alt="Service Detail Image 3">
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Learn about Risk Management -->
-            <div class="col-md-4 col-12">
-                <div class="card mb-5 weserviceimg">
-                    <div class="card-header text-center">
-                        <i class="fa-solid fa-shield-halved fa-2x"></i> <!-- Risk Management Icon -->
+                <div class="col-lg-6 pl-lg-5">
+                    <div class="service-feature-item">
+                        <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
+                        <div class="service-feature-text">Learn the basics of stock market investing from scratch.</div>
                     </div>
-                    <div class="card-body">
-                        <h6 class="text-center">Learn about Risk Management</h6>
-                        <p>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Identify, assess, and monitor potential
-                            risks efficiently. Our Risk Management
-                            System helps you stay compliant and
-                            secure with real-time alerts and analytics."
-                        </p>
+                    <div class="service-feature-item">
+                        <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
+                        <div class="service-feature-text">Master technical analysis and reading market charts efficiently.</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Use Smart Tools -->
-            <div class="col-md-4 col-12">
-                <div class="card mb-5 weserviceimg">
-                    <div class="card-header text-center">
-                        <i class="fa-solid fa-robot fa-2x"></i> <!-- Smart Tools Icon -->
+                    <div class="service-feature-item">
+                        <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
+                        <div class="service-feature-text">Get hands-on training with real-time trading simulations.</div>
                     </div>
-                    <div class="card-body">
-                        <h6 class="text-center">Use Smart Tools</h6>
-                        <p>
-                            "Enhance your decision-making with
-                            our advanced tools like the
-                            <strong>Bramhastra Stock Alert System</strong>
-                            for accurate, timely stock movement alerts."
-                        </p>
+                    <div class="service-feature-item">
+                        <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
+                        <div class="service-feature-text">Understand risk management and smart investment strategies.</div>
+                    </div>
+                    <div class="service-feature-item">
+                        <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
+                        <div class="service-feature-text">Learn how to build and manage your own stock portfolio.</div>
+                    </div>
+                    <div class="service-feature-item">
+                        <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
+                        <div class="service-feature-text">Access expert mentorship and lifetime learning resources.</div>
+                    </div>
+                    <div class="service-feature-item">
+                        <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
+                        <div class="service-feature-text">Become a confident and independent stock market trader.</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 col-12">
-                <div class="card mb-5 weserviceimg">
-                    <div class="card-header text-center">
-                        <i class="fa-solid fa-brain fa-2x"></i> <!-- Psychology Icon -->
-                    </div>
-                    <div class="card-body">
-                        <h6 class="text-center">Learn Trading Psychology</h6>
-                        <p>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Master your emotions and behavior in the market.
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Understand fear, greed, and discipline to
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;build a successful and consistent trading mindset."
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card mb-5 weserviceimg">
-                    <div class="card-header text-center">
-                        <i class="fa-solid fa-user-tie fa-2x"></i> <!-- Professional mentorship icon -->
-                    </div>
-                    <div class="card-body">
-                        <h6 class="text-center">Trade with Professional Trader</h6>
-                        <p>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Join hands with experienced traders and
-                            receive dedicated <strong>mentorship</strong> to
-                            enhance your trading journey. Learn our
-                            exclusive <strong>Vardan Strategy</strong> for smart,
-                            disciplined trading decisions."
-                        </p>
-                    </div>
-                </div>
+    </section>
+
+    <!-- Why Learning Sessions Section Start -->
+    <section class="why-section">
+        <div class="container-wide">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Why <span class="section-title-gradient">Our Learning Sessions</span>
+                </h2>
+                <p class="section-subtitle">Everything you need to build discipline, strategy, and consistent profitability.</p>
             </div>
 
+            <div class="row">
+                <!-- Card 1 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="pastel-card p-4">
+                        <div class="why-icon-badge badge-pastel-indigo">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <h5 class="pastel-card-title text-center">Trade with Pro Mentors</h5>
+                        <p class="pastel-card-text text-center">
+                            Get guided by experienced mentors using our exclusive Vardan Strategy to maximize profit potential and improve trading psychology.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="pastel-card p-4">
+                        <div class="why-icon-badge badge-pastel-sky">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h5 class="pastel-card-title text-center">Risk Management</h5>
+                        <p class="pastel-card-text text-center">
+                            Identify, assess, and monitor potential market risks efficiently with real-time risk mitigation and smart analytics.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="pastel-card p-4">
+                        <div class="why-icon-badge badge-pastel-mint">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h5 class="pastel-card-title text-center">Smart Alert Tools</h5>
+                        <p class="pastel-card-text text-center">
+                            Enhance your decision-making with advanced tools like the Bramhastra Stock Alert System for accurate, timely stock alerts.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="pastel-card p-4">
+                        <div class="why-icon-badge badge-pastel-purple">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h5 class="pastel-card-title text-center">Trading Psychology</h5>
+                        <p class="pastel-card-text text-center">
+                            Master your emotions and behavior in the market. Understand fear, greed, and discipline to build a consistent mindset.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="pastel-card p-4">
+                        <div class="why-icon-badge badge-pastel-rose">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h5 class="pastel-card-title text-center">Exclusive Strategies</h5>
+                        <p class="pastel-card-text text-center">
+                            Join hands with experienced traders and receive dedicated mentorship to execute disciplined, high-probability trades.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-
+    </section>
 
     {% include 'footer.html' %}
-
 
 </body>
 

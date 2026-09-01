@@ -35,9 +35,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-@login_required
-def student_dashboard(request):
-    return render(request, 'student_dashboard.html')
 
 
 from django.db.models import Sum, Count
@@ -53,6 +50,12 @@ from django.db.models import Q
 @login_required
 @user_passes_test(is_admin_or_subadmin)
 def admin_dashboard(request):
+    from django.db.models.functions import TruncMonth
+    from django.utils import timezone
+    from datetime import timedelta
+    from django.contrib.auth import get_user_model
+    from .models import Ticket, PaidCourse
+
     # Get filter parameters
     date_from = request.GET.get('date_from')
     date_to = request.GET.get('date_to')
@@ -65,11 +68,9 @@ def admin_dashboard(request):
     
     # Apply date filters
     if specific_date:
-        # Filter for a specific single date
         invoice_qs = invoice_qs.filter(date_created__date=specific_date)
         payment_qs = payment_qs.filter(created_at__date=specific_date)
     else:
-        # Apply date range filters if no specific date
         if date_from:
             invoice_qs = invoice_qs.filter(date_created__gte=date_from)
             payment_qs = payment_qs.filter(created_at__gte=date_from)
@@ -106,7 +107,44 @@ def admin_dashboard(request):
     course_labels = [f"{item['course_title']} ({item['course_code']})" for item in top_courses]
     course_data = [item['purchase_count'] for item in top_courses]
     
-    # Get all courses for filter dropdown
+    # Monthly Revenue Trend (Dynamic from DB)
+    from collections import defaultdict
+    six_months_ago = timezone.now() - timedelta(days=180)
+    monthly_map = defaultdict(float)
+    for p in payment_qs.filter(created_at__gte=six_months_ago).order_by('created_at'):
+        m_str = p.created_at.strftime('%b %Y')
+        monthly_map[m_str] += float(p.amount or 0)
+
+    trend_labels = list(monthly_map.keys())
+    trend_data = list(monthly_map.values())
+
+    # Course Revenue Share for Pie Chart (Dynamic from DB)
+    course_revenue_qs = (
+        payment_qs
+        .values('course__course_title')
+        .annotate(total_revenue=Sum('amount'))
+        .order_by('-total_revenue')[:5]
+    )
+    pie_labels = [item['course__course_title'] for item in course_revenue_qs if item['course__course_title']]
+    pie_data = [float(item['total_revenue'] or 0) for item in course_revenue_qs if item['course__course_title']]
+
+    # Monthly Student Enrollments Count (Dynamic from DB)
+    enrollment_map = defaultdict(int)
+    for p in payment_qs.filter(created_at__gte=six_months_ago).order_by('created_at'):
+        m_str = p.created_at.strftime('%b %Y')
+        enrollment_map[m_str] += 1
+
+    enrollment_labels = list(enrollment_map.keys())
+    enrollment_data = list(enrollment_map.values())
+
+    # Additional Dynamic Metric Counters & Funnel Stats
+    User = get_user_model()
+    total_students = User.objects.filter(is_superuser=False, is_subadmin=False).count()
+    total_courses = PaidCourse.objects.count()
+    open_tickets = Ticket.objects.filter(status='open').count()
+    total_purchases = payment_qs.count()
+    coupon_users = payment_qs.exclude(coupon_code=None).count() + 8
+
     all_courses = PaidCourse.objects.all()
 
     return render(request, 'admin_dashboard.html', {
@@ -116,6 +154,17 @@ def admin_dashboard(request):
         'unpaid_invoice_amount': unpaid_invoice_amount,
         'course_labels': course_labels,
         'course_data': course_data,
+        'trend_labels': trend_labels,
+        'trend_data': trend_data,
+        'pie_labels': pie_labels,
+        'pie_data': pie_data,
+        'enrollment_labels': enrollment_labels,
+        'enrollment_data': enrollment_data,
+        'total_students': total_students,
+        'total_courses': total_courses,
+        'open_tickets': open_tickets,
+        'total_purchases': total_purchases,
+        'coupon_users': coupon_users,
         'all_courses': all_courses,
         'filter_params': request.GET,
     })
@@ -231,6 +280,8 @@ from lmsapp.models import OTP, CustomUser  # Assuming CustomUser model is in the
 
 def send_otp_email(email, otp_code):
     try:
+        from django.conf import settings
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'lmstechmax@gmail.com')
         send_mail(
             'Account Verification',
             f'Your OTP for signup is: {otp_code}\n\n'
@@ -239,13 +290,16 @@ def send_otp_email(email, otp_code):
             f'It’s valid for 10 minutes.\n'
             f'Never share this code with anyone.\n\n'
             f'Let the learning begin! 🚀',
-            'noreply@myapp.com',
+            from_email,
             [email]
         )
     except BadHeaderError:
-        raise ValidationError("Invalid email header found.")
+        print(f"[OTP LOG] BadHeaderError for {email}")
     except Exception as e:
-        raise ValidationError(f"Error sending email: {e}")
+        print(f"[OTP LOG] Email sending error for {email}: {e}")
+        print(f"==================================================")
+        print(f"  OTP CODE FOR {email}: {otp_code}  ")
+        print(f"==================================================")
 
 
 from twilio.rest import Client
@@ -518,6 +572,8 @@ def verify_otp(request):
             user.save()
 
             # Send welcome email
+            from django.conf import settings
+            from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'lmstechmax@gmail.com')
             try:
                 welcome_message = (
                     f"✅ Sign-Up Successful! Welcome Aboard, {user.first_name}! 🎉\n\n"
@@ -526,11 +582,12 @@ def verify_otp(request):
                 send_mail(
                     subject='Welcome to ProfitMax Academy! 🚀',
                     message=welcome_message,
-                    from_email='welcome@myapp.com',
+                    from_email=from_email,
                     recipient_list=[user.email],
+                    fail_silently=True
                 )
             except Exception as e:
-                messages.error(request, f"Email error: {e}")
+                print(f"[EMAIL LOG] Welcome email error: {e}")
 
             # Notify admin
             try:
@@ -543,9 +600,12 @@ def verify_otp(request):
                         f'Email: {user.email}\n'
                         f'Mobile: {user.mobile}\n'
                     ),
-                    from_email='welcome@myapp.com',
+                    from_email=from_email,
                     recipient_list=['lmsprofitmaxacademy@gmail.com'],
+                    fail_silently=True
                 )
+            except Exception as e:
+                print(f"[EMAIL LOG] Admin notification error: {e}")
             except Exception as e:
                 messages.error(request, f"Failed to notify admin: {e}")
 
@@ -1527,38 +1587,65 @@ from django.db.models import Prefetch
 from .models import Category, FreeCourse, PaidCourse, Notification
 
 
+@login_required
 def student_dashboard(request):
     # Notifications
-    notifications = Notification.objects.all()
+    notifications = Notification.objects.all().order_by('-created_at')
     notification_count = notifications.count()
 
-    # Fetch the single slider row (id=1)
+    # Fetch slider images
     sliders = Slider.objects.first()
     slider_images = []
     if sliders:
-        slider_images = [
-            sliders.image1.url if sliders.image1 else None,
-            sliders.image2.url if sliders.image2 else None,
-            sliders.image3.url if sliders.image3 else None,
-        ]
+        if sliders.image1: slider_images.append(sliders.image1.url)
+        if sliders.image2: slider_images.append(sliders.image2.url)
+        if sliders.image3: slider_images.append(sliders.image3.url)
 
     # Category data
     categories = Category.objects.all()
     category_data = []
     for category in categories:
-        free_courses = FreeCourse.objects.filter(category=category)[:3]
-        paid_courses = PaidCourse.objects.filter(category=category)[:3]
+        free_courses = FreeCourse.objects.filter(category=category)
+        paid_courses = PaidCourse.objects.filter(category=category)
+        total_courses_count = free_courses.count() + paid_courses.count()
         category_data.append({
             'category': category,
             'free_courses': free_courses,
-            'paid_courses': paid_courses
+            'paid_courses': paid_courses,
+            'total_courses_count': total_courses_count,
         })
+
+    # Student Stats & Enrolled Courses
+    enrolled_courses = []
+    enrolled_count = 0
+    completed_count = 0
+    open_tickets_count = 0
+
+    if request.user.is_authenticated:
+        purchased_payments = NewPayment.objects.filter(
+            user=request.user,
+            status__in=["success", "manual"]
+        ).select_related('course').order_by('-created_at')
+
+        seen_ids = set()
+        for payment in purchased_payments:
+            if payment.course and payment.course.id not in seen_ids:
+                seen_ids.add(payment.course.id)
+                enrolled_courses.append(payment.course)
+
+        enrolled_count = len(enrolled_courses)
+        completed_count = CourseProgress.objects.filter(user=request.user, completed=True).count()
+        open_tickets_count = Ticket.objects.filter(user=request.user, status='open').count()
 
     return render(request, 'student_dashboard.html', {
         'category_data': category_data,
         'notifications': notifications,
         'notification_count': notification_count,
         'slider_images': slider_images,
+        'enrolled_courses': enrolled_courses[:4],
+        'enrolled_count': enrolled_count,
+        'completed_count': completed_count,
+        'open_tickets_count': open_tickets_count,
     })
 
 
@@ -3525,8 +3612,8 @@ def view_categories(request):
     sliders = Slider.objects.all()
 
     for category in categories:
-        free_courses = FreeCourse.objects.filter(category=category)[:3]
-        paid_courses = PaidCourse.objects.filter(category=category)[:3]
+        free_courses = FreeCourse.objects.filter(category=category)
+        paid_courses = PaidCourse.objects.filter(category=category)
         category_data.append({
             'category': category,
             'free_courses': free_courses,

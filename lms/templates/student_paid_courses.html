@@ -3,210 +3,274 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy - Paid Courses</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Courses - ProfitMax Share Market Academy</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
-    <!-- Favicon -->
-    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Bootstrap & Font Awesome -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            background-color: #f5f7fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        .course-header {
-            background: linear-gradient(to right, #003c8f, #1976d2);
-            color: white;
-            padding: 3rem 0;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      color: #334155;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-        .course-card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+    /* Wide Fluid Container */
+    .container-wide {
+      width: 94%;
+      max-width: 1640px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 100px;
+      padding-bottom: 70px;
+    }
 
-        .course-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e0e7ff;
+      color: #4f46e5;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 8px 22px;
+      border-radius: 50px;
+      margin-bottom: 1.25rem;
+      border: 1px solid #c7d2fe;
+    }
 
-        .course-img {
-            height: 200px;
-            object-fit: cover;
-            width: 100%;
-        }
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
 
-        .course-body {
-            padding: 1.25rem;
-        }
+    .section-title-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .course-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #212529;
-        }
+    /* Course Cards */
+    .course-pastel-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px -10px rgba(99, 102, 241, 0.08);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .course-meta {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-bottom: 0.5rem;
-        }
+    .course-pastel-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.22);
+      border-color: #6366f1;
+    }
 
-        .course-meta i {
-            width: 20px;
-            text-align: center;
-            margin-right: 6px;
-        }
+    .course-img-box {
+      height: 220px;
+      width: 100%;
+      background: #f8fafc;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
+    }
 
-        .course-level {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
+    .course-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
 
-        .level-beginner {
-            background-color: #e3f2fd;
-            color: #1565c0;
-        }
+    .course-pastel-card:hover .course-img-box img {
+      transform: scale(1.08);
+    }
 
-        .level-intermediate {
-            background-color: #fff3cd;
-            color: #856404;
-        }
+    .course-placeholder-icon {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #6366f1;
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    }
 
-        .level-advanced {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+    .badge-paid-pill {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      color: #c2410c;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 6px 16px;
+      border-radius: 50px;
+      border: 1px solid #fed7aa;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      z-index: 5;
+    }
 
-        .course-price {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #388e3c;
-        }
+    .btn-pill {
+      border-radius: 50px !important;
+      padding: 10px 24px !important;
+      font-size: 0.925rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.01em;
+    }
 
-        .original-price {
-            text-decoration: line-through;
-            color: #9e9e9e;
-            margin-right: 5px;
-        }
+    .btn-pastel-hero {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #ffffff !important;
+      border: none;
+      box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.35);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
 
-        .view-btn {
-            background: #1976d2;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            text-decoration: none;
-        }
+    .btn-pastel-hero:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(99, 102, 241, 0.48);
+      color: #ffffff !important;
+      text-decoration: none;
+    }
 
-        .view-btn:hover {
-            background-color: #125ea7;
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(25, 118, 210, 0.3);
-        }
+    .price-tag-large {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #4f46e5;
+    }
 
-        .empty-courses {
-            text-align: center;
-            padding: 5rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .empty-courses i {
-            font-size: 3rem;
-            color: #6c757d;
-            margin-bottom: 1rem;
-        }
-    </style>
+    .original-price-strike {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      text-decoration: line-through;
+      margin-right: 6px;
+    }
+  </style>
 </head>
 
 <body>
-    {% include 'Student_Base.html' %}
-    <div class="main" style="min-height: 100vh;">
 
-        <div class="text-center mb-3" style="margin-top: 100px;">
-            <div class="container">
-                <h1 class="font-weight-bold">Premium Courses</h1>
-                <p class="text-muted">Level up your trading skills with our expert-curated paid courses.</p>
-            </div>
-        </div>
+  {% include 'Student_Base.html' %}
 
-        <div class="container mb-5">
-            <div class="row">
-                {% for course in courses %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="course-card">
-                        {% if course.thumbnail %}
-                        <img src="{{ course.thumbnail.url }}" class="course-img" alt="{{ course.course_title }}">
-                        {% else %}
-                        <img src="{% static 'images/course-placeholder.jpg' %}" class="course-img"
-                            alt="Course thumbnail">
-                        {% endif %}
-                        <div class="course-body">
-                            <span class="course-level level-{{ course.course_level|lower }}">
-                                {{ course.course_level }}
-                            </span>
-                            <h4 class="course-title">{{ course.course_title }}</h4>
+  <div class="container-wide">
 
-                            <div class="course-meta">
-                                <i class="fas fa-clock"></i> Duration: {{ course.duration }}
-                            </div>
-                            <div class="course-meta">
-                                <i class="fas fa-chalkboard-teacher"></i> Instructor: {{ course.instructor_name }}
-                            </div>
-
-                            <div class="course-price">
-                                <span class="original-price">₹{{ course.original_price }}</span>
-                                ₹{{ course.course_price }}
-                                <span class="text-danger ml-2">
-                                    (Save ₹{{ course.discount_amount }})
-                                </span>
-                            </div>
-
-                            <p class="text-muted mt-2" style="font-size: 0.85rem;">
-                                {{ course.description|truncatechars:80 }}
-                            </p>
-
-
-                            <a href="{% url 'display_paid_content' course.id %}" class="view-btn mt-2 d-inline-block">
-                                <i class="fas fa-eye"></i> View Course
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="col-12">
-                    <div class="empty-courses">
-                        <i class="fas fa-book-open"></i>
-                        <h3>No Courses Available</h3>
-                        <p>We don't have any premium courses at the moment. Please check back later.</p>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+      <div class="hero-badge">
+        <i class="fa-solid fa-gem me-2"></i> Premium Learning
+      </div>
+      <h1 class="section-title mb-3">
+        Master Trading with <span class="section-title-gradient">Premium Courses</span>
+      </h1>
+      <p class="text-muted fs-5 mx-auto" style="max-width: 680px;">
+        Level up your stock market strategies with our expert-led premium training courses.
+      </p>
     </div>
-    {% include 'footer.html' %}
+
+    <!-- Courses Grid -->
+    {% if courses %}
+    <div class="row g-4 mb-5">
+      {% for course in courses %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="course-pastel-card">
+          <div class="course-img-box">
+            {% if course.thumbnail %}
+            <img src="{{ course.thumbnail.url }}" alt="{{ course.course_title }}">
+            {% else %}
+            <div class="course-placeholder-icon">
+              <i class="fa-solid fa-gem"></i>
+            </div>
+            {% endif %}
+            <span class="badge-paid-pill">
+              <i class="fa-solid fa-star me-1"></i> PREMIUM
+            </span>
+          </div>
+
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge bg-indigo-subtle text-primary border border-indigo-200 rounded-pill px-3 py-1 fw-bold">
+                {{ course.course_level|default:"All Levels" }}
+              </span>
+              {% if course.duration %}
+              <span class="text-muted small fw-semibold">
+                <i class="fa-solid fa-clock me-1"></i> {{ course.duration }}
+              </span>
+              {% endif %}
+            </div>
+
+            <h3 class="fw-bold fs-5 text-dark mb-2 text-truncate" title="{{ course.course_title }}">
+              {{ course.course_title }}
+            </h3>
+
+            <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+              {{ course.description|default:"Comprehensive trading strategy breakdown with practical market examples." }}
+            </p>
+
+            {% if course.instructor_name %}
+            <div class="text-muted small mb-3">
+              <i class="fa-solid fa-chalkboard-user me-1 text-primary"></i> Instructor: <strong>{{ course.instructor_name }}</strong>
+            </div>
+            {% endif %}
+
+            <div class="d-flex align-items-center justify-content-between mb-3 pt-3 border-top">
+              <div>
+                {% if course.original_price %}
+                <span class="original-price-strike">₹{{ course.original_price }}</span>
+                {% endif %}
+                <span class="price-tag-large">₹{{ course.course_price }}</span>
+              </div>
+              {% if course.discount_amount %}
+              <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 small fw-bold">
+                Save ₹{{ course.discount_amount }}
+              </span>
+              {% endif %}
+            </div>
+
+            <a href="{% url 'display_paid_content' course.id %}" class="btn btn-pastel-hero btn-pill mt-auto">
+              <i class="fa-solid fa-eye me-2"></i> View Course Details
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <div class="card border-0 shadow-sm rounded-4 p-5 mx-auto" style="max-width: 500px; background: #ffffff;">
+        <i class="fa-solid fa-gem fs-1 text-primary mb-3"></i>
+        <h4 class="fw-bold text-dark mb-2">No Premium Courses Available</h4>
+        <p class="text-muted mb-0">Check back soon for upcoming premium courses.</p>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  {% include 'footer.html' %}
+
 </body>
 
 </html>

@@ -7,32 +7,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profit Max Share Market Academy </title>
   <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
-  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
   <!-- Bootstrap & Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
+    html, body {
+      height: 100%;
+      overflow-x: hidden !important;
+      max-width: 100vw;
+    }
+
     body {
-      font-family: Verdana, sans-serif;
-      background-color: #fffffff6;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8fafc;
       margin: 0;
       padding: 0;
+      color: #334155;
+      min-height: 100vh !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
 
     /* Navbar */
     .navbar {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
       position: fixed;
       top: 0;
       width: 100%;
       z-index: 500;
-      background-color: #f8f9fa;
-      padding: 15px !important;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid #e2e8f0;
+      padding: 12px 24px !important;
     }
 
     .navbar-logo {
-      height: 60px;
+      height: 55px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-logo:hover {
+      transform: scale(1.05);
     }
 
     @media (max-width: 767.98px) {
@@ -51,231 +70,303 @@
       }
     }
 
-    /* Sidebar */
+    /* Light Pastel Sidebar */
     .sidebar {
       position: fixed;
       top: 0;
-      left: -270px;
-      width: 270px;
+      left: -290px;
+      width: 290px;
       height: 100vh;
-      background-color: #343a40;
-      color: #ffffff;
-      transition: all 0.3s ease-in-out;
+      background-color: #ffffff;
+      color: #0f172a;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 999;
-      padding-top: 70px;
+      padding-top: 75px;
       overflow-y: auto;
+      border-right: 1.5px solid #e2e8f0;
+      box-shadow: 10px 0 35px -10px rgba(99, 102, 241, 0.12);
     }
 
     .sidebar.show {
       left: 0;
     }
 
-    .sidebar .nav-link {
-      color: #ffffff;
-      font-size: 15px;
+    .sidebar-user-card {
+      background: #e0e7ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .sidebar .nav-link:hover {
-      color: #fff;
-      box-shadow: 0px 0px 10px rgb(255, 255, 255);
-      border-radius: 5px;
+    .sidebar-user-avatar {
+      width: 40px;
+      height: 40px;
+      background: #4f46e5;
+      color: #ffffff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .sidebar-user-info {
+      overflow: hidden;
+    }
+
+    .sidebar-user-name {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #0f172a;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-user-role {
+      font-size: 0.775rem;
+      color: #4f46e5;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sidebar .nav-link {
+      color: #334155;
+      font-size: 0.925rem;
+      font-weight: 600;
+      padding: 11px 16px;
+      border-radius: 14px;
+      transition: all 0.25s ease;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar .nav-link-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar .nav-link i.link-icon {
+      color: #4f46e5;
+      font-size: 1.05rem;
+      width: 22px;
+      text-align: center;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      color: #4f46e5;
+      background-color: #e0e7ff;
+      box-shadow: 0 4px 14px -3px rgba(99, 102, 241, 0.18);
+    }
+
+    .sidebar .nav-link:hover i.link-icon {
+      transform: scale(1.15);
     }
 
     .sidebar .dropdown-toggle::after {
+      transition: transform 0.3s ease;
       float: right;
-      margin-top: 6px;
+      margin-top: 8px;
+    }
+
+    .sidebar-submenu {
+      background-color: #f8fafc;
+      border-radius: 14px;
+      padding: 6px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .sidebar-submenu .nav-link {
+      font-size: 0.875rem;
+      padding: 9px 14px 9px 38px;
+      color: #475569;
+    }
+
+    .sidebar-submenu .nav-link:hover {
+      color: #0284c7;
+      background-color: #e0f2fe;
     }
 
     .toggle-btn {
       font-size: 24px;
       cursor: pointer;
+      color: #475569;
+      transition: color 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+      color: #4f46e5;
     }
 
     .close-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 26px;
+      top: 18px;
+      right: 18px;
+      font-size: 24px;
       cursor: pointer;
+      color: #64748b;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+      transform: rotate(90deg);
     }
 
     .nav-item .nav-link.pl-4 {
       padding-left: 2.5rem !important;
     }
 
-    /* Main Content */
-    .main-content {
-      padding-top: 100px;
-      /* Adjust based on navbar height */
-    }
-
-    /* Sidebar 2 (Right) */
+    /* Light Pastel Sidebar 2 (Right Notifications) */
     .sidebar2 {
       position: fixed;
       top: 0;
-      right: -350px;
-      width: 300px;
+      right: -360px;
+      width: 340px;
       height: 100vh;
-      background-color: #343a40;
+      background-color: #ffffff;
+      border-left: 1.5px solid #e2e8f0;
       z-index: 1050;
-      transition: right 0.5s ease-in-out;
-      overflow-y: scroll;
-      border-radius: 5px;
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      box-shadow: -10px 0 35px -10px rgba(99, 102, 241, 0.12);
     }
 
     .sidebar2.show {
       right: 0;
     }
 
-    .sidebar2:hover {
-      background-color: #23272b;
-    }
-
-    .sidebar2 .nav-link,
-    .sidebar2 .dropdown-item {
-      color: white !important;
-    }
-
     .close-btn2 {
       position: sticky;
       top: 0;
       right: 5px;
-      background-color: #23272b;
-      color: white;
-      font-size: 30px;
+      background-color: #ffffff;
+      color: #64748b;
+      font-size: 26px;
       cursor: pointer;
       z-index: 1000;
       text-align: right;
-      padding: 10px 20px;
+      padding: 12px 20px;
+      border-bottom: 1px solid #e2e8f0;
     }
 
     .close-btn2:hover {
-      color: #ff4d4d;
+      color: #ef4444;
     }
 
-    .toggle-btn2 {
-      position: fixed;
-      top: 1px;
-      left: 10px;
-      z-index: 1100;
-      cursor: pointer;
-      font-size: 1.5rem;
-    }
-
-    @media screen and (max-width: 480px) {
-      .sidebar2 {
-        width: 250px;
-      }
-    }
-
-    /* Notification */
+    /* Notification Cards */
     .notification {
       transition: all 0.3s ease-in-out;
-      border-radius: 8px;
-      border: 1px solid cyan;
-    }
-
-    .notification:hover {
-      transform: translateY(-5px);
-      box-shadow: 0px 4px 20px #ddd;
-      cursor: pointer;
-    }
-
-    .notification.card {
-      margin: 10px;
-    }
-
-    .notification-container {
-      position: absolute;
-      top: 50px;
-      right: 20px;
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 8px;
-      height: 500px;
-      border: 1px solid #ddd;
-      max-width: 300px;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-      display: none;
-      overflow-y: auto;
+      border-radius: 16px;
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
     }
 
     .bell-icon {
-      background: none;
-      border: none;
-      font-size: 24px;
+      width: 42px;
+      height: 42px;
+      background: #e0e7ff;
+      color: #4f46e5;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
       cursor: pointer;
-      margin: 10px;
-      transition: 2s;
+      transition: all 0.25s ease;
+      border: 1px solid #c7d2fe;
+    }
+
+    .bell-icon:hover {
+      background: #6366f1;
+      color: #ffffff;
+      transform: rotate(15deg);
     }
 
     .nonoti {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      cursor: not-allowed;
-      text-decoration: none;
-      background: linear-gradient(to left, #2575fc, #ffffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0f172a;
     }
 
-    /* Button */
+    /* Logout Button */
     .Btn {
       display: flex;
       align-items: center;
-      background-color: #dc3545;
+      justify-content: center;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
       color: #fff;
-      padding: 10px 20px;
+      padding: 12px 20px;
       border: none;
-      margin-top: 30px;
-      border-radius: 30px;
+      margin-top: 24px;
+      margin-bottom: 20px;
+      border-radius: 14px;
       transition: 0.3s;
+      width: 100%;
+      font-weight: 700;
+      box-shadow: 0 8px 18px -4px rgba(239, 68, 68, 0.35);
+      cursor: pointer;
     }
 
     .Btn:hover {
-      background-color: #c82333;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 0 12px 22px -4px rgba(239, 68, 68, 0.48);
+      transform: translateY(-2px);
+      color: #ffffff;
     }
 
     .Btn .text {
       margin-left: 10px;
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .Btn svg {
-      width: 20px;
+      width: 18px;
       fill: #fff;
     }   
 
-    /* header user css  */
-    .user{
-          padding-right: 10px;
-          background: linear-gradient(to right, #2575fc, #6a11cb);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+    .user {
+      padding-right: 10px;
+      background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .username{
-      font-size: 17px;
+    
+    .username {
+      font-size: 15px;
+      font-weight: 700;
     }
+
     @media (max-width: 768px) {
-        .user{
-          display: none;
-        }
+      .user {
+        display: none;
+      }
     }
-
-    /* sidebar user iconame css */
-       .usersiderbar{
-          position: absolute;
-          top: 20px;
-          left: 10px;
-          font-size: 26px;
-          background: linear-gradient(to right, #2575fc, #6a11cb);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          
-       } 
   </style>
-
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -286,7 +377,9 @@
       const sidebar = document.getElementById('sidebar');
       const toggleBtn = document.querySelector('.toggle-btn');
       sidebar.classList.toggle('show');
-      toggleBtn.style.display = sidebar.classList.contains('show') ? 'none' : 'block';
+      if (toggleBtn) {
+        toggleBtn.style.display = sidebar.classList.contains('show') ? 'none' : 'block';
+      }
     }
 
     function toggleSidebar2() {
@@ -294,174 +387,145 @@
       sidebar2.classList.toggle('show');
     }
   </script>
-
-  <script>
-    function toggleNotifications() {
-      var container = document.getElementById("notificationContainer");
-      var notificationCount = document.getElementById("notification-count");
-
-      container.classList.toggle('active');
-
-      if (container.style.display === "none" || container.style.display === "") {
-        container.style.display = "block"; // Show container
-        notificationCount.style.display = "none"; // Hide count when opened
-      } else {
-        container.style.display = "none"; // Hide container
-      }
-    }
-
-    function closeNotifications() {
-      document.getElementById("notificationContainer").style.display = "none";
-    }
-
-    // Function to update notification count
-    function updateNotificationCount(count) {
-      const notificationCount = document.getElementById('notification-count');
-      if (count > 0) {
-        notificationCount.innerText = count;
-        notificationCount.style.display = 'inline-block'; // Show count if new notifications exist
-      } else {
-        notificationCount.style.display = 'none'; // Hide if no new notifications
-      }
-    }
-
-    // Example: Simulate receiving new notifications dynamically
-    let newNotifications = 3; // Initial notification count
-    updateNotificationCount(newNotifications);
-
-    // Simulating new notifications every 5 seconds (for demo purposes)
-    setInterval(() => {
-      newNotifications += 1; // Increase notification count
-      updateNotificationCount(newNotifications);
-    }, 5000);
-  </script>
 </head>
 
 <body>
 
   <!-- Navbar -->
-   
-   
   <nav class="navbar navbar-light px-4 py-2 justify-content-between">
     <div class="d-flex align-items-center">
       <i class="fas fa-bars toggle-btn text-dark me-3" onclick="toggleSidebar()"></i>
     </div>
 
-   <div class="navbar-logo mx-auto">
-    <img src="
-        {% if category and category.navbar_logo %}
-            {{ category.navbar_logo.url }}
-        {% else %}
-            {% static 'images/pmxlogo_c.png' %}
-        {% endif %}
-    " 
-    alt="Logo" class="navbar-logo">
-</div>
-
-<!-- 
     <div class="navbar-logo mx-auto">
-    <img src="{% if category and category.icon %}{{ category.icon.url }}{% else %}{% static 'images/pmxlogo_c.png' %}{% endif %}" 
-         alt="Logo" class="navbar-logo">
-</div> -->
-
- 
-    <div class="d-flex align-items-center ">
-    {% if user.is_authenticated %}
-     <h4 class="user"><i class="fa-solid fa-user user-icon"></i> <span class="username">{{ request.user.first_name }} {{ request.user.last_name }}</span></h4>
-      <a href="{% url 'raise_ticket' %}" class="btn btn-outline-success me-3">Help</a>  {% endif %}
-      <div class="bell-icon fs-5" style="cursor:pointer;" onclick="toggleSidebar2()">🔔</div>
-
+      <img src="
+          {% if category and category.navbar_logo %}
+              {{ category.navbar_logo.url }}
+          {% else %}
+              {% static 'images/pmxlogo_c.png' %}
+          {% endif %}
+      " 
+      alt="Logo" class="navbar-logo">
     </div>
-   
+
+    <div class="d-flex align-items-center">
+      {% if user.is_authenticated %}
+      <h4 class="user me-3 mb-0"><i class="fa-solid fa-user user-icon me-1"></i> <span class="username">{{ request.user.first_name }} {{ request.user.last_name }}</span></h4>
+      <a href="{% url 'raise_ticket' %}" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold me-3">Help</a>
+      {% endif %}
+      <div class="bell-icon position-relative" onclick="toggleSidebar2()" title="Notifications">
+        <i class="fa-solid fa-bell"></i>
+        {% if notification_count and notification_count > 0 %}
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; border: 2px solid #ffffff;">
+          {{ notification_count }}
+        </span>
+        {% endif %}
+      </div>
+    </div>
   </nav>
 
- 
-
-  <!-- Notifications Sidebar -->
-  <div class="sidebar2 bg-dark p-1" id="sidebar2">
-    <div >
+  <!-- Right Notifications Sidebar -->
+  <div class="sidebar2 p-3" id="sidebar2">
+    <div>
       <span class="close-btn2" onclick="toggleSidebar2()">
         &times;
       </span>
-      </div>
-      <h3 class="text-white nonoti text-center">Notifications</h3>
-    
+    </div>
+    <h4 class="nonoti text-center my-3"><i class="fa-solid fa-bell me-2 text-primary"></i> Notifications</h4>
 
     {% for notification in notifications %}
-    <div class="notification card mt-3">
-      <p class="p-1"><small>Posted on: {{ notification.created_at }}</small></p>
+    <div class="notification card mb-3">
+      <p class="p-2 mb-0"><small class="text-muted">Posted: {{ notification.created_at }}</small></p>
       {% if notification.image %}
-      <div class="card-header p-0" style="height:150px;">
-        <img src="{{ notification.image.url }}" alt="Notification Image" height="100%" width="100%">
+      <div class="card-header p-0" style="height:140px;">
+        <img src="{{ notification.image.url }}" alt="Notification Image" height="100%" width="100%" style="object-fit: cover;">
       </div>
       {% endif %}
-      <div class="card-body bg-white mb-2">
-        <h6 style="font-weight: bold;">{{ notification.title }}</h6>
-        <p>{{ notification.description }}</p>
+      <div class="card-body bg-light text-dark p-3">
+        <h6 class="fw-bold mb-1" style="color:#0f172a;">{{ notification.title }}</h6>
+        <p class="small text-secondary mb-0">{{ notification.description }}</p>
       </div>
     </div>
     {% empty %}
-    <p class="p-2 text-white">No Notifications Available.</p>
+    <p class="p-2 text-muted text-center">No Notifications Available.</p>
     {% endfor %}
   </div>
 
-  <!-- Sidebar Menu -->
+  <!-- Light Pastel Student Sidebar Menu -->
   <div class="sidebar" id="sidebar">
-     <h4 class="usersiderbar"><i class="fa-solid fa-user user-icon"></i> <span class="username">{{ request.user.first_name }} {{ request.user.last_name }}</span></h4>
     <span class="close-btn" onclick="toggleSidebar()">&times;</span>
     <ul class="nav flex-column px-3">
+      <!-- User Card -->
+      <div class="sidebar-user-card mt-2">
+        <div class="sidebar-user-avatar">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">{{ request.user.first_name|default:request.user.username }} {{ request.user.last_name }}</div>
+          <div class="sidebar-user-role">Student Portal</div>
+        </div>
+      </div>
+
       <li class="nav-item">
-        <a href="/student_dashboard/" class="nav-link">Dashboard  </a>
+        <a href="/student_dashboard/" class="nav-link">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-house link-icon"></i>
+            <span>Dashboard</span>
+          </span>
+        </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu1" role="button">Course Management</a>
-        <div class="collapse" id="menu1">
-          <a class="nav-link pl-4" href="/free-course/">Free Course</a>
-
-          <a class="nav-link pl-4" href="/paid-courses/">Paid Course</a>
+        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#menu1" role="button">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-book-open link-icon"></i>
+            <span>Course Catalog</span>
+          </span>
+        </a>
+        <div class="collapse sidebar-submenu" id="menu1">
+          <a class="nav-link" href="/free-course/"><i class="fa-solid fa-circle-play me-2 text-success"></i> Free Courses</a>
+          <a class="nav-link" href="/paid-courses/"><i class="fa-solid fa-gem me-2 text-primary"></i> Paid Courses</a>
         </div>
       </li>
 
-
       <li class="nav-item">
-        <a class="nav-link" href="/your_course/">My Courses</a>
+        <a class="nav-link" href="/your_course/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-graduation-cap link-icon"></i>
+            <span>My Courses</span>
+          </span>
+        </a>
       </li>
 
-       <li class="nav-item">
-        <a class="nav-link" href="/my-certificates/">My Certificates</a>
+      <li class="nav-item">
+        <a class="nav-link" href="/my-certificates/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-certificate link-icon"></i>
+            <span>My Certificates</span>
+          </span>
+        </a>
       </li>
-      
-
 
       <li class="nav-item">
-        <a class="nav-link" href="/tickets/">Your Tickets</a>
+        <a class="nav-link" href="/tickets/">
+          <span class="nav-link-content">
+            <i class="fa-solid fa-ticket link-icon"></i>
+            <span>Your Tickets</span>
+          </span>
+        </a>
       </li>
 
       <li class="nav-item">
         {% if user.is_authenticated %}
-       
-          <button class="Btn" onclick="location.href='{% url "logout" %}'">
-
+        <button class="Btn" onclick="location.href='{% url "logout" %}'">
           <svg viewBox="0 0 512 512">
             <path
               d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
             </path>
           </svg>
-          
-   
           <div class="text">Logout</div>
-         
         </button>
-         {% endif %}
+        {% endif %}
       </li>
-      
     </ul>
-   
   </div>
-
-
-
-</body>
-
-</html>

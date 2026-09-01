@@ -3,290 +3,213 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy </title>
-    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raise Support Ticket - ProfitMax</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
+  <!-- Bootstrap 4 CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      min-height: 100vh;
+      color: #334155;
+      overflow-x: hidden;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            overflow-x: hidden;
-            position: relative;
-            font-family: Verdana, sans-serif;
-        }
+    .form-wrapper-container {
+      max-width: 760px;
+      margin: 100px auto 50px auto;
+      padding: 0 15px;
+    }
 
-     
-        /* Navbar Styles */
-        .bg-light {
-            box-shadow: 0px 0px 5px 1px;
-        }
+    .form-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.12);
+    }
 
-        /* .logo {
-            margin-left: 40px;
-        } */
+    .form-card-header {
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+      border-bottom: 1.5px solid #e2e8f0;
+      border-top: 4px solid #4f46e5;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
+    .form-header-badge {
+      width: 44px;
+      height: 44px;
+      background: #ffffff;
+      color: #4f46e5;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+      border: 1.5px solid #c7d2fe;
+      margin-right: 14px;
+    }
 
-        a:hover {
-            /* background-color: rgb(94, 94, 93); */
-            /* font-size: 18px; */
-            /* border: 1px solid; */
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            /* padding: 5px; */
-        }
+    .form-card-header h2 {
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
 
-        .paid-btn {
-            width: 100%;
-        }
+    .form-subtitle {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 2px;
+      margin-bottom: 0;
+    }
 
-        .paid-form {
-            box-shadow: 0px 0px 5px rgb(177, 177, 176);
-            border-radius: 10px;
-        }
+    .form-card-body {
+      padding: 1.75rem 2rem;
+    }
 
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: 25px;
-        }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
 
-        .logo1 {
-            display: flex;
-            align-items: center;
-        }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #1e293b;
+    }
 
- 
+    .input-group-text {
+      background-color: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-right: none;
+      border-radius: 12px 0 0 12px !important;
+      color: #4f46e5;
+      font-size: 1rem;
+      width: 42px;
+      height: 44px !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
- 
- 
- 
-        .mypro {
-            text-decoration: none;
-            color: rgb(17, 14, 14);
-            margin-right: 10px;
+    .input-group .form-control {
+      border-radius: 0 12px 12px 0 !important;
+    }
 
-        }
+    .form-control, textarea.form-control {
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 12px;
+      font-size: 0.9rem !important;
+      font-weight: 500 !important;
+      transition: all 0.25s ease !important;
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) inset;
+    }
 
-        .mypro:hover {
-            text-decoration: none;
-            color: rgb(9, 37, 96);
-            box-shadow: none;
+    input.form-control {
+      height: 44px !important;
+    }
 
-        }
+    .form-control:focus {
+      outline: none !important;
+      border-color: #6366f1 !important;
+      background-color: #ffffff !important;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+    }
 
+    .btn-action-primary {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      border: none;
+      transition: all 0.3s ease;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border-radius: 14px;
+      height: 48px;
+      color: #ffffff;
+      width: 100%;
+      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+      margin-top: 1rem;
+    }
 
-
- 
-
-        /* .logo {
-            margin-left: 40px;
-        } */
-
-        /* Content Styles */
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        .logo1 {
-            display: flex;
-            align-items: center;
-        }
-
- 
-        .signbut {
-            background: linear-gradient(to right, #017123, #044e13);
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-            width: 100%;
-            display: inline-block;
-        }
-
-        .signbut {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-
-
-        }
-
-        .signbut:hover {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1.02);
-        }
-
-        .signbut:hover {
-            background: linear-gradient(to right, #017123, #1cb149);
-            transform: scale(1.02);
-        }
-    </style>
-
-    <script>
-        function toggleNotifications() {
-            var container = document.getElementById("notificationContainer");
-            var notificationCount = document.getElementById("notification-count");
-
-            container.classList.toggle('active');
-
-            if (container.style.display === "none" || container.style.display === "") {
-                container.style.display = "block"; // Show container
-                notificationCount.style.display = "none"; // Hide count when opened
-            } else {
-                container.style.display = "none"; // Hide container
-            }
-        }
-
-        function closeNotifications() {
-            document.getElementById("notificationContainer").style.display = "none";
-        }
-
-        // Function to update notification count
-        function updateNotificationCount(count) {
-            const notificationCount = document.getElementById('notification-count');
-            if (count > 0) {
-                notificationCount.innerText = count;
-                notificationCount.style.display = 'inline-block'; // Show count if new notifications exist
-            } else {
-                notificationCount.style.display = 'none'; // Hide if no new notifications
-            }
-        }
-
-        // Example: Simulate receiving new notifications dynamically
-        let newNotifications = 3; // Initial notification count
-        updateNotificationCount(newNotifications);
-
-        // Simulating new notifications every 5 seconds (for demo purposes)
-        setInterval(() => {
-            newNotifications += 1; // Increase notification count
-            updateNotificationCount(newNotifications);
-        }, 5000);
-    </script>
-
+    .btn-action-primary:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      box-shadow: 0 14px 28px -5px rgba(79, 70, 229, 0.55);
+      transform: translateY(-2px);
+      color: #ffffff;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- JavaScript -->
-    <script>
-        function toggleSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.toggle-btn');
+  {% include 'Student_Base.html' %}
 
-            sidebar.classList.toggle('show');
-
-            // Toggle button icon
-            if (sidebar.classList.contains('show')) {
-                toggleBtn.style.display = 'none';
-            } else {
-                toggleBtn.style.display = 'inline-block';
-            }
-        }
-    </script>
-
-
-
-    <script>
-        function toggleSidebar2() {
-            const sidebar = document.getElementById('sidebar2');
-            const toggleBtn = document.querySelector('.toggle-btn2');
-
-            sidebar.classList.toggle('show');
-
-            // Toggle button icon
-            if (sidebar.classList.contains('show')) {
-                toggleBtn.style.display = 'none';
-            } else {
-                toggleBtn.style.display = 'inline-block';
-            }
-        }
-
-
-    </script>
- 
-
-
-
-
-
- 
-
-     {% include 'Student_Base.html' %}
-
-    <div class="gffjhgdf" style="min-height: 100vh;">
-        <div class="container" style="margin-top: 100px; display: flex; justify-content: center;  ">
-            <div class="card"
-                style="max-width: 600px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 100%;">
-
-                <div class="btnn" style="display: flex;justify-content: space-between;
-">
-                    <!-- Back and home buttons start -->
-                    <span onclick="window.location.href='/student_dashboard/'"
-                        style="float: left; cursor: pointer; color:rgb(75, 162, 255); font-size:20px;" class="mb-4">
-                        <i class="fa-solid fa-house-chimney"></i>
-                    </span>
-                    <span onclick="goBackAndRefresh()" style="float: right; cursor: pointer; color:red; font-size:20px;"
-                        class="mb-4">X</span>
-                    <script>
-                        function goBackAndRefresh() {
-                            window.history.back();
-                            setTimeout(function () {
-                                location.reload();
-                            }, 100); // slight delay to allow back navigation
-                        }
-                    </script>
-                    <!-- Back and home buttons End -->
-
-                </div>
-                <h3 style="text-align: center; margin-bottom: 20px; color: #007bff;">Raise a Ticket</h3>
-                <form method="post" action="{% url 'raise_ticket' %}">
-                    {% csrf_token %}
-                    <div style="margin-bottom: 15px;">
-                        <label for="subject"
-                            style="font-weight: bold; display: block; margin-bottom: 5px;">Subject</label>
-                        <input type="text" id="subject" name="subject"
-                            style="width: 100%; padding: 10px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border-radius: 5px;"
-                            required>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="description"
-                            style="font-weight: bold; display: block; margin-bottom: 5px;">Description</label>
-                        <textarea id="description" name="description"
-                            style="width: 100%; padding: 10px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border-radius: 5px; height: 100px;"
-                            required></textarea>
-                    </div>
-                    <div style="text-align: center;">
-                        <!-- <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Submit Ticket</button> -->
-                        <a href="/signup/"><button class="signbut">Submit</button></a>
-
-                    </div>
-                </form>
-            </div>
+  <div class="form-wrapper-container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-lg border-0 shadow-sm mb-3">
+          <i class="fas fa-info-circle mr-2"></i> {{ message }}
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="d-flex align-items-center">
+          <div class="form-header-badge">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <div>
+            <h2>Raise Support Ticket</h2>
+            <p class="form-subtitle">Contact ProfitMax student support team for assistance with courses and billing.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card-body">
+        <form method="post">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="subject">Issue Subject <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-heading"></i></span>
+              <input type="text" id="subject" name="subject" class="form-control" placeholder="e.g. Issue accessing Chapter 3 video" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Detailed Description <span class="text-danger">*</span></label>
+            <textarea id="description" name="description" class="form-control" rows="5" placeholder="Explain your issue in detail..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-action-primary">
+            <i class="fa-solid fa-paper-plane mr-2"></i> Submit Support Ticket Now
+          </button>
+        </form>
+      </div>
     </div>
+  </div>
 
-
-     {% include 'footer.html' %}
-
+  {% include 'footer.html' %}
 </body>
-
 </html>

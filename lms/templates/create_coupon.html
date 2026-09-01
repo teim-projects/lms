@@ -1,145 +1,229 @@
+{% load static %}
 {% include 'Admin_Base.html' %}
+
 <style>
-    .coupon-form-container {
-        max-width: 550px;
-        margin: 2rem auto;
-        padding: 1.5rem 2rem;
+    body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+        min-height: 100vh;
+        color: #334155;
+        overflow-x: hidden;
+    }
+
+    .form-wrapper-container {
+        max-width: 760px;
+        margin: 100px auto 50px auto;
+        padding: 0 15px;
+    }
+
+    .form-card {
         background: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e0e6ed;
-        margin-top: 7%;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.12);
     }
-    
-    .coupon-form-title {
-        color: #3498db;
-        font-weight: 600;
-        margin-bottom: 1.2rem;
-        text-align: center;
-        font-size: 1.5rem;
+
+    .form-card-header {
+        background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+        border-bottom: 1.5px solid #e2e8f0;
+        border-top: 4px solid #4f46e5;
+        padding: 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
-    
-    .form-label {
-        font-weight: 500;
-        color: #2c3e50;
-        margin-bottom: 0.4rem;
-        display: block;
-        font-size: 0.9rem;
+
+    .form-header-badge {
+        width: 44px;
+        height: 44px;
+        background: #ffffff;
+        color: #4f46e5;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+        border: 1.5px solid #c7d2fe;
+        margin-right: 14px;
     }
-    
-    .form-control {
-        border: 1px solid #d1d9e6;
-        border-radius: 5px;
-        padding: 0.6rem 0.75rem;
-        font-size: 0.9rem;
-        transition: all 0.2s ease;
-        background-color: #f8fafc;
+
+    .form-card-header h2 {
+        color: #0f172a;
+        font-weight: 800;
+        font-size: 1.6rem;
+        letter-spacing: -0.02em;
+        margin: 0;
     }
-    
-    .form-control:focus {
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        background-color: #fff;
+
+    .form-subtitle {
+        color: #64748b;
+        font-size: 0.875rem;
+        margin-top: 2px;
+        margin-bottom: 0;
     }
-    
-    .form-check-label {
-        color: #2c3e50;
-        font-size: 0.9rem;
+
+    .form-card-body {
+        padding: 1.75rem 2rem;
     }
-    
-    .btn-primary {
-        background-color: #3498db;
-        border: none;
-        padding: 0.6rem 1.75rem;
-        font-weight: 500;
-        border-radius: 5px;
-        width: 100%;
-        margin-top: 0.5rem;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
-    }
-    
-    .btn-primary:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
-    }
-    
+
     .form-group {
         margin-bottom: 1.2rem;
     }
-    
+
+    label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #1e293b;
+    }
+
+    .input-group-text {
+        background-color: #f8fafc;
+        border: 1.5px solid #cbd5e1;
+        border-right: none;
+        border-radius: 12px 0 0 12px !important;
+        color: #4f46e5;
+        font-size: 1rem;
+        width: 42px;
+        height: 44px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .input-group .form-control {
+        border-radius: 0 12px 12px 0 !important;
+        height: 44px !important;
+    }
+
+    .form-control {
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 12px;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+        transition: all 0.25s ease !important;
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        height: 44px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) inset;
+    }
+
+    .form-control:focus {
+        outline: none !important;
+        border-color: #6366f1 !important;
+        background-color: #ffffff !important;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+    }
+
     .input-hint {
-        font-size: 0.75rem;
-        color: #7f8c8d;
-        margin-top: 0.2rem;
+        font-size: 0.825rem;
+        color: #64748b;
+        margin-top: 5px;
         display: block;
     }
-    
-    .form-check-input:checked {
-        background-color: #3498db;
-        border-color: #3498db;
-    }
-    
-    .form-check {
-        padding-left: 1.5em;
+
+    .btn-action-primary {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        border: none;
+        transition: all 0.3s ease;
+        font-size: 1.05rem;
+        font-weight: 800;
+        border-radius: 16px;
+        height: 54px;
+        color: #ffffff;
+        width: 100%;
+        box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+        margin-top: 1.25rem;
     }
 
-      span.badge.badge-danger.ml-2 {
-    background: red;
-}
+    .btn-action-primary:hover {
+        background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+        box-shadow: 0 14px 28px -5px rgba(79, 70, 229, 0.55);
+        transform: translateY(-2px);
+        color: #ffffff;
+    }
 </style>
 
-<div class="coupon-form-container ">
-    <h2 class="coupon-form-title">Create New Coupon</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label class="form-label"><b>Coupon Code:</b></label>
-            <input name="code" class="form-control" required>
-            <span class="input-hint">Enter unique coupon code (e.g., SUMMER25)</span>
-        </div>
-        
-        <div class="form-group">
-            <label class="form-label"><b>Discount Percentage:</b></label>
-            <input name="discount_percent" type="number" class="form-control" required>
-            <span class="input-hint">Discount value (5-100%)</span>
-        </div>
-        
-        <div class="form-group">
-            <label class="form-label"><b>Validity Period:</b></label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div>
-                    <label class="form-label" style="font-size: 0.8rem;">From:</label>
-                    <input name="valid_from" type="datetime-local" class="form-control" required>
+<div class="form-wrapper-container">
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="d-flex align-items-center">
+                <div class="form-header-badge">
+                    <i class="fa-solid fa-ticket"></i>
                 </div>
                 <div>
-                    <label class="form-label" style="font-size: 0.8rem;">To:</label>
-                    <input name="valid_to" type="datetime-local" class="form-control" required>
+                    <h2>Create New Coupon</h2>
+                    <p class="form-subtitle">Configure discount percentages, applicability, and validity windows.</p>
                 </div>
             </div>
+            <a href="/coupons/" class="btn btn-outline-primary btn-sm rounded-pill font-weight-bold px-3">
+                <i class="fa-solid fa-tags mr-1"></i> View Coupons
+            </a>
         </div>
-        
-        <div class="form-group">
-            <label class="form-label"><b>Minimum Purchase Amount:</b></label>
-            <input name="min_amount" type="number" step="0.01" class="form-control" value="0.00">
-            <span class="input-hint">Leave as 0.00 for no minimum</span>
+
+        <div class="form-card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="code">Coupon Code <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
+                            <input id="code" name="code" class="form-control text-uppercase font-weight-bold" placeholder="e.g. PROFITMAX25" required>
+                        </div>
+                        <span class="input-hint">Unique coupon code (e.g. SUMMER25).</span>
+                    </div>
+                    
+                    <div class="col-md-6 form-group">
+                        <label for="discount_percent">Discount Percentage (%) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-percent"></i></span>
+                            <input id="discount_percent" name="discount_percent" type="number" class="form-control" placeholder="25" min="1" max="100" required>
+                        </div>
+                        <span class="input-hint">Discount percentage value (1% to 100%).</span>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="valid_from">Valid From <span class="text-danger">*</span></label>
+                        <input id="valid_from" name="valid_from" type="datetime-local" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="valid_to">Valid Until <span class="text-danger">*</span></label>
+                        <input id="valid_to" name="valid_to" type="datetime-local" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="min_amount">Minimum Purchase Amount (₹)</label>
+                        <input id="min_amount" name="min_amount" type="number" step="0.01" class="form-control" value="0.00">
+                        <span class="input-hint">Leave as 0.00 for no minimum cart limit.</span>
+                    </div>
+                    
+                    <div class="col-md-6 form-group">
+                        <label for="course_codes">Applicable Course Codes</label>
+                        <input id="course_codes" name="course_codes" class="form-control" placeholder="PMAX-101, PMAX-202">
+                        <span class="input-hint">Comma-separated course codes (optional).</span>
+                    </div>
+                </div>
+                
+                <div class="form-group form-check mt-2 mb-3">
+                    <input name="active" type="checkbox" class="form-check-input" checked id="activeCheck" style="width:18px; height:18px;">
+                    <label class="form-check-label font-weight-bold ml-2 text-dark" for="activeCheck">Activate Coupon Code Immediately</label>
+                </div>
+                
+                <button class="btn btn-action-primary" type="submit">
+                    <i class="fas fa-save mr-2"></i> Create Coupon Code
+                </button>
+            </form>
         </div>
-        
-        <div class="form-group">
-            <label class="form-label"><b>Applicable Courses:</b></label>
-            <input name="course_codes" class="form-control" placeholder="PMAX-1234, PMAX-5678">
-            <span class="input-hint">Comma-separated course codes (optional)</span>
-        </div>
-        
-        <div class="form-group form-check">
-            <input name="active" type="checkbox" class="form-check-input" checked id="activeCheck">
-            <label class="form-check-label" for="activeCheck">Active Coupon</label>
-        </div>
-        
-        <button class="btn btn-primary" type="submit">
-            <i class="fas fa-save" style="margin-right: 8px;"></i> Create Coupon
-        </button>
-    </form>
+    </div>
 </div>
+
 {% include 'footer.html' %}

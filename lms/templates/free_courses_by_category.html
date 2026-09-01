@@ -1,207 +1,228 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ category.name }} - Free Courses</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #1976d2;
-            --secondary-color: #f8f9fa;
-            --accent-color: #00C853; /* Green accent color */
-            --text-dark: #2d3436;
-            --text-light: #636e72;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ category.name }} - Free Courses</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8fafc;
-            color: var(--text-dark);
-        }
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        .container {
-            margin-top: 100px;
-            min-height: 100vh;
-            padding-bottom: 60px;
-        }
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-        .section-header {
-            text-align: center;
-            font-weight: 600;
-            font-size: 2.2rem;
-            margin: 40px 0 30px;
-            color: var(--text-dark);
-            position: relative;
-        }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        .section-header:after {
-            content: "";
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--accent-color);
-            margin: 15px auto 0;
-            border-radius: 2px;
-        }
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      color: #334155;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-        .btn-custom {
-            margin-bottom: 30px;
-            border-radius: 30px;
-            padding: 10px 25px;
-            font-weight: 500;
-            transition: var(--transition);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            background-color: var(--accent-color);
-            border: none;
-            color: white;
-        }
+    .container-wide {
+      width: 94%;
+      max-width: 1640px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 100px;
+      padding-bottom: 70px;
+    }
 
-        .btn-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
-            background-color: #00B34A;
-            color: white;
-        }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e0e7ff;
+      color: #4f46e5;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 8px 22px;
+      border-radius: 50px;
+      margin-bottom: 1.25rem;
+      border: 1px solid #c7d2fe;
+    }
 
-        /* Course Card Styles */
-        .course-card {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            margin-bottom: 25px;
-            border: none;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
 
-        .course-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-        }
+    .section-title-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .course-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
+    .course-pastel-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px -10px rgba(99, 102, 241, 0.08);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .course-body {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
+    .course-pastel-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.22);
+      border-color: #6366f1;
+    }
 
-        .course-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--text-dark);
-        }
+    .course-img-box {
+      height: 220px;
+      width: 100%;
+      background: #f8fafc;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
+    }
 
-        .course-description {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 20px;
-            line-height: 1.5;
-            flex-grow: 1;
-        }
+    .course-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
 
-        .btn-primary {
-            background: var(--accent-color);
-            border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: var(--transition);
-            display: inline-block;
-            width: auto;
-            min-width: 120px;
-            align-self: center;
-            margin-top: auto;
-            box-shadow: 0 2px 8px rgba(0, 200, 83, 0.2);
-        }
+    .course-pastel-card:hover .course-img-box img {
+      transform: scale(1.08);
+    }
 
-        .btn-primary:hover {
-            background: #00B34A;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
-            color: white;
-            text-decoration: none;
-        }
+    .course-placeholder-icon {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #6366f1;
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    }
 
-       
+    .badge-free-pill {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      color: #059669;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 6px 16px;
+      border-radius: 50px;
+      border: 1px solid #a7f3d0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      z-index: 5;
+    }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            margin: 20px 0;
-        }
+    .btn-pill {
+      border-radius: 50px !important;
+      padding: 10px 24px !important;
+      font-size: 0.925rem !important;
+      font-weight: 700 !important;
+    }
 
-        .empty-state i {
-            font-size: 3rem;
-            color: #bdbdbd;
-            margin-bottom: 15px;
-        }
+    .btn-pastel-hero {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #ffffff !important;
+      border: none;
+      box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.35);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
 
-        .empty-state h5 {
-            color: var(--text-light);
-            font-weight: 500;
-        }
-    </style>
+    .btn-pastel-hero:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(99, 102, 241, 0.48);
+      color: #ffffff !important;
+      text-decoration: none;
+    }
+  </style>
 </head>
+
 <body>
-{% include 'Student_Base.html' %}
+  {% include 'Student_Base.html' %}
 
-<div class="container">
-    <h1 class="section-header">Free Courses in {{ category.name }}</h1>
+  <div class="container-wide">
 
-    <div class="text-center mb-4">
-        <a href="{% url 'paid_courses_by_category' category.id %}" class="btn btn-custom">
-            <i class="fas fa-certificate mr-2"></i>View Paid Courses
+    <div class="text-center mb-5">
+      <div class="hero-badge">
+        <i class="fa-solid fa-layer-group me-2"></i> {{ category.name }}
+      </div>
+      <h1 class="section-title mb-3">
+        Free Courses in <span class="section-title-gradient">{{ category.name }}</span>
+      </h1>
+      <div class="d-flex justify-content-center mt-3">
+        <a href="{% url 'paid_courses_by_category' category.id %}" class="btn btn-outline-primary btn-pill shadow-sm">
+          <i class="fa-solid fa-gem me-2"></i> View Premium Courses in {{ category.name }}
         </a>
+      </div>
     </div>
 
     {% if courses %}
-        <div class="row">
-            {% for course in courses %}
-                <div class="col-md-4 mb-4">
-                    <div class="course-card">
-                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="course-img">
-                        <div class="course-body">
-                            <h5 class="course-title">{{ course.title }}</h5>
-                            <p class="course-description">{{ course.description|truncatewords:20 }}</p>
-                            <a href="{% url 'free_course_detail' course.id %}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-eye mr-2"></i> View Course
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="empty-state">
-            <i class="fas fa-book-open"></i>
-            <h5>No free courses available in this category</h5>
-            <a href="/" class="btn btn-success mt-3" style="border-radius: 30px; padding: 8px 20px;">
-                <i class="fas fa-arrow-left mr-2"></i>Browse Categories
-            </a>
-        </div>
-    {% endif %}
-</div>
+    <div class="row g-4 mb-5">
+      {% for course in courses %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="course-pastel-card">
+          <div class="course-img-box">
+            {% if course.thumbnail %}
+            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+            {% else %}
+            <div class="course-placeholder-icon">
+              <i class="fa-solid fa-play"></i>
+            </div>
+            {% endif %}
+            <span class="badge-free-pill">
+              <i class="fa-solid fa-gift me-1"></i> FREE
+            </span>
+          </div>
 
-{% include 'footer.html' %}
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <h3 class="fw-bold fs-5 text-dark mb-2 text-truncate" title="{{ course.title }}">
+              {{ course.title }}
+            </h3>
+
+            <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+              {{ course.description|default:"Learn trading fundamentals and strategies in this free course." }}
+            </p>
+
+            <a href="{% url 'free_course_detail' course.id %}" class="btn btn-pastel-hero btn-pill mt-auto">
+              <i class="fa-solid fa-circle-play me-2"></i> Start Learning
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <div class="card border-0 shadow-sm rounded-4 p-5 mx-auto" style="max-width: 500px; background: #ffffff;">
+        <i class="fa-solid fa-folder-open fs-1 text-primary mb-3"></i>
+        <h4 class="fw-bold text-dark mb-2">No Free Courses Available</h4>
+        <p class="text-muted mb-4">No free courses in {{ category.name }} currently available.</p>
+        <a href="{% url 'student_dashboard' %}" class="btn btn-primary btn-pill text-white">
+          <i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  {% include 'footer.html' %}
 </body>
 </html>

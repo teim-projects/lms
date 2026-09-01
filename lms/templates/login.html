@@ -3,197 +3,600 @@
 <html lang="en">
 
 <head>
-    <title>Profit Max Share Market Academy</title>
+    <title>Student Login - ProfitMax Share Market Academy</title>
     <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap & jQuery -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 4 CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- jQuery & Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
-        .paid-btn {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #fff;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }
-
-        .paid-btn:hover {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            box-shadow: 0 10px 10px rgba(106, 17, 203, 0.5);
-        }
-
-        body {
-            font-family: Verdana, sans-serif;
-            background-color: #FAFAFA;
+        body, html {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            height: 100vh;
             min-height: 100vh;
+            color: #334155;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
-        .f1 {
-            background-color: #f7f7f7;
-            text-align: center;
-            font-size: 1rem;
-            color: #555;
-            box-shadow: 0px -2px 10px rgb(203, 203, 203);
-            position: fixed;
-            width: 100%;
-            bottom: 0px;
-            padding-top: 5px;
+        .split-screen-wrapper {
+            height: 100vh;
+            display: flex;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
-        .f2 {
-            background-color: #FAFAFA;
-            text-align: center;
-            font-size: 1rem;
-            color: #555;
-            display: none;
+        /* 50% Left Visual Hero Panel (Light Pastel Theme) */
+        .hero-panel {
+            width: 50%;
+            height: 100vh;
+            background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+            color: #0f172a;
+            padding: 3rem 3.5rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            border-right: 1.5px solid #e2e8f0;
         }
 
-        @media (max-width: 480px) {
-            .f1 {
-                display: none;
-            }
-
-            .f2 {
-                display: block;
-                margin-top: 30px;
-            }
-
-.fff input{
-        width: 45%;
-}
-
-            .rounded {
-                margin-top: 50px;
-            }
+        .hero-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 5;
         }
 
-        .textcolor {
-            text-decoration: none;
-            background: linear-gradient(to right, #2575fc, #6a11cb);
+        .hero-logo {
+            max-width: 190px;
+            height: auto;
+        }
+
+        .live-badge {
+            background: #e0e7ff;
+            border: 1px solid #c7d2fe;
+            color: #4f46e5;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .live-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #22c55e;
+        }
+
+        .hero-content {
+            z-index: 5;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle-tag {
+            color: #4f46e5;
+            font-weight: 800;
+            font-size: 0.825rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .hero-main-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1.25;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-main-title span {
+            background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .main {
-            background-image: url("{% static 'images/LmsBackgroundImg.jpg' %}");
-            background-attachment: fixed;
-            background-size: cover;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .hero-description {
+            color: #475569;
+            font-size: 0.975rem;
+            line-height: 1.6;
+            max-width: 500px;
+            margin-bottom: 1.5rem;
         }
- .fff input{
-    margin-left: 10px;
- }
-        .ff input {
+
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .feature-pill {
+            background: #ffffff;
+            border: 1px solid #c7d2fe;
+            color: #334155;
+            font-size: 0.825rem;
+            font-weight: 600;
+            padding: 7px 16px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .feature-pill i {
+            color: #4f46e5;
+            margin-right: 8px;
+        }
+
+        .hero-graphic-wrapper {
+            z-index: 5;
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 20px 45px -10px rgba(99, 102, 241, 0.15);
+            max-height: 360px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-graphic-wrapper img {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
+            height: 100%;
+            max-height: 330px;
+            object-fit: contain;
+            border-radius: 14px;
+            display: block;
+        }
+
+        /* 50% Right Form Panel */
+        .form-panel {
+            width: 50%;
+            height: 100vh;
+            background: #ffffff;
+            padding: 2.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+        }
+
+        .form-top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .support-link {
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .support-link:hover {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .form-card-container {
+            max-width: 460px;
+            width: 100%;
+            margin: auto;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 24px;
+            padding: 2.25rem 2.25rem;
+            box-shadow: 0 15px 35px -10px rgba(99, 102, 241, 0.12);
+        }
+
+        .form-header-badge {
+            width: 48px;
+            height: 48px;
+            background: #e0e7ff;
+            color: #4f46e5;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 1.25rem;
+            border: 1.5px solid #c7d2fe;
+        }
+
+        .form-title {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-wrapper .input-icon {
+            position: absolute;
+            left: 16px;
+            color: #64748b;
+            font-size: 16px;
+            z-index: 5;
+            pointer-events: none;
+            transition: color 0.25s ease;
+        }
+
+        .input-wrapper input {
+            width: 100% !important;
+            padding: 12px 16px 12px 46px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 14px !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+            transition: all 0.25s ease !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            height: 48px !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) inset;
+        }
+
+        .input-wrapper input:focus {
+            outline: none !important;
+            border-color: #6366f1 !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+        }
+
+        .input-wrapper input:focus ~ .input-icon,
+        .input-wrapper input:focus + .input-icon {
+            color: #6366f1;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 5;
+            transition: color 0.2s ease;
+            outline: none !important;
+        }
+
+        .toggle-password:hover {
+            color: #6366f1;
+        }
+
+        .captcha-box {
+            background-color: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 12px;
+        }
+
+        .captcha-img-wrapper img.captcha {
+            border-radius: 10px;
+            height: 40px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-refresh {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            border: 1.5px solid #c7d2fe;
+            color: #6366f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .btn-refresh:hover {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            border-color: #818cf8;
+            transform: rotate(15deg);
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            border-radius: 14px;
+            height: 50px;
+            color: #ffffff;
+            width: 100%;
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.35);
+            margin-top: 1rem;
+        }
+
+        .btn-action-primary:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            box-shadow: 0 14px 25px -5px rgba(99, 102, 241, 0.48);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        .form-footer-nav {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .hover-underline:hover {
+            text-decoration: underline !important;
+            color: #4f46e5 !important;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 991.98px) {
+            body, html {
+                height: auto;
+                overflow: auto;
+            }
+            .split-screen-wrapper {
+                flex-direction: column;
+                height: auto;
+                overflow: auto;
+            }
+            .hero-panel {
+                width: 100%;
+                height: auto;
+                padding: 2.5rem 2rem;
+            }
+            .form-panel {
+                width: 100%;
+                height: auto;
+                padding: 2.5rem 2rem;
+            }
+            .form-card-container {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
-    {% include 'base_without_sidebar.html' %}
+    <div class="split-screen-wrapper">
+        <!-- Left 50% Visual Hero Panel (Light Pastel Theme) -->
+        <div class="hero-panel">
+            <div class="hero-top-bar">
+                <a href="/">
+                    <img src="{% static 'images/pmxlogowide.png' %}" alt="ProfitMax Academy Logo" class="hero-logo">
+                </a>
+                <div class="live-badge">
+                    <span class="pulse-dot"></span> LIVE ACADEMY
+                </div>
+            </div>
 
-    <div class="main">
-        <div class="container d-flex justify-content-center align-items-center mt-5" style="min-height: 80vh;">
-            <div class="col-md-6 bg-white p-4 shadow rounded mb-5" style="margin-top:90px;">
-                <form method="post" class="p-2">
+            <div class="hero-content">
+                <span class="hero-subtitle-tag">PROFITMAX SHARE MARKET ACADEMY</span>
+                <h1 class="hero-main-title">
+                    Empowering Modern <span>Trading Education</span>
+                </h1>
+                <p class="hero-description">
+                    Access real-time market mentorship, technical analysis courses, and smart stock alerts designed for traders at every level.
+                </p>
+
+                <div class="hero-features">
+                    <div class="feature-pill">
+                        <i class="fa-solid fa-shield-halved"></i> Risk Control
+                    </div>
+                    <div class="feature-pill">
+                        <i class="fa-solid fa-chart-line"></i> Vardan Strategy
+                    </div>
+                    <div class="feature-pill">
+                        <i class="fa-solid fa-bolt"></i> Smart Alerts
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-graphic-wrapper">
+                <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" alt="Trading Dashboard">
+            </div>
+        </div>
+
+        <!-- Right 50% Form Panel -->
+        <div class="form-panel">
+            <div class="form-top-bar">
+                <a href="mailto:info@profitmaxacademy.com" class="support-link">
+                    <i class="fa-solid fa-headset me-1"></i> Need Support?
+                </a>
+            </div>
+
+            <div class="form-card-container">
+                <div class="form-header-badge">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <h2 class="form-title">Welcome back</h2>
+                <p class="form-subtitle">Sign in to your account to access your trading courses & dashboard.</p>
+
+                <form method="post" class="needs-validation" novalidate>
                     {% csrf_token %}
-                    {{ form.non_field_errors }}
-                    <h2 class="text-center mb-4">Login</h2>
 
-                    <div class="form-group ff">
-                        {{ form.identifier.label_tag }}
-                        {{ form.identifier }}
-                    </div>
-
-                    <div class="form-group ff">
-                        {{ form.password.label_tag }}
-                        {{ form.password }}
-                    </div>
-
-                   
-                    <!-- Captcha with Refresh -->
-                    <div class="">
-                        {{ form.captcha.label_tag }}
-                        <div class="d-flex align-items-center fff">
-                            {{ form.captcha.image }} <!-- shows initial captcha image -->
-                            {{ form.captcha }}
-                            <button type="button" class="btn btn-outline-secondary btn-sm ml-2" id="refresh-captcha"
-                                title="Refresh Captcha" style="border: none; background-color:white;"><span style="height: 100px; width:100px; font-size:27px;">🔄</span></button>
-                            <!-- this renders both the hidden and text input fields -->
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger d-flex align-items-center rounded-lg border-0 shadow-sm mb-3 py-2 px-3">
+                        <i class="fa-solid fa-circle-exclamation text-danger mr-2" style="font-size: 1.1rem;"></i>
+                        <div class="small font-weight-semibold">
+                            {% for error in form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
                         </div>
-
                     </div>
-
-
+                    {% endif %}
 
                     {% if messages %}
-                    <div class="error">
+                    <div class="messages mb-3">
                         {% for message in messages %}
-                        <p class="text-danger text-center">{{ message }}</p>
+                        <div class="alert alert-{{ message.tags|default:'danger' }} d-flex align-items-center rounded-lg border-0 shadow-sm py-2 px-3">
+                            <i class="fa-solid fa-triangle-exclamation text-danger mr-2" style="font-size: 1.1rem;"></i>
+                            <div class="small font-weight-semibold">{{ message }}</div>
+                        </div>
                         {% endfor %}
                     </div>
                     {% endif %}
 
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8">
-                            <button type="submit" class="btn btn-primary btn-block paid-btn"
-                                style="font-size: 20px;">Login</button>
+                    <!-- Identifier Field -->
+                    <div class="form-group mb-3">
+                        <label for="id_identifier" class="form-label">Email or Mobile Number</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            {{ form.identifier }}
                         </div>
-                        <div class="col-md-2"></div>
                     </div>
 
-                    <div class="text-center mt-3">
-                        <a href="/signup/">Signup</a> |
-                        <a href="/subadmin-login/">SubAdmin Login</a> |
-                        <a href="/password-reset/">Forgot Password?</a>
+                    <!-- Password Field -->
+                    <div class="form-group mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label for="id_password" class="form-label mb-0">Password</label>
+                            <a href="/password-reset/" class="small text-primary font-weight-bold text-decoration-none hover-underline">
+                                Forgot password?
+                            </a>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            {{ form.password }}
+                            <button type="button" class="toggle-password" id="togglePasswordBtn" title="Toggle password visibility">
+                                <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Captcha Field -->
+                    <div class="form-group mb-3">
+                        <label class="form-label">Security Captcha</label>
+                        <div class="captcha-box">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="captcha-img-wrapper">
+                                    {{ form.captcha.image }}
+                                </div>
+                                <button type="button" class="btn btn-refresh shadow-sm" id="refresh-captcha" title="Refresh Captcha">
+                                    <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
+                                </button>
+                            </div>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-shield-halved input-icon"></i>
+                                {{ form.captcha }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-action-primary">
+                        <span>Sign In</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+
+                    <!-- Footer Navigation Links -->
+                    <div class="form-footer-nav">
+                        <p class="text-muted mb-2 small">Don't have an account?</p>
+                        <a href="/signup/" class="btn btn-outline-primary btn-sm rounded-pill px-4 mb-2 font-weight-bold">
+                            <i class="fa-solid fa-user-plus mr-1"></i> Create New Account
+                        </a>
+                        <div>
+                            <a href="/subadmin-login/" class="text-secondary small font-weight-bold text-decoration-none hover-underline">
+                                <i class="fa-solid fa-user-shield mr-1"></i> SubAdmin Portal Login
+                            </a>
+                        </div>
                     </div>
                 </form>
+            </div>
+
+            <div class="text-center text-muted small mt-3">
+                © 2024 ProfitMax Academy. All Rights Reserved.
             </div>
         </div>
     </div>
 
-    {% include 'footer.html' %}
-
-    <!-- Captcha Refresh Script -->
+    <!-- Interactive Scripts -->
     <script>
         $(document).ready(function () {
+            // Password Show/Hide Toggle
+            $('#togglePasswordBtn').click(function () {
+                const passwordInput = $('input[name="password"]');
+                const icon = $('#togglePasswordIcon');
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+
+            // Captcha Refresh Handling
             $('#refresh-captcha').click(function (e) {
                 e.preventDefault();
+                const $icon = $('#refresh-icon');
+                $icon.addClass('fa-spin');
 
                 $.get("/captcha/refresh/", function (data) {
-                    // Change image
                     $('.captcha').attr("src", data.image_url);
-                    // Update hidden input key
                     $('input[name="captcha_0"]').val(data.key);
+                    setTimeout(function() {
+                        $icon.removeClass('fa-spin');
+                    }, 400);
+                }).fail(function() {
+                    $icon.removeClass('fa-spin');
                 });
             });
         });
     </script>
-
-
-
-
-
-
 </body>
 
 </html>
