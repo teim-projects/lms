@@ -551,8 +551,16 @@
     .modal-header-gradient {
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: #ffffff;
-      padding: 1.5rem 2rem;
+      padding: 1.15rem 1.75rem;
       border-bottom: none;
+    }
+
+    /* Fixed Category Modal Tabs Header (Zero Gap below Main Heading) */
+    .category-modal-tabs-bar {
+      background: #f8fafc;
+      padding: 8px 24px;
+      border-bottom: 1.5px solid #e2e8f0;
+      flex-shrink: 0;
     }
 
     .course-card-modal {
@@ -576,6 +584,81 @@
       height: 200px;
       width: 100%;
       object-fit: cover;
+    }
+
+    .category-nav-tabs {
+      border: 1.5px solid #e2e8f0 !important;
+      background: #ffffff !important;
+      padding: 5px !important;
+      border-radius: 50px !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .category-nav-tabs .nav-link {
+      color: #475569;
+      font-weight: 700;
+      border-radius: 50px !important;
+      padding: 10px 20px !important;
+      transition: all 0.25s ease;
+      border: 1.5px solid transparent;
+    }
+
+    .category-nav-tabs .nav-link:hover:not(.active) {
+      background: #f0f7ff !important;
+      color: #2563eb !important;
+    }
+
+    /* Pastel Blue / Soft Light Blue Active State for Free Courses */
+    .category-nav-tabs .free-tab-btn.active,
+    .category-nav-tabs .nav-link.active {
+      background: linear-gradient(135deg, #7ea5f8 0%, #5a94f8 100%) !important;
+      color: #ffffff !important;
+      border-color: #5a94f8 !important;
+      box-shadow: 0 4px 14px rgba(90, 148, 248, 0.35) !important;
+    }
+
+    .category-nav-tabs .free-tab-btn.active i {
+      color: #ffffff !important;
+    }
+
+    .category-nav-tabs .tab-badge-free {
+      background: #eff6ff !important;
+      color: #3b82f6 !important;
+      border: 1px solid #bfdbfe !important;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .category-nav-tabs .free-tab-btn.active .tab-badge-free {
+      background: rgba(255, 255, 255, 0.28) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    /* Pastel Emerald Active State for Premium Courses */
+    .category-nav-tabs .paid-tab-btn.active {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
+      color: #ffffff !important;
+      border-color: #10b981 !important;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    .category-nav-tabs .paid-tab-btn.active i {
+      color: #ffffff !important;
+    }
+
+    .category-nav-tabs .tab-badge-paid {
+      background: #ecfdf5 !important;
+      color: #059669 !important;
+      border: 1px solid #a7f3d0 !important;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .category-nav-tabs .paid-tab-btn.active .tab-badge-paid {
+      background: rgba(255, 255, 255, 0.28) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.5) !important;
     }
 
     .price-tag-badge {
@@ -894,37 +977,39 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <div class="modal-body p-4 bg-light">
-          <!-- Category Nav Tabs -->
-          <ul class="nav nav-pills nav-justified mb-4 p-1.5 bg-white border rounded-pill shadow-sm" id="categoryTab-{{ item.category.id }}" role="tablist">
+        <!-- Category Nav Tabs (Fixed Header Bar - Zero Void Gap below Title) -->
+        <div class="category-modal-tabs-bar">
+          <ul class="nav nav-pills nav-justified category-nav-tabs mb-0" id="categoryTab-{{ item.category.id }}" role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link active fw-bold rounded-pill py-2.5 d-flex align-items-center justify-content-center gap-2" 
+              <button class="nav-link free-tab-btn active fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" 
                       id="free-tab-{{ item.category.id }}" 
                       data-bs-toggle="pill" 
                       data-bs-target="#free-pane-{{ item.category.id }}" 
                       type="button" role="tab" aria-controls="free-pane-{{ item.category.id }}" aria-selected="true">
-                <i class="fa-solid fa-graduation-cap text-primary"></i>
+                <i class="fa-solid fa-graduation-cap"></i>
                 <span>Free Courses</span>
-                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 small">
+                <span class="badge rounded-pill px-2.5 py-1 small tab-badge-free">
                   {{ item.free_courses|length }}
                 </span>
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link fw-bold rounded-pill py-2.5 d-flex align-items-center justify-content-center gap-2" 
+              <button class="nav-link paid-tab-btn fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" 
                       id="paid-tab-{{ item.category.id }}" 
                       data-bs-toggle="pill" 
                       data-bs-target="#paid-pane-{{ item.category.id }}" 
                       type="button" role="tab" aria-controls="paid-pane-{{ item.category.id }}" aria-selected="false">
                 <i class="fa-solid fa-gem text-success"></i>
                 <span>Premium Courses</span>
-                <span class="badge bg-success text-white rounded-pill px-2.5 py-1 small">
+                <span class="badge rounded-pill px-2.5 py-1 small tab-badge-paid">
                   {{ item.paid_courses|length }}
                 </span>
               </button>
             </li>
           </ul>
+        </div>
 
+        <div class="modal-body p-4 bg-light">
           <!-- Tab Contents -->
           <div class="tab-content" id="categoryTabContent-{{ item.category.id }}">
             <!-- Free Courses Pane -->

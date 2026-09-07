@@ -13,7 +13,8 @@
     <!-- Font Awesome 6 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- jQuery & Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -289,11 +290,30 @@
         }
 
         /* Pastel Badge Color Variations */
-        .badge-pastel-indigo { background: #e0e7ff; color: #4f46e5; }
-        .badge-pastel-sky { background: #e0f2fe; color: #0284c7; }
-        .badge-pastel-mint { background: #d1fae5; color: #059669; }
-        .badge-pastel-purple { background: #f3e8ff; color: #9333ea; }
-        .badge-pastel-rose { background: #fce7f3; color: #db2777; }
+        .badge-pastel-indigo {
+            background: #e0e7ff;
+            color: #4f46e5;
+        }
+
+        .badge-pastel-sky {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .badge-pastel-mint {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .badge-pastel-purple {
+            background: #f3e8ff;
+            color: #9333ea;
+        }
+
+        .badge-pastel-rose {
+            background: #fce7f3;
+            color: #db2777;
+        }
 
         @media (max-width: 768px) {
             .hero-section {
@@ -334,7 +354,8 @@
                         Unlock the Secrets of the <span class="hero-title-gradient">Share Market</span>
                     </h1>
                     <p class="hero-description mb-4">
-                        Discover stock market fundamentals and real-life stock stories that make learning engaging and practical. Perfect for traders – start learning and trading smarter today!
+                        Discover stock market fundamentals and real-life stock stories that make learning engaging and
+                        practical. Perfect for traders – start learning and trading smarter today!
                     </p>
                     <div class="d-flex flex-wrap gap-3 hero-buttons">
                         <a href="login/" class="btn btn-pastel-hero btn-pill mr-3 mb-2">
@@ -346,8 +367,11 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="hero-img-wrapper">
-                        <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" alt="ProfitMax LMS Dashboard Preview">
+                    <div class="hero-img-wrapper overflow-hidden">
+                        <video class="img-fluid rounded-4 w-100 h-auto" autoplay loop muted playsinline style="border-radius: 18px; display: block;">
+                            <source src="{% static 'images/hero_animated.mp4' %}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                 </div>
             </div>
@@ -361,18 +385,21 @@
                 <h2 class="section-title">
                     Award-Winning <span class="section-title-gradient">Share Market Classes</span> Pune
                 </h2>
-                <p class="section-subtitle">Recognized for delivering excellence in stock market education and trader empowerment.</p>
+                <p class="section-subtitle">Recognized for delivering excellence in stock market education and trader
+                    empowerment.</p>
             </div>
 
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="pastel-card">
                         <div class="overflow-hidden">
-                            <img src="{% static 'images/award1.jpg' %}" alt="Smart Learning System" class="pastel-card-img-top">
+                            <img src="{% static 'images/award1.jpg' %}" alt="Smart Learning System"
+                                class="pastel-card-img-top">
                         </div>
                         <div class="pastel-card-body">
                             <h5 class="pastel-card-title">Smart Learning System</h5>
-                            <p class="pastel-card-text">Explore our comprehensive, interactive LMS platform designed for fast learning.</p>
+                            <p class="pastel-card-text">Explore our comprehensive, interactive LMS platform designed for
+                                fast learning.</p>
                         </div>
                     </div>
                 </div>
@@ -380,11 +407,13 @@
                 <div class="col-md-4 mb-4">
                     <div class="pastel-card">
                         <div class="overflow-hidden">
-                            <img src="{% static 'images/award2.jpg' %}" alt="Advanced Trading Tools" class="pastel-card-img-top">
+                            <img src="{% static 'images/award2.jpg' %}" alt="Advanced Trading Tools"
+                                class="pastel-card-img-top">
                         </div>
                         <div class="pastel-card-body">
                             <h5 class="pastel-card-title">Advanced Trading Tools</h5>
-                            <p class="pastel-card-text">Master market analysis faster and smarter with cutting-edge stock tools.</p>
+                            <p class="pastel-card-text">Master market analysis faster and smarter with cutting-edge
+                                stock tools.</p>
                         </div>
                     </div>
                 </div>
@@ -392,11 +421,13 @@
                 <div class="col-md-4 mb-4">
                     <div class="pastel-card">
                         <div class="overflow-hidden">
-                            <img src="{% static 'images/award3.jpg' %}" alt="Dedicated Mentorship Support" class="pastel-card-img-top">
+                            <img src="{% static 'images/award3.jpg' %}" alt="Dedicated Mentorship Support"
+                                class="pastel-card-img-top">
                         </div>
                         <div class="pastel-card-body">
                             <h5 class="pastel-card-title">Dedicated Mentorship</h5>
-                            <p class="pastel-card-text">Receive ongoing guidance and support from experienced market professionals.</p>
+                            <p class="pastel-card-text">Receive ongoing guidance and support from experienced market
+                                professionals.</p>
                         </div>
                     </div>
                 </div>
@@ -411,7 +442,8 @@
                 <h2 class="section-title">
                     Services <span class="section-title-gradient">We Offer</span>
                 </h2>
-                <p class="section-subtitle">Structured modules to transform beginners into confident stock market traders.</p>
+                <p class="section-subtitle">Structured modules to transform beginners into confident stock market
+                    traders.</p>
             </div>
 
             <div class="row align-items-center">
@@ -440,15 +472,18 @@
                     </div>
                     <div class="service-feature-item">
                         <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
-                        <div class="service-feature-text">Master technical analysis and reading market charts efficiently.</div>
+                        <div class="service-feature-text">Master technical analysis and reading market charts
+                            efficiently.</div>
                     </div>
                     <div class="service-feature-item">
                         <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
-                        <div class="service-feature-text">Get hands-on training with real-time trading simulations.</div>
+                        <div class="service-feature-text">Get hands-on training with real-time trading simulations.
+                        </div>
                     </div>
                     <div class="service-feature-item">
                         <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
-                        <div class="service-feature-text">Understand risk management and smart investment strategies.</div>
+                        <div class="service-feature-text">Understand risk management and smart investment strategies.
+                        </div>
                     </div>
                     <div class="service-feature-item">
                         <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
@@ -456,7 +491,8 @@
                     </div>
                     <div class="service-feature-item">
                         <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
-                        <div class="service-feature-text">Access expert mentorship and lifetime learning resources.</div>
+                        <div class="service-feature-text">Access expert mentorship and lifetime learning resources.
+                        </div>
                     </div>
                     <div class="service-feature-item">
                         <div class="service-icon-badge"><i class="fa-solid fa-check"></i></div>
@@ -474,7 +510,8 @@
                 <h2 class="section-title">
                     Why <span class="section-title-gradient">Our Learning Sessions</span>
                 </h2>
-                <p class="section-subtitle">Everything you need to build discipline, strategy, and consistent profitability.</p>
+                <p class="section-subtitle">Everything you need to build discipline, strategy, and consistent
+                    profitability.</p>
             </div>
 
             <div class="row">
@@ -486,7 +523,8 @@
                         </div>
                         <h5 class="pastel-card-title text-center">Trade with Pro Mentors</h5>
                         <p class="pastel-card-text text-center">
-                            Get guided by experienced mentors using our exclusive Vardan Strategy to maximize profit potential and improve trading psychology.
+                            Get guided by experienced mentors using our exclusive Vardan Strategy to maximize profit
+                            potential and improve trading psychology.
                         </p>
                     </div>
                 </div>
@@ -499,7 +537,8 @@
                         </div>
                         <h5 class="pastel-card-title text-center">Risk Management</h5>
                         <p class="pastel-card-text text-center">
-                            Identify, assess, and monitor potential market risks efficiently with real-time risk mitigation and smart analytics.
+                            Identify, assess, and monitor potential market risks efficiently with real-time risk
+                            mitigation and smart analytics.
                         </p>
                     </div>
                 </div>
@@ -512,7 +551,8 @@
                         </div>
                         <h5 class="pastel-card-title text-center">Smart Alert Tools</h5>
                         <p class="pastel-card-text text-center">
-                            Enhance your decision-making with advanced tools like the Bramhastra Stock Alert System for accurate, timely stock alerts.
+                            Enhance your decision-making with advanced tools like the Bramhastra Stock Alert System for
+                            accurate, timely stock alerts.
                         </p>
                     </div>
                 </div>
@@ -525,7 +565,8 @@
                         </div>
                         <h5 class="pastel-card-title text-center">Trading Psychology</h5>
                         <p class="pastel-card-text text-center">
-                            Master your emotions and behavior in the market. Understand fear, greed, and discipline to build a consistent mindset.
+                            Master your emotions and behavior in the market. Understand fear, greed, and discipline to
+                            build a consistent mindset.
                         </p>
                     </div>
                 </div>
@@ -538,7 +579,8 @@
                         </div>
                         <h5 class="pastel-card-title text-center">Exclusive Strategies</h5>
                         <p class="pastel-card-text text-center">
-                            Join hands with experienced traders and receive dedicated mentorship to execute disciplined, high-probability trades.
+                            Join hands with experienced traders and receive dedicated mentorship to execute disciplined,
+                            high-probability trades.
                         </p>
                     </div>
                 </div>

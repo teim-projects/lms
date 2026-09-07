@@ -20,12 +20,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 85px;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
       color: #334155;
       overflow-x: hidden;
       min-height: 100vh;
+      width: 100%;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* Hide Hamburger Menu Icon */
@@ -164,10 +172,34 @@
       border-color: #4f46e5;
     }
 
+    /* Trust & Statistics Highlights Bar */
+    .stats-banner-wrapper {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 18px 28px;
+      box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.12);
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-icon-badge {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+    }
+
     /* Hero Section */
     .hero-section {
       background: transparent;
-      padding: 40px 0 75px 0;
+      padding: 95px 0 85px 0;
+      margin-top: 40px;
       border-bottom: none;
     }
 
@@ -280,8 +312,10 @@
 
     /* Section Header */
     .section-header {
-      text-align: center;
+      text-align: left;
       margin-bottom: 3.5rem;
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     .section-title {
@@ -344,7 +378,9 @@
       border-radius: 22px;
       overflow: hidden;
       box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08);
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+      will-change: transform;
+      transform: translateZ(0);
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -506,7 +542,9 @@
       border-radius: 24px;
       overflow: hidden;
       box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.05);
-      transition: all 0.35s ease;
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+      will-change: transform;
+      transform: translateZ(0);
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -523,10 +561,48 @@
       height: 240px;
       object-fit: cover;
       transition: transform 0.5s ease;
+      will-change: transform;
+      transform: translateZ(0);
     }
 
     .pastel-card:hover .pastel-card-img {
       transform: scale(1.06);
+    }
+
+    /* Floating Back to Top Button */
+    .back-to-top-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      color: #ffffff !important;
+      border: none;
+      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      cursor: pointer;
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateY(15px);
+    }
+
+    .back-to-top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top-btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.6);
+      background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
     }
 
     .pastel-card-content {
@@ -580,7 +656,7 @@
       align-items: center;
       justify-content: center;
       font-size: 28px;
-      margin: 0 auto 1.25rem auto;
+      margin: 0 0 1.25rem 0;
       transition: transform 0.3s ease;
     }
 
@@ -652,8 +728,16 @@
     .modal-header-gradient {
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: #ffffff;
-      padding: 1.5rem 2rem;
+      padding: 1.15rem 1.75rem;
       border-bottom: none;
+    }
+
+    /* Fixed Category Modal Tabs Header (Zero Gap below Main Heading) */
+    .category-modal-tabs-bar {
+      background: #f8fafc;
+      padding: 8px 24px;
+      border-bottom: 1.5px solid #e2e8f0;
+      flex-shrink: 0;
     }
 
     .course-card-modal {
@@ -687,6 +771,81 @@
       border-radius: 50px;
       font-size: 0.95rem;
     }
+
+    .category-nav-tabs {
+      border: 1.5px solid #e2e8f0 !important;
+      background: #ffffff !important;
+      padding: 5px !important;
+      border-radius: 50px !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .category-nav-tabs .nav-link {
+      color: #475569;
+      font-weight: 700;
+      border-radius: 50px !important;
+      padding: 10px 20px !important;
+      transition: all 0.25s ease;
+      border: 1.5px solid transparent;
+    }
+
+    .category-nav-tabs .nav-link:hover:not(.active) {
+      background: #f0f7ff !important;
+      color: #2563eb !important;
+    }
+
+    /* Pastel Blue / Soft Light Blue Active State for Free Courses */
+    .category-nav-tabs .free-tab-btn.active,
+    .category-nav-tabs .nav-link.active {
+      background: linear-gradient(135deg, #7ea5f8 0%, #5a94f8 100%) !important;
+      color: #ffffff !important;
+      border-color: #5a94f8 !important;
+      box-shadow: 0 4px 14px rgba(90, 148, 248, 0.35) !important;
+    }
+
+    .category-nav-tabs .free-tab-btn.active i {
+      color: #ffffff !important;
+    }
+
+    .category-nav-tabs .tab-badge-free {
+      background: #eff6ff !important;
+      color: #3b82f6 !important;
+      border: 1px solid #bfdbfe !important;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .category-nav-tabs .free-tab-btn.active .tab-badge-free {
+      background: rgba(255, 255, 255, 0.28) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    /* Pastel Emerald Active State for Premium Courses */
+    .category-nav-tabs .paid-tab-btn.active {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
+      color: #ffffff !important;
+      border-color: #10b981 !important;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    .category-nav-tabs .paid-tab-btn.active i {
+      color: #ffffff !important;
+    }
+
+    .category-nav-tabs .tab-badge-paid {
+      background: #ecfdf5 !important;
+      color: #059669 !important;
+      border: 1px solid #a7f3d0 !important;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .category-nav-tabs .paid-tab-btn.active .tab-badge-paid {
+      background: rgba(255, 255, 255, 0.28) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.5) !important;
+    }
   </style>
 </head>
 
@@ -717,6 +876,58 @@
       </div>
     </section>
 
+    <!-- Trust & Statistics Highlights Bar -->
+    <div class="container-wide">
+      <div class="stats-banner-wrapper">
+        <div class="row text-center text-md-start align-items-center g-3">
+          <div class="col-6 col-md-3">
+            <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+              <div class="stat-icon-badge bg-primary-subtle text-primary border border-primary-subtle">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+              <div>
+                <h4 class="fw-bold text-dark mb-0 fs-5">50,000+</h4>
+                <span class="text-muted small fw-semibold">Active Learners</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+              <div class="stat-icon-badge bg-warning-subtle text-warning border border-warning-subtle">
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <div>
+                <h4 class="fw-bold text-dark mb-0 fs-5">4.9 / 5★</h4>
+                <span class="text-muted small fw-semibold">Student Rating</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+              <div class="stat-icon-badge bg-success-subtle text-success border border-success-subtle">
+                <i class="fa-solid fa-award"></i>
+              </div>
+              <div>
+                <h4 class="fw-bold text-dark mb-0 fs-5">ISO Certified</h4>
+                <span class="text-muted small fw-semibold">Verified Academy</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+              <div class="stat-icon-badge" style="background:#f3e8ff; color:#9333ea; border: 1px solid #e9d5ff;">
+                <i class="fa-solid fa-headset"></i>
+              </div>
+              <div>
+                <h4 class="fw-bold text-dark mb-0 fs-5">Live Mentorship</h4>
+                <span class="text-muted small fw-semibold">Expert Support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Hero Section (Light Pastel 2-Column Hero) -->
     <section class="hero-section">
       <div class="container-wide">
@@ -741,10 +952,11 @@
             </div>
           </div>
           <div class="col-lg-6">
-            <div class="hero-img-wrapper">
-              <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" 
-                   class="img-fluid rounded-4" 
-                   alt="Trading Dashboard">
+            <div class="hero-img-wrapper overflow-hidden">
+              <video class="img-fluid rounded-4 w-100 h-auto" autoplay loop muted playsinline style="border-radius: 18px; display: block;">
+                <source src="{% static 'images/hero_animated.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         </div>
@@ -790,7 +1002,7 @@
                     <i class="fa-solid fa-graduation-cap me-1"></i> Category
                   </div>
                 </div>
-                <div class="category-card-body p-3 text-center d-flex flex-column justify-content-between">
+                <div class="category-card-body p-3 text-start d-flex flex-column justify-content-between">
                   <div class="mb-3">
                     <h3 class="category-title mb-2">{{ item.category.name }}</h3>
                     <p class="text-muted small mb-0">
@@ -821,7 +1033,7 @@
   </section>
 
   <!-- Award Winning Section -->
-  <section class="py-5">
+  <section class="py-5" id="award-section">
     <div class="container-wide">
       <div class="section-header">
         <h2 class="section-title">
@@ -834,9 +1046,9 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/award1.jpg' %}" alt="Best Trading Education 2023" class="pastel-card-img">
+              <img src="{% static 'images/award1.jpg' %}" alt="Best Trading Education 2023" class="pastel-card-img" loading="lazy" decoding="async">
             </div>
-            <div class="pastel-card-content text-center">
+            <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Best Trading Education</h6>
               <p class="text-muted small mb-0">Excellence in financial education and trader development.</p>
             </div>
@@ -846,9 +1058,9 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/award2.jpg' %}" alt="Innovation in Trading Tools" class="pastel-card-img">
+              <img src="{% static 'images/award2.jpg' %}" alt="Innovation in Trading Tools" class="pastel-card-img" loading="lazy" decoding="async">
             </div>
-            <div class="pastel-card-content text-center">
+            <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Innovation in Tools</h6>
               <p class="text-muted small mb-0">Cutting-edge trading tools & analytics platform.</p>
             </div>
@@ -858,9 +1070,9 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/award3.jpg' %}" alt="Student Success Award" class="pastel-card-img">
+              <img src="{% static 'images/award3.jpg' %}" alt="Student Success Award" class="pastel-card-img" loading="lazy" decoding="async">
             </div>
-            <div class="pastel-card-content text-center">
+            <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Student Success Award</h6>
               <p class="text-muted small mb-0">Highest satisfaction & success rate in the industry.</p>
             </div>
@@ -870,9 +1082,9 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/mam.jpg' %}" alt="Smart Learning System" class="pastel-card-img">
+              <img src="{% static 'images/mam.jpg' %}" alt="Smart Learning System" class="pastel-card-img" loading="lazy" decoding="async">
             </div>
-            <div class="pastel-card-content text-center">
+            <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Smart Learning System</h6>
               <p class="text-muted small mb-0">Always here to support your learning journey.</p>
             </div>
@@ -972,8 +1184,8 @@
             <div class="why-icon-badge badge-pastel-indigo">
               <i class="fa-solid fa-chalkboard-user"></i>
             </div>
-            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Professional Mentorship</h5>
-            <p class="text-muted text-center mb-0">Learn from experienced traders using our exclusive Vardan Strategy for optimal profit potential.</p>
+            <h5 class="fw-bold text-start text-dark fs-5 mb-2">Professional Mentorship</h5>
+            <p class="text-muted text-start mb-0">Learn from experienced traders using our exclusive Vardan Strategy for optimal profit potential.</p>
           </div>
         </div>
 
@@ -982,8 +1194,8 @@
             <div class="why-icon-badge badge-pastel-sky">
               <i class="fa-solid fa-shield-halved"></i>
             </div>
-            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Advanced Risk Control</h5>
-            <p class="text-muted text-center mb-0">Assess and monitor market risk efficiently with our real-time risk mitigation algorithms.</p>
+            <h5 class="fw-bold text-start text-dark fs-5 mb-2">Advanced Risk Control</h5>
+            <p class="text-muted text-start mb-0">Assess and monitor market risk efficiently with our real-time risk mitigation algorithms.</p>
           </div>
         </div>
 
@@ -992,8 +1204,8 @@
             <div class="why-icon-badge badge-pastel-mint">
               <i class="fa-solid fa-robot"></i>
             </div>
-            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Smart Alert Systems</h5>
-            <p class="text-muted text-center mb-0">Enhance decisions with our Bramhastra Stock Alert System for accurate stock movement alerts.</p>
+            <h5 class="fw-bold text-start text-dark fs-5 mb-2">Smart Alert Systems</h5>
+            <p class="text-muted text-start mb-0">Enhance decisions with our Bramhastra Stock Alert System for accurate stock movement alerts.</p>
           </div>
         </div>
 
@@ -1002,8 +1214,8 @@
             <div class="why-icon-badge badge-pastel-purple">
               <i class="fa-solid fa-brain"></i>
             </div>
-            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Trading Psychology</h5>
-            <p class="text-muted text-center mb-0">Master emotions and discipline in volatile markets to maintain a consistent mindset.</p>
+            <h5 class="fw-bold text-start text-dark fs-5 mb-2">Trading Psychology</h5>
+            <p class="text-muted text-start mb-0">Master emotions and discipline in volatile markets to maintain a consistent mindset.</p>
           </div>
         </div>
 
@@ -1012,8 +1224,8 @@
             <div class="why-icon-badge badge-pastel-rose">
               <i class="fa-solid fa-chart-line"></i>
             </div>
-            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Real-time Analytics</h5>
-            <p class="text-muted text-center mb-0">Access live market charts, trends, and data insights to make informed trading choices.</p>
+            <h5 class="fw-bold text-start text-dark fs-5 mb-2">Real-time Analytics</h5>
+            <p class="text-muted text-start mb-0">Access live market charts, trends, and data insights to make informed trading choices.</p>
           </div>
         </div>
 
@@ -1022,8 +1234,8 @@
             <div class="why-icon-badge badge-pastel-amber">
               <i class="fa-solid fa-users"></i>
             </div>
-            <h5 class="fw-bold text-center text-dark fs-5 mb-2">Trader Community</h5>
-            <p class="text-muted text-center mb-0">Join an active network of passionate traders to exchange ideas and market insights.</p>
+            <h5 class="fw-bold text-start text-dark fs-5 mb-2">Trader Community</h5>
+            <p class="text-muted text-start mb-0">Join an active network of passionate traders to exchange ideas and market insights.</p>
           </div>
         </div>
       </div>
@@ -1104,37 +1316,39 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <div class="modal-body p-4 bg-light">
-          <!-- Category Nav Tabs -->
-          <ul class="nav nav-pills nav-justified mb-4 p-1.5 bg-white border rounded-pill shadow-sm" id="categoryTab-{{ item.category.id }}" role="tablist">
+        <!-- Category Nav Tabs (Fixed Header Bar - Zero Void Gap below Title) -->
+        <div class="category-modal-tabs-bar">
+          <ul class="nav nav-pills nav-justified category-nav-tabs mb-0" id="categoryTab-{{ item.category.id }}" role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link active fw-bold rounded-pill py-2.5 d-flex align-items-center justify-content-center gap-2" 
+              <button class="nav-link free-tab-btn active fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" 
                       id="free-tab-{{ item.category.id }}" 
                       data-bs-toggle="pill" 
                       data-bs-target="#free-pane-{{ item.category.id }}" 
                       type="button" role="tab" aria-controls="free-pane-{{ item.category.id }}" aria-selected="true">
-                <i class="fa-solid fa-graduation-cap text-primary"></i>
+                <i class="fa-solid fa-graduation-cap"></i>
                 <span>Free Courses</span>
-                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 small">
+                <span class="badge rounded-pill px-2.5 py-1 small tab-badge-free">
                   {{ item.free_courses|length }}
                 </span>
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link fw-bold rounded-pill py-2.5 d-flex align-items-center justify-content-center gap-2" 
+              <button class="nav-link paid-tab-btn fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" 
                       id="paid-tab-{{ item.category.id }}" 
                       data-bs-toggle="pill" 
                       data-bs-target="#paid-pane-{{ item.category.id }}" 
                       type="button" role="tab" aria-controls="paid-pane-{{ item.category.id }}" aria-selected="false">
                 <i class="fa-solid fa-gem text-success"></i>
                 <span>Premium Courses</span>
-                <span class="badge bg-success text-white rounded-pill px-2.5 py-1 small">
+                <span class="badge rounded-pill px-2.5 py-1 small tab-badge-paid">
                   {{ item.paid_courses|length }}
                 </span>
               </button>
             </li>
           </ul>
+        </div>
 
+        <div class="modal-body p-4 bg-light">
           <!-- Tab Contents -->
           <div class="tab-content" id="categoryTabContent-{{ item.category.id }}">
             <!-- Free Courses Pane -->
@@ -1314,12 +1528,42 @@
           e.preventDefault();
           const target = document.getElementById("sectiondemo");
           if (target) {
-            target.scrollIntoView({ behavior: "smooth" });
+            const navbarOffset = 85;
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navbarOffset;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: "smooth"
+            });
           }
+        });
+      }
+
+      // Back to Top Floating Button Logic
+      const backToTopBtn = document.getElementById("backToTopBtn");
+      if (backToTopBtn) {
+        window.addEventListener("scroll", function () {
+          if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add("visible");
+          } else {
+            backToTopBtn.classList.remove("visible");
+          }
+        });
+
+        backToTopBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
         });
       }
     });
   </script>
+
+  <!-- Floating Back to Top Button -->
+  <button id="backToTopBtn" class="back-to-top-btn" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
   {% include 'footer.html' %}
 

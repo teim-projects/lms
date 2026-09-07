@@ -174,6 +174,7 @@ urlpatterns = [
     path('edit-course-title/<int:course_id>/<str:title>/',views.edit_course_title, name='edit_course_title'),
 
     path('edit-course-subtitle/<int:content_id>/',views.edit_course_subtitle,name='edit_course_subtitle'),
+    path('api/search-courses/', views.search_courses_api, name='search_courses_api'),
 
 
 

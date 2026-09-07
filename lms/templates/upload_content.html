@@ -3,229 +3,361 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy </title>
-    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Course Content - ProfitMax</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+
+  <!-- Bootstrap 5 & Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      min-height: 100vh;
+      color: #334155;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 95px auto 40px auto;
+      padding: 0 15px;
+      flex: 1;
+    }
+
+    /* Header Banner Card */
+    .header-banner-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.12);
+      border-top: 4px solid #4f46e5;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .header-badge-icon {
+      width: 48px;
+      height: 48px;
+      background: #ffffff;
+      color: #4f46e5;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+      border: 1.5px solid #c7d2fe;
+      margin-right: 14px;
+    }
+
+    /* Form Container Card */
+    .form-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.1);
+    }
+
+    .title-block {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .title-block:hover {
+      border-color: #c7d2fe;
+      box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.08);
+    }
+
+    .subtitle-block {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-left: 4px solid #6366f1;
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-control, .form-select {
+      border-radius: 12px;
+      padding: 10px 16px;
+      border: 1.5px solid #cbd5e1;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    }
+
+    .form-label {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .btn-indigo {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff !important;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 24px;
+      font-weight: 700;
+      box-shadow: 0 8px 18px -4px rgba(79, 70, 229, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-indigo:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      transform: translateY(-2px);
+    }
+
+    .btn-emerald {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff !important;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 24px;
+      font-weight: 700;
+      box-shadow: 0 8px 18px -4px rgba(16, 185, 129, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-emerald:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-2px);
+    }
+
+    .btn-soft-rose {
+      background: #ffe4e6;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+    }
+
+    .btn-soft-rose:hover {
+      background: #fecdd3;
+      color: #be123c;
+    }
+
+    .btn-soft-indigo {
+      background: #e0e7ff;
+      color: #4338ca;
+      border: 1px solid #c7d2fe;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+    }
+
+    .btn-soft-indigo:hover {
+      background: #c7d2fe;
+      color: #3730a3;
+    }
+  </style>
 </head>
 
-<style>
-    body {
-        font-family: Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #FAFAFA;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 100vh;
-
-    }
-
-    /*Form css*/
-    fieldset {
-        background: rgba(255, 255, 255, 1);
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        font-weight: bold;
-    }
-
-    input:focus {
-        outline: none;
-
-        box-shadow: 0 0 5px linear-gradient(#10014b, #01235d);
-        background: #fff;
-        font-size: 1rem;
-    }
-
-    .allbutton {
-        background: linear-gradient(to right, #6a11cb, #2575fc);
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        width: 100%;
-    }
-
-    .allbutton:hover {
-        background: linear-gradient(to right, #2575fc, #6a11cb);
-        transform: scale(1.02);
-        color: #f7f7f7;
-    }
-
-    .remove-subtitle,
-    .add-subtitle-btn,
-    .submit-btn {
-        border-radius: 15px;
-        border: none;
-        font-size: 1rem;
-        color: #f7f7f7;
-    }
-
-    .ucc {
-        text-align: center;
-    }
-
-    .content {
-        margin-left: 0;
-        transition: margin-left 0.3s ease-in-out;
-    }
-
-
-
-    .container {
-        padding-bottom: 10px;
-    }
-
-    /*Footer Css End*/
-</style>
-
 <body>
-    {% include 'Admin_Base.html' %}
+  {% include 'Admin_Base.html' %}
 
-    <div class="main" style="min-height: 100vh;">
-        <div class="container-fluid " style="margin-top: 100px;">
-            <div class="row mt-5">
-                <div class="col-md-3"></div>
-                <div class="col-md-6 col-12">
-                    <fieldset>
-                        <form method="POST" enctype="multipart/form-data" class="p-5" id="upload-form">
-                            {% csrf_token %}
-                            <div id="title-container">
-                                <!-- Initial Title Block -->
-                                <div class="title-block">
-                                    <div class="form-group">
-                                        <label>Title:</label>
-                                        <input type="text" class="form-control" name="title[]" required>
-                                    </div>
-
-                                    <div class="subtitle-container">
-                                        <div class="subtitle-block">
-                                            <div class="form-group">
-                                                <label>Subtitle:</label>
-                                                <input type="text" class="form-control" name="subtitle[]" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Resource File:</label>
-                                                <input type="file" class="form-control" name="resource_file[]" required>
-                                            </div>
-                                            <button type="button" class="btn btn-danger remove-subtitle">Remove Subtitle</button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Hidden input to track number of subtitles -->
-                                    <input type="hidden" name="subtitle_count[]" class="subtitle-count" value="1">
-
-                                    <button type="button" class="btn btn-secondary add-subtitle">Add Subtitle</button>
-                                    <button type="button" class="btn btn-danger remove-title mt-2">Remove Title</button>
-                                    <hr>
-                                </div>
-                            </div>
-
-                            <div class="row mt-3">
-                                <div class="col-md-6 col-12 mt-2">
-                                    <button type="button" class="btn btn-primary" id="add-title">Add Title</button>
-                                </div>
-                                <div class="col-md-6 col-12 mt-2">
-                                    <button type="submit" class="btn btn-success">Submit</button>
-                                </div>
-                            </div>
-                        </form>
-                    </fieldset>
-                </div>
-                <div class="col-md-3 mt-2"></div>
-            </div>
+  <div class="main-container">
+    <!-- Header Banner Card -->
+    <div class="header-banner-card mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="d-flex align-items-center">
+        <div class="header-badge-icon">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
         </div>
+        <div>
+          <h2 class="fw-extrabold text-dark m-0 fs-3">Upload Course Content</h2>
+          <p class="text-muted small m-0">Add new modules, video lectures, and PDF resources to <strong>{{ course.course_title }}</strong>.</p>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <a href="javascript:history.back()" class="btn btn-light border rounded-3 fw-bold px-3 py-2 text-dark">
+          <i class="fa-solid fa-arrow-left me-1.5 text-primary"></i> Back
+        </a>
+      </div>
     </div>
 
-    <!-- JQuery CDN (ensure included) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% if error %}
+    <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4">
+      <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ error }}
+    </div>
+    {% endif %}
 
-    <!-- JS for dynamic add/remove -->
-    <script>
-        $(document).ready(function () {
+    <!-- Upload Form Card -->
+    <div class="form-card">
+      <form method="POST" enctype="multipart/form-data" id="upload-form">
+        {% csrf_token %}
 
-            // Add new Title block
-            $('#add-title').click(function () {
-                const titleBlock = `
-                <div class="title-block">
-                    <div class="form-group">
-                        <label>Title:</label>
-                        <input type="text" class="form-control" name="title[]" required>
-                    </div>
+        <div id="title-container">
+          <!-- Initial Title Block -->
+          <div class="title-block">
+            <div class="mb-3">
+              <label class="form-label"><i class="fa-solid fa-folder me-2 text-indigo"></i>Module Title / Chapter Name</label>
+              <input type="text" class="form-control" name="title[]" placeholder="e.g. Chapter 1: Introduction to Technical Analysis" required>
+            </div>
 
-                    <div class="subtitle-container">
-                        <div class="subtitle-block">
-                            <div class="form-group">
-                                <label>Subtitle:</label>
-                                <input type="text" class="form-control" name="subtitle[]" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Resource File:</label>
-                                <input type="file" class="form-control" name="resource_file[]" required>
-                            </div>
-                            <button type="button" class="btn btn-danger remove-subtitle">Remove Subtitle</button>
-                        </div>
-                    </div>
+            <div class="subtitle-container">
+              <div class="subtitle-block">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fa-solid fa-heading me-1.5 text-primary"></i>Lesson Subtitle</label>
+                    <input type="text" class="form-control" name="subtitle[]" placeholder="e.g. Lesson 1.1: Candlestick Patterns" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fa-solid fa-file-arrow-up me-1.5 text-success"></i>Resource File (Video MP4 or PDF Document)</label>
+                    <input type="file" class="form-control" name="resource_file[]" required>
+                  </div>
+                </div>
+                <div class="mt-3 text-end">
+                  <button type="button" class="btn btn-soft-rose remove-subtitle">
+                    <i class="fa-solid fa-trash me-1"></i> Remove Subtitle
+                  </button>
+                </div>
+              </div>
+            </div>
 
-                    <input type="hidden" name="subtitle_count[]" class="subtitle-count" value="1">
-                    <button type="button" class="btn btn-secondary add-subtitle">Add Subtitle</button>
-                    <button type="button" class="btn btn-danger remove-title mt-2">Remove Title</button>
-                    <hr>
-                </div>`;
-                $('#title-container').append(titleBlock);
-            });
+            <!-- Hidden input to track number of subtitles -->
+            <input type="hidden" name="subtitle_count[]" class="subtitle-count" value="1">
 
-            // Remove entire Title block
-            $(document).on('click', '.remove-title', function () {
-                $(this).closest('.title-block').remove();
-            });
+            <div class="d-flex align-items-center justify-content-between mt-3 pt-2 border-top">
+              <button type="button" class="btn btn-soft-indigo add-subtitle">
+                <i class="fa-solid fa-plus me-1"></i> Add Subtitle to Chapter
+              </button>
+              <button type="button" class="btn btn-soft-rose remove-title">
+                <i class="fa-solid fa-trash me-1"></i> Remove Entire Chapter
+              </button>
+            </div>
+          </div>
+        </div>
 
-            // Add Subtitle to current Title
-            $(document).on('click', '.add-subtitle', function () {
-                const subtitleBlock = `
-                <div class="subtitle-block">
-                    <div class="form-group">
-                        <label>Subtitle:</label>
-                        <input type="text" class="form-control" name="subtitle[]" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Resource File:</label>
-                        <input type="file" class="form-control" name="resource_file[]" required>
-                    </div>
-                    <button type="button" class="btn btn-danger remove-subtitle">Remove Subtitle</button>
-                </div>`;
-                const container = $(this).siblings('.subtitle-container');
-                container.append(subtitleBlock);
+        <div class="d-flex align-items-center justify-content-between gap-3 mt-4 pt-3 border-top">
+          <button type="button" class="btn btn-indigo" id="add-title">
+            <i class="fa-solid fa-folder-plus me-2"></i> Add New Chapter Block
+          </button>
+          <button type="submit" class="btn btn-emerald px-5">
+            <i class="fa-solid fa-check-circle me-2"></i> Submit & Save All Content
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-                // Update subtitle count
-                const countInput = $(this).siblings('.subtitle-count');
-                countInput.val(container.find('.subtitle-block').length);
-            });
+  {% include 'footer.html' %}
 
-            // Remove a subtitle
-            $(document).on('click', '.remove-subtitle', function () {
-                const subtitleContainer = $(this).closest('.subtitle-container');
-                $(this).closest('.subtitle-block').remove();
+  <!-- jQuery & Dynamic Add/Remove Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Add new Title block
+      $('#add-title').click(function () {
+        const titleBlock = `
+        <div class="title-block">
+          <div class="mb-3">
+            <label class="form-label"><i class="fa-solid fa-folder me-2 text-indigo"></i>Module Title / Chapter Name</label>
+            <input type="text" class="form-control" name="title[]" placeholder="e.g. Chapter Title" required>
+          </div>
 
-                // Update subtitle count
-                const countInput = subtitleContainer.siblings('.subtitle-count');
-                countInput.val(subtitleContainer.find('.subtitle-block').length);
-            });
-        });
-    </script>
+          <div class="subtitle-container">
+            <div class="subtitle-block">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label"><i class="fa-solid fa-heading me-1.5 text-primary"></i>Lesson Subtitle</label>
+                  <input type="text" class="form-control" name="subtitle[]" placeholder="e.g. Lesson Subtitle" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label"><i class="fa-solid fa-file-arrow-up me-1.5 text-success"></i>Resource File (Video MP4 or PDF Document)</label>
+                  <input type="file" class="form-control" name="resource_file[]" required>
+                </div>
+              </div>
+              <div class="mt-3 text-end">
+                <button type="button" class="btn btn-soft-rose remove-subtitle">
+                  <i class="fa-solid fa-trash me-1"></i> Remove Subtitle
+                </button>
+              </div>
+            </div>
+          </div>
 
-    {% include 'footer.html' %}
+          <input type="hidden" name="subtitle_count[]" class="subtitle-count" value="1">
+
+          <div class="d-flex align-items-center justify-content-between mt-3 pt-2 border-top">
+            <button type="button" class="btn btn-soft-indigo add-subtitle">
+              <i class="fa-solid fa-plus me-1"></i> Add Subtitle to Chapter
+            </button>
+            <button type="button" class="btn btn-soft-rose remove-title">
+              <i class="fa-solid fa-trash me-1"></i> Remove Entire Chapter
+            </button>
+          </div>
+        </div>`;
+        $('#title-container').append(titleBlock);
+      });
+
+      // Remove entire Title block
+      $(document).on('click', '.remove-title', function () {
+        $(this).closest('.title-block').remove();
+      });
+
+      // Add Subtitle to current Title
+      $(document).on('click', '.add-subtitle', function () {
+        const subtitleBlock = `
+        <div class="subtitle-block">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa-solid fa-heading me-1.5 text-primary"></i>Lesson Subtitle</label>
+              <input type="text" class="form-control" name="subtitle[]" placeholder="e.g. Lesson Subtitle" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa-solid fa-file-arrow-up me-1.5 text-success"></i>Resource File (Video MP4 or PDF Document)</label>
+              <input type="file" class="form-control" name="resource_file[]" required>
+            </div>
+          </div>
+          <div class="mt-3 text-end">
+            <button type="button" class="btn btn-soft-rose remove-subtitle">
+              <i class="fa-solid fa-trash me-1"></i> Remove Subtitle
+            </button>
+          </div>
+        </div>`;
+        const container = $(this).closest('.title-block').find('.subtitle-container');
+        container.append(subtitleBlock);
+
+        // Update subtitle count
+        const countInput = $(this).closest('.title-block').find('.subtitle-count');
+        countInput.val(container.find('.subtitle-block').length);
+      });
+
+      // Remove a subtitle
+      $(document).on('click', '.remove-subtitle', function () {
+        const titleBlock = $(this).closest('.title-block');
+        const subtitleContainer = $(this).closest('.subtitle-container');
+        $(this).closest('.subtitle-block').remove();
+
+        // Update subtitle count
+        const countInput = titleBlock.find('.subtitle-count');
+        countInput.val(subtitleContainer.find('.subtitle-block').length);
+      });
+    });
+  </script>
 </body>
-
 
 </html>

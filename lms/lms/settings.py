@@ -28,7 +28,16 @@ SECRET_KEY = 'django-insecure-)+o#%d_8!lx@ep8id(8h_7af%v1zo=&7$5*b$#r2)(*++q90-p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "profitmaxacademy.in",
+    "www.profitmaxacademy.in",
+    "127.0.0.1",
+    "localhost",
+]
+CSRF_TRUSTED_ORIGINS = [
+     "https://profitmaxacademy.in",
+     "https://www.profitmaxacademy.in",
+]
 
 
 # Application definition
@@ -186,3 +195,12 @@ EASEBUZZ_USE_SANDBOX = False  # Important: switch to False for real payments
 AUTH_USER_MODEL = 'lmsapp.CustomUser'
 # AUTH_USER_MODEL = 'lmsapp.SubAdmin'
 
+# Django Simple Captcha Settings (Sleek Single-Row Inline Captcha)
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null',)
+CAPTCHA_LETTER_ROTATION = (-3, 3)
+CAPTCHA_FONT_SIZE = 24
+CAPTCHA_IMAGE_SIZE = (110, 42)
+CAPTCHA_LENGTH = 4
+CAPTCHA_BACKGROUND_COLOR = '#ffffff'
+CAPTCHA_FOREGROUND_COLOR = '#1e293b'

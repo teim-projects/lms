@@ -61,40 +61,83 @@
       margin-right: 14px;
     }
 
-    /* KPI Summary Cards */
+    /* Aesthetic Pastel KPI Summary Cards */
     .kpi-card {
-      background: #ffffff;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 20px;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08);
-      transition: all 0.3s ease;
+      border-radius: 22px;
+      padding: 1.35rem 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       height: 100%;
+      position: relative;
+      overflow: hidden;
     }
 
     .kpi-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.15);
-      border-color: #6366f1;
+      transform: translateY(-5px);
+      box-shadow: 0 18px 35px -8px rgba(0, 0, 0, 0.09);
     }
 
+    .kpi-card-mint {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 1.5px solid #bbf7d0;
+    }
+    .kpi-card-mint:hover { border-color: #86efac; }
+    .kpi-card-mint .kpi-icon-box { background: #ffffff; color: #166534; border: 1.5px solid #86efac; box-shadow: 0 4px 12px rgba(22, 101, 52, 0.12); }
+    .kpi-card-mint .kpi-title { color: #166534; }
+    .kpi-card-mint .kpi-number { color: #14532d; }
+
+    .kpi-card-indigo {
+      background: linear-gradient(135deg, #f0f3ff 0%, #e0e7ff 100%);
+      border: 1.5px solid #c7d2fe;
+    }
+    .kpi-card-indigo:hover { border-color: #a5b4fc; }
+    .kpi-card-indigo .kpi-icon-box { background: #ffffff; color: #4338ca; border: 1.5px solid #a5b4fc; box-shadow: 0 4px 12px rgba(67, 56, 202, 0.12); }
+    .kpi-card-indigo .kpi-title { color: #3730a3; }
+    .kpi-card-indigo .kpi-number { color: #312e81; }
+
+    .kpi-card-rose {
+      background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+      border: 1.5px solid #fecdd3;
+    }
+    .kpi-card-rose:hover { border-color: #fda4af; }
+    .kpi-card-rose .kpi-icon-box { background: #ffffff; color: #e11d48; border: 1.5px solid #fda4af; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.12); }
+    .kpi-card-rose .kpi-title { color: #9f1239; }
+    .kpi-card-rose .kpi-number { color: #881337; }
+
+    .kpi-card-amber {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 1.5px solid #fde68a;
+    }
+    .kpi-card-amber:hover { border-color: #fcd34d; }
+    .kpi-card-amber .kpi-icon-box { background: #ffffff; color: #d97706; border: 1.5px solid #fcd34d; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.12); }
+    .kpi-card-amber .kpi-title { color: #92400e; }
+    .kpi-card-amber .kpi-number { color: #78350f; }
+
     .kpi-icon-box {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
+      flex-shrink: 0;
     }
 
-    .icon-indigo { background: #e0e7ff; color: #4f46e5; border: 1.5px solid #c7d2fe; }
-    .icon-emerald { background: #d1fae5; color: #059669; border: 1.5px solid #a7f3d0; }
-    .icon-purple { background: #f3e8ff; color: #7c3aed; border: 1.5px solid #ddd6fe; }
-    .icon-amber { background: #fef3c7; color: #d97706; border: 1.5px solid #fde68a; }
+    .kpi-title {
+      font-size: 0.825rem;
+      font-weight: 800;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-    .kpi-title { font-size: 0.825rem; font-weight: 700; color: #64748b; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
-    .kpi-number { font-size: 1.65rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin: 0; }
+    .kpi-number {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin: 0;
+    }
 
     /* Chart & Widget Cards */
     .chart-card {
@@ -264,20 +307,20 @@
     <!-- KPI Summary Stat Cards -->
     <div class="row g-4 mb-4">
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="kpi-card d-flex align-items-center">
-          <div class="kpi-icon-box icon-emerald me-3">
+        <div class="kpi-card kpi-card-mint d-flex align-items-center">
+          <div class="kpi-icon-box me-3">
             <i class="fa-solid fa-wallet"></i>
           </div>
           <div>
             <div class="kpi-title">Active Revenue</div>
-            <h3 class="kpi-number text-success">₹{{ active_total }}</h3>
+            <h3 class="kpi-number">₹{{ active_total }}</h3>
           </div>
         </div>
       </div>
 
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="kpi-card d-flex align-items-center">
-          <div class="kpi-icon-box icon-indigo me-3">
+        <div class="kpi-card kpi-card-indigo d-flex align-items-center">
+          <div class="kpi-icon-box me-3">
             <i class="fa-solid fa-users"></i>
           </div>
           <div>
@@ -288,8 +331,8 @@
       </div>
 
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="kpi-card d-flex align-items-center">
-          <div class="kpi-icon-box icon-purple me-3">
+        <div class="kpi-card kpi-card-rose d-flex align-items-center">
+          <div class="kpi-icon-box me-3">
             <i class="fa-solid fa-graduation-cap"></i>
           </div>
           <div>
@@ -300,13 +343,13 @@
       </div>
 
       <div class="col-12 col-sm-6 col-xl-3">
-        <div class="kpi-card d-flex align-items-center">
-          <div class="kpi-icon-box icon-amber me-3">
+        <div class="kpi-card kpi-card-amber d-flex align-items-center">
+          <div class="kpi-icon-box me-3">
             <i class="fa-solid fa-headset"></i>
           </div>
           <div>
             <div class="kpi-title">Open Support Tickets</div>
-            <h3 class="kpi-number text-amber">{{ open_tickets }}</h3>
+            <h3 class="kpi-number">{{ open_tickets }}</h3>
           </div>
         </div>
       </div>

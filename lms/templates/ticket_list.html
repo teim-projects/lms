@@ -87,7 +87,13 @@
     {% include 'Student_Base.html' %}
     <div class="main"style="min-height:100vh;">
 
-        <div class="container" style="margin-top: 80px; padding: 20px;">
+        <div class="container" style="margin-top: 80px; padding: 20px; min-height: 100vh;">
+            <!-- Back Button -->
+            <div class="mb-3">
+              <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5 shadow-sm d-inline-flex align-items-center gap-2 fw-semibold">
+                <i class="fa-solid fa-arrow-left"></i> Back
+              </a>
+            </div>
             <h2 style="text-align: center; margin-bottom: 20px; color: #007bff;">My Tickets</h2>
             <div style="overflow-x: auto;">
                 <table class="table"

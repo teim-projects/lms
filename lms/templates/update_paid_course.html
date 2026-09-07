@@ -3,453 +3,345 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Max Share Market Academy </title>
-    <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Paid Course - ProfitMax</title>
+  <link rel="icon" href="{% static 'images/favicon.jpeg' %}" type="image/png">
 
+  <!-- Bootstrap 5 & Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #fdf2f8 100%);
+      min-height: 100vh;
+      color: #334155;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    .main-container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 95px auto 40px auto;
+      padding: 0 15px;
+      flex: 1;
+    }
 
-    <style>
-        body {
-            font-family: Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #FAFAFA;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-        }
+    /* Header Banner Card */
+    .header-banner-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.12);
+      border-top: 4px solid #4f46e5;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    }
 
-        .row {
-            font-weight: bold;
-        }
+    .header-badge-icon {
+      width: 48px;
+      height: 48px;
+      background: #ffffff;
+      color: #4f46e5;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+      border: 1.5px solid #c7d2fe;
+      margin-right: 14px;
+    }
 
-        /* Button styling */
-        .buttonn {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-            width: 100%;
-        }
+    /* Card Box */
+    .editor-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.1);
+      margin-bottom: 2rem;
+    }
 
-        .buttonn.buttonncancle {
-            background: linear-gradient(to right, #f80303, #bd03ba);
+    .form-control, .form-select {
+      border-radius: 12px;
+      padding: 10px 16px;
+      border: 1.5px solid #cbd5e1;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
 
-        }
+    .form-control:focus, .form-select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    }
 
-        .buttonn:hover {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            transform: scale(1.02);
-        }
+    .form-label {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: #334155;
+      margin-bottom: 6px;
+    }
 
-        .buttonn.buttonncancle:hover {
-            background: linear-gradient(to right, #f80303, #bd03ba);
-            transform: scale(1.02);
-            border-radius: 25px;
-        }
+    .thumb-preview-box {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1.5px solid #e2e8f0;
+    }
 
+    .btn-indigo {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff !important;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 24px;
+      font-weight: 700;
+      box-shadow: 0 8px 18px -4px rgba(79, 70, 229, 0.4);
+      transition: all 0.3s ease;
+    }
 
-        .signup a {
-            align-items: center;
-            font-size: 13px;
-            padding: 0px;
-        }
+    .btn-indigo:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      transform: translateY(-2px);
+    }
 
-        .updatetitle {
-            text-decoration: none;
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    .chapter-edit-box {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
 
-        .card {
-            font-weight: bold;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            margin-bottom: 40px;
-
-            border-radius: 6px;
-            padding-bottom: 20px;
-        }
-
-        input {
-            color: #000000;
-
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #d75403;
-            box-shadow: 0 0 5px rgba(220, 60, 2, 0.5);
-            background: #fff;
-            font-size: 1rem;
-        }
-
-        .card-header {
-
-            border-radius: 5px;
-
-
-        }
-
-        .card-footer {
-            border: none;
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-        .content {
-            margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-
-
-        .container {
-            padding-bottom: 10px;
-        }
-
-        .update-paid{
-            padding: 0px 15px;
-        }
-
-
-
-
-
-        .uploaded-content-header {
-    background: linear-gradient(to right, #2575fc, #6a11cb);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px 5px 0 0;
-    font-weight: 600;
-    font-size: 1.2rem;
-}
-
-.uploaded-card {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    background-color: #fff;
-}
-
-.uploaded-card .card-body {
-    padding: 15px;
-}
-
-.uploaded-subtitle {
-    background-color: #f4f7ff;
-    border-left: 4px solid #2575fc;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-}
-
-.uploaded-subtitle p {
-    margin: 0;
-    padding: 3px 0;
-}
-
-.uploaded-subtitle a {
-    color: #0066cc;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.uploaded-subtitle a:hover {
-    text-decoration: underline;
-}
-
-.delete-btn-title {
-    background: linear-gradient(to right, #ff512f, #dd2476);
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 5px 15px;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-.delete-btn-subtitle {
-    background: linear-gradient(to right, #ff9966, #ff5e62);
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-    </style>
-
-
+    .subtitle-edit-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #4f46e5;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
+  {% include 'Admin_Base.html' %}
 
-    {% include 'Admin_Base.html' %}
-
-
-
-
-    <div class="container my-4">
-
-        <div class="row " style="margin-top: 100px;">
-            <div class="col-md-12 col-12 ">
-                <h2 class="text-center"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; ">
-                    Update Paid Course</h2>
-            </div>
-
+  <div class="main-container">
+    <!-- Header Banner Card -->
+    <div class="header-banner-card mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="d-flex align-items-center">
+        <div class="header-badge-icon">
+          <i class="fa-solid fa-pen-to-square"></i>
         </div>
-        <div class="row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-6">
-
-                <div class="card ">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-                        <div class=" card-header " style="padding: 0px; ">
-
-                            {% if course.thumbnail %}
-                            <img src="{{ course.thumbnail.url }}" alt="Thumbnail" width="100%" height="250px">
-                            {% endif %}
-                        </div>
-
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="thumbnail" class="form-label">Thumbnail</label>
-                                <input type="file" class="form-control p-1" id="thumbnail" name="thumbnail">
-                            </div>
-
-                            <!-- CATEGORY SELECTION - ADDED -->
-                            <div class="mb-3">
-                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
-                                <select class="form-control" id="category" name="category" required>
-                                    <option value="">-- Select Category --</option>
-                                    {% for cat in categories %}
-                                        <option value="{{ cat.id }}" {% if course.category and cat.id == course.category.id %}selected{% endif %}>
-                                            {{ cat.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="course_title" class="form-label">Course Title</label>
-                                <input type="text" class="form-control" id="course_title" name="course_title"
-                                    value="{{ course.course_title }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="duration" class="form-label">Duration</label>
-                                <input type="text" class="form-control" id="duration" name="duration"
-                                    value="{{ course.duration }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description"
-                                    name="description">{{ course.description }}</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="instructor_name" class="form-label">Instructor Name</label>
-                                <input type="text" class="form-control" id="instructor_name" name="instructor_name"
-                                    value="{{ course.instructor_name }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="course_level" class="form-label">Course Level</label>
-                                <select class="form-control" id="course_level" name="course_level">
-                                    {% for level, label in course.COURSE_LEVELS %}
-                                        <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
-                                            {{ label }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            
-                        </div>
-
-
-                        <div class="update-paid">
-                            <div class="mb-3">
-                                <label for="about" class="form-label">About</label>
-                                <textarea class="form-control" id="about" name="about">{{ course.about }}</textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="benefits" class="form-label">Benefits</label>
-                                <textarea class="form-control" id="benefits" name="benefits">{{ course.benefits }}</textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="original_price" class="form-label">Original Price</label>
-                                <input type="number" step="0.01" class="form-control" id="original_price"
-                                       name="original_price" value="{{ course.original_price }}">
-                            </div>
-
-                            <div class="mb-1">
-                                <label for="course_price" class="form-label">Course Price</label>
-                                <input type="number" step="0.01" class="form-control" id="course_price"
-                                    name="course_price" value="{{ course.course_price }}">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="discount_amount" class="form-label">Discount Amount</label>
-                                <input type="number" step="0.01" class="form-control" id="discount_amount"
-                                       name="discount_amount" value="{{ course.discount_amount }}" readonly>
-                            </div>
-
-                        </div>
-
-                        <div class="  mb-2 card-footer bg-white ">
-                            <button type="submit" class="btn   buttonn">Update Course</button>
-                            <a href="/view_paid_course/" class="btn  buttonn buttonncancle ">Cancel</a>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-3"></div>
-
+        <div>
+          <h2 class="fw-extrabold text-dark m-0 fs-3">Edit Paid Course Details</h2>
+          <p class="text-muted small m-0">Update pricing, information, category, and modules for <strong>{{ course.course_title }}</strong>.</p>
         </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <a href="javascript:history.back()" class="btn btn-light border rounded-3 fw-bold px-3 py-2 text-dark">
+          <i class="fa-solid fa-arrow-left me-1.5 text-primary"></i> Back
+        </a>
+      </div>
     </div>
 
+    <!-- Main Course Edit Form Card -->
+    <div class="editor-card">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
+        <div class="row g-4">
+          <!-- Left Column: Thumbnail & Basic Settings -->
+          <div class="col-lg-5">
+            <h5 class="fw-extrabold text-dark mb-3"><i class="fa-solid fa-image me-2 text-indigo"></i>Course Thumbnail</h5>
+            {% if course.thumbnail %}
+            <img src="{{ course.thumbnail.url }}" alt="Course Thumbnail" class="thumb-preview-box mb-3">
+            {% endif %}
 
-    <div class="container mb-5">
-        <div class="row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-6">
-                <h4 class="text-center my-4"
-                    style="text-decoration: none; background: linear-gradient(to right, #2575fc, #6a11cb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; ">
-                    Uploaded Course Content
-                </h4>
-
-               {% for title, contents in grouped_contents.items %}
-          <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-             <div class="d-flex align-items-center">
-
-            <!-- TITLE EDIT FORM -->
-            <form method="post" action="{% url 'edit_course_title' course.id title %}" class="d-flex align-items-center mr-2">
-                {% csrf_token %}
-
-                <input type="text" name="new_title"
-                       value="{{ title }}"
-                       class="form-control form-control-sm mr-2"
-                       style="width: 200px;" required>
-
-                <button class="btn btn-sm btn-success">Update</button>
-            </form>
-
-            <!-- COLLAPSE BUTTON -->
-            <a class="text-decoration-none"
-               data-bs-toggle="collapse"
-               href="#collapse{{ forloop.counter }}">
-                <span class="btn btn-sm btn-info">View</span>
-            </a>
-
-        </div>
-        <form method="post"
-                  action="{% url 'update_title_order' course.id title %}"
-                  class="d-flex align-items-center">
-                {% csrf_token %}
-
-                <input type="number" name="order"
-                       value="{{ contents.0.order }}"
-                       class="form-control form-control-sm mr-2"
-                       style="width: 80px;" required>
-
-                <button class="btn btn-sm btn-primary">Set</button>
-            </form>
-
-              <form method="post" action="{% url 'delete_course_title' course.id title %}" onsubmit="return confirm('Delete the title and all its subtitles?')">
-                {% csrf_token %}
-                <button class="btn btn-danger btn-sm">Delete Title</button>
-              </form>
+            <div class="mb-3">
+              <label for="thumbnail" class="form-label">Upload New Thumbnail</label>
+              <input type="file" class="form-control" id="thumbnail" name="thumbnail">
             </div>
 
-            <div class="collapse" id="collapse{{ forloop.counter }}">
-              <div class="card-body">
-                {% for content in contents %}
-                  <div class="mb-3 border p-2 rounded" style="font-size: 0.95rem;">
-                    <form method="post" action="{% url 'edit_course_subtitle' content.id %}">
-                {% csrf_token %}
-
-                <input type="text" name="new_subtitle"
-                       value="{{ content.subtitle }}"
-                       class="form-control form-control-sm mb-2" required>
-
-                <button class="btn btn-sm btn-success">Update Subtitle</button>
-            </form>
-                    <p><strong>File:</strong>
-                      <a href="{{ content.resource_file.url }}" target="_blank">
-                        {{ content.resource_file.name|cut:"course_resources/" }}
-                      </a>
-                    </p>
-                    <form method="post" action="{% url 'delete_course_subtitle' content.id %}" onsubmit="return confirm('Delete this subtitle?')">
-                      {% csrf_token %}
-                      <button class="btn btn-warning btn-sm">Delete Subtitle</button>
-                    </form>
-                  </div>
+            <div class="mb-3">
+              <label for="category" class="form-label">Course Category <span class="text-danger">*</span></label>
+              <select class="form-select" id="category" name="category" required>
+                <option value="">-- Select Category --</option>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if course.category and cat.id == course.category.id %}selected{% endif %}>
+                  {{ cat.name }}
+                </option>
                 {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="course_level" class="form-label">Difficulty Level</label>
+              <select class="form-select" id="course_level" name="course_level">
+                {% for level, label in course.COURSE_LEVELS %}
+                <option value="{{ level }}" {% if level == course.course_level %}selected{% endif %}>
+                  {{ label }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Right Column: Course Info & Pricing -->
+          <div class="col-lg-7">
+            <h5 class="fw-extrabold text-dark mb-3"><i class="fa-solid fa-sliders me-2 text-indigo"></i>Course Details & Pricing</h5>
+
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="course_title" class="form-label">Course Title</label>
+                <input type="text" class="form-control" id="course_title" name="course_title" value="{{ course.course_title }}" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="instructor_name" class="form-label">Instructor Name</label>
+                <input type="text" class="form-control" id="instructor_name" name="instructor_name" value="{{ course.instructor_name }}" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="duration" class="form-label">Duration</label>
+                <input type="text" class="form-control" id="duration" name="duration" value="{{ course.duration }}" required>
+              </div>
+
+              <div class="col-md-4">
+                <label for="original_price" class="form-label">Original Price (₹)</label>
+                <input type="number" step="0.01" class="form-control" id="original_price" name="original_price" value="{{ course.original_price }}" required>
+              </div>
+
+              <div class="col-md-4">
+                <label for="course_price" class="form-label">Discounted Price (₹)</label>
+                <input type="number" step="0.01" class="form-control" id="course_price" name="course_price" value="{{ course.course_price }}" required>
+              </div>
+
+              <div class="col-md-4">
+                <label for="discount_amount" class="form-label">Savings Amount (₹)</label>
+                <input type="number" step="0.01" class="form-control bg-light" id="discount_amount" name="discount_amount" value="{{ course.discount_amount }}" readonly>
+              </div>
+
+              <div class="col-12">
+                <label for="description" class="form-label">Short Summary Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required>{{ course.description }}</textarea>
+              </div>
+
+              <div class="col-12">
+                <label for="about" class="form-label">Full About Details</label>
+                <textarea class="form-control" id="about" name="about" rows="3">{{ course.about }}</textarea>
+              </div>
+
+              <div class="col-12">
+                <label for="benefits" class="form-label">Course Key Benefits</label>
+                <textarea class="form-control" id="benefits" name="benefits" rows="3">{{ course.benefits }}</textarea>
               </div>
             </div>
           </div>
-        {% empty %}
-          <p class="text-center">No uploaded content found.</p>
-        {% endfor %}
 
-            </div>
-
-            <div class="col-md-3"></div>
+          <div class="col-12 d-flex align-items-center justify-content-end gap-3 pt-3 border-top">
+            <a href="{% url 'view_paid_course' %}" class="btn btn-light border rounded-3 fw-bold px-4">Cancel</a>
+            <button type="submit" class="btn btn-indigo px-5">
+              <i class="fa-solid fa-save me-2"></i> Save Course Changes
+            </button>
+          </div>
         </div>
+      </form>
     </div>
 
+    <!-- Uploaded Content Manager Card -->
+    <div class="editor-card">
+      <h4 class="fw-extrabold text-dark mb-4"><i class="fa-solid fa-folder-tree text-indigo me-2"></i>Manage Uploaded Modules & Lessons</h4>
 
+      {% for title, contents in grouped_contents.items %}
+      <div class="chapter-edit-box">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+          <!-- Title Edit Form -->
+          <form method="POST" action="{% url 'edit_course_title' course.id title %}" class="d-flex align-items-center gap-2 flex-grow-1">
+            {% csrf_token %}
+            <input type="text" name="new_title" value="{{ title }}" class="form-control form-control-sm fw-bold" style="max-width: 320px;" required>
+            <button class="btn btn-sm btn-outline-success fw-bold rounded-pill px-3">Update Title</button>
+          </form>
 
+          <div class="d-flex align-items-center gap-2">
+            <!-- Order Form -->
+            <form method="POST" action="{% url 'update_title_order' course.id title %}" class="d-flex align-items-center gap-1">
+              {% csrf_token %}
+              <input type="number" name="order" value="{{ contents.0.order }}" class="form-control form-control-sm text-center" style="width: 70px;" required>
+              <button class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-2.5">Set Order</button>
+            </form>
 
-    {% include 'footer.html' %}
+            <a class="btn btn-sm btn-light border rounded-pill px-3 fw-bold" data-bs-toggle="collapse" href="#collapseEdit{{ forloop.counter }}">
+              <i class="fa-solid fa-bars-staggered me-1"></i> Lessons ({{ contents|length }})
+            </a>
 
-    <script>
+            <form method="POST" action="{% url 'delete_course_title' course.id title %}" onsubmit="return confirm('Delete entire title and lessons?')">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold">Delete Title</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="collapse" id="collapseEdit{{ forloop.counter }}">
+          <div class="pt-2">
+            {% for content in contents %}
+            <div class="subtitle-edit-item">
+              <form method="POST" action="{% url 'edit_course_subtitle' content.id %}" class="d-flex align-items-center gap-2 mb-2">
+                {% csrf_token %}
+                <input type="text" name="new_subtitle" value="{{ content.subtitle }}" class="form-control form-control-sm fw-semibold" required>
+                <button class="btn btn-sm btn-success fw-bold rounded-pill px-3">Save</button>
+              </form>
+
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="small text-muted">
+                  <i class="fa-solid fa-paperclip me-1 text-primary"></i> File:
+                  <a href="{{ content.resource_file.url }}" target="_blank" class="fw-bold text-decoration-none">
+                    {{ content.resource_file.name|cut:"course_resources/" }}
+                  </a>
+                </span>
+                <form method="POST" action="{% url 'delete_course_subtitle' content.id %}" onsubmit="return confirm('Delete this lesson?')">
+                  {% csrf_token %}
+                  <button class="btn btn-sm btn-link text-danger p-0 fw-bold text-decoration-none">
+                    <i class="fa-solid fa-trash me-1"></i> Delete Subtitle
+                  </button>
+                </form>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted text-center py-4">No content modules uploaded for this course yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <!-- Realtime Discount Calculator & Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
     document.getElementById('original_price').addEventListener('input', calculateDiscount);
     document.getElementById('course_price').addEventListener('input', calculateDiscount);
 
     function calculateDiscount() {
-        const originalPrice = parseFloat(document.getElementById('original_price').value) || 0;
-        const coursePrice = parseFloat(document.getElementById('course_price').value) || 0;
-        const discount = originalPrice - coursePrice;
-        document.getElementById('discount_amount').value = discount.toFixed(2);
+      const originalPrice = parseFloat(document.getElementById('original_price').value) || 0;
+      const coursePrice = parseFloat(document.getElementById('course_price').value) || 0;
+      const discount = Math.max(0, originalPrice - coursePrice);
+      document.getElementById('discount_amount').value = discount.toFixed(2);
     }
-</script>
-
+  </script>
 </body>
 
 </html>

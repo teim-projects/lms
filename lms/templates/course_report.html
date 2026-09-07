@@ -64,7 +64,7 @@
       background: #ffffff;
       border: 1.5px solid #e2e8f0;
       border-radius: 24px;
-      padding: 2rem;
+      padding: 1.75rem;
       box-shadow: 0 15px 35px -15px rgba(99, 102, 241, 0.1);
     }
 
@@ -87,6 +87,7 @@
       vertical-align: middle;
       border-bottom: 1px solid #f1f5f9;
       text-align: center;
+      color: #1e293b;
     }
 
     .btn-action-purple {
@@ -105,6 +106,17 @@
       background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
       transform: translateY(-2px);
       box-shadow: 0 12px 22px -4px rgba(79, 70, 229, 0.55);
+    }
+
+    .badge-indigo-custom {
+      background-color: #e0e7ff !important;
+      color: #4f46e5 !important;
+      border: 1.5px solid #c7d2fe !important;
+      padding: 6px 16px !important;
+      border-radius: 50px !important;
+      font-weight: 800 !important;
+      display: inline-flex !important;
+      align-items: center !important;
     }
   </style>
 </head>
@@ -126,11 +138,11 @@
       </div>
 
       <div class="d-flex align-items-center gap-2">
-        <a href="{% url 'admin_dashboard' %}?{{ request.GET.urlencode }}" class="btn btn-light border rounded-3 fw-bold px-3 py-2">
-          <i class="fa-solid fa-arrow-left me-1.5 text-indigo"></i> Back to Dashboard
+        <a href="javascript:history.back()" class="btn btn-light border rounded-3 fw-bold px-3 py-2 text-dark">
+          <i class="fa-solid fa-arrow-left me-1.5 text-primary"></i> Back
         </a>
-        <a href="{{ request.path }}?{{ request.GET.urlencode }}" class="btn btn-light border rounded-3 fw-bold px-3 py-2">
-          <i class="fa-solid fa-rotate me-1.5 text-indigo"></i> Refresh
+        <a href="{{ request.path }}?{{ request.GET.urlencode }}" class="btn btn-light border rounded-3 fw-bold px-3 py-2 text-dark">
+          <i class="fa-solid fa-rotate me-1.5 text-primary"></i> Refresh
         </a>
         <a href="{% url 'export_to_excel' %}?report_type=course&{{ request.GET.urlencode }}" class="btn btn-action-purple">
           <i class="fa-solid fa-file-excel me-1.5"></i> Export Excel Report
@@ -139,7 +151,7 @@
     </div>
 
     <!-- Active Filters Alert -->
-    <div class="alert alert-info border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center gap-2">
+    <div class="alert alert-info border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center gap-2 text-dark">
       <i class="fa-solid fa-filter text-info fs-5"></i>
       <div class="fw-bold fs-7">
         <strong>Active Filters:</strong>
@@ -180,10 +192,10 @@
             <tr>
               <td class="fw-bold text-muted">{{ forloop.counter }}</td>
               <td class="text-start fw-bold text-dark fs-6">
-                <i class="fa-solid fa-graduation-cap me-2 text-indigo"></i>{{ course.course_title }}
+                <i class="fa-solid fa-graduation-cap me-2 text-primary"></i>{{ course.course_title }}
               </td>
               <td>
-                <span class="badge bg-indigo-subtle text-indigo border border-indigo-subtle px-3 py-1.5 rounded-pill fw-bold fs-7">
+                <span class="badge-indigo-custom">
                   {{ course.total_enrollments }} Enrolled
                 </span>
               </td>
@@ -206,4 +218,5 @@
 
   {% include 'footer.html' %}
 </body>
+
 </html>

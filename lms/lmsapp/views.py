@@ -4114,3 +4114,70 @@ def uncreated_invoice_report(request):
             'course': course_id or '',
         },
     })
+
+
+from django.http import JsonResponse
+from django.db.models import Q
+from django.urls import reverse
+
+def search_courses_api(request):
+    """
+    Live autocomplete API for searching Free and Paid courses with category details.
+    """
+    query = request.GET.get('q', '').strip()
+    if not query or len(query) < 1:
+        return JsonResponse({'results': []})
+
+    results = []
+
+    # Search Free Courses
+    free_courses = FreeCourse.objects.filter(
+        Q(title__icontains=query) |
+        Q(description__icontains=query) |
+        Q(category__name__icontains=query)
+    ).select_related('category')[:8]
+
+    for course in free_courses:
+        cat_name = course.category.name if course.category else 'General'
+        thumb = course.thumbnail.url if course.thumbnail else None
+        try:
+            url = reverse('free_course_detail', args=[course.id])
+        except Exception:
+            url = f"/free-courses/{course.id}/"
+
+        results.append({
+            'id': course.id,
+            'title': course.title,
+            'type': 'Free',
+            'category': cat_name,
+            'price': 'Free',
+            'thumbnail': thumb,
+            'url': url
+        })
+
+    # Search Paid Courses
+    paid_courses = PaidCourse.objects.filter(
+        Q(course_title__icontains=query) |
+        Q(description__icontains=query) |
+        Q(category__name__icontains=query)
+    ).select_related('category')[:8]
+
+    for course in paid_courses:
+        cat_name = course.category.name if course.category else 'General'
+        thumb = course.thumbnail.url if course.thumbnail else None
+        try:
+            url = reverse('display_paid_content', args=[course.id])
+        except Exception:
+            url = f"/display_paid_content/{course.id}/"
+
+        results.append({
+            'id': course.id,
+            'title': course.course_title,
+            'type': 'Premium',
+            'category': cat_name,
+            'price': f'₹{course.course_price}',
+            'thumbnail': thumb,
+            'url': url
+        })
+
+    return JsonResponse({'results': results})

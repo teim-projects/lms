@@ -13,7 +13,8 @@
     <!-- Font Awesome 6 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- jQuery & Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -21,7 +22,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
-        body, html {
+        body,
+        html {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #ffffff;
             height: 100vh;
@@ -182,7 +184,7 @@
             width: 50%;
             height: 100vh;
             background: #ffffff;
-            padding: 2.5rem 4rem;
+            padding: 1.75rem 2.5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -192,12 +194,12 @@
         .form-top-bar {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .support-link {
             color: #64748b;
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             font-weight: 600;
             text-decoration: none;
             transition: color 0.2s ease;
@@ -209,49 +211,49 @@
         }
 
         .form-card-container {
-            max-width: 460px;
+            max-width: 420px;
             width: 100%;
             margin: auto;
             background: #ffffff;
             border: 1.5px solid #e2e8f0;
-            border-radius: 24px;
-            padding: 2.25rem 2.25rem;
-            box-shadow: 0 15px 35px -10px rgba(99, 102, 241, 0.12);
+            border-radius: 20px;
+            padding: 1.75rem 1.75rem;
+            box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.12);
         }
 
         .form-header-badge {
-            width: 48px;
-            height: 48px;
+            width: 42px;
+            height: 42px;
             background: #e0e7ff;
             color: #4f46e5;
-            border-radius: 14px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            margin-bottom: 1.25rem;
+            font-size: 18px;
+            margin-bottom: 0.85rem;
             border: 1.5px solid #c7d2fe;
         }
 
         .form-title {
-            font-size: 1.85rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: #0f172a;
             letter-spacing: -0.02em;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.25rem;
         }
 
         .form-subtitle {
             color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            margin-bottom: 1.1rem;
         }
 
         .form-label {
-            font-size: 0.875rem;
+            font-size: 0.825rem;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
             display: block;
         }
 
@@ -264,9 +266,9 @@
 
         .input-wrapper .input-icon {
             position: absolute;
-            left: 16px;
+            left: 14px;
             color: #64748b;
-            font-size: 16px;
+            font-size: 15px;
             z-index: 5;
             pointer-events: none;
             transition: color 0.25s ease;
@@ -274,15 +276,15 @@
 
         .input-wrapper input {
             width: 100% !important;
-            padding: 12px 16px 12px 46px !important;
+            padding: 10px 14px 10px 42px !important;
             border: 1.5px solid #cbd5e1 !important;
-            border-radius: 14px !important;
-            font-size: 0.95rem !important;
+            border-radius: 10px !important;
+            font-size: 0.875rem !important;
             font-weight: 500 !important;
             transition: all 0.25s ease !important;
             background-color: #ffffff !important;
             color: #0f172a !important;
-            height: 48px !important;
+            height: 42px !important;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) inset;
         }
 
@@ -290,22 +292,22 @@
             outline: none !important;
             border-color: #6366f1 !important;
             background-color: #ffffff !important;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
         }
 
-        .input-wrapper input:focus ~ .input-icon,
-        .input-wrapper input:focus + .input-icon {
+        .input-wrapper input:focus~.input-icon,
+        .input-wrapper input:focus+.input-icon {
             color: #6366f1;
         }
 
         .toggle-password {
             position: absolute;
-            right: 14px;
+            right: 12px;
             background: none;
             border: none;
             color: #64748b;
             cursor: pointer;
-            padding: 6px;
+            padding: 4px;
             z-index: 5;
             transition: color 0.2s ease;
             outline: none !important;
@@ -315,24 +317,29 @@
             color: #6366f1;
         }
 
-        .captcha-box {
-            background-color: #f8fafc;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 12px;
+        .captcha-inline-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .captcha-inline-row .input-wrapper input {
+            padding-left: 14px !important;
         }
 
         .captcha-img-wrapper img.captcha {
             border-radius: 10px;
-            height: 40px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border: 1px solid #cbd5e1;
+            height: 42px;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            display: block;
         }
 
         .btn-refresh {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 10px;
             background-color: #ffffff;
             border: 1.5px solid #c7d2fe;
             color: #6366f1;
@@ -341,6 +348,7 @@
             justify-content: center;
             transition: all 0.25s ease;
             cursor: pointer;
+            font-size: 0.9rem;
         }
 
         .btn-refresh:hover {
@@ -354,15 +362,15 @@
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             border: none;
             transition: all 0.3s ease;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 700;
             letter-spacing: 0.01em;
-            border-radius: 14px;
-            height: 50px;
+            border-radius: 12px;
+            height: 44px;
             color: #ffffff;
             width: 100%;
-            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.35);
-            margin-top: 1rem;
+            box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.35);
+            margin-top: 0.75rem;
         }
 
         .btn-action-primary:hover {
@@ -386,25 +394,31 @@
 
         /* Responsive Breakpoints */
         @media (max-width: 991.98px) {
-            body, html {
+
+            body,
+            html {
                 height: auto;
                 overflow: auto;
             }
+
             .split-screen-wrapper {
                 flex-direction: column;
                 height: auto;
                 overflow: auto;
             }
+
             .hero-panel {
                 width: 100%;
                 height: auto;
                 padding: 2.5rem 2rem;
             }
+
             .form-panel {
                 width: 100%;
                 height: auto;
                 padding: 2.5rem 2rem;
             }
+
             .form-card-container {
                 max-width: 100%;
             }
@@ -431,7 +445,8 @@
                     Empowering Modern <span>Trading Education</span>
                 </h1>
                 <p class="hero-description">
-                    Access real-time market mentorship, technical analysis courses, and smart stock alerts designed for traders at every level.
+                    Access real-time market mentorship, technical analysis courses, and smart stock alerts designed for
+                    traders at every level.
                 </p>
 
                 <div class="hero-features">
@@ -448,7 +463,8 @@
             </div>
 
             <div class="hero-graphic-wrapper">
-                <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png" alt="Trading Dashboard">
+                <img src="https://info.cshco.com/hs-fs/hubfs/CSH_Dashboards-03.png?width=875&height=543&name=CSH_Dashboards-03.png"
+                    alt="Trading Dashboard">
             </div>
         </div>
 
@@ -471,11 +487,12 @@
                     {% csrf_token %}
 
                     {% if form.non_field_errors %}
-                    <div class="alert alert-danger d-flex align-items-center rounded-lg border-0 shadow-sm mb-3 py-2 px-3">
+                    <div
+                        class="alert alert-danger d-flex align-items-center rounded-lg border-0 shadow-sm mb-3 py-2 px-3">
                         <i class="fa-solid fa-circle-exclamation text-danger mr-2" style="font-size: 1.1rem;"></i>
                         <div class="small font-weight-semibold">
                             {% for error in form.non_field_errors %}
-                                <div>{{ error }}</div>
+                            <div>{{ error }}</div>
                             {% endfor %}
                         </div>
                     </div>
@@ -484,7 +501,8 @@
                     {% if messages %}
                     <div class="messages mb-3">
                         {% for message in messages %}
-                        <div class="alert alert-{{ message.tags|default:'danger' }} d-flex align-items-center rounded-lg border-0 shadow-sm py-2 px-3">
+                        <div
+                            class="alert alert-{{ message.tags|default:'danger' }} d-flex align-items-center rounded-lg border-0 shadow-sm py-2 px-3">
                             <i class="fa-solid fa-triangle-exclamation text-danger mr-2" style="font-size: 1.1rem;"></i>
                             <div class="small font-weight-semibold">{{ message }}</div>
                         </div>
@@ -505,14 +523,16 @@
                     <div class="form-group mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <label for="id_password" class="form-label mb-0">Password</label>
-                            <a href="/password-reset/" class="small text-primary font-weight-bold text-decoration-none hover-underline">
+                            <a href="/password-reset/"
+                                class="small text-primary font-weight-bold text-decoration-none hover-underline">
                                 Forgot password?
                             </a>
                         </div>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-lock input-icon"></i>
                             {{ form.password }}
-                            <button type="button" class="toggle-password" id="togglePasswordBtn" title="Toggle password visibility">
+                            <button type="button" class="toggle-password" id="togglePasswordBtn"
+                                title="Toggle password visibility">
                                 <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
                             </button>
                         </div>
@@ -521,19 +541,17 @@
                     <!-- Captcha Field -->
                     <div class="form-group mb-3">
                         <label class="form-label">Security Captcha</label>
-                        <div class="captcha-box">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="captcha-img-wrapper">
-                                    {{ form.captcha.image }}
-                                </div>
-                                <button type="button" class="btn btn-refresh shadow-sm" id="refresh-captcha" title="Refresh Captcha">
-                                    <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
-                                </button>
+                        <div class="captcha-inline-row">
+                            <div class="captcha-img-wrapper">
+                                {{ form.captcha.image }}
                             </div>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-shield-halved input-icon"></i>
+                            <div class="input-wrapper flex-grow-1">
                                 {{ form.captcha }}
                             </div>
+                            <button type="button" class="btn btn-refresh shadow-sm" id="refresh-captcha"
+                                title="Refresh Captcha">
+                                <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -545,11 +563,13 @@
                     <!-- Footer Navigation Links -->
                     <div class="form-footer-nav">
                         <p class="text-muted mb-2 small">Don't have an account?</p>
-                        <a href="/signup/" class="btn btn-outline-primary btn-sm rounded-pill px-4 mb-2 font-weight-bold">
+                        <a href="/signup/"
+                            class="btn btn-outline-primary btn-sm rounded-pill px-4 mb-2 font-weight-bold">
                             <i class="fa-solid fa-user-plus mr-1"></i> Create New Account
                         </a>
                         <div>
-                            <a href="/subadmin-login/" class="text-secondary small font-weight-bold text-decoration-none hover-underline">
+                            <a href="/subadmin-login/"
+                                class="text-secondary small font-weight-bold text-decoration-none hover-underline">
                                 <i class="fa-solid fa-user-shield mr-1"></i> SubAdmin Portal Login
                             </a>
                         </div>
@@ -588,10 +608,10 @@
                 $.get("/captcha/refresh/", function (data) {
                     $('.captcha').attr("src", data.image_url);
                     $('input[name="captcha_0"]').val(data.key);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $icon.removeClass('fa-spin');
                     }, 400);
-                }).fail(function() {
+                }).fail(function () {
                     $icon.removeClass('fa-spin');
                 });
             });

@@ -75,6 +75,13 @@
   {% include 'Student_Base.html' %}
 
   <div class="container" style="min-height: 100vh; margin-top: 100px;">
+    <!-- Back Button -->
+    <div class="mb-3">
+      <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5 shadow-sm d-inline-flex align-items-center gap-2 fw-semibold">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </a>
+    </div>
+
     <!-- Title -->
     <div class="text-center mb-4">
       <h2 class="text-primary font-weight-bold">{{ course.title }}</h2>
