@@ -17,7 +17,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <style>
     html {
@@ -142,8 +143,13 @@
       box-shadow: 0 12px 25px rgba(99, 102, 241, 0.35);
     }
 
-    .custom-prev { left: 24px; }
-    .custom-next { right: 24px; }
+    .custom-prev {
+      left: 24px;
+    }
+
+    .custom-next {
+      right: 24px;
+    }
 
     .custom-slider-dots {
       position: absolute;
@@ -162,7 +168,7 @@
       border: 1px solid rgba(0, 0, 0, 0.15);
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
     .slider-dot.active {
@@ -368,7 +374,7 @@
       padding: 5px 14px;
       border-radius: 50px;
       border: 1px solid #c7d2fe;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       z-index: 5;
     }
 
@@ -488,17 +494,24 @@
       box-shadow: 0 10px 24px rgba(99, 102, 241, 0.22);
     }
 
-    .category-prev { left: 5px; }
-    .category-next { right: 5px; }
+    .category-prev {
+      left: 5px;
+    }
+
+    .category-next {
+      right: 5px;
+    }
 
     @media (max-width: 991px) {
       .custom-slider {
         height: 320px;
       }
+
       .category-slide-item {
         flex: 0 0 calc(50% - 12px);
         max-width: calc(50% - 12px);
       }
+
       .category-carousel-wrapper {
         padding: 0 50px;
       }
@@ -664,12 +677,35 @@
       transform: scale(1.12) rotate(4deg);
     }
 
-    .badge-pastel-indigo { background: #e0e7ff; color: #4f46e5; }
-    .badge-pastel-sky { background: #e0f2fe; color: #0284c7; }
-    .badge-pastel-mint { background: #d1fae5; color: #059669; }
-    .badge-pastel-purple { background: #f3e8ff; color: #9333ea; }
-    .badge-pastel-rose { background: #fce7f3; color: #db2777; }
-    .badge-pastel-amber { background: #fef3c7; color: #d97706; }
+    .badge-pastel-indigo {
+      background: #e0e7ff;
+      color: #4f46e5;
+    }
+
+    .badge-pastel-sky {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+
+    .badge-pastel-mint {
+      background: #d1fae5;
+      color: #059669;
+    }
+
+    .badge-pastel-purple {
+      background: #f3e8ff;
+      color: #9333ea;
+    }
+
+    .badge-pastel-rose {
+      background: #fce7f3;
+      color: #db2777;
+    }
+
+    .badge-pastel-amber {
+      background: #fef3c7;
+      color: #d97706;
+    }
 
     /* Testimonials */
     .testimonial-card {
@@ -861,16 +897,18 @@
         <div id="mySlider" class="custom-slider">
           <div class="custom-slider-inner">
             {% for img in slider_images %}
-              <div class="custom-slide {% if forloop.first %}active{% endif %}">
-                <img src="{{ img }}" class="custom-image" alt="Slide {{ forloop.counter }}">
-                <div class="custom-slide-caption">
-                  <i class="fa-solid fa-sparkles text-primary me-2"></i> ProfitMax Share Market Academy
-                </div>
+            <div class="custom-slide {% if forloop.first %}active{% endif %}">
+              <img src="{{ img }}" class="custom-image" alt="Slide {{ forloop.counter }}">
+              <div class="custom-slide-caption">
+                <i class="fa-solid fa-sparkles text-primary me-2"></i> ProfitMax Share Market Academy
               </div>
+            </div>
             {% endfor %}
           </div>
-          <button class="custom-prev" type="button" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
-          <button class="custom-next" type="button" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+          <button class="custom-prev" type="button" aria-label="Previous slide"><i
+              class="fa-solid fa-chevron-left"></i></button>
+          <button class="custom-next" type="button" aria-label="Next slide"><i
+              class="fa-solid fa-chevron-right"></i></button>
           <div class="custom-slider-dots" id="sliderDots"></div>
         </div>
       </div>
@@ -940,7 +978,8 @@
               Master the Stock Market with <span class="hero-title-gradient">ProfitMax</span>
             </h1>
             <p class="hero-subtitle mb-4">
-              Unlock the secrets of successful trading with our comprehensive courses, expert mentorship, and powerful tools designed for traders at all levels.
+              Unlock the secrets of successful trading with our comprehensive courses, expert mentorship, and powerful
+              tools designed for traders at all levels.
             </p>
             <div class="d-flex flex-wrap gap-3 hero-buttons">
               <a href="/signup/" class="btn btn-pastel-hero btn-pill">
@@ -953,7 +992,8 @@
           </div>
           <div class="col-lg-6">
             <div class="hero-img-wrapper overflow-hidden">
-              <video class="img-fluid rounded-4 w-100 h-auto" autoplay loop muted playsinline style="border-radius: 18px; display: block;">
+              <video class="img-fluid rounded-4 w-100 h-auto" autoplay loop muted playsinline
+                style="border-radius: 18px; display: block;">
                 <source src="{% static 'images/hero_animated.mp4' %}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
@@ -980,7 +1020,8 @@
       </div>
 
       <div class="category-carousel-wrapper">
-        <button class="category-carousel-btn category-prev" id="catPrevBtn" type="button" aria-label="Previous Category">
+        <button class="category-carousel-btn category-prev" id="catPrevBtn" type="button"
+          aria-label="Previous Category">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
 
@@ -1046,7 +1087,8 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/award1.jpg' %}" alt="Best Trading Education 2023" class="pastel-card-img" loading="lazy" decoding="async">
+              <img src="{% static 'images/award1.jpg' %}" alt="Best Trading Education 2023" class="pastel-card-img"
+                loading="lazy" decoding="async">
             </div>
             <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Best Trading Education</h6>
@@ -1058,7 +1100,8 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/award2.jpg' %}" alt="Innovation in Trading Tools" class="pastel-card-img" loading="lazy" decoding="async">
+              <img src="{% static 'images/award2.jpg' %}" alt="Innovation in Trading Tools" class="pastel-card-img"
+                loading="lazy" decoding="async">
             </div>
             <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Innovation in Tools</h6>
@@ -1070,7 +1113,8 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/award3.jpg' %}" alt="Student Success Award" class="pastel-card-img" loading="lazy" decoding="async">
+              <img src="{% static 'images/award3.jpg' %}" alt="Student Success Award" class="pastel-card-img"
+                loading="lazy" decoding="async">
             </div>
             <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Student Success Award</h6>
@@ -1082,7 +1126,8 @@
         <div class="col-12 col-sm-6 col-md-3">
           <div class="pastel-card">
             <div class="overflow-hidden">
-              <img src="{% static 'images/mam.jpg' %}" alt="Smart Learning System" class="pastel-card-img" loading="lazy" decoding="async">
+              <img src="{% static 'images/mam.jpg' %}" alt="Smart Learning System" class="pastel-card-img"
+                loading="lazy" decoding="async">
             </div>
             <div class="pastel-card-content text-start">
               <h6 class="fw-bold text-dark fs-5 mb-2">Smart Learning System</h6>
@@ -1185,7 +1230,8 @@
               <i class="fa-solid fa-chalkboard-user"></i>
             </div>
             <h5 class="fw-bold text-start text-dark fs-5 mb-2">Professional Mentorship</h5>
-            <p class="text-muted text-start mb-0">Learn from experienced traders using our exclusive Vardan Strategy for optimal profit potential.</p>
+            <p class="text-muted text-start mb-0">Learn from experienced traders using our exclusive Vardan Strategy for
+              optimal profit potential.</p>
           </div>
         </div>
 
@@ -1195,7 +1241,8 @@
               <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h5 class="fw-bold text-start text-dark fs-5 mb-2">Advanced Risk Control</h5>
-            <p class="text-muted text-start mb-0">Assess and monitor market risk efficiently with our real-time risk mitigation algorithms.</p>
+            <p class="text-muted text-start mb-0">Assess and monitor market risk efficiently with our real-time risk
+              mitigation algorithms.</p>
           </div>
         </div>
 
@@ -1205,7 +1252,8 @@
               <i class="fa-solid fa-robot"></i>
             </div>
             <h5 class="fw-bold text-start text-dark fs-5 mb-2">Smart Alert Systems</h5>
-            <p class="text-muted text-start mb-0">Enhance decisions with our Bramhastra Stock Alert System for accurate stock movement alerts.</p>
+            <p class="text-muted text-start mb-0">Enhance decisions with our Bramhastra Stock Alert System for accurate
+              stock movement alerts.</p>
           </div>
         </div>
 
@@ -1215,7 +1263,8 @@
               <i class="fa-solid fa-brain"></i>
             </div>
             <h5 class="fw-bold text-start text-dark fs-5 mb-2">Trading Psychology</h5>
-            <p class="text-muted text-start mb-0">Master emotions and discipline in volatile markets to maintain a consistent mindset.</p>
+            <p class="text-muted text-start mb-0">Master emotions and discipline in volatile markets to maintain a
+              consistent mindset.</p>
           </div>
         </div>
 
@@ -1225,7 +1274,8 @@
               <i class="fa-solid fa-chart-line"></i>
             </div>
             <h5 class="fw-bold text-start text-dark fs-5 mb-2">Real-time Analytics</h5>
-            <p class="text-muted text-start mb-0">Access live market charts, trends, and data insights to make informed trading choices.</p>
+            <p class="text-muted text-start mb-0">Access live market charts, trends, and data insights to make informed
+              trading choices.</p>
           </div>
         </div>
 
@@ -1235,7 +1285,8 @@
               <i class="fa-solid fa-users"></i>
             </div>
             <h5 class="fw-bold text-start text-dark fs-5 mb-2">Trader Community</h5>
-            <p class="text-muted text-start mb-0">Join an active network of passionate traders to exchange ideas and market insights.</p>
+            <p class="text-muted text-start mb-0">Join an active network of passionate traders to exchange ideas and
+              market insights.</p>
           </div>
         </div>
       </div>
@@ -1256,7 +1307,8 @@
         <div class="col-md-4">
           <div class="testimonial-card">
             <div class="testimonial-quote"><i class="fa-solid fa-quote-left"></i></div>
-            <p class="testimonial-text">"ProfitMax transformed my approach to trading. The Vardan Strategy alone was worth the investment. I've doubled my portfolio in just 6 months!"</p>
+            <p class="testimonial-text">"ProfitMax transformed my approach to trading. The Vardan Strategy alone was
+              worth the investment. I've doubled my portfolio in just 6 months!"</p>
             <h6 class="testimonial-author">Rajesh Kumar</h6>
             <span class="testimonial-role">Swing Trader</span>
           </div>
@@ -1265,7 +1317,8 @@
         <div class="col-md-4">
           <div class="testimonial-card">
             <div class="testimonial-quote"><i class="fa-solid fa-quote-left"></i></div>
-            <p class="testimonial-text">"The risk management course saved me from huge losses during market volatility. Now I trade with confidence knowing my capital is protected."</p>
+            <p class="testimonial-text">"The risk management course saved me from huge losses during market volatility.
+              Now I trade with confidence knowing my capital is protected."</p>
             <h6 class="testimonial-author">Priya Sharma</h6>
             <span class="testimonial-role">Day Trader</span>
           </div>
@@ -1274,7 +1327,8 @@
         <div class="col-md-4">
           <div class="testimonial-card">
             <div class="testimonial-quote"><i class="fa-solid fa-quote-left"></i></div>
-            <p class="testimonial-text">"As a complete beginner, I appreciated the step-by-step approach. The mentors are always available to answer questions. Highly recommended!"</p>
+            <p class="testimonial-text">"As a complete beginner, I appreciated the step-by-step approach. The mentors
+              are always available to answer questions. Highly recommended!"</p>
             <h6 class="testimonial-author">Amit Patel</h6>
             <span class="testimonial-role">Beginner Investor</span>
           </div>
@@ -1292,7 +1346,8 @@
           Join thousands of successful traders who have elevated their strategies with expert mentorship.
         </p>
         <div class="d-flex justify-content-center flex-wrap gap-3">
-          <a href="#sectiondemo" class="btn btn-light btn-lg px-4 py-2 font-weight-bold rounded-pill shadow" id="scrollBtn">
+          <a href="#sectiondemo" class="btn btn-light btn-lg px-4 py-2 font-weight-bold rounded-pill shadow"
+            id="scrollBtn">
             Start Learning Now <i class="fa-solid fa-arrow-down ms-1"></i>
           </a>
           <a href="/login/" class="btn btn-outline-light btn-lg px-4 py-2 font-weight-bold rounded-pill">
@@ -1318,13 +1373,14 @@
 
         <!-- Category Nav Tabs (Fixed Header Bar - Zero Void Gap below Title) -->
         <div class="category-modal-tabs-bar">
-          <ul class="nav nav-pills nav-justified category-nav-tabs mb-0" id="categoryTab-{{ item.category.id }}" role="tablist">
+          <ul class="nav nav-pills nav-justified category-nav-tabs mb-0" id="categoryTab-{{ item.category.id }}"
+            role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link free-tab-btn active fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" 
-                      id="free-tab-{{ item.category.id }}" 
-                      data-bs-toggle="pill" 
-                      data-bs-target="#free-pane-{{ item.category.id }}" 
-                      type="button" role="tab" aria-controls="free-pane-{{ item.category.id }}" aria-selected="true">
+              <button
+                class="nav-link free-tab-btn active fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2"
+                id="free-tab-{{ item.category.id }}" data-bs-toggle="pill"
+                data-bs-target="#free-pane-{{ item.category.id }}" type="button" role="tab"
+                aria-controls="free-pane-{{ item.category.id }}" aria-selected="true">
                 <i class="fa-solid fa-graduation-cap"></i>
                 <span>Free Courses</span>
                 <span class="badge rounded-pill px-2.5 py-1 small tab-badge-free">
@@ -1333,11 +1389,11 @@
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link paid-tab-btn fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2" 
-                      id="paid-tab-{{ item.category.id }}" 
-                      data-bs-toggle="pill" 
-                      data-bs-target="#paid-pane-{{ item.category.id }}" 
-                      type="button" role="tab" aria-controls="paid-pane-{{ item.category.id }}" aria-selected="false">
+              <button
+                class="nav-link paid-tab-btn fw-bold rounded-pill py-2 d-flex align-items-center justify-content-center gap-2"
+                id="paid-tab-{{ item.category.id }}" data-bs-toggle="pill"
+                data-bs-target="#paid-pane-{{ item.category.id }}" type="button" role="tab"
+                aria-controls="paid-pane-{{ item.category.id }}" aria-selected="false">
                 <i class="fa-solid fa-gem text-success"></i>
                 <span>Premium Courses</span>
                 <span class="badge rounded-pill px-2.5 py-1 small tab-badge-paid">
@@ -1352,13 +1408,15 @@
           <!-- Tab Contents -->
           <div class="tab-content" id="categoryTabContent-{{ item.category.id }}">
             <!-- Free Courses Pane -->
-            <div class="tab-pane fade show active" id="free-pane-{{ item.category.id }}" role="tabpanel" aria-labelledby="free-tab-{{ item.category.id }}">
+            <div class="tab-pane fade show active" id="free-pane-{{ item.category.id }}" role="tabpanel"
+              aria-labelledby="free-tab-{{ item.category.id }}">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold text-dark mb-0">
                   <span class="badge bg-primary me-2">🎓</span> Free Courses in {{ item.category.name }}
                 </h6>
                 {% if item.free_courses %}
-                <a href="{% url 'free_courses_by_category' item.category.id %}" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold">
+                <a href="{% url 'free_courses_by_category' item.category.id %}"
+                  class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold">
                   View Full Page <i class="fa-solid fa-arrow-right ms-1"></i>
                 </a>
                 {% endif %}
@@ -1369,17 +1427,21 @@
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="course-card-modal">
                     {% if course.thumbnail %}
-                      <img src="{{ course.thumbnail.url }}" class="course-card-thumbnail" alt="{{ course.title }}">
+                    <img src="{{ course.thumbnail.url }}" class="course-card-thumbnail" alt="{{ course.title }}">
                     {% else %}
-                      <div class="course-card-thumbnail bg-light d-flex align-items-center justify-content-center text-primary fs-3" style="height: 160px;">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                      </div>
+                    <div
+                      class="course-card-thumbnail bg-light d-flex align-items-center justify-content-center text-primary fs-3"
+                      style="height: 160px;">
+                      <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
                     {% endif %}
                     <div class="p-3 d-flex flex-column flex-grow-1">
                       <h6 class="fw-bold text-dark fs-5 text-truncate mb-2">{{ course.title }}</h6>
-                      <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px;">{{ course.description|truncatewords:12 }}</p>
+                      <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px;">{{
+                        course.description|truncatewords:12 }}</p>
                       <div class="text-center pt-2 border-top mt-auto">
-                        <a href="{% url 'free_course_detail' course.id %}" class="btn btn-pastel-hero btn-sm rounded-pill w-100 font-weight-bold">
+                        <a href="{% url 'free_course_detail' course.id %}"
+                          class="btn btn-pastel-hero btn-sm rounded-pill w-100 font-weight-bold">
                           Start Learning <i class="fa-solid fa-play ms-1"></i>
                         </a>
                       </div>
@@ -1388,20 +1450,23 @@
                 </div>
                 {% empty %}
                 <div class="col-12 text-center py-4">
-                  <p class="text-muted italic mb-0"><i class="fa-solid fa-info-circle me-1"></i> No free courses available in this category currently.</p>
+                  <p class="text-muted italic mb-0"><i class="fa-solid fa-info-circle me-1"></i> No free courses
+                    available in this category currently.</p>
                 </div>
                 {% endfor %}
               </div>
             </div>
 
             <!-- Paid Courses Pane -->
-            <div class="tab-pane fade" id="paid-pane-{{ item.category.id }}" role="tabpanel" aria-labelledby="paid-tab-{{ item.category.id }}">
+            <div class="tab-pane fade" id="paid-pane-{{ item.category.id }}" role="tabpanel"
+              aria-labelledby="paid-tab-{{ item.category.id }}">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold text-dark mb-0">
                   <span class="badge bg-success me-2">💼</span> Premium Paid Courses in {{ item.category.name }}
                 </h6>
                 {% if item.paid_courses %}
-                <a href="{% url 'paid_courses_by_category' item.category.id %}" class="btn btn-outline-success btn-sm rounded-pill px-3 font-weight-bold">
+                <a href="{% url 'paid_courses_by_category' item.category.id %}"
+                  class="btn btn-outline-success btn-sm rounded-pill px-3 font-weight-bold">
                   View Full Page <i class="fa-solid fa-arrow-right ms-1"></i>
                 </a>
                 {% endif %}
@@ -1412,18 +1477,22 @@
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="course-card-modal">
                     {% if course.thumbnail %}
-                      <img src="{{ course.thumbnail.url }}" class="course-card-thumbnail" alt="{{ course.course_title }}">
+                    <img src="{{ course.thumbnail.url }}" class="course-card-thumbnail" alt="{{ course.course_title }}">
                     {% else %}
-                      <div class="course-card-thumbnail bg-light d-flex align-items-center justify-content-center text-success fs-3" style="height: 160px;">
-                        <i class="fa-solid fa-gem"></i>
-                      </div>
+                    <div
+                      class="course-card-thumbnail bg-light d-flex align-items-center justify-content-center text-success fs-3"
+                      style="height: 160px;">
+                      <i class="fa-solid fa-gem"></i>
+                    </div>
                     {% endif %}
                     <div class="p-3 d-flex flex-column flex-grow-1">
                       <h6 class="fw-bold text-dark fs-5 text-truncate mb-2">{{ course.course_title }}</h6>
-                      <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px;">{{ course.description|truncatewords:12 }}</p>
+                      <p class="text-muted small mb-3 flex-grow-1" style="min-height: 44px;">{{
+                        course.description|truncatewords:12 }}</p>
                       <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto">
                         <span class="price-tag-badge">₹{{ course.course_price }}</span>
-                        <a href="{% url 'display_paid_content' course.id %}" class="btn btn-success btn-sm rounded-pill px-3 font-weight-bold">
+                        <a href="{% url 'display_paid_content' course.id %}"
+                          class="btn btn-success btn-sm rounded-pill px-3 font-weight-bold">
                           View Course
                         </a>
                       </div>
@@ -1432,7 +1501,8 @@
                 </div>
                 {% empty %}
                 <div class="col-12 text-center py-4">
-                  <p class="text-muted italic mb-0"><i class="fa-solid fa-info-circle me-1"></i> No premium courses available in this category currently.</p>
+                  <p class="text-muted italic mb-0"><i class="fa-solid fa-info-circle me-1"></i> No premium courses
+                    available in this category currently.</p>
                 </div>
                 {% endfor %}
               </div>
@@ -1524,7 +1594,7 @@
       // Smooth Scroll Button
       const scrollBtn = document.getElementById("scrollBtn");
       if (scrollBtn) {
-        scrollBtn.addEventListener("click", function(e) {
+        scrollBtn.addEventListener("click", function (e) {
           e.preventDefault();
           const target = document.getElementById("sectiondemo");
           if (target) {

@@ -195,7 +195,9 @@
     }
 
     @keyframes navSearchSpin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* Live Search Dropdown */
@@ -220,8 +222,15 @@
     }
 
     @keyframes navSearchFadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .search-dropdown-header {
@@ -471,12 +480,16 @@
       .navbar-search-container {
         display: none;
       }
+
       .navbar-brand-img {
         height: 36px;
       }
-      .user-info-text, .user-dropdown-arrow {
+
+      .user-info-text,
+      .user-dropdown-arrow {
         display: none;
       }
+
       .navbar-user-pill {
         padding: 2px;
         border: none;
@@ -645,13 +658,29 @@
     }
 
     /* Global Utility Badge Styles for Admin Reports */
-    .text-indigo { color: #4f46e5 !important; }
-    .bg-indigo-subtle { background-color: #e0e7ff !important; }
-    .border-indigo-subtle { border-color: #c7d2fe !important; }
+    .text-indigo {
+      color: #4f46e5 !important;
+    }
 
-    .text-emerald { color: #059669 !important; }
-    .bg-emerald-subtle { background-color: #d1fae5 !important; }
-    .border-emerald-subtle { border-color: #a7f3d0 !important; }
+    .bg-indigo-subtle {
+      background-color: #e0e7ff !important;
+    }
+
+    .border-indigo-subtle {
+      border-color: #c7d2fe !important;
+    }
+
+    .text-emerald {
+      color: #059669 !important;
+    }
+
+    .bg-emerald-subtle {
+      background-color: #d1fae5 !important;
+    }
+
+    .border-emerald-subtle {
+      border-color: #a7f3d0 !important;
+    }
 
     .badge-custom {
       display: inline-flex;
@@ -720,7 +749,7 @@
       }
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       const sidebar = document.getElementById('sidebar');
       const toggleBtn = document.querySelector('.toggle-btn');
       if (sidebar && sidebar.classList.contains('show')) {
@@ -731,7 +760,7 @@
     });
 
     /* Live Course Search with Category Tagging */
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const searchInput = document.getElementById('navbarSearchInput');
       const searchDropdown = document.getElementById('navbarSearchDropdown');
       const searchClear = document.getElementById('navbarSearchClear');
@@ -785,7 +814,7 @@
         `;
 
         results.forEach((item, idx) => {
-          const thumbHtml = item.thumbnail 
+          const thumbHtml = item.thumbnail
             ? `<img src="${item.thumbnail}" alt="${escapeHtml(item.title)}">`
             : `<div class="search-thumb-fallback"><i class="fa-solid fa-graduation-cap"></i></div>`;
 
@@ -838,7 +867,7 @@
           });
       }
 
-      searchInput.addEventListener('input', function(e) {
+      searchInput.addEventListener('input', function (e) {
         const query = e.target.value.trim();
 
         if (!query) {
@@ -856,7 +885,7 @@
         }, 220);
       });
 
-      searchInput.addEventListener('focus', function() {
+      searchInput.addEventListener('focus', function () {
         const query = searchInput.value.trim();
         if (query && currentResults.length > 0) {
           searchDropdown.classList.add('show');
@@ -866,7 +895,7 @@
       });
 
       if (searchClear) {
-        searchClear.addEventListener('click', function() {
+        searchClear.addEventListener('click', function () {
           searchInput.value = '';
           searchClear.style.display = 'none';
           if (searchSpinner) searchSpinner.style.display = 'none';
@@ -877,7 +906,7 @@
       }
 
       // Keyboard navigation
-      searchInput.addEventListener('keydown', function(e) {
+      searchInput.addEventListener('keydown', function (e) {
         if (!searchDropdown.classList.contains('show')) return;
         const items = searchDropdown.querySelectorAll('.search-result-item');
         if (!items.length) return;
@@ -912,7 +941,7 @@
       }
 
       // Click outside listener
-      document.addEventListener('click', function(e) {
+      document.addEventListener('click', function (e) {
         if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target) && (!searchClear || !searchClear.contains(e.target))) {
           searchDropdown.classList.remove('show');
         }
@@ -922,11 +951,13 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-light px-3 px-md-4 py-2 d-flex align-items-center justify-content-between" style="z-index: 1000 !important;">
+  <nav class="navbar navbar-light px-3 px-md-4 py-2 d-flex align-items-center justify-content-between"
+    style="z-index: 1000 !important;">
     <!-- Left: Sidebar Toggle Arrow + Brand Logo -->
     <div class="d-flex align-items-center gap-2 gap-md-3">
       {% if user.is_authenticated %}
-      <button type="button" class="navbar-arrow-btn toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+      <button type="button" class="navbar-arrow-btn toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar"
+        aria-label="Toggle Sidebar">
         <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
       </button>
       {% endif %}
@@ -939,8 +970,11 @@
     <div class="navbar-search-container">
       <div class="navbar-search-box">
         <i class="fa-solid fa-magnifying-glass navbar-search-icon"></i>
-        <input type="text" class="navbar-search-input" id="navbarSearchInput" placeholder="Search courses (e.g. Price Action, Option Trading...)" autocomplete="off" aria-label="Search courses">
-        <button type="button" class="navbar-search-clear" id="navbarSearchClear" style="display: none;" title="Clear search" aria-label="Clear search">
+        <input type="text" class="navbar-search-input" id="navbarSearchInput"
+          placeholder="Search courses (e.g. Price Action, Option Trading...)" autocomplete="off"
+          aria-label="Search courses">
+        <button type="button" class="navbar-search-clear" id="navbarSearchClear" style="display: none;"
+          title="Clear search" aria-label="Clear search">
           <i class="fa-solid fa-xmark"></i>
         </button>
         <div class="navbar-search-spinner" id="navbarSearchSpinner" style="display: none;"></div>

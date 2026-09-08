@@ -173,7 +173,9 @@
     }
 
     @keyframes navSearchSpin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* Live Search Dropdown */
@@ -198,8 +200,15 @@
     }
 
     @keyframes navSearchFadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .search-dropdown-header {
@@ -360,6 +369,7 @@
       .navbar-search-container {
         display: none;
       }
+
       .navbar-brand-img {
         height: 36px;
       }
@@ -706,7 +716,7 @@
       }
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       const sidebar = document.getElementById('sidebar');
       const toggleBtn = document.querySelector('.toggle-btn');
       if (sidebar && sidebar.classList.contains('show')) {
@@ -722,7 +732,7 @@
     }
 
     /* Live Course Search with Category Tagging */
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const searchInput = document.getElementById('navbarSearchInput');
       const searchDropdown = document.getElementById('navbarSearchDropdown');
       const searchClear = document.getElementById('navbarSearchClear');
@@ -776,7 +786,7 @@
         `;
 
         results.forEach((item, idx) => {
-          const thumbHtml = item.thumbnail 
+          const thumbHtml = item.thumbnail
             ? `<img src="${item.thumbnail}" alt="${escapeHtml(item.title)}">`
             : `<div class="search-thumb-fallback"><i class="fa-solid fa-graduation-cap"></i></div>`;
 
@@ -829,7 +839,7 @@
           });
       }
 
-      searchInput.addEventListener('input', function(e) {
+      searchInput.addEventListener('input', function (e) {
         const query = e.target.value.trim();
 
         if (!query) {
@@ -847,7 +857,7 @@
         }, 220);
       });
 
-      searchInput.addEventListener('focus', function() {
+      searchInput.addEventListener('focus', function () {
         const query = searchInput.value.trim();
         if (query && currentResults.length > 0) {
           searchDropdown.classList.add('show');
@@ -857,7 +867,7 @@
       });
 
       if (searchClear) {
-        searchClear.addEventListener('click', function() {
+        searchClear.addEventListener('click', function () {
           searchInput.value = '';
           searchClear.style.display = 'none';
           if (searchSpinner) searchSpinner.style.display = 'none';
@@ -868,7 +878,7 @@
       }
 
       // Keyboard navigation
-      searchInput.addEventListener('keydown', function(e) {
+      searchInput.addEventListener('keydown', function (e) {
         if (!searchDropdown.classList.contains('show')) return;
         const items = searchDropdown.querySelectorAll('.search-result-item');
         if (!items.length) return;
@@ -903,7 +913,7 @@
       }
 
       // Click outside listener
-      document.addEventListener('click', function(e) {
+      document.addEventListener('click', function (e) {
         if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target) && (!searchClear || !searchClear.contains(e.target))) {
           searchDropdown.classList.remove('show');
         }
@@ -919,7 +929,8 @@
     <!-- Left: Sidebar Toggle Arrow + Brand Logo -->
     <div class="d-flex align-items-center gap-2 gap-md-3">
       {% if user.is_authenticated %}
-      <button type="button" class="navbar-arrow-btn toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+      <button type="button" class="navbar-arrow-btn toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar"
+        aria-label="Toggle Sidebar">
         <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
       </button>
       {% endif %}
@@ -938,8 +949,11 @@
     <div class="navbar-search-container">
       <div class="navbar-search-box">
         <i class="fa-solid fa-magnifying-glass navbar-search-icon"></i>
-        <input type="text" class="navbar-search-input" id="navbarSearchInput" placeholder="Search courses (e.g. Price Action, Option Trading...)" autocomplete="off" aria-label="Search courses">
-        <button type="button" class="navbar-search-clear" id="navbarSearchClear" style="display: none;" title="Clear search" aria-label="Clear search">
+        <input type="text" class="navbar-search-input" id="navbarSearchInput"
+          placeholder="Search courses (e.g. Price Action, Option Trading...)" autocomplete="off"
+          aria-label="Search courses">
+        <button type="button" class="navbar-search-clear" id="navbarSearchClear" style="display: none;"
+          title="Clear search" aria-label="Clear search">
           <i class="fa-solid fa-xmark"></i>
         </button>
         <div class="navbar-search-spinner" id="navbarSearchSpinner" style="display: none;"></div>
@@ -952,16 +966,17 @@
       {% if user.is_authenticated %}
       <a href="{% url 'raise_ticket' %}"
         class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold">Help</a>
-      <div class="bell-icon position-relative" onclick="toggleSidebar2()" title="Notifications" role="button" aria-label="Notifications">
+      <div class="bell-icon position-relative" onclick="toggleSidebar2()" title="Notifications" role="button"
+        aria-label="Notifications">
         <i class="fa-solid fa-bell"></i>
         {% if notification_count and notification_count > 0 %}
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; border: 2px solid #ffffff;">
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+          style="font-size: 0.65rem; border: 2px solid #ffffff;">
           {{ notification_count }}
         </span>
         {% endif %}
       </div>
-      <a href="{% url 'logout' %}"
-        class="btn btn-outline-danger btn-sm rounded-pill px-3 font-weight-bold">
+      <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm rounded-pill px-3 font-weight-bold">
         <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Logout
       </a>
       {% else %}
@@ -1010,7 +1025,8 @@
           <i class="fa-solid fa-user-graduate"></i>
         </div>
         <div class="sidebar-user-info">
-          <div class="sidebar-user-name">{{ request.user.first_name|default:request.user.username }} {{ request.user.last_name }}</div>
+          <div class="sidebar-user-name">{{ request.user.first_name|default:request.user.username }} {{
+            request.user.last_name }}</div>
           <div class="sidebar-user-role">Student Portal</div>
         </div>
       </div>
