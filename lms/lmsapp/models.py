@@ -70,6 +70,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def username(self):
         return self.email  # Fallback so Django admin etc. works
 
+    def get_full_name(self):
+        full_name = f"{self.first_name} {self.last_name}".strip()
+        return full_name if full_name else self.email
+
+    def get_short_name(self):
+        return self.first_name.strip() if self.first_name else self.email
+
 
 
 

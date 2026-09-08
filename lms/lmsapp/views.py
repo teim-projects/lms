@@ -1350,7 +1350,10 @@ def manage_subadmins(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        phone_number = request.POST.get('phone_number') or None
+        first_name = request.POST.get('first_name', '')
+        last_name = request.POST.get('last_name', '')
+        mobile = request.POST.get('mobile') or None
+        phone_number = request.POST.get('phone_number') or mobile
 
         if User.objects.filter(email=email).exists():
             messages.error(request, "A SubAdmin with this email already exists.")
@@ -1360,6 +1363,9 @@ def manage_subadmins(request):
                     email=email,
                     password=password,
                     plain_password=password,
+                    first_name=first_name,
+                    last_name=last_name,
+                    mobile=mobile,
                     phone_number=phone_number,
                     is_subadmin=True
                 )
@@ -1371,6 +1377,13 @@ def manage_subadmins(request):
 
     subadmins = User.objects.filter(is_subadmin=True)
     return render(request, 'manage_subadmin.html', {'subadmins': subadmins})
+
+
+def delete_subadmin(request, subadmin_id):
+    subadmin = get_object_or_404(User, id=subadmin_id, is_subadmin=True)
+    subadmin.delete()
+    messages.success(request, "SubAdmin removed successfully!")
+    return redirect('manage_subadmins')
 
 
 
