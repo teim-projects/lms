@@ -221,6 +221,16 @@
                                     value="{{ course.title }}" required>
 
                             </div>
+                            <!-- Course Category -->
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select name="category_id" id="category" class="form-control">
+                                    <option value="">-- Choose Category --</option>
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}" {% if course.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                             <!-- Course Description -->
                             <div class="mb-3">
                                 <label for="description" class="form-label">Course Description</label>

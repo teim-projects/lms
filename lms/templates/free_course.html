@@ -273,6 +273,11 @@
               <button class="btn btn-pastel-outline btn-pill toggle-details-btn" data-course-id="{{ course.id }}">
                 <i class="fa-solid fa-layer-group me-2"></i> View Lessons Preview
               </button>
+              {% if user.is_authenticated and user.is_superuser or user.is_subadmin %}
+              <a href="{% url 'update_free_course' course.id %}" class="btn btn-outline-success btn-pill">
+                <i class="fa-solid fa-pen-to-square me-2"></i> Edit Course
+              </a>
+              {% endif %}
             </div>
 
             <!-- Lessons Drawer -->

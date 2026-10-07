@@ -898,24 +898,9 @@ def create_free_course(request):
 
             return redirect("create_free_course")
 
-    courses = FreeCourse.objects.prefetch_related("chapters").all()
+    courses = FreeCourse.objects.prefetch_related("chapters").all().order_by('-id')
     return render(request, "create_free_course.html", {"courses": courses, "categories": categories})
 
-@login_required
-def update_free_course(request, course_id):
-    course = FreeCourse.objects.get(id=course_id)
-
-    if request.method == 'POST':
-        course.title = request.POST.get('title')
-        course.description = request.POST.get('description')
-        # Thumbnail logic if any
-        course.save()
-
-        # Example: Update chapter links
-        for chapter in course.chapters.all():
-            print(chapter.youtube_link)  # ✅ Works if you need it
-
-        return redirect('create_free_course')
 
 @login_required
 def free_courses(request):
@@ -1119,6 +1104,7 @@ def delete_free_course(request, course_id):
         course = get_object_or_404(FreeCourse, id=course_id)
         course.delete()
         return redirect('create_free_course')
+    return redirect('create_free_course')
     
 
 # Update Free Course
@@ -1141,6 +1127,14 @@ def update_free_course(request, course_id):
 
         if 'thumbnail' in request.FILES:
             course.thumbnail = request.FILES['thumbnail']
+
+        category_id = request.POST.get('category_id')
+        if category_id:
+            try:
+                from .models import Category
+                course.category = Category.objects.get(id=category_id)
+            except Exception:
+                pass
         course.save()
 
         # Update or create chapters
@@ -1174,7 +1168,9 @@ def update_free_course(request, course_id):
         return redirect('create_free_course')
 
     chapters = course.chapters.all()
-    return render(request, 'update_free_course.html', {'course': course, 'chapters': chapters})
+    from .models import Category
+    categories = Category.objects.all()
+    return render(request, 'update_free_course.html', {'course': course, 'chapters': chapters, 'categories': categories})
 
 
 
@@ -1375,10 +1371,56 @@ def manage_subadmins(request):
 
         return redirect('manage_subadmins')
 
-    subadmins = User.objects.filter(is_subadmin=True)
+    subadmins = User.objects.filter(is_subadmin=True).order_by('-id')
     return render(request, 'manage_subadmin.html', {'subadmins': subadmins})
 
 
+@login_required
+def edit_subadmin(request, subadmin_id):
+    from django.db import IntegrityError
+    subadmin = get_object_or_404(User, id=subadmin_id, is_subadmin=True)
+
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        mobile = request.POST.get('mobile', '').strip() or None
+        phone_number = request.POST.get('phone_number', '').strip() or mobile
+        new_password = request.POST.get('password', '').strip()
+        is_active = 'is_active' in request.POST
+
+        if email and User.objects.filter(email=email).exclude(id=subadmin.id).exists():
+            messages.error(request, f"A user with email '{email}' already exists.")
+            return render(request, 'edit_subadmin.html', {'subadmin': subadmin})
+
+        if mobile and User.objects.filter(mobile=mobile).exclude(id=subadmin.id).exists():
+            messages.error(request, f"A user with mobile number '{mobile}' already exists.")
+            return render(request, 'edit_subadmin.html', {'subadmin': subadmin})
+
+        try:
+            subadmin.first_name = first_name
+            subadmin.last_name = last_name
+            if email:
+                subadmin.email = email
+            subadmin.mobile = mobile
+            subadmin.phone_number = phone_number
+            subadmin.is_active = is_active
+
+            if new_password:
+                subadmin.set_password(new_password)
+                subadmin.plain_password = new_password
+
+            subadmin.save()
+            messages.success(request, f"SubAdmin '{subadmin.email}' updated successfully!")
+            return redirect('manage_subadmins')
+        except IntegrityError as e:
+            messages.error(request, f"Error updating SubAdmin: {e}")
+            return render(request, 'edit_subadmin.html', {'subadmin': subadmin})
+
+    return render(request, 'edit_subadmin.html', {'subadmin': subadmin})
+
+
+@login_required
 def delete_subadmin(request, subadmin_id):
     subadmin = get_object_or_404(User, id=subadmin_id, is_subadmin=True)
     subadmin.delete()
