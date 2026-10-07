@@ -486,13 +486,6 @@
                                 </button>
                             </a>
 
-                            <!-- View Lessons -->
-                            <a href="{% url 'free_course_detail' course.id %}" title="View Lessons">
-                                <button type="button" class="viwe-btn">
-                                    <i class="fa-solid fa-eye"></i>
-                                </button>
-                            </a>
-
                             <!-- Delete Course -->
                             {% if not is_subadmin %}
                             <form action="{% url 'delete_free_course' course.id %}" method="POST"
